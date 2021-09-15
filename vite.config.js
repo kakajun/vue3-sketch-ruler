@@ -11,7 +11,7 @@ const banner = `/*!
 export default defineConfig({
   plugins: [vue()],
   build: {
-    minify: false, // 不压缩代码,方便开发调试
+    // minify: false, // 不压缩代码,方便开发调试
     lib: {
       entry: resolve(__dirname, 'src/index.js'),
       name: 'SketchRuler',
