@@ -1,7 +1,7 @@
 <template>
   <canvas
-    class="ruler"
     ref="$canvas"
+    class="ruler"
     @click="handleClick"
     @mouseenter="handleEnter"
     @mousemove="handleMove"
@@ -14,12 +14,6 @@ const getValueByOffset = (offset, start, scale) =>
   Math.round(start + offset / scale)
 export default {
   name: 'CanvasRuler',
-  data() {
-    return {
-      $canvas: {},
-      canvasContext: {}
-    }
-  },
   props: {
     vertical: Boolean,
     start: Number,
@@ -31,6 +25,12 @@ export default {
     selectLength: Number
   },
   emits: ['onAddLine', 'onIndicatorShow', 'onIndicatorMove', 'onIndicatorHide'],
+  data() {
+    return {
+      $canvas: {},
+      canvasContext: {}
+    }
+  },
   watch: {
     start() {
       this.drawRuler()
@@ -43,6 +43,11 @@ export default {
       this.updateCanvasContext()
       this.drawRuler()
     }
+  },
+  mounted() {
+    this.initCanvasRef()
+    this.updateCanvasContext()
+    this.drawRuler()
   },
   methods: {
     initCanvasRef() {
@@ -106,11 +111,6 @@ export default {
     handleLeave() {
       this.$emit('onIndicatorHide')
     }
-  },
-  mounted() {
-    this.initCanvasRef()
-    this.updateCanvasContext()
-    this.drawRuler()
   }
 }
 </script>

@@ -40,7 +40,7 @@ export const drawHorizontalRuler = (ctx, start, shadow, options) => {
   const startValue10 = Math.floor(start / gridSize10) * gridSize10 // 长间隔绘制起点的刻度(略小于start, 且是gridSize10的整数倍)
 
   const offsetX = ((startValue - start) / gridSize) * gridPixel // 起点刻度距离ctx原点(start)的px距离
-  const offsetX_10 = ((startValue10 - start) / gridSize10) * gridPixel10 // 长间隔起点刻度距离ctx原点(start)的px距离
+  const offsetX10 = ((startValue10 - start) / gridSize10) * gridPixel10 // 长间隔起点刻度距离ctx原点(start)的px距离
   const endValue = start + Math.ceil(width / scale) // 终点刻度(略超出标尺宽度即可)
 
   // 3. 画刻度和文字(因为刻度遮住了阴影)
@@ -56,7 +56,7 @@ export const drawHorizontalRuler = (ctx, start, shadow, options) => {
     value < endValue;
     value += gridSize10, count++
   ) {
-    const x = offsetX_10 + count * gridPixel10 + 0.5 // prevent canvas 1px line blurry
+    const x = offsetX10 + count * gridPixel10 + 0.5 // prevent canvas 1px line blurry
     ctx.moveTo(x, 0)
     ctx.save()
     ctx.translate(x, height * 0.4)
@@ -121,7 +121,7 @@ export const drawVerticalRuler = (ctx, start, shadow, options) => {
   const startValue10 = Math.floor(start / gridSize10) * gridSize10 // 长间隔单独绘制起点的刻度
 
   const offsetY = ((startValue - start) / gridSize) * gridPixel // 起点刻度距离ctx原点(start)的px距离
-  const offsetY_10 = ((startValue10 - start) / gridSize10) * gridPixel10 // 长间隔起点刻度距离ctx原点(start)的px距离
+  const offsetY10 = ((startValue10 - start) / gridSize10) * gridPixel10 // 长间隔起点刻度距离ctx原点(start)的px距离
   const endValue = start + Math.ceil(height / scale) // 终点刻度(略超出标尺宽度即可)
 
   // 3. 画刻度和文字(因为刻度遮住了阴影)
@@ -135,7 +135,7 @@ export const drawVerticalRuler = (ctx, start, shadow, options) => {
     value < endValue;
     value += gridSize10, count++
   ) {
-    const y = offsetY_10 + count * gridPixel10 + 0.5
+    const y = offsetY10 + count * gridPixel10 + 0.5
     ctx.moveTo(0, y)
     ctx.save() // 这里先保存一下状态
     ctx.translate(width * 0.4, y) // 将原点转移到当前画笔所在点

@@ -1,12 +1,12 @@
 <template>
   <div
-    class="line"
     v-show="showLine"
+    class="line"
     :style="[offset, borderCursor]"
     @mousedown="handleDown"
   >
     <div class="action" :style="actionStyle">
-      <span class="del" @click="this.handleRemove">&times;</span>
+      <span class="del" @click="handleRemove">&times;</span>
       <span class="value">{{ startValue }}</span>
     </div>
   </div>
@@ -14,12 +14,6 @@
 <script>
 export default {
   name: 'LineRuler',
-  data() {
-    return {
-      startValue: 0,
-      showLine: true
-    }
-  },
   props: {
     index: Number,
     start: Number,
@@ -30,14 +24,17 @@ export default {
     isShowReferLine: Boolean,
     thick: Number
   },
+  emits: ['onMouseDown', 'onRelease', 'onRemove'],
+  data() {
+    return {
+      startValue: 0,
+      showLine: true
+    }
+  },
   computed: {
     offset() {
       const offset = (this.startValue - this.start) * this.scale
-      if (offset < 0) {
-        this.showLine = false
-      } else {
-        this.showLine = true
-      }
+      this.setShowLine(offset)
       const positionValue = offset + 'px'
       const position = this.vertical
         ? { top: positionValue }
@@ -67,7 +64,13 @@ export default {
       return actionStyle
     }
   },
+  mounted() {
+    this.initStartValue()
+  },
   methods: {
+    setShowLine(offset) {
+      this.showLine = offset >= 0
+    },
     handleDown(e) {
       const startD = this.vertical ? e.clientY : e.clientX
       const initValue = this.startValue
@@ -93,9 +96,6 @@ export default {
     initStartValue() {
       this.startValue = this.value
     }
-  },
-  mounted() {
-    this.initStartValue()
   }
 }
 </script>

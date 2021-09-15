@@ -6,16 +6,16 @@
       :width="width"
       :height="height"
       :start="start"
-      :selectStart="selectStart"
-      :selectLength="selectLength"
-      :canvasConfigs="canvasConfigs"
+      :select-start="selectStart"
+      :select-length="selectLength"
+      :canvas-configs="canvasConfigs"
       @onAddLine="handleNewLine"
       @onIndicatorShow="handleIndicatorShow"
       @onIndicatorMove="handleIndicatorMove"
       @onIndicatorHide="handleIndicatorHide"
     >
     </CanvasRuler>
-    <div class="lines" v-show="isShowReferLine">
+    <div v-show="isShowReferLine" class="lines">
       <LineRuler
         v-for="(v, i) in lines"
         :key="v + i"
@@ -26,14 +26,14 @@
         :thick="thick"
         :palette="palette"
         :vertical="vertical"
-        :isShowReferLine="isShowReferLine"
+        :is-show-refer-line="isShowReferLine"
         @onRemove="handleLineRemove"
         @onMouseDown="handleLineDown"
         @onRelease="handleLineRelease"
       >
       </LineRuler>
     </div>
-    <div class="indicator" :style="indicatorStyle" v-show="showIndicator">
+    <div v-show="showIndicator" class="indicator" :style="indicatorStyle">
       <div class="value">{{ value }}</div>
     </div>
   </div>
@@ -64,6 +64,7 @@ export default {
     onShowRightMenu: Function,
     handleShowReferLine: Function
   },
+  emits: ['onLineChange'],
   data() {
     return {
       isDraggingLine: false,

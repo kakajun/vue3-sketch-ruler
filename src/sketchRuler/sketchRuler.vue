@@ -1,19 +1,19 @@
 <template>
-  <div class="style-ruler mb-ruler" id="mb-ruler">
+  <div id="mb-ruler" class="style-ruler mb-ruler">
     <!-- 水平方向 -->
     <RulerWrapper
       :vertical="false"
       :width="width"
       :height="thick"
-      :isShowReferLine="isShowReferLine"
+      :is-show-refer-line="isShowReferLine"
       :thick="thick"
       :start="startX"
       :lines="horLineArr"
-      :selectStart="shadow.x"
-      :selectLength="shadow.width"
+      :select-start="shadow.x"
+      :select-length="shadow.width"
       :scale="scale"
       :palette="palette"
-      :canvasConfigs="canvasConfigs"
+      :canvas-configs="canvasConfigs"
       @onLineChange="handleLineChange"
     />
     <!-- 竖直方向 -->
@@ -21,15 +21,15 @@
       :vertical="true"
       :width="thick"
       :height="height"
-      :isShowReferLine="isShowReferLine"
+      :is-show-refer-line="isShowReferLine"
       :thick="thick"
       :start="startY"
       :lines="verLineArr"
-      :selectStart="shadow.y"
-      :selectLength="shadow.height"
+      :select-start="shadow.y"
+      :select-length="shadow.height"
       :scale="scale"
       :palette="palette"
-      :canvasConfigs="canvasConfigs"
+      :canvas-configs="canvasConfigs"
       @onLineChange="handleLineChange"
     />
     <a
@@ -59,11 +59,7 @@ export default {
   components: {
     RulerWrapper
   },
-  data() {
-    return {
-      vertical: true
-    }
-  },
+
   props: {
     scale: {
       type: Number,
@@ -112,7 +108,10 @@ export default {
     },
     cornerActive: Boolean,
     lang: String,
-    isOpenMenuFeature: false,
+    isOpenMenuFeature: {
+      type: Boolean,
+      default: false
+    },
     handleShowRuler: {
       type: Function,
       default: () => {
@@ -146,6 +145,13 @@ export default {
       }
     }
   },
+  emits: ['onCornerClick', 'handleLine'],
+  data() {
+    return {
+      vertical: true
+    }
+  },
+
   computed: {
     cornerActiveClass() {
       return this.cornerActive ? ' active' : ''

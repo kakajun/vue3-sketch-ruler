@@ -6,19 +6,19 @@
       :scale="scale"
       :width="582"
       :height="482"
-      :startX="startX"
-      :startY="startY"
+      :start-x="startX"
+      :start-y="startY"
       :shadow="shadow"
-      :horLineArr="lines.h"
-      :verLineArr="lines.v"
-      :cornerActive="true"
+      :hor-line-arr="lines.h"
+      :ver-line-arr="lines.v"
+      :corner-active="true"
       @handleLine="handleLine"
       @onCornerClick="handleCornerClick"
     >
     </SketchRule>
     <div
-      ref="screensRef"
       id="screens"
+      ref="screensRef"
       @wheel="handleWheel"
       @scroll="handleScroll"
     >
@@ -36,6 +36,7 @@ import SketchRule from '../sketchRuler/sketchRuler.vue'
 const rectWidth = 160
 const rectHeight = 200
 export default {
+  components: { SketchRule },
   data() {
     return {
       scale: 2, //658813476562495, //1,
@@ -51,8 +52,6 @@ export default {
       isShowReferLine: true // 显示参考线
     }
   },
-
-  components: { SketchRule },
   computed: {
     shadow() {
       return {
@@ -69,6 +68,12 @@ export default {
         transform: `scale(${this.scale})`
       }
     }
+  },
+  mounted() {
+    // console.log(SketchRule, "666666");
+    // 滚动居中
+    this.$refs.screensRef.scrollLeft =
+      this.$refs.containerRef.getBoundingClientRect().width / 2 - 300 // 300 = #screens.width / 2
   },
   methods: {
     handleLine(lines) {
@@ -107,12 +112,6 @@ export default {
         this.handleScroll()
       })
     }
-  },
-  mounted() {
-    // console.log(SketchRule, "666666");
-    // 滚动居中
-    this.$refs.screensRef.scrollLeft =
-      this.$refs.containerRef.getBoundingClientRect().width / 2 - 300 // 300 = #screens.width / 2
   }
 }
 </script>

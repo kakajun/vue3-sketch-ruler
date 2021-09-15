@@ -7,6 +7,8 @@ module.exports = {
   extends: [
     // https://github.com/standard/standard/blob/master/docs/RULES-en.md
     'plugin:vue/vue3-essential',
+    'plugin:vue/vue3-strongly-recommended',
+    'plugin:vue/vue3-recommended',
     'eslint:recommended',
     '@vue/prettier'
   ],
@@ -47,13 +49,6 @@ module.exports = {
     // vue
     'vue/no-v-html': 'off',
     'vue/require-default-prop': 'off',
-    'prettier/prettier': [
-      'warn',
-      {
-        singleQuote: true,
-        parser: 'flow',
-        semi: false
-      }
-    ]
+    'prettier/prettier': 'off'
   }
 }

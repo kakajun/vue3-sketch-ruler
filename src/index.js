@@ -3,7 +3,7 @@ import SketchRule from './sketchRuler/sketchRuler.vue'
 
 // Declare install function executed by Vue.use()
 export function install(app) {
-  app.component(item.name, SketchRule)
+  app.component(SketchRule.name, SketchRule)
 }
 
 // Create module definition for Vue.use()
