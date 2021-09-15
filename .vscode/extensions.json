@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "octref.vetur",
+    "dbaeumer.vscode-eslint",
+    "stylelint.vscode-stylelint",
+    "esbenp.prettier-vscode",
+    "christian-kohler.path-intellisense",
+    "mikestead.dotenv",
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag"
+  ]
+}

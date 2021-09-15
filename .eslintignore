@@ -1,0 +1,17 @@
+
+*.sh
+node_modules
+lib
+*.md
+*.scss
+*.woff
+*.ttf
+.vscode
+.idea
+./vue.config.js
+/build/
+/dist/
+/public/
+/docs
+src/examples-pro
+.vscode
