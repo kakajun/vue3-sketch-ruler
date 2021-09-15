@@ -8,10 +8,9 @@ lib
 *.ttf
 .vscode
 .idea
-./vue.config.js
+
 /build/
 /dist/
 /public/
-/docs
-src/examples-pro
+
 .vscode
