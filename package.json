@@ -1,6 +1,7 @@
 {
   "name": "vue3-sketch-ruler",
   "version": "0.0.2",
+  "private":true,
   "workspaces": [
     "packages/*"
   ],
@@ -13,6 +14,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:demo": "vite build --config vite.demo.js",
     "serve": "vite preview",
     "precommit": "lint-staged",
     "lint-fix": "eslint --fix ./src --ext .vue,.js,.ts",
