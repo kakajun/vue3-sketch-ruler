@@ -7,7 +7,7 @@ vue3sketchRuler是对原vue-sketch-ruler重新打包, 这边对代码进行了vu
 由于项目升级成vite, 发现原来的插件vue-sketch-ruler,用到vue3中会报错, 这边我重新用vite打包了一份, 打包后的插件和原来功一样, 且支持在vue3中使用
 更多信息,请参看源码, 地址: [https://github.com/chuxiaoguo/vue-sketch-ruler.git](https://github.com/chuxiaoguo/vue-sketch-ruler.git)
 ## demo
-案例浏览: [https://chuxiaoguo.gitee.io/vue-sketch-ruler](https://chuxiaoguo.gitee.io/vue-sketch-ruler)
+案例浏览: [https://majun2232.github.io/vue3sketchRuler/](https://majun2232.github.io/vue3sketchRuler)
 ![image](https://github.com/majun2232/vue3sketchRuler/blob/master/src/assets/demo.png)
 
 ## 引入方式
