@@ -42,7 +42,7 @@
 <script>
 import LineRuler from './line.vue'
 import CanvasRuler from '../canvasRuler/canvasRuler.vue'
-import { reactive, ref, computed, onMounted, watch } from 'vue'
+import { ref, computed } from 'vue'
 export default {
   name: 'RulerWrapper',
   components: {

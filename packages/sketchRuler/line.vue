@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-import { reactive, ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 export default {
   name: 'LineRuler',
   props: {

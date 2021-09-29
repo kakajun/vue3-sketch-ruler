@@ -43,7 +43,7 @@
 
 <script>
 import RulerWrapper from './rulerWrapper.vue'
-import { reactive, ref, computed, onMounted, watch } from 'vue'
+import { computed } from 'vue'
 const DEFAULTMENU = {
   bgColor: '#fff',
   dividerColor: '#DBDBDB',
