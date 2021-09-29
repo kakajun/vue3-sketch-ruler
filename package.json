@@ -1,7 +1,6 @@
 {
   "name": "vue3-sketch-ruler",
   "version": "1.0.0",
-  "private": true,
   "workspaces": [
     "packages/*"
   ],
@@ -10,7 +9,7 @@
     "vue": ">=3.0.0"
   },
   "main": "dist/index.umd.js",
-  "module": "dist/index.esm.js",
+  "module": "dist/index.es.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
