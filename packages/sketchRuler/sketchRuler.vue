@@ -43,6 +43,7 @@
 
 <script>
 import RulerWrapper from './rulerWrapper.vue'
+import { reactive, ref, computed, onMounted, watch } from 'vue'
 const DEFAULTMENU = {
   bgColor: '#fff',
   dividerColor: '#DBDBDB',
@@ -146,26 +147,20 @@ export default {
     }
   },
   emits: ['onCornerClick', 'handleLine'],
-  data() {
-    return {
-      vertical: true
-    }
-  },
-
-  computed: {
-    cornerActiveClass() {
-      return this.cornerActive ? ' active' : ''
-    },
-    cornerStyle() {
+  setup(props, context) {
+    const cornerActiveClass = computed(() => {
+      return props.cornerActive ? ' active' : ''
+    })
+    const cornerStyle = computed(() => {
       return {
-        backgroundColor: this.palette.bgColor,
-        width: this.thick + 'px',
-        height: this.thick + 'px',
-        borderRight: `1px solid ${this.palette.borderColor}`,
-        borderBottom: `1px solid ${this.palette.borderColor}`
+        backgroundColor: props.palette.bgColor,
+        width: props.thick + 'px',
+        height: props.thick + 'px',
+        borderRight: `1px solid ${props.palette.borderColor}`,
+        borderBottom: `1px solid ${props.palette.borderColor}`
       }
-    },
-    canvasConfigs() {
+    })
+    const canvasConfigs = computed(() => {
       const {
         bgColor,
         longfgColor,
@@ -175,9 +170,9 @@ export default {
         lineColor,
         borderColor,
         cornerActiveColor
-      } = this.palette
+      } = props.palette
       return {
-        ratio: this.ratio,
+        ratio: props.ratio,
         bgColor,
         longfgColor,
         shortfgColor,
@@ -187,17 +182,22 @@ export default {
         borderColor,
         cornerActiveColor
       }
+    })
+    const onCornerClick = e => {
+      context.emit('onCornerClick', e)
     }
-  },
-  methods: {
-    onCornerClick(e) {
-      this.$emit('onCornerClick', e)
-    },
-    handleLineChange(arr, vertical) {
+    const handleLineChange = (arr, vertical) => {
       const newLines = vertical
-        ? { h: this.horLineArr, v: [...arr] }
-        : { h: [...arr], v: this.verLineArr }
-      this.$emit('handleLine', newLines)
+        ? { h: props.horLineArr, v: [...arr] }
+        : { h: [...arr], v: props.verLineArr }
+      context.emit('handleLine', newLines)
+    }
+    return {
+      cornerActiveClass,
+      canvasConfigs,
+      cornerStyle,
+      onCornerClick,
+      handleLineChange
     }
   }
 }

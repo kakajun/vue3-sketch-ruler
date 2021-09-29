@@ -7,11 +7,12 @@
   >
     <div class="action" :style="actionStyle">
       <span class="del" @click="handleRemove">&times;</span>
-      <span class="value">{{ startValue }}</span>
+      <span class="value">{{ startValue.value }}</span>
     </div>
   </div>
 </template>
 <script>
+import { reactive, ref, computed, onMounted, watch } from 'vue'
 export default {
   name: 'LineRuler',
   props: {
@@ -25,30 +26,32 @@ export default {
     thick: Number
   },
   emits: ['onMouseDown', 'onRelease', 'onRemove'],
-  data() {
-    return {
-      startValue: 0,
-      showLine: true
+  setup(props, context) {
+    const startValue = ref(0)
+    const showLine = ref(true)
+    onMounted(() => {
+      startValue.value = props.value
+    })
+    const setShowLine = offset => {
+      showLine.value = offset >= 0
     }
-  },
-  computed: {
-    offset() {
-      const offset = (this.startValue - this.start) * this.scale
-      this.setShowLine(offset)
+    const offset = computed(() => {
+      const offset = (startValue.value - props.start) * props.scale
+      setShowLine(offset)
       const positionValue = offset + 'px'
-      const position = this.vertical
+      const position = props.vertical
         ? { top: positionValue }
         : { left: positionValue }
       return position
-    },
-    borderCursor() {
-      const borderValue = `1px solid ${this.palette.lineColor}`
-      const border = this.vertical
+    })
+    const borderCursor = computed(() => {
+      const borderValue = `1px solid ${props.palette.lineColor}`
+      const border = props.vertical
         ? { borderTop: borderValue }
         : { borderLeft: borderValue }
 
-      const cursorValue = this.isShowReferLine
-        ? this.vertical
+      const cursorValue = props.isShowReferLine
+        ? props.vertical
           ? 'ns-resize'
           : 'ew-resize'
         : 'none'
@@ -56,45 +59,44 @@ export default {
         cursor: cursorValue,
         ...border
       }
-    },
-    actionStyle() {
-      const actionStyle = this.vertical
-        ? { left: this.thick + 'px' }
-        : { top: this.thick + 'px' }
+    })
+    const actionStyle = computed(() => {
+      const actionStyle = props.vertical
+        ? { left: props.thick + 'px' }
+        : { top: props.thick + 'px' }
       return actionStyle
-    }
-  },
-  mounted() {
-    this.initStartValue()
-  },
-  methods: {
-    setShowLine(offset) {
-      this.showLine = offset >= 0
-    },
-    handleDown(e) {
-      const startD = this.vertical ? e.clientY : e.clientX
-      const initValue = this.startValue
-      this.$emit('onMouseDown')
+    })
+
+    const handleDown = e => {
+      const startD = props.vertical ? e.clientY : e.clientX
+      const initValue = startValue.value
+      context.$emit('onMouseDown')
       const onMove = e => {
-        const currentD = this.vertical ? e.clientY : e.clientX
+        const currentD = props.vertical ? e.clientY : e.clientX
         const newValue = Math.round(
-          initValue + (currentD - startD) / this.scale
+          initValue + (currentD - startD) / props.scale
         )
-        this.startValue = newValue
+        startValue.value = newValue
       }
       const onEnd = () => {
-        this.$emit('onRelease', this.startValue, this.index)
+        context.$emit('onRelease', startValue.value, props.index)
         document.removeEventListener('mousemove', onMove)
         document.removeEventListener('mouseup', onEnd)
       }
       document.addEventListener('mousemove', onMove)
       document.addEventListener('mouseup', onEnd)
-    },
-    handleRemove() {
-      this.$emit('onRemove', this.index)
-    },
-    initStartValue() {
-      this.startValue = this.value
+    }
+    const handleRemove = () => {
+      context.$emit('onRemove', props.index)
+    }
+    return {
+      startValue,
+      showLine,
+      offset,
+      borderCursor,
+      actionStyle,
+      handleDown,
+      handleRemove
     }
   }
 }

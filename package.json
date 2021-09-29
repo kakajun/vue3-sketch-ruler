@@ -17,7 +17,7 @@
     "build:demo": "vite build --config vite.demo.js",
     "serve": "vite preview",
     "precommit": "lint-staged",
-    "lint-fix": "eslint --fix ./src --ext .vue,.js,.ts",
+    "lint-fix": "eslint --fix  --ext .vue,.js,.ts",
     "lint:lint-staged": "lint-staged -c ./.husky/lintstagedrc.js",
     "format": "prettier-eslint --write src/**/*.{js,vue,css,scss,styl} && prettier-eslint --write packages/**/*.{js,vue,css,scss,styl} ",
     "css": "cross-env stylelint src/**/*.{html,vue,css,less,scss,styl} --fix && stylelint packages/**/*.{html,vue,css,less,scss,styl} ",
