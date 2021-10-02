@@ -13,7 +13,7 @@ export default defineConfig({
   build: {
     // minify: false, // 不压缩代码,方便开发调试
     lib: {
-      entry: resolve(__dirname, 'packages/index.js'),
+      entry: resolve(__dirname, 'packages/index.ts'),
       name: 'SketchRuler',
       fileName: 'index',
       formats: ['es', 'umd']
