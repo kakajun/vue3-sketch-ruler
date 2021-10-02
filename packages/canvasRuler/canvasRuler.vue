@@ -8,10 +8,8 @@
     @mouseleave="handleLeave"
   />
 </template>
-<script>
+<script lang="ts">
 import { drawHorizontalRuler, drawVerticalRuler } from './utils'
-const getValueByOffset = (offset, start, scale) =>
-  Math.round(start + offset / scale)
 import { reactive, ref, onMounted, watch } from 'vue'
 export default {
   name: 'CanvasRuler',
@@ -26,9 +24,9 @@ export default {
     selectLength: Number
   },
   emits: ['onAddLine', 'onIndicatorShow', 'onIndicatorMove', 'onIndicatorHide'],
-  setup(props, context) {
+  setup(props, { emit }) {
     const state = reactive({
-      canvasContext: {}
+      canvasContext: {} as CanvasRenderingContext2D
     })
     const canvas = ref(null)
 
@@ -85,23 +83,25 @@ export default {
       updateCanvasContext()
       drawRuler()
     })
-    const handleClick = e => {
+    const getValueByOffset = (offset: number, start: number, scale: number) =>
+      Math.round(start + offset / scale)
+    const handleClick = (e: MouseEvent) => {
       const offset = props.vertical ? e.offsetY : e.offsetX
       const value = getValueByOffset(offset, props.start, props.scale)
-      context.emit('onAddLine', value)
+      emit('onAddLine', value)
     }
-    const handleEnter = e => {
+    const handleEnter = (e: MouseEvent) => {
       const offset = props.vertical ? e.offsetY : e.offsetX
       const value = getValueByOffset(offset, props.start, props.scale)
-      context.emit('onIndicatorShow', value)
+      emit('onIndicatorShow', value)
     }
-    const handleMove = e => {
+    const handleMove = (e: MouseEvent) => {
       const offset = props.vertical ? e.offsetY : e.offsetX
       const value = getValueByOffset(offset, props.start, props.scale)
-      context.emit('onIndicatorMove', value)
+      emit('onIndicatorMove', value)
     }
     const handleLeave = () => {
-      context.emit('onIndicatorHide')
+      emit('onIndicatorHide')
     }
     return {
       state,

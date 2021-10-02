@@ -41,9 +41,20 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import RulerWrapper from './rulerWrapper.vue'
 import { computed } from 'vue'
+interface canvasConfigsType {
+  ratio: number
+  bgColor: string
+  longfgColor: string
+  shortfgColor: string
+  fontColor: string
+  shadowColor: string
+  lineColor: string
+  borderColor: string
+  cornerActiveColor: string
+}
 const DEFAULTMENU = {
   bgColor: '#fff',
   dividerColor: '#DBDBDB',
@@ -147,7 +158,7 @@ export default {
     }
   },
   emits: ['onCornerClick', 'handleLine'],
-  setup(props, context) {
+  setup(props, { emit }) {
     const cornerActiveClass = computed(() => {
       return props.cornerActive ? ' active' : ''
     })
@@ -171,7 +182,7 @@ export default {
         borderColor,
         cornerActiveColor
       } = props.palette
-      return {
+      const config: canvasConfigsType = {
         ratio: props.ratio,
         bgColor,
         longfgColor,
@@ -182,15 +193,16 @@ export default {
         borderColor,
         cornerActiveColor
       }
+      return config
     })
-    const onCornerClick = e => {
-      context.emit('onCornerClick', e)
+    const onCornerClick = (e: MouseEvent) => {
+      emit('onCornerClick', e)
     }
-    const handleLineChange = (arr, vertical) => {
+    const handleLineChange = (arr: Array<number>, vertical: string) => {
       const newLines = vertical
         ? { h: props.horLineArr, v: [...arr] }
         : { h: [...arr], v: props.verLineArr }
-      context.emit('handleLine', newLines)
+      emit('handleLine', newLines)
     }
     return {
       cornerActiveClass,

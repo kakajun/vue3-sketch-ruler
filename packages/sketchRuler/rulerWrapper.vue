@@ -39,7 +39,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import LineRuler from './line.vue'
 import CanvasRuler from '../canvasRuler/canvasRuler.vue'
 import { ref, computed } from 'vue'
@@ -66,7 +66,7 @@ export default {
     handleShowReferLine: Function
   },
   emits: ['onLineChange'],
-  setup(props, context) {
+  setup(props, { emit }) {
     const isDraggingLine = ref(false)
     const showIndicator = ref(false)
     const valueNum = ref(0)
@@ -106,18 +106,18 @@ export default {
       }
     })
 
-    const handleNewLine = value => {
+    const handleNewLine = (value: number) => {
       props.lines.push(value)
-      context.emit('onLineChange', props.lines, props.vertical)
+      emit('onLineChange', props.lines, props.vertical)
       // !isShowReferLine && handleShowReferLine()
     }
-    const handleIndicatorShow = value => {
+    const handleIndicatorShow = (value: number) => {
       if (!isDraggingLine.value) {
         showIndicator.value = true
         valueNum.value = value
       }
     }
-    const handleIndicatorMove = value => {
+    const handleIndicatorMove = (value: number) => {
       if (showIndicator.value) {
         valueNum.value = value
       }
@@ -128,7 +128,8 @@ export default {
     const handleLineDown = () => {
       isDraggingLine.value = true
     }
-    const handleLineRelease = (value, index) => {
+    const handleLineRelease = (value: number, index: string | number) => {
+      console.log(typeof index)
       isDraggingLine.value = false
       // 左右或上下超出时, 删除该条对齐线
       const offset = value - props.start
@@ -139,12 +140,12 @@ export default {
         handleLineRemove(index)
       } else {
         props.lines[index] = value
-        context.emit('onLineChange', props.lines, props.vertical)
+        emit('onLineChange', props.lines, props.vertical)
       }
     }
-    const handleLineRemove = index => {
+    const handleLineRemove = (index: any) => {
       props.lines.splice(index, 1)
-      context.emit('onLineChange', props.lines, props.vertical)
+      emit('onLineChange', props.lines, props.vertical)
     }
     return {
       isDraggingLine,

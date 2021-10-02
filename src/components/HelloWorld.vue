@@ -29,8 +29,8 @@
   </div>
 </template>
 <script>
-// import { SketchRule } from '../../packages/index.js'
-import { SketchRule } from '/dist/index.es.js?3242' // 这里可以换成打包后的
+import { SketchRule } from '../../packages/index.ts'
+// import { SketchRule } from '/dist/index.es.js?3242' // 这里可以换成打包后的
 import '/dist/style.css'
 // console.log(SketchRule, '7777777')
 const rectWidth = 160

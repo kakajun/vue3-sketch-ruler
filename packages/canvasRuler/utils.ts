@@ -1,5 +1,5 @@
 // 标尺中每小格代表的宽度(根据scale的不同实时变化)
-const getGridSize = scale => {
+const getGridSize = (scale: number) => {
   if (scale <= 0.25) return 40
   if (scale <= 0.5) return 20
   if (scale <= 1) return 10
@@ -10,7 +10,12 @@ const getGridSize = scale => {
 
 const FONT_SCALE = 0.83 // 10 / 12
 
-export const drawHorizontalRuler = (ctx, start, shadow, options) => {
+export const drawHorizontalRuler = (
+  ctx: CanvasRenderingContext2D,
+  start: number,
+  shadow: { x: number; width: number },
+  options: { scale: number; width: number; height: number; canvasConfigs: any }
+) => {
   const { scale, width, height, canvasConfigs } = options
   const { bgColor, fontColor, shadowColor, ratio, longfgColor, shortfgColor } =
     canvasConfigs
@@ -61,7 +66,7 @@ export const drawHorizontalRuler = (ctx, start, shadow, options) => {
     ctx.save()
     ctx.translate(x, height * 0.4)
     ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
-    ctx.fillText(value, 4 * ratio, 7 * ratio)
+    ctx.fillText(value.toString(), 4 * ratio, 7 * ratio)
     ctx.restore()
     ctx.lineTo(x, (height * 9) / 16)
   }
@@ -89,7 +94,12 @@ export const drawHorizontalRuler = (ctx, start, shadow, options) => {
   ctx.setTransform(1, 0, 0, 1, 0, 0)
 }
 
-export const drawVerticalRuler = (ctx, start, shadow, options) => {
+export const drawVerticalRuler = (
+  ctx: CanvasRenderingContext2D,
+  start: number,
+  shadow: { y: number; height: number },
+  options: { scale: any; width: any; height: any; canvasConfigs: any }
+) => {
   const { scale, width, height, canvasConfigs } = options
   const { bgColor, fontColor, shadowColor, ratio, longfgColor, shortfgColor } =
     canvasConfigs
@@ -141,7 +151,7 @@ export const drawVerticalRuler = (ctx, start, shadow, options) => {
     ctx.translate(width * 0.4, y) // 将原点转移到当前画笔所在点
     ctx.rotate(-Math.PI / 2) // 旋转 -90 度
     ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio) // 缩放至10px
-    ctx.fillText(value, 4 * ratio, 7 * ratio) // 绘制文字
+    ctx.fillText(value.toString(), 4 * ratio, 7 * ratio) // 绘制文字
     // 回复刚刚保存的状态
     ctx.restore()
     ctx.lineTo((width * 9) / 16, y)

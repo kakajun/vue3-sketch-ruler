@@ -7,11 +7,11 @@
   >
     <div class="action" :style="actionStyle">
       <span class="del" @click="handleRemove">&times;</span>
-      <span class="value">{{ startValue.value }}</span>
+      <span class="value">{{ startValue }}</span>
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
 import { ref, computed, onMounted } from 'vue'
 export default {
   name: 'LineRuler',
@@ -26,13 +26,13 @@ export default {
     thick: Number
   },
   emits: ['onMouseDown', 'onRelease', 'onRemove'],
-  setup(props, context) {
+  setup(props, { emit }) {
     const startValue = ref(0)
     const showLine = ref(true)
     onMounted(() => {
       startValue.value = props.value
     })
-    const setShowLine = offset => {
+    const setShowLine = (offset: number) => {
       showLine.value = offset >= 0
     }
     const offset = computed(() => {
@@ -67,11 +67,13 @@ export default {
       return actionStyle
     })
 
-    const handleDown = e => {
+    const handleDown = (e: MouseEvent) => {
+      debugger
       const startD = props.vertical ? e.clientY : e.clientX
       const initValue = startValue.value
-      context.$emit('onMouseDown')
-      const onMove = e => {
+
+      emit('onMouseDown')
+      const onMove = (e: MouseEvent) => {
         const currentD = props.vertical ? e.clientY : e.clientX
         const newValue = Math.round(
           initValue + (currentD - startD) / props.scale
@@ -79,7 +81,7 @@ export default {
         startValue.value = newValue
       }
       const onEnd = () => {
-        context.$emit('onRelease', startValue.value, props.index)
+        emit('onRelease', startValue.value, props.index)
         document.removeEventListener('mousemove', onMove)
         document.removeEventListener('mouseup', onEnd)
       }
@@ -87,7 +89,8 @@ export default {
       document.addEventListener('mouseup', onEnd)
     }
     const handleRemove = () => {
-      context.$emit('onRemove', props.index)
+      debugger
+      emit('onRemove', props.index)
     }
     return {
       startValue,
