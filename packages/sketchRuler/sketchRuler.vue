@@ -7,13 +7,13 @@
       :height="thick"
       :is-show-refer-line="isShowReferLine"
       :thick="thick"
+      :ratio="ratio"
       :start="startX"
       :lines="horLineArr"
       :select-start="shadow.x"
       :select-length="shadow.width"
       :scale="scale"
       :palette="palette"
-      :canvas-configs="canvasConfigs"
       @onLineChange="handleLineChange"
     />
     <!-- 竖直方向 -->
@@ -23,13 +23,13 @@
       :height="height"
       :is-show-refer-line="isShowReferLine"
       :thick="thick"
+      :ratio="ratio"
       :start="startY"
       :lines="verLineArr"
       :select-start="shadow.y"
       :select-length="shadow.height"
       :scale="scale"
       :palette="palette"
-      :canvas-configs="canvasConfigs"
       @onLineChange="handleLineChange"
     />
     <a
@@ -43,18 +43,9 @@
 
 <script lang="ts">
 import RulerWrapper from './rulerWrapper.vue'
-import { computed } from 'vue'
-interface canvasConfigsType {
-  ratio: number
-  bgColor: string
-  longfgColor: string
-  shortfgColor: string
-  fontColor: string
-  shadowColor: string
-  lineColor: string
-  borderColor: string
-  cornerActiveColor: string
-}
+import { computed, defineComponent, PropType } from 'vue'
+import type { PaletteType, ShadowType } from '../index'
+
 const DEFAULTMENU = {
   bgColor: '#fff',
   dividerColor: '#DBDBDB',
@@ -66,7 +57,8 @@ const DEFAULTMENU = {
     hoverBgColor: '#F2F2F2'
   }
 }
-export default {
+
+export default defineComponent({
   name: 'SketchRule',
   components: {
     RulerWrapper
@@ -96,7 +88,7 @@ export default {
       default: 0
     },
     shadow: {
-      type: Object,
+      type: Object as PropType<ShadowType>,
       default: () => {
         return {
           x: 200,
@@ -107,41 +99,28 @@ export default {
       }
     },
     horLineArr: {
-      type: Array,
+      type: Array as PropType<Array<() => [number, number]>>,
       default: () => {
         return [100, 200]
       }
     },
     verLineArr: {
-      type: Array,
+      type: Array as PropType<Array<() => [number, number]>>,
       default: () => {
         return [100, 200]
       }
     },
-    cornerActive: Boolean,
-    lang: String,
-    isOpenMenuFeature: {
+    cornerActive: {
       type: Boolean,
       default: false
     },
-    handleShowRuler: {
-      type: Function,
-      default: () => {
-        return () => {}
-      }
-    },
+
     isShowReferLine: {
       type: Boolean,
       default: true
     },
-    handleShowReferLine: {
-      type: Function,
-      default: () => {
-        return () => {}
-      }
-    },
     palette: {
-      type: Object,
+      type: Object as PropType<PaletteType>,
       default: () => {
         return {
           bgColor: 'rgba(225,225,225, 0)', // ruler bg color
@@ -171,30 +150,7 @@ export default {
         borderBottom: `1px solid ${props.palette.borderColor}`
       }
     })
-    const canvasConfigs = computed(() => {
-      const {
-        bgColor,
-        longfgColor,
-        shortfgColor,
-        fontColor,
-        shadowColor,
-        lineColor,
-        borderColor,
-        cornerActiveColor
-      } = props.palette
-      const config: canvasConfigsType = {
-        ratio: props.ratio,
-        bgColor,
-        longfgColor,
-        shortfgColor,
-        fontColor,
-        shadowColor,
-        lineColor,
-        borderColor,
-        cornerActiveColor
-      }
-      return config
-    })
+
     const onCornerClick = (e: MouseEvent) => {
       emit('onCornerClick', e)
     }
@@ -206,13 +162,12 @@ export default {
     }
     return {
       cornerActiveClass,
-      canvasConfigs,
       cornerStyle,
       onCornerClick,
       handleLineChange
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

@@ -6,9 +6,10 @@
       :width="width"
       :height="height"
       :start="start"
+      :ratio="ratio"
       :select-start="selectStart"
       :select-length="selectLength"
-      :canvas-configs="canvasConfigs"
+      :palette="palette"
       @onAddLine="handleNewLine"
       @onIndicatorShow="handleIndicatorShow"
       @onIndicatorMove="handleIndicatorMove"
@@ -42,28 +43,69 @@
 <script lang="ts">
 import LineRuler from './line.vue'
 import CanvasRuler from '../canvasRuler/canvasRuler.vue'
-import { ref, computed } from 'vue'
-export default {
+import { ref, computed, defineComponent, PropType } from 'vue'
+import type { PaletteType, ShadowType } from '../index'
+// export interface RulerWrapperProps{
+//     id: number;
+//     title: string;
+//     avatar?: string;
+//     description: string;
+// }
+export default defineComponent({
   name: 'RulerWrapper',
   components: {
     CanvasRuler,
     LineRuler
   },
   props: {
-    vertical: Boolean,
-    scale: Number,
-    width: Number,
-    thick: Number,
-    height: Number,
-    start: Number,
-    lines: Array,
-    selectStart: Number,
-    selectLength: Number,
-    canvasConfigs: Object,
-    palette: Object,
-    isShowReferLine: Boolean,
-    onShowRightMenu: Function,
-    handleShowReferLine: Function
+    vertical: {
+      type: Boolean,
+      require: true
+    },
+    scale: {
+      type: Number,
+      require: true
+    },
+    width: {
+      type: Number,
+      require: true
+    },
+    thick: {
+      type: Number,
+      require: true
+    },
+    height: {
+      type: Number,
+      require: true
+    },
+    start: {
+      type: Number,
+      require: true
+    },
+    lines: {
+      type: Array as unknown as PropType<[number, number]>,
+      require: true
+    },
+    selectStart: {
+      type: Number,
+      require: true
+    },
+    selectLength: {
+      type: Number,
+      require: true
+    },
+    ratio: {
+      type: Number,
+      require: true
+    },
+    palette: {
+      type: Object as PropType<PaletteType>,
+      require: true
+    },
+    isShowReferLine: {
+      type: Boolean,
+      require: true
+    }
   },
   emits: ['onLineChange'],
   setup(props, { emit }) {
@@ -81,7 +123,7 @@ export default {
         left: `${props.thick}` + 'px'
       }
       const vContainer = {
-        width: `${props.thick + 1}px`,
+        width: `${props.thick && props.thick + 1}px`,
         height: `calc(100% - ${props.thick}px)`,
         top: `${props.thick}` + 'px'
       }
@@ -109,7 +151,6 @@ export default {
     const handleNewLine = (value: number) => {
       props.lines.push(value)
       emit('onLineChange', props.lines, props.vertical)
-      // !isShowReferLine && handleShowReferLine()
     }
     const handleIndicatorShow = (value: number) => {
       if (!isDraggingLine.value) {
@@ -164,7 +205,7 @@ export default {
       handleLineRemove
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

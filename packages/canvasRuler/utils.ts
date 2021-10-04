@@ -14,11 +14,11 @@ export const drawHorizontalRuler = (
   ctx: CanvasRenderingContext2D,
   start: number,
   shadow: { x: number; width: number },
-  options: { scale: number; width: number; height: number; canvasConfigs: any }
+  options: { scale: number; width: number; height: number; palette: any }
 ) => {
-  const { scale, width, height, canvasConfigs } = options
+  const { scale, width, height, palette } = options
   const { bgColor, fontColor, shadowColor, ratio, longfgColor, shortfgColor } =
-    canvasConfigs
+    palette
 
   // 缩放ctx, 以简化计算
   ctx.scale(ratio, ratio)
@@ -98,11 +98,11 @@ export const drawVerticalRuler = (
   ctx: CanvasRenderingContext2D,
   start: number,
   shadow: { y: number; height: number },
-  options: { scale: any; width: any; height: any; canvasConfigs: any }
+  options: { scale: any; width: any; height: any; palette: any }
 ) => {
-  const { scale, width, height, canvasConfigs } = options
+  const { scale, width, height, palette } = options
   const { bgColor, fontColor, shadowColor, ratio, longfgColor, shortfgColor } =
-    canvasConfigs
+    palette
 
   // 缩放ctx, 以简化计算
   ctx.scale(ratio, ratio)

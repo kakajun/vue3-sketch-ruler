@@ -1,15 +1,22 @@
 {
   "name": "vue3-sketch-ruler",
   "version": "1.1.0",
+  "author": "kakajun <253495832@qq.com>",
+  "license": "MIT",
   "workspaces": [
     "packages/*"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/majun2232/vue3sketchRuler"
+  },
   "engines": {
     "node": ">=12.0.0",
     "vue": ">=3.0.0"
   },
-  "main": "dist/index.umd.js",
+  "main": "dist/index.es.js",
   "module": "dist/index.es.js",
+    "style": "dist/style.css",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -23,11 +30,11 @@
     "pretty": "pretty-quick --staged",
     "prepare": "husky install"
   },
-  "dependencies": {
-    "vue": "^3.2.6",
-    "sass": "^1.39.0"
+   "peerDependencies": {
+   "vue": "^3.2.6"
   },
   "devDependencies": {
+    "sass": "^1.39.0",
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
     "@vue/eslint-config-prettier": "^6.0.0",
@@ -56,9 +63,10 @@
     "vue-ruler",
     "vite2"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/majun2232/vue3sketchRuler"
+    "bugs": {
+    "url": "https://github.com/majun2232/vue3sketchRuler/issues"
   },
-  "author": "kakajun <253495832@qq.com>"
+  "homepage": "https://github.com/majun2232/vue3sketchRuler/blob/master/README.md"
+
+
 }

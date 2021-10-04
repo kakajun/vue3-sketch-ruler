@@ -10,6 +10,8 @@ vue3-sketch-ruler
 
 English | [简体中文](https://github.com/majun2232/vue3sketchRuler/blob/master/README.zh-CN.md)
 
+- 💪 Vue 3 Composition API
+- 🔥 Written in TypeScript
 # 介绍
 vue3-sketch-ruler是对原vue-sketch-ruler重新打包, 这边对代码进行了vue3的eslint修复和styleLint和pretty的代码格式化,支持适应vue3中使用sketchRuler,同时改写为vue3 Composition API 的写法用typerscript进行改写,以方便大家使用
 # Vue 3 + Vite + ts 打包sketchRuler
@@ -18,6 +20,12 @@ vue3-sketch-ruler是对原vue-sketch-ruler重新打包, 这边对代码进行了
 ## demo
 案例浏览: [https://majun2232.github.io/vue3sketchRuler/](https://majun2232.github.io/vue3sketchRuler)
 ![image](https://github.com/majun2232/vue3sketchRuler/blob/master/src/assets/demo.png)
+
+## 安装
+> 支持全局导入和模块导入
+```
+npm install --save vue-sketch-ruler
+```
 
 ## 引入方式
 将打包后的dist包拷贝,用import导入,支持下面两种引用方式

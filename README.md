@@ -10,11 +10,12 @@ vue3-sketch-ruler
 
 English | [简体中文](https://github.com/majun2232/vue3sketchRuler/blob/master/README.zh-CN.md)
 
+- 💪 Vue 3 Composition API
+- 🔥 Written in TypeScript
 # introduce
 
-
-
 Vue3 sketch ruler repackages the original vue3 sketch ruler. Here, the code is eslint repaired by vue3 and formatted by stylelint and pretty. It supports the use of sketchruler in vue3. At the same time, it is rewritten into the writing method of vue3 composition API and rewritten with typescript for your convenience
+
 
 # Vue 3 + vite + TS package sketchrule
 
@@ -26,6 +27,11 @@ Because the project was upgraded to vite, I found that the original plug-in Vue 
 Case browsing:[ https://majun2232.github.io/vue3sketchRuler/ ]( https://majun2232.github.io/vue3sketchRuler )
 
 ! [image]( https://github.com/majun2232/vue3sketchRuler/blob/master/src/assets/demo.png )
+
+## Install
+```
+npm install --save vue-sketch-ruler
+```
 
 ##Introduction mode
 
