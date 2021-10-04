@@ -34,7 +34,7 @@ import { SketchRule } from '../../packages/index.ts'
 import '/dist/style.css'
 // console.log(SketchRule, '7777777')
 const rectWidth = 160
-const rectHeight = 400
+const rectHeight = 200
 export default {
   components: { SketchRule },
   data() {

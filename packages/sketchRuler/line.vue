@@ -12,18 +12,38 @@
   </div>
 </template>
 <script lang="ts">
-import { ref, computed, onMounted } from 'vue'
-export default {
+import { ref, computed, onMounted, defineComponent } from 'vue'
+import { props } from '../props'
+
+export default defineComponent({
   name: 'LineRuler',
   props: {
-    index: Number,
-    start: Number,
-    vertical: Boolean,
-    scale: Number,
-    value: Number,
-    palette: Object,
-    isShowReferLine: Boolean,
-    thick: Number
+    ...props,
+    index: {
+      type: Number,
+      default: 0
+    },
+    start: {
+      type: Number,
+      default: 0
+    },
+    vertical: {
+      type: Boolean,
+      default: true
+    },
+    scale: {
+      type: Number,
+      default: 1
+    },
+    value: {
+      type: Number,
+      default: 0
+    },
+
+    isShowReferLine: {
+      type: Boolean,
+      require: true
+    }
   },
   emits: ['onMouseDown', 'onRelease', 'onRemove'],
   setup(props, { emit }) {
@@ -68,7 +88,6 @@ export default {
     })
 
     const handleDown = (e: MouseEvent) => {
-      debugger
       const startD = props.vertical ? e.clientY : e.clientX
       const initValue = startValue.value
 
@@ -89,7 +108,6 @@ export default {
       document.addEventListener('mouseup', onEnd)
     }
     const handleRemove = () => {
-      debugger
       emit('onRemove', props.index)
     }
     return {
@@ -102,7 +120,7 @@ export default {
       handleRemove
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

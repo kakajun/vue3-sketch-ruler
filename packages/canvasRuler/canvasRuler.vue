@@ -10,37 +10,39 @@
 </template>
 <script lang="ts">
 import { drawHorizontalRuler, drawVerticalRuler } from './utils'
-import {
-  reactive,
-  ref,
-  onMounted,
-  watch,
-  defineComponent,
-  unref,
-  PropType
-} from 'vue'
-import type { PaletteType, ShadowType } from '../index'
+import { reactive, ref, onMounted, watch, defineComponent } from 'vue'
+import { props } from '../props'
+
 export default defineComponent({
   name: 'CanvasRuler',
   props: {
+    ...props,
     vertical: Boolean,
-    start: Number,
-    scale: Number,
-    width: Number,
-    height: Number,
-    ratio: {
+    start: {
       type: Number,
-      require: true
+      default: 0
     },
-    palette: {
-      type: Object as PropType<PaletteType>,
-      require: true
+
+    width: {
+      type: Number,
+      default: 200
     },
-    selectStart: Number,
-    selectLength: Number
+    height: {
+      type: Number,
+      default: 200
+    },
+    selectStart: {
+      type: Number,
+      default: 0
+    },
+    selectLength: {
+      type: Number,
+      default: 0
+    }
   },
   emits: ['onAddLine', 'onIndicatorShow', 'onIndicatorMove', 'onIndicatorHide'],
   setup(props, { emit }) {
+    const { width } = props
     const state = reactive({
       canvasContext: null as CanvasRenderingContext2D | null
     })
@@ -59,13 +61,15 @@ export default defineComponent({
         // 比例宽高
         canvas.value.width = props.width * ratio
         canvas.value.height = props.height * ratio
-        const ctx = canvas.value.getContext('2d')
-        ctx.font = `${12 * ratio}px -apple-system,
+        const ctx = state.canvasContext
+        if (ctx) {
+          ctx.font = `${12 * ratio}px -apple-system,
                 "Helvetica Neue", ".SFNSText-Regular",
                 "SF UI Text", Arial, "PingFang SC", "Hiragino Sans GB",
                 "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif`
-        ctx.lineWidth = 1
-        ctx.textBaseline = 'middle'
+          ctx.lineWidth = 1
+          ctx.textBaseline = 'middle'
+        }
       }
     }
     const drawRuler = () => {

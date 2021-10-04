@@ -44,13 +44,8 @@
 import LineRuler from './line.vue'
 import CanvasRuler from '../canvasRuler/canvasRuler.vue'
 import { ref, computed, defineComponent, PropType } from 'vue'
-import type { PaletteType, ShadowType } from '../index'
-// export interface RulerWrapperProps{
-//     id: number;
-//     title: string;
-//     avatar?: string;
-//     description: string;
-// }
+import { props } from '../props'
+
 export default defineComponent({
   name: 'RulerWrapper',
   components: {
@@ -58,33 +53,31 @@ export default defineComponent({
     LineRuler
   },
   props: {
+    ...props,
     vertical: {
       type: Boolean,
-      require: true
-    },
-    scale: {
-      type: Number,
+      default: true,
       require: true
     },
     width: {
       type: Number,
-      require: true
-    },
-    thick: {
-      type: Number,
+      default: 200,
       require: true
     },
     height: {
       type: Number,
+      default: 200,
       require: true
     },
     start: {
       type: Number,
-      require: true
+      default: 0
     },
     lines: {
-      type: Array as unknown as PropType<[number, number]>,
-      require: true
+      type: Array as PropType<Array<number>>,
+      default: () => {
+        return [100, 200]
+      }
     },
     selectStart: {
       type: Number,
@@ -96,10 +89,6 @@ export default defineComponent({
     },
     ratio: {
       type: Number,
-      require: true
-    },
-    palette: {
-      type: Object as PropType<PaletteType>,
       require: true
     },
     isShowReferLine: {
@@ -169,8 +158,7 @@ export default defineComponent({
     const handleLineDown = () => {
       isDraggingLine.value = true
     }
-    const handleLineRelease = (value: number, index: string | number) => {
-      console.log(typeof index)
+    const handleLineRelease = (value: number, index: number) => {
       isDraggingLine.value = false
       // 左右或上下超出时, 删除该条对齐线
       const offset = value - props.start
