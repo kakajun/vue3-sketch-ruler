@@ -44,8 +44,8 @@
 <script lang="ts">
 import RulerWrapper from './rulerWrapper.vue'
 import { computed, defineComponent, PropType } from 'vue'
-import type { ShadowType } from '../types/index'
-import { props } from '../props'
+import type { ShadowType } from '../types'
+import { props } from './props'
 
 export default defineComponent({
   name: 'SketchRule',

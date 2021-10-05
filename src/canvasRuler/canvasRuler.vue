@@ -11,7 +11,7 @@
 <script lang="ts">
 import { drawHorizontalRuler, drawVerticalRuler } from './utils'
 import { reactive, ref, onMounted, watch, defineComponent } from 'vue'
-import { props } from '../props'
+import { props } from '../sketchRuler/props'
 
 export default defineComponent({
   name: 'CanvasRuler',

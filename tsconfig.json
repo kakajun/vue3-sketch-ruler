@@ -1,14 +1,21 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "downlevelIteration": true,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "declarationDir": "types",
     "declaration": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowJs": true,
-    "lib": ["esnext", "dom"],
-    "allowSyntheticDefaultImports": true,
+    "strict": true,
     "jsx": "preserve",
-    "isolatedModules": true
-  }
+    "allowJs": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "lib": ["esnext", "dom"]
+  },
+  "include": ["src/**/*"]
 }

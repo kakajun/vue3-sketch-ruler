@@ -1,5 +1,5 @@
 import type { PropType } from 'vue'
-import type { PaletteType } from './index'
+import type { PaletteType } from '../types'
 
 const DEFAULTMENU = {
   bgColor: '#fff',

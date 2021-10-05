@@ -13,7 +13,7 @@
 </template>
 <script lang="ts">
 import { ref, computed, onMounted, defineComponent } from 'vue'
-import { props } from '../props'
+import { props } from './props'
 
 export default defineComponent({
   name: 'LineRuler',

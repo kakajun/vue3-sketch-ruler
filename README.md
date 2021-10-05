@@ -103,10 +103,10 @@ Usage
 </template>
 <script>
 import Vue from 'vue';
-import SketchRule from "vue-sketch-ruler";
+import {SketchRule} from "vue-sketch-ruler";
 const rectWidth = 160;
 const rectHeight = 200;
-export default Vue.extend({
+export default {
     data() {
         return {
             scale: 2, //658813476562495, //1,

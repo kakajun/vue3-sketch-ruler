@@ -1,7 +1,11 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-const pkg = require('./package.json')
+import { existsSync, readdirSync, lstatSync, rmdirSync, unlinkSync } from 'fs'
 import { resolve } from 'path'
+import dts from 'vite-plugin-dts'
+const pkg = require('./package.json')
+
+emptyDir(resolve(__dirname, 'types'))
 const banner = `/*!
 * ${pkg.name} v${pkg.version}
 * ${new Date().getFullYear()}年${new Date().getMonth() + 1}月${new Date()}
@@ -9,11 +13,24 @@ const banner = `/*!
 */`
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    dts({
+      outputDir: 'types',
+      staticImport: true,
+      insertTypesEntry: true,
+      logDiagnostics: true
+    })
+  ],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname)
+    }
+  },
   build: {
     // minify: false, // 不压缩代码,方便开发调试
     lib: {
-      entry: resolve(__dirname, 'packages/index.ts'),
+      entry: resolve(__dirname, 'src/index.ts'),
       name: 'SketchRuler',
       fileName: 'index',
       formats: ['es', 'umd']
@@ -27,3 +44,21 @@ export default defineConfig({
     }
   }
 })
+
+function emptyDir(dir) {
+  if (!existsSync(dir)) {
+    return
+  }
+
+  for (const file of readdirSync(dir)) {
+    const abs = resolve(dir, file)
+
+    // baseline is Node 12 so can't use rmSync
+    if (lstatSync(abs).isDirectory()) {
+      emptyDir(abs)
+      rmdirSync(abs)
+    } else {
+      unlinkSync(abs)
+    }
+  }
+}

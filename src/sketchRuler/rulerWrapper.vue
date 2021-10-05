@@ -44,7 +44,7 @@
 import LineRuler from './line.vue'
 import CanvasRuler from '../canvasRuler/canvasRuler.vue'
 import { ref, computed, defineComponent, PropType } from 'vue'
-import { props } from '../props'
+import { props } from './props'
 
 export default defineComponent({
   name: 'RulerWrapper',

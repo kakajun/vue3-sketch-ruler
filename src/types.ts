@@ -1,6 +1,3 @@
-import { PropType } from 'vue'
-import { VarComponent } from './varComponent'
-
 export interface SketchRulerProps {
   scale?: number
   ratio?: number
@@ -58,9 +55,3 @@ export interface ShadowType {
   width: number
   height: number
 }
-
-export class SketchRule extends VarComponent {
-  $props: SketchRulerProps
-}
-
-export class _SketchRuleComponent extends SketchRule {}
