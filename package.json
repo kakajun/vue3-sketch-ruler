@@ -12,8 +12,8 @@
     "url": "https://github.com/majun2232/vue3sketchRuler"
   },
 
-  "typings": "types/index.d.ts",
-  "main": "dist/index.es.js",
+  "typings": "src/types.ts",
+  "main": "dist/index.umd.js",
   "module": "dist/index.es.js",
   "style": "dist/style.css",
   "scripts": {

@@ -86,7 +86,6 @@ Usage
 ```
 <template>
     <SketchRule
-        :lang="lang"
         :thick="thick"
         :scale="scale"
         :width="582"
@@ -117,7 +116,6 @@ export default {
                 v: [100, 200]
             },
             thick: 20,
-            lang: "zh-CN",
             isShowRuler: true,
             isShowReferLine: true
         }

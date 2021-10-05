@@ -61,7 +61,6 @@ import '/dist/style.css'
 ```
 <template>
     <SketchRule
-        :lang="lang"
         :thick="thick"
         :scale="scale"
         :width="582"
@@ -93,7 +92,6 @@ export default {
                 v: [100, 200]
             },
             thick: 20,
-            lang: "zh-CN",
             isShowRuler: true,
             isShowReferLine: true
         }
@@ -134,7 +132,6 @@ interface Palette {
 
 |  属性名称|  描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| lang | 初始化的语言 | String | zh-CN |
 | scale | 初始化标尺的缩放 | Number | 2 |
 | thick | 标尺的厚度 | Number | 16 |
 | width | 放置标尺窗口的宽度  | Number | - |
