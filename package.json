@@ -1,9 +1,9 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "kakajun <253495832@qq.com>",
   "license": "MIT",
-  "private":true,
+  "private2":true,
   "workspaces": [
     "packages/*"
   ],
