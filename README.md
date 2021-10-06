@@ -36,6 +36,8 @@ Due to limited time, we hope to improve the following points in the future:
 
 3. Click the eye in the upper left corner to control the red line development
 
+4. Add test function
+
 This is an open source amateur function. If you are interested in strengthening the plug-in, you are welcome to join. You are also welcome to mention PR or issue, or email me a message, 253495832@qq.com
 
 ## demo

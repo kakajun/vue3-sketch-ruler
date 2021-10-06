@@ -25,7 +25,8 @@
     "format": "prettier-eslint --write src/**/*.{js,vue,css,scss,styl} && prettier-eslint --write packages/**/*.{js,vue,css,scss,styl} ",
     "css": "cross-env stylelint src/**/*.{html,vue,css,less,scss,styl} --fix && stylelint packages/**/*.{html,vue,css,less,scss,styl} ",
     "pretty": "pretty-quick --staged",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "genlog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "dependencies": {
 
