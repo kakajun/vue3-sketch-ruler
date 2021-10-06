@@ -17,7 +17,6 @@ export default defineComponent({
   name: 'LineRuler',
   props: {
     scale: Number,
-    ratio: Number,
     thick: Number,
     palette: Object,
     index: Number,

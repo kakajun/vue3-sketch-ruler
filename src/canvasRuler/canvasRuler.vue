@@ -16,7 +16,6 @@ export default defineComponent({
   props: {
     scale: Number,
     ratio: Number,
-    thick: Number,
     palette: Object,
     vertical: Boolean,
     start: Number,
