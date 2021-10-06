@@ -19,17 +19,25 @@
   "scripts": {
     "dev": "vite --config vite.demo.js",
     "build": "vite build",
-    "precommit": "lint-staged",
-    "lint-fix": "eslint --fix  --ext .vue,.js,.ts",
+     "precommit": "lint-staged",
+   "lint-fix": "eslint --fix  --ext .vue,.js,.ts",
     "lint:lint-staged": "lint-staged -c ./.husky/lintstagedrc.js",
     "format": "prettier-eslint --write src/**/*.{js,vue,css,scss,styl} && prettier-eslint --write packages/**/*.{js,vue,css,scss,styl} ",
     "css": "cross-env stylelint src/**/*.{html,vue,css,less,scss,styl} --fix && stylelint packages/**/*.{html,vue,css,less,scss,styl} ",
     "pretty": "pretty-quick --staged",
     "prepare": "husky install",
-    "genlog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+    "commit": "git-cz",
+    "gen": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
-  "dependencies": {
-
+   "lint-staged": {
+    "*.{ts,tsx,js,vue,less}": "prettier --write",
+    "*.{ts,tsx,js,vue}": "eslint --fix",
+    "*.{vue,css,less}": "stylelint --fix"
+  },
+         "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   },
   "devDependencies": {
      "vue": "^3.2.19",
@@ -40,6 +48,8 @@
      "@typescript-eslint/eslint-plugin": "^4.29.2",
     "@typescript-eslint/parser": "^4.29.2",
     "conventional-changelog-cli": "^2.1.1",
+     "cz-conventional-changelog" :"3.3.0",
+      "commitizen": "^4.2.2",
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
@@ -56,6 +66,7 @@
     "vite": "^2.6.2",
     "vite-plugin-dts": "^0.8.2"
   },
+
   "keywords": [
     "vue3",
     "ruler",
