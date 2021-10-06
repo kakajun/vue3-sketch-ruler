@@ -10,10 +10,10 @@
       :ratio="ratio"
       :start="startX"
       :lines="horLineArr"
-      :select-start="shadow.x"
-      :select-length="shadow.width"
+      :select-start="shadowCpu.x"
+      :select-length="shadowCpu.width"
       :scale="scale"
-      :palette="palette"
+      :palette="paletteCpu"
       @onLineChange="handleLineChange"
     />
     <!-- 竖直方向 -->
@@ -26,10 +26,10 @@
       :ratio="ratio"
       :start="startY"
       :lines="verLineArr"
-      :select-start="shadow.y"
-      :select-length="shadow.height"
+      :select-start="shadowCpu.y"
+      :select-length="shadowCpu.height"
       :scale="scale"
-      :palette="palette"
+      :palette="paletteCpu"
       @onLineChange="handleLineChange"
     />
     <a
@@ -44,18 +44,26 @@
 <script lang="ts">
 import RulerWrapper from './rulerWrapper.vue'
 import { computed, defineComponent, PropType } from 'vue'
-import type { ShadowType } from '../types'
-import { props } from './props'
-
+import type { ShadowType, PaletteType } from '../types'
 export default defineComponent({
   name: 'SketchRule',
   components: {
     RulerWrapper
   },
-
   props: {
-    ...props,
-
+    scale: {
+      type: Number,
+      default: 1
+    },
+    ratio: {
+      type: Number,
+      default: window.devicePixelRatio || 1
+    },
+    thick: {
+      type: Number,
+      default: 16
+    },
+    palette: Object as PropType<PaletteType>,
     startX: {
       type: Number
     },
@@ -71,17 +79,7 @@ export default defineComponent({
       type: Number,
       default: 200
     },
-    shadow: {
-      type: Object as PropType<ShadowType>,
-      default: () => {
-        return {
-          x: 200,
-          y: 100,
-          width: 200,
-          height: 200
-        }
-      }
-    },
+    shadow: Object as PropType<ShadowType>,
     horLineArr: {
       type: Array as PropType<Array<number>>,
       default: () => {
@@ -106,16 +104,49 @@ export default defineComponent({
   },
   emits: ['onCornerClick', 'handleLine'],
   setup(props, { emit }) {
+    // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
+    const shadowCpu = computed(() => {
+      return Object.assign(props.shadow || {}, {
+        x: 200,
+        y: 100,
+        width: 200,
+        height: 200
+      })
+    })
+    const paletteCpu = computed(() => {
+      return Object.assign(props.palette || {}, {
+        bgColor: 'rgba(225,225,225, 0)', // ruler bg color
+        longfgColor: '#BABBBC', // ruler longer mark color
+        shortfgColor: '#C8CDD0', // ruler shorter mark color
+        fontColor: '#7D8694', // ruler font color
+        shadowColor: '#E8E8E8', // ruler shadow color
+        lineColor: '#EB5648',
+        borderColor: '#DADADC',
+        cornerActiveColor: 'rgb(235, 86, 72, 0.6)',
+        menu: {
+          bgColor: '#fff',
+          dividerColor: '#DBDBDB',
+          listItem: {
+            textColor: '#415058',
+            hoverTextColor: '#298DF8',
+            disabledTextColor: 'rgba(65, 80, 88, 0.4)',
+            bgColor: '#fff',
+            hoverBgColor: '#F2F2F2'
+          }
+        }
+      })
+    })
     const cornerActiveClass = computed(() => {
       return props.cornerActive ? ' active' : ''
     })
+
     const cornerStyle = computed(() => {
       return {
-        backgroundColor: props.palette.bgColor,
+        backgroundColor: paletteCpu.value.bgColor,
         width: props.thick + 'px',
         height: props.thick + 'px',
-        borderRight: `1px solid ${props.palette.borderColor}`,
-        borderBottom: `1px solid ${props.palette.borderColor}`
+        borderRight: `1px solid ${paletteCpu.value.borderColor}`,
+        borderBottom: `1px solid ${paletteCpu.value.borderColor}`
       }
     })
 
@@ -129,6 +160,8 @@ export default defineComponent({
       emit('handleLine', newLines)
     }
     return {
+      paletteCpu,
+      shadowCpu,
       cornerActiveClass,
       cornerStyle,
       onCornerClick,

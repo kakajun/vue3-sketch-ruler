@@ -44,8 +44,6 @@
 import LineRuler from './line.vue'
 import CanvasRuler from '../canvasRuler/canvasRuler.vue'
 import { ref, computed, defineComponent, PropType } from 'vue'
-import { props } from './props'
-
 export default defineComponent({
   name: 'RulerWrapper',
   components: {
@@ -53,21 +51,21 @@ export default defineComponent({
     LineRuler
   },
   props: {
-    ...props,
+    scale: Number,
+    ratio: Number,
+    thick: Number,
+    palette: Object,
     vertical: {
       type: Boolean,
-      default: true,
-      require: true
+      default: true
     },
     width: {
       type: Number,
-      default: 200,
-      require: true
+      default: 200
     },
     height: {
       type: Number,
-      default: 200,
-      require: true
+      default: 200
     },
     start: {
       type: Number,
@@ -80,20 +78,13 @@ export default defineComponent({
       }
     },
     selectStart: {
-      type: Number,
-      require: true
+      type: Number
     },
     selectLength: {
-      type: Number,
-      require: true
-    },
-    ratio: {
-      type: Number,
-      require: true
+      type: Number
     },
     isShowReferLine: {
-      type: Boolean,
-      require: true
+      type: Boolean
     }
   },
   emits: ['onLineChange'],
@@ -108,7 +99,7 @@ export default defineComponent({
     const rwStyle = computed(() => {
       const hContainer = {
         width: `calc(100% - ${props.thick}px)`,
-        height: `${props.thick + 1}px`,
+        height: `${props.thick! + 1}px`,
         left: `${props.thick}` + 'px'
       }
       const vContainer = {
@@ -121,19 +112,19 @@ export default defineComponent({
 
     const lineStyle = computed(() => {
       return {
-        borderTop: `1px solid ${props.palette.lineColor}`,
+        borderTop: `1px solid ${props.palette?.lineColor}`,
         cursor: props.isShowReferLine ? 'ns-resize' : 'none'
       }
     })
     const indicatorStyle = computed(() => {
-      const indicatorOffset = (valueNum.value - props.start) * props.scale
+      const indicatorOffset = (valueNum.value - props.start) * props.scale!
       let positionKey = 'top'
       let boderKey = 'borderLeft'
       positionKey = props.vertical ? 'top' : 'left'
       boderKey = props.vertical ? 'borderBottom' : 'borderLeft'
       return {
         [positionKey]: indicatorOffset + 'px',
-        [boderKey]: `1px solid ${props.palette.lineColor}`
+        [boderKey]: `1px solid ${props.palette?.lineColor}`
       }
     })
 
@@ -163,7 +154,7 @@ export default defineComponent({
       // 左右或上下超出时, 删除该条对齐线
       const offset = value - props.start
       const maxOffset =
-        (props.vertical ? props.height : props.width) / props.scale
+        (props.vertical ? props.height : props.width) / props.scale!
 
       if (offset < 0 || offset > maxOffset) {
         handleLineRemove(index)

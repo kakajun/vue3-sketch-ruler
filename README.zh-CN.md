@@ -12,11 +12,21 @@ English | [简体中文](https://github.com/majun2232/vue3sketchRuler/blob/maste
 
 - 💪 Vue 3 Composition API
 - 🔥 Written in TypeScript
-# 介绍
-vue3-sketch-ruler是对原vue-sketch-ruler重新打包, 这边对代码进行了vue3的eslint修复和styleLint和pretty的代码格式化,支持适应vue3中使用sketchRuler,同时改写为vue3 Composition API 的写法用typerscript进行改写,以方便大家使用
-# Vue 3 + Vite + ts 打包sketchRuler
-由于项目升级成vite, 发现原来的插件vue-sketch-ruler,用到vue3中会报错, 这边我重新用vite打包了一份, 打包后的插件和原来功一样, 且支持在vue3和vite中使用
 
+
+# Vue 3 + Vite + ts 打包sketchRuler
+由于项目升级成vite， 发现原来的插件vue-sketch-ruler，用到vue3中会报错， 这边我重新用vite打包了一份， 打包后的插件和原来功一样， 且支持在vue3和vite中使用
+---
+这边对原代码进行了改进优化，功能目前和之前vue3-sketch-ruler一样，还没时间优化，主要改进分为以下几点
+1. vue3的eslint修复和styleLint和pretty的代码格式化，支持适应vue3中使用sketchRuler，同时改写为vue3 Composition API 的写法
+2. 用typerscript进行重构，对类型进行定义，同时方便后续扩展
+3. 对shadow和palette参数进行对象合并计算，在以前palette的参数要么都传，要么不传，我这里改进后可以只传需要修改的属性即可，没有修改的可以不传
+4. 对类型进行打包设置（目前还不知道这个类型打包有多大的好处）
+由于时间有限， 未来希望改进以下几点：
+1. 加入画布鼠标拖动功能
+2. 右下角有个鼠标进入缩放小功能
+3. 左上角的眼睛，点击能控制红线显影
+这是个开源业余做的功能，有兴趣加强该插件的小伙伴欢迎加入，也欢迎大家提pr或者issue，，或者邮箱给我留言，253495832@qq.com
 ## demo
 案例浏览: [https://majun2232.github.io/vue3sketchRuler/](https://majun2232.github.io/vue3sketchRuler)
 ![image](https://github.com/majun2232/vue3sketchRuler/blob/master/src/assets/demo.png)
@@ -28,7 +38,7 @@ npm install --save vue-sketch-ruler
 ```
 
 ## 引入方式
-将打包后的dist包拷贝,用import导入,支持下面两种引用方式
+将打包后的dist包拷贝，用import导入，支持下面两种引用方式
 ```
 import { SketchRule } from '/dist/index.es.js?3242'
  components: { SketchRule }

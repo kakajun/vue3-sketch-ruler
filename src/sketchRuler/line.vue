@@ -13,50 +13,31 @@
 </template>
 <script lang="ts">
 import { ref, computed, onMounted, defineComponent } from 'vue'
-import { props } from './props'
-
 export default defineComponent({
   name: 'LineRuler',
   props: {
-    ...props,
-    index: {
-      type: Number,
-      default: 0
-    },
-    start: {
-      type: Number,
-      default: 0
-    },
-    vertical: {
-      type: Boolean,
-      default: true
-    },
-    scale: {
-      type: Number,
-      default: 1
-    },
-    value: {
-      type: Number,
-      default: 0
-    },
-
-    isShowReferLine: {
-      type: Boolean,
-      require: true
-    }
+    scale: Number,
+    ratio: Number,
+    thick: Number,
+    palette: Object,
+    index: Number,
+    start: Number,
+    vertical: Boolean,
+    value: Number,
+    isShowReferLine: Boolean
   },
   emits: ['onMouseDown', 'onRelease', 'onRemove'],
   setup(props, { emit }) {
     const startValue = ref(0)
     const showLine = ref(true)
     onMounted(() => {
-      startValue.value = props.value
+      startValue.value = props.value!
     })
     const setShowLine = (offset: number) => {
       showLine.value = offset >= 0
     }
     const offset = computed(() => {
-      const offset = (startValue.value - props.start) * props.scale
+      const offset = (startValue.value - props.start!) * props.scale!
       setShowLine(offset)
       const positionValue = offset + 'px'
       const position = props.vertical
@@ -65,7 +46,7 @@ export default defineComponent({
       return position
     })
     const borderCursor = computed(() => {
-      const borderValue = `1px solid ${props.palette.lineColor}`
+      const borderValue = `1px solid ${props.palette?.lineColor}`
       const border = props.vertical
         ? { borderTop: borderValue }
         : { borderLeft: borderValue }
@@ -95,7 +76,7 @@ export default defineComponent({
       const onMove = (e: MouseEvent) => {
         const currentD = props.vertical ? e.clientY : e.clientX
         const newValue = Math.round(
-          initValue + (currentD - startD) / props.scale
+          initValue + (currentD - startD) / props.scale!
         )
         startValue.value = newValue
       }

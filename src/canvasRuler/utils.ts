@@ -98,7 +98,7 @@ export const drawVerticalRuler = (
   ctx: CanvasRenderingContext2D,
   start: number,
   shadow: { y: number; height: number },
-  options: { scale: any; width: any; height: any; palette: any }
+  options: { scale: number; width: number; height: number; palette: any }
 ) => {
   const { scale, width, height, palette } = options
   const { bgColor, fontColor, shadowColor, ratio, longfgColor, shortfgColor } =

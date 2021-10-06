@@ -11,34 +11,19 @@
 <script lang="ts">
 import { drawHorizontalRuler, drawVerticalRuler } from './utils'
 import { reactive, ref, onMounted, watch, defineComponent } from 'vue'
-import { props } from '../sketchRuler/props'
-
 export default defineComponent({
   name: 'CanvasRuler',
   props: {
-    ...props,
+    scale: Number,
+    ratio: Number,
+    thick: Number,
+    palette: Object,
     vertical: Boolean,
-    start: {
-      type: Number,
-      default: 0
-    },
-
-    width: {
-      type: Number,
-      default: 200
-    },
-    height: {
-      type: Number,
-      default: 200
-    },
-    selectStart: {
-      type: Number,
-      default: 0
-    },
-    selectLength: {
-      type: Number,
-      default: 0
-    }
+    start: Number,
+    width: Number,
+    height: Number,
+    selectStart: Number,
+    selectLength: Number
   },
   emits: ['onAddLine', 'onIndicatorShow', 'onIndicatorMove', 'onIndicatorHide'],
   setup(props, { emit }) {
@@ -59,11 +44,11 @@ export default defineComponent({
       if (canvas.value) {
         const ratio = props.ratio
         // 比例宽高
-        canvas.value.width = props.width * ratio
-        canvas.value.height = props.height * ratio
+        canvas.value.width = props.width! * ratio!
+        canvas.value.height = props.height! * ratio!
         const ctx = state.canvasContext
         if (ctx) {
-          ctx.font = `${12 * ratio}px -apple-system,
+          ctx.font = `${12 * ratio!}px -apple-system,
                 "Helvetica Neue", ".SFNSText-Regular",
                 "SF UI Text", Arial, "PingFang SC", "Hiragino Sans GB",
                 "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif`
@@ -74,24 +59,24 @@ export default defineComponent({
     }
     const drawRuler = () => {
       const options = {
-        scale: props.scale,
-        width: props.width,
-        height: props.height,
-        palette: props.palette
+        scale: props.scale!,
+        width: props.width!,
+        height: props.height!,
+        palette: props.palette!
       }
 
       if (props.vertical && state.canvasContext) {
         drawVerticalRuler(
           state.canvasContext,
-          props.start,
-          { y: props.selectStart, height: props.selectLength },
+          props.start!,
+          { y: props.selectStart!, height: props.selectLength! },
           options
         )
       } else if (state.canvasContext) {
         drawHorizontalRuler(
           state.canvasContext,
-          props.start,
-          { x: props.selectStart, width: props.selectLength },
+          props.start!,
+          { x: props.selectStart!, width: props.selectLength! },
           options
         )
       }
@@ -108,17 +93,17 @@ export default defineComponent({
       Math.round(start + offset / scale)
     const handleClick = (e: MouseEvent) => {
       const offset = props.vertical ? e.offsetY : e.offsetX
-      const value = getValueByOffset(offset, props.start, props.scale)
+      const value = getValueByOffset(offset, props.start!, props.scale!)
       emit('onAddLine', value)
     }
     const handleEnter = (e: MouseEvent) => {
       const offset = props.vertical ? e.offsetY : e.offsetX
-      const value = getValueByOffset(offset, props.start, props.scale)
+      const value = getValueByOffset(offset, props.start!, props.scale!)
       emit('onIndicatorShow', value)
     }
     const handleMove = (e: MouseEvent) => {
       const offset = props.vertical ? e.offsetY : e.offsetX
-      const value = getValueByOffset(offset, props.start, props.scale)
+      const value = getValueByOffset(offset, props.start!, props.scale!)
       emit('onIndicatorMove', value)
     }
     const handleLeave = () => {

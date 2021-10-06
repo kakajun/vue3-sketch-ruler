@@ -12,15 +12,31 @@ English | [简体中文](https://github.com/majun2232/vue3sketchRuler/blob/maste
 
 - 💪 Vue 3 Composition API
 - 🔥 Written in TypeScript
-# introduce
-
-Vue3 sketch ruler repackages the original vue3 sketch ruler. Here, the code is eslint repaired by vue3 and formatted by stylelint and pretty. It supports the use of sketchruler in vue3. At the same time, it is rewritten into the writing method of vue3 composition API and rewritten with typescript for your convenience
-
-
 # Vue 3 + vite + TS package sketchrule
 
 Because the project was upgraded to vite, I found that the original plug-in Vue sketch ruler would report an error when used in vue3. Here, I repackaged a copy with vite. The packaged plug-in works the same as the original and supports the use in vue3 and vite
 
+---
+
+The original code has been improved and optimized here. The function is the same as that of vue3 sketch ruler before. There is no time for optimization. The main improvements are as follows
+
+1. The eslint repair of vue3 and the code formatting of stylelint and pretty support the use of sketchrule in vue3, and rewrite it to the writing method of vue3 composition API
+
+2. Refactoring with typescript to define types and facilitate subsequent expansion
+
+3. Perform object consolidation calculation for shadow and palette parameters. Previously, palette parameters were either passed or not passed. After improvement, I can only pass the attributes that need to be modified, and those that have not been modified can not be passed
+
+4. Package the type (I don't know the benefits of packaging this type yet)
+
+Due to limited time, we hope to improve the following points in the future:
+
+1. Add the canvas mouse drag function
+
+2. There is a mouse in the lower right corner to enter the zoom function
+
+3. Click the eye in the upper left corner to control the red line development
+
+This is an open source amateur function. If you are interested in strengthening the plug-in, you are welcome to join. You are also welcome to mention PR or issue, or email me a message, 253495832@qq.com
 
 ## demo
 
