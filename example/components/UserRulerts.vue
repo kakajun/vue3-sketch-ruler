@@ -37,7 +37,7 @@ import {
   nextTick
 } from 'vue'
 // import { SketchRule } from '/lib/index.es.js?3242' // 这里可以换成打包后的
-import '/lib/style.css'
+// import '/lib/style.css'
 const rectWidth = 160
 const rectHeight = 200
 export default defineComponent({
