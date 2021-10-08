@@ -1,63 +1,70 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "0.0.3",
+  "version": "1.1.2",
+  "author": "kakajun <253495832@qq.com>",
+  "license": "MIT",
+  "private2": true,
   "workspaces": [
     "packages/*"
   ],
-  "engines": {
-    "node": ">=12.0.0",
-    "vue": ">=3.0.0"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/majun2232/vue3sketchRuler"
   },
+  "typings": "src/types.ts",
   "main": "dist/index.umd.js",
-  "module": "dist/index.esm.js",
+  "module": "dist/index.es.js",
+  "style": "dist/style.css",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --config vite.demo.js",
     "build": "vite build",
-    "serve": "vite preview",
     "precommit": "lint-staged",
-    "lint-fix": "eslint --fix ./src --ext .vue,.js,.ts",
+    "lint-fix": "eslint --fix  --ext .vue,.js,.ts",
     "lint:lint-staged": "lint-staged -c ./.husky/lintstagedrc.js",
     "format": "prettier-eslint --write src/**/*.{js,vue,css,scss,styl} && prettier-eslint --write packages/**/*.{js,vue,css,scss,styl} ",
     "css": "cross-env stylelint src/**/*.{html,vue,css,less,scss,styl} --fix && stylelint packages/**/*.{html,vue,css,less,scss,styl} ",
     "pretty": "pretty-quick --staged",
     "prepare": "husky install"
   },
-  "dependencies": {
-    "vue": "^3.2.6",
-    "sass": "^1.39.0"
+  "lint-staged": {
+    "*.{ts,tsx,js,vue,less}": "prettier --write",
+    "*.{ts,tsx,js,vue}": "eslint --fix",
+    "*.{vue,css,less}": "stylelint --fix"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.29.2",
+    "@typescript-eslint/parser": "^4.29.2",
+    "@vitejs/plugin-vue": "^1.9.2",
     "@vue/eslint-config-prettier": "^6.0.0",
-    "@vitejs/plugin-vue": "^1.6.1",
-    "eslint": "^7.32.0",
     "cross-env": "^7.0.3",
-    "eslint-plugin-vue": "7.17.0",
+    "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "@vue/compiler-sfc": "^3.2.6",
+    "eslint-plugin-vue": "7.17.0",
+    "gh-pages": "^3.2.3",
     "husky": "^7.0.2",
     "lint-staged": "^11.1.2",
     "prettier": "^2.3.2",
-    "prettier-eslint-cli": "^5.0.1",
     "pretty-quick": "^3.1.1",
+    "sass": "^1.39.0",
     "stylelint": "13.13.1",
     "stylelint-config-standard": "22.0.0",
     "stylelint-order": "4.1.0",
-    "vite": "^2.5.4"
+    "vite": "^2.6.2",
+    "vite-plugin-dts": "^0.8.2",
+    "vue": "^3.2.19"
   },
   "keywords": [
     "vue3",
     "ruler",
     "javascript",
     "sketch-ruler",
-    "vue-ruler",
-    "vite2"
+    "vite"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/majun2232/vue3sketchRuler"
+  "bugs": {
+    "url": "https://github.com/majun2232/vue3sketchRuler/issues"
   },
-  "author": "kakajun <253495832@qq.com>"
+  "homepage": "https://github.com/majun2232/vue3sketchRuler/blob/master/README.md"
 }

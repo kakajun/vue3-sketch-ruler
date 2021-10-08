@@ -1,19 +1,17 @@
 <template>
   <div class="wrapper">
     <SketchRule
-      :lang="lang"
-      :thick="thick"
-      :scale="scale"
+      :thick="state.thick"
+      :scale="state.scale"
       :width="582"
       :height="482"
-      :start-x="startX"
-      :start-y="startY"
+      :start-x="state.startX"
+      :start-y="state.startY"
       :shadow="shadow"
-      :hor-line-arr="lines.h"
-      :ver-line-arr="lines.v"
+      :hor-line-arr="state.lines.h"
+      :ver-line-arr="state.lines.v"
       :corner-active="true"
       @handleLine="handleLine"
-      @onCornerClick="handleCornerClick"
     >
     </SketchRule>
     <div
@@ -28,17 +26,26 @@
     </div>
   </div>
 </template>
-<script>
-import { SketchRule } from '../../packages/index.js'
+<script lang="ts">
+import { SketchRule } from '../../src/index'
+import {
+  computed,
+  defineComponent,
+  ref,
+  reactive,
+  onMounted,
+  nextTick
+} from 'vue'
 // import { SketchRule } from '/dist/index.es.js?3242' // 这里可以换成打包后的
-// import '/dist/style.css'
-// console.log(SketchRule, '7777777')
+import '/dist/style.css'
 const rectWidth = 160
 const rectHeight = 200
-export default {
+export default defineComponent({
   components: { SketchRule },
-  data() {
-    return {
+  setup() {
+    const screensRef = ref(null)
+    const containerRef = ref(null)
+    const state = reactive({
       scale: 2, //658813476562495, //1,
       startX: 0,
       startY: 0,
@@ -47,42 +54,35 @@ export default {
         v: [100, 200]
       },
       thick: 20,
-      lang: 'zh-CN', // 中英文
       isShowRuler: true, // 显示标尺
       isShowReferLine: true // 显示参考线
-    }
-  },
-  computed: {
-    shadow() {
+    })
+    const shadow = computed(() => {
       return {
         x: 0,
         y: 0,
         width: rectWidth,
         height: rectHeight
       }
-    },
-    canvasStyle() {
+    })
+    const canvasStyle = computed(() => {
       return {
         width: rectWidth,
         height: rectHeight,
-        transform: `scale(${this.scale})`
+        transform: `scale(${state.scale})`
       }
+    })
+    onMounted(() => {
+      // 滚动居中
+      screensRef.value.scrollLeft =
+        containerRef.value.getBoundingClientRect().width / 2 - 300
+    })
+
+    const handleLine = (lines: { h: number[]; v: number[] }) => {
+      state.lines = lines
     }
-  },
-  mounted() {
-    // console.log(SketchRule, "666666");
-    // 滚动居中
-    this.$refs.screensRef.scrollLeft =
-      this.$refs.containerRef.getBoundingClientRect().width / 2 - 300 // 300 = #screens.width / 2
-  },
-  methods: {
-    handleLine(lines) {
-      this.lines = lines
-    },
-    handleCornerClick() {
-      return
-    },
-    handleScroll() {
+
+    const handleScroll = () => {
       const screensRect = document
         .querySelector('#screens')
         .getBoundingClientRect()
@@ -92,28 +92,44 @@ export default {
 
       // 标尺开始的刻度
       const startX =
-        (screensRect.left + this.thick - canvasRect.left) / this.scale
+        (screensRect.left + state.thick - canvasRect.left) / state.scale
       const startY =
-        (screensRect.top + this.thick - canvasRect.top) / this.scale
+        (screensRect.top + state.thick - canvasRect.top) / state.scale
 
-      this.startX = startX
-      this.startY = startY
-    },
+      state.startX = startX
+      state.startY = startY
+    }
     // 控制缩放值
-    handleWheel(e) {
+    const handleWheel = (e: {
+      ctrlKey: any
+      metaKey: any
+      preventDefault: () => void
+      deltaY: number
+    }) => {
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault()
         const nextScale = parseFloat(
-          Math.max(0.2, this.scale - e.deltaY / 500).toFixed(2)
+          Math.max(0.2, state.scale - e.deltaY / 500).toFixed(2)
         )
-        this.scale = nextScale
+        state.scale = nextScale
       }
-      this.$nextTick(() => {
-        this.handleScroll()
+      nextTick(() => {
+        handleScroll()
       })
     }
+
+    return {
+      screensRef,
+      containerRef,
+      state,
+      shadow,
+      canvasStyle,
+      handleWheel,
+      handleScroll,
+      handleLine
+    }
   }
-}
+})
 </script>
 <style lang="scss">
 body {

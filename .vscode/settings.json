@@ -1,8 +1,5 @@
 {
-  "cSpell.words": ["windi"],
   "typescript.tsdk": "./node_modules/typescript/lib",
-  "volar.tsPlugin": true,
-  "volar.tsPluginStatus": false,
   //===========================================
   //============= Editor ======================
   //===========================================
@@ -15,7 +12,6 @@
   //============= Other =======================
   //===========================================
   "breadcrumbs.enabled": true,
-  "open-in-browser.default": "chrome",
   //===========================================
   //============= emmet =======================
   //===========================================
@@ -74,18 +70,6 @@
   },
   "stylelint.enable": true,
   "stylelint.packageManager": "yarn",
-  // ===========================================
-  // ================ Vetur ====================
-  // ===========================================
-  "vetur.experimental.templateInterpolationService": true,
-  "vetur.format.options.tabSize": 2,
-  "vetur.languageFeatures.codeActions": false,
-  "vetur.format.defaultFormatterOptions": {
-    "js-beautify-html": {
-      "wrap_attributes": "force-expand-multiline"
-    }
-  },
-  "liveServer.settings.donotShowInfoMsg": true,
   "telemetry.enableCrashReporter": false,
   "workbench.settings.enableNaturalLanguageSearch": false,
   "path-intellisense.mappings": {
@@ -119,6 +103,9 @@
       "source.fixAll.stylelint": true
     }
   },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -130,5 +117,6 @@
       "source.fixAll.eslint": false,
       "source.fixAll.stylelint": true
     }
-  }
+  },
+  "svn.ignoreMissingSvnWarning": true
 }
