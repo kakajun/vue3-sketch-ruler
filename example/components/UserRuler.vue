@@ -29,8 +29,8 @@
 </template>
 <script>
 import { SketchRule, _SketchRuleComponent } from '../../src/index.ts'
-// import { SketchRule } from '/dist/index.es.js?3242' // 这里可以换成打包后的
-import '/dist/style.css'
+// import { SketchRule } from '/lib/index.es.js?3242' // 这里可以换成打包后的
+// import '/lib/style.css'
 console.log(_SketchRuleComponent, '7777777')
 const rectWidth = 160
 const rectHeight = 200

@@ -5,6 +5,7 @@ import UserRuler from './components/UserRulerts.vue'
 </script>
 
 <template>
+  <span>2021/10/8</span>
   <UserRuler />
 </template>
 

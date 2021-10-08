@@ -4,20 +4,18 @@
   "author": "kakajun <253495832@qq.com>",
   "license": "MIT",
   "private2": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/majun2232/vue3sketchRuler"
   },
   "typings": "src/types.ts",
-  "main": "dist/index.umd.js",
-  "module": "dist/index.es.js",
-  "style": "dist/style.css",
+  "main": "lib/index.umd.js",
+  "module": "lib/index.es.js",
+  "style": "lib/style.css",
   "scripts": {
     "dev": "vite --config vite.demo.js",
     "build": "vite build",
+    "build:demo": "vite build --config vite.demo.js",
     "precommit": "lint-staged",
     "lint-fix": "eslint --fix  --ext .vue,.js,.ts",
     "lint:lint-staged": "lint-staged -c ./.husky/lintstagedrc.js",
