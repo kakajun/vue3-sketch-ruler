@@ -1,8 +1,5 @@
 > Zoom operation for page presentation in vue3
-# vue3-sketch-ruler
-
- [![](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)
-](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)
+# vue3-sketch-ruler [![](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)  [![build status](https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml)
 
 English | [简体中文](https://github.com/majun2232/vue3sketchRuler/blob/master)
 
