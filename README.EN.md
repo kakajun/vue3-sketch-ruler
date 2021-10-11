@@ -44,7 +44,11 @@ Case browsing:[ https://majun2232.github.io/vue3sketchRuler/ ]( https://majun223
 
 ## Install
 ```
-npm install --save vue-sketch-ruler
+npm install --save vue3-sketch-ruler
+
+or
+
+yarn add vue3-sketch-ruler
 ```
 
 ##Introduction mode
@@ -53,7 +57,7 @@ Copy the packaged dist package and import it with import. The following two refe
 
 ```
 
-import { SketchRule } from '/dist/index.es.js? 3242'
+import { SketchRule } from '/dist/index.es.js'
 
 components: { SketchRule }
 
@@ -63,7 +67,7 @@ It can also be like this
 
 ```
 
-import SketchRule from '/dist/index.es.js? 3242'
+import SketchRule from '/dist/index.es.js'
 
 components: SketchRule
 

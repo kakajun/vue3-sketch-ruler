@@ -26,18 +26,22 @@
 ## 安装
 > 支持全局导入和模块导入
 ```
-npm install --save vue-sketch-ruler
+npm install --save vue3-sketch-ruler
+
+or
+
+yarn add vue3-sketch-ruler 
 ```
 
 ## 引入方式
 将打包后的dist包拷贝，用import导入，支持下面两种引用方式
 ```
-import { SketchRule } from '/dist/index.es.js?3242'
+import { SketchRule } from '/dist/index.es.js'
  components: { SketchRule }
 ```
 也可以是这样子
 ```
-import SketchRule  from '/dist/index.es.js?3242'
+import SketchRule  from '/dist/index.es.js'
  components: SketchRule
 ```
 同时不要忘了引入样式
