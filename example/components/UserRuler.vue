@@ -32,7 +32,7 @@ import { SketchRule, _SketchRuleComponent } from '../../src/index.ts'
 // import { SketchRule } from '/lib/index.es.js?3242' // 这里可以换成打包后的
 // import '/lib/style.css'
 console.log(_SketchRuleComponent, '7777777')
-const rectWidth = 160
+const rectWidth = 200
 const rectHeight = 200
 export default {
   components: { SketchRule },
@@ -159,17 +159,6 @@ body * {
   position: absolute;
   bottom: 100%;
   left: 100px;
-}
-
-.button-ch {
-  position: absolute;
-  bottom: 100%;
-  left: 200px;
-}
-.button-en {
-  position: absolute;
-  bottom: 100%;
-  left: 230px;
 }
 
 #canvas {

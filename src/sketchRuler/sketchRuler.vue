@@ -45,6 +45,7 @@
 import RulerWrapper from './rulerWrapper.vue'
 import { computed, defineComponent, PropType } from 'vue'
 import type { ShadowType, PaletteType } from '../types'
+import { merge } from 'lodash-es'
 export default defineComponent({
   name: 'SketchRule',
   components: {
@@ -106,35 +107,55 @@ export default defineComponent({
   setup(props, { emit }) {
     // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
     const shadowCpu = computed(() => {
-      return Object.assign(props.shadow || {}, {
-        x: 200,
-        y: 100,
-        width: 200,
-        height: 200
-      })
+      console.log(
+        merge(
+          {
+            x: 0,
+            y: 0,
+            width: 200,
+            height: 200
+          },
+          props.shadow || {}
+        ),
+        '222'
+      )
+      return merge(
+        {
+          x: 0,
+          y: 0,
+          width: 200,
+          height: 200
+        },
+        props.shadow || {}
+      )
     })
     const paletteCpu = computed(() => {
-      return Object.assign(props.palette || {}, {
-        bgColor: 'rgba(225,225,225, 0)', // ruler bg color
-        longfgColor: '#BABBBC', // ruler longer mark color
-        shortfgColor: '#C8CDD0', // ruler shorter mark color
-        fontColor: '#7D8694', // ruler font color
-        shadowColor: '#E8E8E8', // ruler shadow color
-        lineColor: '#EB5648',
-        borderColor: '#DADADC',
-        cornerActiveColor: 'rgb(235, 86, 72, 0.6)',
-        menu: {
-          bgColor: '#fff',
-          dividerColor: '#DBDBDB',
-          listItem: {
-            textColor: '#415058',
-            hoverTextColor: '#298DF8',
-            disabledTextColor: 'rgba(65, 80, 88, 0.4)',
+      const finalObj = merge(
+        {
+          bgColor: 'rgba(225,225,225, 0)', // ruler bg color
+          longfgColor: '#BABBBC', // ruler longer mark color
+          shortfgColor: '#C8CDD0', // ruler shorter mark color
+          fontColor: '#7D8694', // ruler font color
+          shadowColor: '#E8E8E8', // ruler shadow color
+          lineColor: '#EB5648',
+          borderColor: '#DADADC',
+          cornerActiveColor: 'rgb(235, 86, 72, 0.6)',
+          menu: {
             bgColor: '#fff',
-            hoverBgColor: '#F2F2F2'
+            dividerColor: '#DBDBDB',
+            listItem: {
+              textColor: '#415058',
+              hoverTextColor: '#298DF8',
+              disabledTextColor: 'rgba(65, 80, 88, 0.4)',
+              bgColor: '#fff',
+              hoverBgColor: '#F2F2F2'
+            }
           }
-        }
-      })
+        },
+        props.palette || {}
+      )
+      // console.log(finalObj, '6666')
+      return finalObj
     })
     const cornerActiveClass = computed(() => {
       return props.cornerActive ? ' active' : ''

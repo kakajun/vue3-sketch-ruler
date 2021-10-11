@@ -8,6 +8,7 @@
       :start-x="state.startX"
       :start-y="state.startY"
       :shadow="shadow"
+      :palette="palette"
       :hor-line-arr="state.lines.h"
       :ver-line-arr="state.lines.v"
       :corner-active="true"
@@ -38,15 +39,23 @@ import {
 } from 'vue'
 // import { SketchRule } from '/lib/index.es.js?3242' // 这里可以换成打包后的
 // import '/lib/style.css'
-const rectWidth = 160
+const rectWidth = 200
 const rectHeight = 200
 export default defineComponent({
   components: { SketchRule },
   setup() {
+    const palette = {
+      bgColor: 'rgba(225,225,225, 0)', // ruler bg color
+      longfgColor: '#000', // ruler longer mark color
+      cornerActiveColor: 'rgb(235, 86, 72, 0.6)',
+      menu: {
+        bgColor: '#000'
+      }
+    }
     const screensRef = ref(null)
     const containerRef = ref(null)
     const state = reactive({
-      scale: 2, //658813476562495, //1,
+      scale: 1, //658813476562495, //1,
       startX: 0,
       startY: 0,
       lines: {
@@ -119,6 +128,7 @@ export default defineComponent({
     }
 
     return {
+      palette,
       screensRef,
       containerRef,
       state,
@@ -179,24 +189,13 @@ body * {
   left: 100px;
 }
 
-.button-ch {
-  position: absolute;
-  bottom: 100%;
-  left: 200px;
-}
-.button-en {
-  position: absolute;
-  bottom: 100%;
-  left: 230px;
-}
-
 #canvas {
   position: absolute;
   top: 80px;
   left: 50%;
-  width: 160px;
+  width: 200px;
   height: 200px;
-  margin-left: -80px;
+  // margin-left: -80px;
   background: lightblue;
   transform-origin: 50% 0;
 }
