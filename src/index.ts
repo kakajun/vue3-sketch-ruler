@@ -1,4 +1,4 @@
-import SketchRule from './sketchRuler/sketchRuler.vue'
+import SketchRule from './sketch-ruler/index.vue'
 import type { App } from 'vue'
 
 SketchRule.install = (app: App) => {
