@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/majun2232/vue3sketchRuler"
   },
-  "typings": "src/types.ts",
+  "typings": "src/index-types.ts",
   "main": "lib/index.umd.js",
   "module": "lib/index.es.js",
   "style": "lib/style.css",
