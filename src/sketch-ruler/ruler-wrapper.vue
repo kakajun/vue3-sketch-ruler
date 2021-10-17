@@ -43,52 +43,17 @@
 <script lang="ts">
 import RulerLine from './ruler-line.vue'
 import CanvasRuler from '../canvas-ruler/index.vue'
-import { ref, computed, defineComponent, PropType } from 'vue'
+import { ref, computed, defineComponent } from 'vue'
+import { wrapperProps, WrapperProps } from './ruler-wrapper-types'
 export default defineComponent({
   name: 'RulerWrapper',
   components: {
     CanvasRuler,
     RulerLine
   },
-  props: {
-    scale: Number,
-    ratio: Number,
-    thick: Number,
-    palette: Object,
-    vertical: {
-      type: Boolean,
-      default: true
-    },
-    width: {
-      type: Number,
-      default: 200
-    },
-    height: {
-      type: Number,
-      default: 200
-    },
-    start: {
-      type: Number,
-      default: 0
-    },
-    lines: {
-      type: Array as PropType<Array<number>>,
-      default: () => {
-        return [100, 200]
-      }
-    },
-    selectStart: {
-      type: Number
-    },
-    selectLength: {
-      type: Number
-    },
-    isShowReferLine: {
-      type: Boolean
-    }
-  },
+  props: wrapperProps,
   emits: ['onLineChange'],
-  setup(props, { emit }) {
+  setup(props: WrapperProps, { emit }) {
     const isDraggingLine = ref(false)
     const showIndicator = ref(false)
     const valueNum = ref(0)

@@ -44,7 +44,7 @@
 <script lang="ts">
 import RulerWrapper from './ruler-wrapper.vue'
 import { computed, defineComponent } from 'vue'
-import { sketchRulerProps, SketchRulerProps } from './sketch-ruler-types'
+import { sketchRulerProps, SketchRulerProps } from './index-types'
 
 export default defineComponent({
   name: 'SketchRule',
