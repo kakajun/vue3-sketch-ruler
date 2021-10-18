@@ -29,7 +29,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'lib',
-    // minify: false, // 不压缩代码,方便开发调试
+    // minify: true, // 不压缩代码,方便开发调试
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'SketchRuler',
@@ -40,7 +40,8 @@ export default defineConfig({
       // 确保外部化处理那些你不想打包进库的依赖
       external: ['vue'],
       output: {
-        banner
+        banner,
+        exports: 'named'
       }
     }
   }
