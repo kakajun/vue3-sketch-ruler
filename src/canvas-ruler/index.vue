@@ -11,22 +11,12 @@
 <script lang="ts">
 import { drawHorizontalRuler, drawVerticalRuler } from './utils'
 import { reactive, ref, onMounted, watch, defineComponent } from 'vue'
+import { canvasProps, CanvasProps } from './canvas-types'
 export default defineComponent({
   name: 'CanvasRuler',
-  props: {
-    scale: Number,
-    ratio: Number,
-    palette: Object,
-    vertical: Boolean,
-    start: Number,
-    width: Number,
-    height: Number,
-    selectStart: Number,
-    selectLength: Number
-  },
+  props: canvasProps,
   emits: ['onAddLine', 'onIndicatorShow', 'onIndicatorMove', 'onIndicatorHide'],
-  setup(props, { emit }) {
-    const { width } = props
+  setup(props: CanvasProps, { emit }) {
     const state = reactive({
       canvasContext: null as CanvasRenderingContext2D | null
     })

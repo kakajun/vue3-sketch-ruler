@@ -13,20 +13,12 @@
 </template>
 <script lang="ts">
 import { ref, computed, onMounted, defineComponent } from 'vue'
+import { lineProps, LineProps } from './ruler-line-types'
 export default defineComponent({
   name: 'LineRuler',
-  props: {
-    scale: Number,
-    thick: Number,
-    palette: Object,
-    index: Number,
-    start: Number,
-    vertical: Boolean,
-    value: Number,
-    isShowReferLine: Boolean
-  },
+  props: lineProps,
   emits: ['onMouseDown', 'onRelease', 'onRemove'],
-  setup(props, { emit }) {
+  setup(props: LineProps, { emit }) {
     const startValue = ref(0)
     const showLine = ref(true)
     onMounted(() => {

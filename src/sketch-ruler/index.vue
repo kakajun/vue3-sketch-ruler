@@ -42,69 +42,18 @@
 </template>
 
 <script lang="ts">
-import RulerWrapper from './rulerWrapper.vue'
-import { computed, defineComponent, PropType } from 'vue'
-import type { ShadowType, PaletteType } from '../types'
+import RulerWrapper from './ruler-wrapper.vue'
+import { computed, defineComponent } from 'vue'
+import { sketchRulerProps, SketchRulerProps } from '../index-types'
 import { merge } from 'lodash-es'
 export default defineComponent({
   name: 'SketchRule',
   components: {
     RulerWrapper
   },
-  props: {
-    scale: {
-      type: Number,
-      default: 1
-    },
-    ratio: {
-      type: Number,
-      default: window.devicePixelRatio || 1
-    },
-    thick: {
-      type: Number,
-      default: 16
-    },
-    palette: Object as PropType<PaletteType>,
-    startX: {
-      type: Number
-    },
-    startY: {
-      type: Number,
-      default: 0
-    },
-    width: {
-      type: Number,
-      default: 200
-    },
-    height: {
-      type: Number,
-      default: 200
-    },
-    shadow: Object as PropType<ShadowType>,
-    horLineArr: {
-      type: Array as PropType<Array<number>>,
-      default: () => {
-        return [100, 200]
-      }
-    },
-    verLineArr: {
-      type: Array as PropType<Array<number>>,
-      default: () => {
-        return [100, 200]
-      }
-    },
-    cornerActive: {
-      type: Boolean,
-      default: false
-    },
-
-    isShowReferLine: {
-      type: Boolean,
-      default: true
-    }
-  },
+  props: sketchRulerProps,
   emits: ['onCornerClick', 'handleLine'],
-  setup(props, { emit }) {
+  setup(props: SketchRulerProps, { emit }) {
     // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
     const shadowCpu = computed(() => {
       console.log(

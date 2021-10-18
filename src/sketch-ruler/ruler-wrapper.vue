@@ -17,7 +17,7 @@
     >
     </CanvasRuler>
     <div v-show="isShowReferLine" class="lines">
-      <LineRuler
+      <RulerLine
         v-for="(v, i) in lines"
         :key="v + i"
         :index="i"
@@ -32,7 +32,7 @@
         @onMouseDown="handleLineDown"
         @onRelease="handleLineRelease"
       >
-      </LineRuler>
+      </RulerLine>
     </div>
     <div v-show="showIndicator" class="indicator" :style="indicatorStyle">
       <div class="value">{{ valueNum }}</div>
@@ -41,54 +41,19 @@
 </template>
 
 <script lang="ts">
-import LineRuler from './line.vue'
-import CanvasRuler from '../canvasRuler/canvasRuler.vue'
-import { ref, computed, defineComponent, PropType } from 'vue'
+import RulerLine from './ruler-line.vue'
+import CanvasRuler from '../canvas-ruler/index.vue'
+import { ref, computed, defineComponent } from 'vue'
+import { wrapperProps, WrapperProps } from './ruler-wrapper-types'
 export default defineComponent({
   name: 'RulerWrapper',
   components: {
     CanvasRuler,
-    LineRuler
+    RulerLine
   },
-  props: {
-    scale: Number,
-    ratio: Number,
-    thick: Number,
-    palette: Object,
-    vertical: {
-      type: Boolean,
-      default: true
-    },
-    width: {
-      type: Number,
-      default: 200
-    },
-    height: {
-      type: Number,
-      default: 200
-    },
-    start: {
-      type: Number,
-      default: 0
-    },
-    lines: {
-      type: Array as PropType<Array<number>>,
-      default: () => {
-        return [100, 200]
-      }
-    },
-    selectStart: {
-      type: Number
-    },
-    selectLength: {
-      type: Number
-    },
-    isShowReferLine: {
-      type: Boolean
-    }
-  },
+  props: wrapperProps,
   emits: ['onLineChange'],
-  setup(props, { emit }) {
+  setup(props: WrapperProps, { emit }) {
     const isDraggingLine = ref(false)
     const showIndicator = ref(false)
     const valueNum = ref(0)
