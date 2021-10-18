@@ -8,7 +8,6 @@
       :start-x="state.startX"
       :start-y="state.startY"
       :shadow="shadow"
-      :palette="palette"
       :hor-line-arr="state.lines.h"
       :ver-line-arr="state.lines.v"
       :corner-active="true"
@@ -44,14 +43,6 @@ const rectHeight = 200
 export default defineComponent({
   components: { SketchRule },
   setup() {
-    const palette = {
-      bgColor: 'rgba(225,225,225, 0)', // ruler bg color
-      longfgColor: '#000', // ruler longer mark color
-      cornerActiveColor: 'rgb(235, 86, 72, 0.6)',
-      menu: {
-        bgColor: '#000'
-      }
-    }
     const screensRef = ref(null)
     const containerRef = ref(null)
     const state = reactive({
@@ -128,7 +119,6 @@ export default defineComponent({
     }
 
     return {
-      palette,
       screensRef,
       containerRef,
       state,
