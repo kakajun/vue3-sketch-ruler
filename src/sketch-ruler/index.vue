@@ -56,18 +56,6 @@ export default defineComponent({
   setup(props: SketchRulerProps, { emit }) {
     // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
     const shadowCpu = computed(() => {
-      console.log(
-        merge(
-          {
-            x: 0,
-            y: 0,
-            width: 200,
-            height: 200
-          },
-          props.shadow || {}
-        ),
-        '222'
-      )
       return merge(
         {
           x: 0,

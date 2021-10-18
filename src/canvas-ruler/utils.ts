@@ -16,7 +16,7 @@ export const drawHorizontalRuler = (
   shadow: { x: number; width: number },
   options: { scale: number; width: number; height: number; palette: any }
 ) => {
-  console.log(shadow, 'shadowshadow')
+  // console.log(shadow, 'shadowshadow')
   const { scale, width, height, palette } = options
   const { bgColor, fontColor, shadowColor, ratio, longfgColor, shortfgColor } =
     palette

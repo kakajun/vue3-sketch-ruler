@@ -31,7 +31,7 @@
 import { SketchRule, _SketchRuleComponent } from '../../src/index.ts'
 // import { SketchRule } from '/lib/index.es.js?3242' // 这里可以换成打包后的
 // import '/lib/style.css'
-console.log(_SketchRuleComponent, '7777777')
+// console.log(_SketchRuleComponent, '7777777')
 const rectWidth = 200
 const rectHeight = 200
 export default {

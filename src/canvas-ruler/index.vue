@@ -47,7 +47,7 @@ export default defineComponent({
       }
     }
     const drawRuler = () => {
-      console.log(props.selectStart!, props.scale!, '8888')
+      // console.log(props.selectStart!, props.scale!, '8888')
       const options = {
         scale: props.scale!,
         width: props.width!,
