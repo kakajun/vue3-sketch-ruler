@@ -1,6 +1,6 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "author": "kakajun <253495832@qq.com>",
   "license": "MIT",
   "private2": true,
@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/majun2232/vue3sketchRuler"
   },
-  "typings": "src/types/index.d.ts",
+  "typings": "lib/types/index.d.ts",
   "main": "lib/index.umd.js",
   "module": "lib/index.es.js",
   "style": "lib/style.css",
