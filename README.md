@@ -36,12 +36,16 @@ yarn add vue3-sketch-ruler
 ## 引入方式
 将打包后的dist包拷贝，用import导入，支持下面两种引用方式
 ```
-import { SketchRule } from '/dist/index.es.js'
+import { SketchRule } from 'vue3-sketch-ruler'
+import 'vue3-sketch-ruler/lib/style.css'
+
  components: { SketchRule }
 ```
 也可以是这样子
 ```
-import SketchRule  from '/dist/index.es.js'
+import SketchRule from 'vue3-sketch-ruler'
+import 'vue3-sketch-ruler/lib/style.css'
+
  components: SketchRule
 ```
 同时不要忘了引入样式

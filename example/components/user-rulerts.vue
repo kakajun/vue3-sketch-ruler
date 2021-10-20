@@ -27,7 +27,8 @@
   </div>
 </template>
 <script lang="ts">
-import { SketchRule } from '../../src/index'
+import { SketchRule } from 'vue3-sketch-ruler'
+import 'vue3-sketch-ruler/lib/style.css'
 import {
   computed,
   defineComponent,

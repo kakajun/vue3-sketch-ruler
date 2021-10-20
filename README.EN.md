@@ -58,8 +58,8 @@ Copy the packaged dist package and import it with import. The following two refe
 
 ```
 
-import { SketchRule } from '/dist/index.es.js'
-
+import { SketchRule } from 'vue3-sketch-ruler'
+import 'vue3-sketch-ruler/lib/style.css'
 components: { SketchRule }
 
 ```
