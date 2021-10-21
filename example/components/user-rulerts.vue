@@ -3,8 +3,6 @@
     <SketchRule
       :thick="state.thick"
       :scale="state.scale"
-      :width="582"
-      :height="482"
       :start-x="state.startX"
       :start-y="state.startY"
       :shadow="shadow"
@@ -27,8 +25,8 @@
   </div>
 </template>
 <script lang="ts">
-import { SketchRule } from 'vue3-sketch-ruler'
-import 'vue3-sketch-ruler/lib/style.css'
+// import { SketchRule } from 'vue3-sketch-ruler'
+// import 'vue3-sketch-ruler/lib/style.css'
 import {
   computed,
   defineComponent,
@@ -37,27 +35,41 @@ import {
   onMounted,
   nextTick
 } from 'vue'
-// import { SketchRule } from '/lib/index.es.js?3242' // 这里可以换成打包后的
+import { SketchRule } from '../../src/index' // 这里可以换成打包后的
 // import '/lib/style.css'
 const rectWidth = 200
 const rectHeight = 200
 export default defineComponent({
   components: { SketchRule },
+  data() {
+    return {
+      height: '500px',
+      font: {
+        size: '2em'
+      }
+    }
+  },
   setup() {
     const screensRef = ref(null)
     const containerRef = ref(null)
     const state = reactive({
       scale: 1, //658813476562495, //1,
       startX: 0,
+      wrapperwith: 1200,
+      wrapperheight: 500,
+      width: 1200,
       startY: 0,
       lines: {
-        h: [100, 200],
-        v: [100, 200]
+        h: [0, 200],
+        v: [0, 200]
       },
       thick: 20,
       isShowRuler: true, // 显示标尺
       isShowReferLine: true // 显示参考线
     })
+
+    const wrapperwithpx = computed(() => state.wrapperwith + 22 + 'px')
+    const wrapperheightpx = computed(() => state.wrapperheight + 22 + 'px')
     const shadow = computed(() => {
       return {
         x: 0,
@@ -74,6 +86,10 @@ export default defineComponent({
       }
     })
     onMounted(() => {
+      window.addEventListener('resize', () => {
+        state.wrapperwith = window.innerWidth - 400
+        state.wrapperheight = window.innerHeight - 400
+      })
       // 滚动居中
       screensRef.value.scrollLeft =
         containerRef.value.getBoundingClientRect().width / 2 - 300
@@ -120,6 +136,8 @@ export default defineComponent({
     }
 
     return {
+      wrapperwithpx,
+      wrapperheightpx,
       screensRef,
       containerRef,
       state,
@@ -132,7 +150,7 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 body {
   padding: 0;
   margin: 0;
@@ -149,8 +167,8 @@ body * {
   position: absolute;
   top: 100px;
   left: 100px;
-  width: 600px;
-  height: 500px;
+  width: v-bind(wrapperwithpx);
+  height: v-bind(wrapperheightpx);
   background-color: #f5f5f5;
   border: 1px solid #dadadc;
 }
@@ -171,7 +189,7 @@ body * {
 .scale-value {
   position: absolute;
   bottom: 100%;
-  left: 0;
+  left: 100px;
 }
 
 .button {
@@ -186,7 +204,6 @@ body * {
   left: 50%;
   width: 200px;
   height: 200px;
-  // margin-left: -80px;
   background: lightblue;
   transform-origin: 50% 0;
 }

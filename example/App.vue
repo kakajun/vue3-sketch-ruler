@@ -5,7 +5,7 @@ import UserRuler from './components/user-rulerts.vue'
 </script>
 
 <template>
-  <span>2021/10/11</span>
+  <span>2021/10/21</span>
   <UserRuler />
 </template>
 

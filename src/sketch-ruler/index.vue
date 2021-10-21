@@ -1,5 +1,5 @@
 <template>
-  <div id="mb-ruler" class="style-ruler mb-ruler">
+  <div ref="ruler" class="style-ruler">
     <!-- 水平方向 -->
     <RulerWrapper
       :vertical="false"
@@ -43,7 +43,7 @@
 
 <script lang="ts">
 import RulerWrapper from './ruler-wrapper.vue'
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { sketchRulerProps, SketchRulerProps } from '../index-types'
 import { merge } from 'lodash-es'
 export default defineComponent({
@@ -97,7 +97,18 @@ export default defineComponent({
     const cornerActiveClass = computed(() => {
       return props.cornerActive ? ' active' : ''
     })
-
+    const ruler = ref<HTMLElement | null>(null)
+    let width = ref(0)
+    let height = ref(0)
+    onMounted(() => {
+      console.log(ruler.value, '55555')
+      if (ruler.value) {
+        const refruler = ruler.value.getBoundingClientRect()
+        console.log(refruler, '666666')
+        width.value = refruler.width - 21
+        height.value = refruler.height - 21
+      }
+    })
     const cornerStyle = computed(() => {
       return {
         backgroundColor: paletteCpu.value.bgColor,
@@ -118,6 +129,9 @@ export default defineComponent({
       emit('handleLine', newLines)
     }
     return {
+      width,
+      height,
+      ruler,
       paletteCpu,
       shadowCpu,
       cornerActiveClass,

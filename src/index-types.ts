@@ -1,37 +1,26 @@
 import { PropType, ExtractPropTypes } from 'vue'
 export interface PaletteType {
-  bgColor: string
-  longfgColor: string
-  shortfgColor: string
-  fontColor: string
-  shadowColor: string
-  lineColor: string
-  borderColor: string
-  cornerActiveColor: string
-  menu: MenuType
+  bgColor?: string
+  longfgColor?: string
+  shortfgColor?: string
+  fontColor?: string
+  shadowColor?: string
+  lineColor?: string
+  borderColor?: string
+  cornerActiveColor?: string
+  menu?: MenuType
 }
 
 export interface MenuType {
-  bgColor: string
-  dividerColor: string
-  listItem: {
-    textColor: string
-    hoverTextColor: string
-    disabledTextColor: string
-    bgColor: string
-    hoverBgColor: string
+  bgColor?: string
+  dividerColor?: string
+  listItem?: {
+    textColor?: string
+    hoverTextColor?: string
+    disabledTextColor?: string
+    bgColor?: string
+    hoverBgColor?: string
   }
-}
-export interface PaletteType {
-  bgColor: string
-  longfgColor: string
-  shortfgColor: string
-  fontColor: string
-  shadowColor: string
-  lineColor: string
-  borderColor: string
-  cornerActiveColor: string
-  menu: MenuType
 }
 
 export interface ShadowType {
@@ -47,7 +36,7 @@ export const sketchRulerProps = {
   },
   ratio: {
     type: Number,
-    default: window.devicePixelRatio || 1
+    default: 1
   },
   thick: {
     type: Number,
@@ -60,14 +49,6 @@ export const sketchRulerProps = {
   startY: {
     type: Number,
     default: 0
-  },
-  width: {
-    type: Number,
-    default: 200
-  },
-  height: {
-    type: Number,
-    default: 200
   },
   shadow: Object as PropType<ShadowType>,
   horLineArr: {
