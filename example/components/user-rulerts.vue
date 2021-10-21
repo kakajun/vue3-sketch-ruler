@@ -25,8 +25,8 @@
   </div>
 </template>
 <script lang="ts">
-// import { SketchRule } from 'vue3-sketch-ruler'
-// import 'vue3-sketch-ruler/lib/style.css'
+import { SketchRule } from 'vue3-sketch-ruler'
+import 'vue3-sketch-ruler/lib/style.css'
 import {
   computed,
   defineComponent,
@@ -35,27 +35,18 @@ import {
   onMounted,
   nextTick
 } from 'vue'
-import { SketchRule } from '../../src/index' // 这里可以换成打包后的
-// import '/lib/style.css'
+// import { SketchRule } from '../../src/index' // 这里可以换成打包后的
 const rectWidth = 200
 const rectHeight = 200
 export default defineComponent({
   components: { SketchRule },
-  data() {
-    return {
-      height: '500px',
-      font: {
-        size: '2em'
-      }
-    }
-  },
   setup() {
     const screensRef = ref(null)
     const containerRef = ref(null)
     const state = reactive({
-      scale: 1, //658813476562495, //1,
+      scale: 1,
       startX: 0,
-      wrapperwith: 1200,
+      wrapperwith: 1200, // 定义外面容器大小
       wrapperheight: 500,
       width: 1200,
       startY: 0,
@@ -67,7 +58,6 @@ export default defineComponent({
       isShowRuler: true, // 显示标尺
       isShowReferLine: true // 显示参考线
     })
-
     const wrapperwithpx = computed(() => state.wrapperwith + 22 + 'px')
     const wrapperheightpx = computed(() => state.wrapperheight + 22 + 'px')
     const shadow = computed(() => {
@@ -86,19 +76,18 @@ export default defineComponent({
       }
     })
     onMounted(() => {
-      window.addEventListener('resize', () => {
-        state.wrapperwith = window.innerWidth - 400
-        state.wrapperheight = window.innerHeight - 400
-      })
+      // 这里监听窗口变化, 可要可不要
+      // window.addEventListener('resize', () => {
+      //   state.wrapperwith = window.innerWidth - 400
+      //   state.wrapperheight = window.innerHeight - 400
+      // })
       // 滚动居中
       screensRef.value.scrollLeft =
         containerRef.value.getBoundingClientRect().width / 2 - 300
     })
-
     const handleLine = (lines: { h: number[]; v: number[] }) => {
       state.lines = lines
     }
-
     const handleScroll = () => {
       const screensRect = document
         .querySelector('#screens')
@@ -112,7 +101,6 @@ export default defineComponent({
         (screensRect.left + state.thick - canvasRect.left) / state.scale
       const startY =
         (screensRect.top + state.thick - canvasRect.top) / state.scale
-
       state.startX = startX
       state.startY = startY
     }
@@ -167,6 +155,7 @@ body * {
   position: absolute;
   top: 100px;
   left: 100px;
+  // vue3 新写法,可以共享js中的变量,必须要写
   width: v-bind(wrapperwithpx);
   height: v-bind(wrapperheightpx);
   background-color: #f5f5f5;

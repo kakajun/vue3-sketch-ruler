@@ -3,8 +3,6 @@
     <SketchRule
       :thick="thick"
       :scale="scale"
-      :width="582"
-      :height="482"
       :start-x="startX"
       :start-y="startY"
       :shadow="shadow"
@@ -28,10 +26,9 @@
   </div>
 </template>
 <script>
-import { SketchRule, _SketchRuleComponent } from '../../src/index.ts'
-// import { SketchRule } from '/lib/index.es.js?3242' // 这里可以换成打包后的
-// import '/lib/style.css'
-// console.log(_SketchRuleComponent, '7777777')
+import { SketchRule } from 'vue3-sketch-ruler'
+import 'vue3-sketch-ruler/lib/style.css'
+// import { SketchRule } from '../../src/index' // 这里可以换成打包后的
 const rectWidth = 200
 const rectHeight = 200
 export default {
@@ -41,9 +38,11 @@ export default {
       scale: 2, //658813476562495, //1,
       startX: 0,
       startY: 0,
+      wrapperwith: 1200,
+      wrapperheight: 600,
       lines: {
-        h: [100, 200],
-        v: [100, 200]
+        h: [0, 200],
+        v: [0, 200]
       },
       thick: 20,
       isShowRuler: true, // 显示标尺
@@ -51,6 +50,12 @@ export default {
     }
   },
   computed: {
+    wrapperwithpx() {
+      return this.wrapperwith + 'px'
+    },
+    wrapperheightpx() {
+      return this.wrapperheight + 'px'
+    },
     shadow() {
       return {
         x: 0,
@@ -130,8 +135,9 @@ body * {
   position: absolute;
   top: 100px;
   left: 100px;
-  width: 600px;
-  height: 500px;
+  // vue3 新写法,可以共享js中的变量,必须要写
+  width: v-bind(wrapperwithpx);
+  height: v-bind(wrapperheightpx);
   background-color: #f5f5f5;
   border: 1px solid #dadadc;
 }
@@ -165,9 +171,8 @@ body * {
   position: absolute;
   top: 80px;
   left: 50%;
-  width: 160px;
+  width: 200px;
   height: 200px;
-  margin-left: -80px;
   background: lightblue;
   transform-origin: 50% 0;
 }
