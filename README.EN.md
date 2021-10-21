@@ -1,15 +1,16 @@
-
 # vue3-sketch-ruler
 
-> Zoom operation for page presentation in vue3
+>In using vue3, the zoom operation used for page presentation
 
- [![](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)  [![build status](https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml)
+[![]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667 )]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667 ) [! [build status]( https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml/badge.svg?branch=master )]( https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml )
 
-English | [简体中文](https://github.com/majun2232/vue3sketchRuler/blob/master)
+Simplified Chinese | [English]（ https://github.com/majun2232/vue3sketchRuler/blob/master/README.EN.md )
 
 - 💪 Vue 3 Composition API
+
 - 🔥 Written in TypeScript
-# Vue 3 + vite + TS package sketchrule
+
+#Vue 3 + vite + TS package sketchrule
 
 Because the project was upgraded to vite, I found that the original plug-in Vue sketch ruler would report an error when used in vue3. Here, I repackaged a copy with vite. The packaged plug-in works the same as the original and supports the use in vue3 and vite
 
@@ -25,31 +26,24 @@ The original code has been improved and optimized here. The function is the same
 
 4. Package the type (I don't know the benefits of packaging this type yet)
 
-Due to limited time, we hope to improve the following points in the future:
-
-1. Add the canvas mouse drag function
-
-2. There is a mouse in the lower right corner to enter the zoom function
-
-3. Click the eye in the upper left corner to control the red line development
-
-4. Add test function
-
-This is an open source amateur function. If you are interested in strengthening the plug-in, you are welcome to join. You are also welcome to mention PR or issue, or email me a message, 253495832@qq.com
-
 ## demo
 
 Case browsing:[ https://majun2232.github.io/vue3sketchRuler/ ]( https://majun2232.github.io/vue3sketchRuler )
 
-! [image]( https://github.com/majun2232/vue3sketchRuler/blob/master/example/assets/demo.png )
+![image]( https://github.com/majun2232/vue3sketchRuler/blob/master/example/assets/demo.png )
 
-## Install
+##Installation
+
+>Supports global import and module import
+
 ```
+
 npm install --save vue3-sketch-ruler
 
 or
 
 yarn add vue3-sketch-ruler
+
 ```
 
 ##Introduction mode
@@ -59,7 +53,9 @@ Copy the packaged dist package and import it with import. The following two refe
 ```
 
 import { SketchRule } from 'vue3-sketch-ruler'
+
 import 'vue3-sketch-ruler/lib/style.css'
+
 components: { SketchRule }
 
 ```
@@ -68,146 +64,218 @@ It can also be like this
 
 ```
 
-import SketchRule from '/dist/index.es.js'
+import SketchRule from 'vue3-sketch-ruler'
+
+import 'vue3-sketch-ruler/lib/style.css'
 
 components: SketchRule
 
 ```
 
-And don't forget to introduce styles
+##Supported features
+
+-[x] ruler rendering
+
+-[x] zoom content, redraw ruler
+
+-[x] scroll the contents and redraw the ruler
+
+-[x] toggle ruler status, show or hide
+
+-[x] reference line management (add delete)
+
+-[x] toggles the reference line status, showing or hiding
+
+##Future supported features
+
+-[] add canvas mouse drag function
+
+-[] corner support events
+
+-[] there is a mouse in the lower right corner to enter the zoom function
+
+-[] Click the eye in the upper left corner to control the red line development
+
+-[] add unit test function
+
+This is an open source amateur function. If you are interested in strengthening the plug-in, you are welcome to join. You are also welcome to mention PR or issue, or email me a message, 253495832@qq.com
+
+##Use
 
 ```
 
-import '/dist/style.css'
-
-```
-Supported features
-------------------
-
-*   ruler render
-*   ruler render when scale
-*   ruler render when srolling
-*   switch status of ruler(show or hide)
-*   reference line management
-*   switch status of reference line (show or hide)
-
-Upcoming features
------------------
-
-*   \[\] contextmenu of ruler
-*   \[\] add event on corner
-*   \[\] separate css style
-*   \[\] international
-
-Usage
------
-
-```
 <template>
-    <SketchRule
-        :thick="thick"
-        :scale="scale"
-        :width="582"
-        :height="482"
-        :startX="startX"
-        :startY="startY"
-        :shadow="shadow"
-        :horLineArr="lines.h"
-        :verLineArr="lines.v"
-        :cornerActive="true"
-        @handleLine="handleLine"
-        @onCornerClick="handleCornerClick"
-    >
+
+<SketchRule
+
+:thick="thick"
+
+:scale="scale"
+
+:width="582"
+
+:height="482"
+
+:startX="startX"
+
+:startY="startY"
+
+:shadow="shadow"
+
+:horLineArr="lines.h"
+
+:verLineArr="lines.v"
+
+:cornerActive="true"
+
+@handleLine="handleLine"
+
+@onCornerClick="handleCornerClick"
+
+>
+
 </template>
+
 <script>
+
 import Vue from 'vue';
+
 import {SketchRule} from "vue-sketch-ruler";
+
 const rectWidth = 160;
+
 const rectHeight = 200;
+
 export default {
-    data() {
-        return {
-            scale: 2, //658813476562495, //1,
-            startX: 0,
-            startY: 0,
-            lines: {
-                h: [100, 200],
-                v: [100, 200]
-            },
-            thick: 20,
-            isShowRuler: true,
-            isShowReferLine: true
-        }
-    },
-    components: {
-        SketchRule
-    }
+
+data() {
+
+return {
+
+scale: 2, //658813476562495, //1,
+
+startX: 0,
+
+startY: 0,
+
+lines: {
+
+h: [100, 200],
+
+v: [100, 200]
+
+},
+
+thick: 20,
+
+isShowRuler: true,
+
+isShowReferLine: true
+
+}
+
+},
+
+components: {
+
+SketchRule
+
+}
+
 });
+
 </script>
 
 ```
-A complete example can be found [here](https://github.com/majun2232/vue3sketchRuler/blob/master/src/components/UserRuler.vue)
 
+Refer to a complete example, [click here]（ https://github.com/majun2232/vue3sketchRuler/blob/master/example/components/UserRuler.vue )
 
-api
----
+Vue3 API example, [click here]（ https://github.com/majun2232/vue3sketchRuler/blob/master/example/components/UserRulerts.vue )
 
-### Interface
+## api
+
+###Interface < typescript >
 
 ```
+
 interface Lines {
-    h: number[],
-    v:  Array<Number>,
+
+h: number[],
+
+v: Array<Number>,
+
 }
+
 interface Shadow {
-    x: number,
-    y: number,
-    width: number,
-    height: number
+
+x: number,
+
+y: number,
+
+width: number,
+
+height: number
+
 }
+
 interface Palette {
-    bgColor: string, // ruler bg color
-    longfgColor: string, // ruler longer mark color
-    shortfgColor: string, // ruler shorter mark color
-    fontColor: string, // ruler font color
-    shadowColor: string, // ruler shadow color
-    lineColor: string,
-    borderColor: string',
-    cornerActiveColor: string,
+
+bgColor: string, // ruler bg color
+
+longfgColor: string, // ruler longer mark color
+
+shortfgColor: string, // ruler shorter mark color
+
+fontColor: string, // ruler font color
+
+shadowColor: string, // ruler shadow color
+
+lineColor: string,
+
+borderColor: string',
+
+cornerActiveColor: string,
+
 }
 
 ```
 
-### Attributes
+###Attributes
 
-| Attributes | Description | Type | Default |
+|Attribute name | description | type | default value|
+
 | --- | --- | --- | --- |
-| lang | init language lang | String | zh-CN |
-| scale | ruler scale size | Number | 2 |
-| thick | thick size | Number | 16 |
-| width | the window width of the currently loaded ruler | Number | \- |
-| height | the window height of the currently loaded ruler | Number | \- |
-| startX | x at the beginning of the ruler | Number | 0 |
-| startY | y at the beginning of the ruler | Number | 0 |
-| shadow | size and the start coordinates on the ruler of the shadow | Shadow | 0 |
-| startY | y at the beginning of the ruler | Number | {x: 200,y: 100,width: 200,height: 400} |
-| horLineArr | Initial values for horizontal reference lines | Array | \[\] |
-| verLineArr | Initial values for vertical reference lines | Array | \[\] |
-| palette | the palette of sketch ruler | Palette | {bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',shortfgColor: '#C8CDD0',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',} |
+
+|Scale | initialize the scale of the scale | number | 2|
+
+|Thickness | number | 16|
+
+|Width | the width of the window where the ruler is placed | number | -|
+
+|Height | height of the ruler window | number | -|
+
+|Startx | coordinate value | number | 0 at the beginning of x-axis ruler|
+
+|Starty | coordinate value | number | 0 at the beginning of y-axis ruler|
+
+|Shadow | shadow | 0|
+
+|Horlinearray | initializes the reference line | array < number > | [] on the horizontal ruler|
+
+|Verlinearray | initializes the reference line | array < number > | [] on the vertical ruler|
+
+|Palette | style configuration parameters of the ruler | palette | {bgcolor:'rgba (225225, 0) ', longfgcolor:' #babbbc ', shortfgcolor:' #c8cdd0 ', fontcolor:' #7d8694 ', shadowcolor:' #e8e8 ', linecolor:' #eb5648 ', bordercolor:' #dadc ', coreactivecolor:' RGB (235, 86, 72, 0.6),}|
 
 ### Event
 
-| EventName | Description | CallbackParam |
+|Event name | description | callback parameters|
+
 | --- | --- | --- |
-| handleLine | horizontal or vertical reference lines has changed (add or remove) | Lines |
 
-License
--------
+|Handleline | operate the reference line (add or remove) on the horizontal and vertical ruler | lines|
 
-MIT
+##Quote
 
-reference
----------
+Vue ruler assembly [Vue sketch ruler]（ https://github.com/chuxiaoguo/vue-sketch-ruler.git )
 
-a vue component  [vue-sketch-ruler](https://github.com/chuxiaoguo/vue-sketch-ruler.git) from mockingbot.
-a react component [mb-sketch-ruler](https://github.com/mockingbot/mb-sketch-ruler) from mockingbot.
+A react ruler component from the ink knife [MB sketch ruler]（ https://github.com/mockingbot/mb-sketch-ruler ) .

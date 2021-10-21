@@ -48,10 +48,7 @@ import 'vue3-sketch-ruler/lib/style.css'
 
  components: SketchRule
 ```
-同时不要忘了引入样式
-```
-import '/dist/style.css'
-```
+
 ## 支持的功能
 - [x] 标尺渲染
 - [x] 缩放内容，重绘标尺
