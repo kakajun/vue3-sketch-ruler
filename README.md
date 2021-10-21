@@ -72,8 +72,6 @@ import 'vue3-sketch-ruler/lib/style.css'
     <SketchRule
         :thick="thick"
         :scale="scale"
-        :width="582"
-        :height="482"
         :startX="startX"
         :startY="startY"
         :shadow="shadow"
@@ -144,8 +142,6 @@ interface Palette {
 | --- | --- | --- | --- |
 | scale | 初始化标尺的缩放 | Number | 2 |
 | thick | 标尺的厚度 | Number | 16 |
-| width | 放置标尺窗口的宽度  | Number | - |
-| height | 放置标尺窗口的高度  | Number | - |
 | startX | x轴标尺开始的坐标数值 | Number | 0 |
 | startY | y轴标尺开始的坐标数值 | Number | 0 |
 | shadow |  阴影的参数  | Shadow | 0 |
