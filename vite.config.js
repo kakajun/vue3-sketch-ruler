@@ -34,14 +34,14 @@ export default defineConfig({
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'SketchRuler',
       fileName: 'index',
-      formats: ['es', 'umd']
+      formats: ['es']
     },
     rollupOptions: {
       // 确保外部化处理那些你不想打包进库的依赖
       external: ['vue'],
       output: {
         banner,
-        exports: 'named'
+        exports: 'auto'
       }
     }
   }

@@ -9,7 +9,7 @@
     "url": "https://github.com/majun2232/vue3sketchRuler"
   },
   "typings": "lib/types/index.d.ts",
-  "main": "lib/index.umd.js",
+  "main": "lib/index.es.js",
   "module": "lib/index.es.js",
   "style": "lib/style.css",
   "scripts": {

@@ -35,6 +35,8 @@ import {
   onMounted,
   nextTick
 } from 'vue'
+// import '../../lib/style.css'
+// import { SketchRule } from '../../lib/index.es' // 这里可以换成打包后的
 // import { SketchRule } from '../../src/index' // 这里可以换成打包后的
 const rectWidth = 200
 const rectHeight = 200
@@ -77,10 +79,10 @@ export default defineComponent({
     })
     onMounted(() => {
       // 这里监听窗口变化, 可要可不要
-      // window.addEventListener('resize', () => {
-      //   state.wrapperwith = window.innerWidth - 400
-      //   state.wrapperheight = window.innerHeight - 400
-      // })
+      window.addEventListener('resize', () => {
+        state.wrapperwith = window.innerWidth - 400
+        state.wrapperheight = window.innerHeight - 400
+      })
       // 滚动居中
       screensRef.value.scrollLeft =
         containerRef.value.getBoundingClientRect().width / 2 - 300
