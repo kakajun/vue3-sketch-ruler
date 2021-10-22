@@ -281,9 +281,8 @@ body * {
 </style>
 
 ```
-## 如果是需要查看普通方式写法[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/master/example/components/user-ruler.vue)
-参考一个完整的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/master/example/components/UserRuler.vue)
-vue3 api 的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/master/example/components/UserRulerts.vue)
+### 如果是需要查看普通方式写法[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/master/example/components/user-ruler.vue)
+
 
 
 ### 属性
