@@ -160,13 +160,11 @@ export default defineComponent({
   position: absolute;
   top: 0;
   left: 0;
-
   pointer-events: auto;
   cursor: pointer;
   box-sizing: content-box;
   transition: all 0.2s ease-in-out;
 }
-
 .indicator {
   position: absolute;
   pointer-events: none;
@@ -175,7 +173,6 @@ export default defineComponent({
     background: white;
   }
 }
-
 .ruler {
   width: 100%;
   height: 100%;

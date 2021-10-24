@@ -147,12 +147,10 @@ body {
   overflow: hidden;
   font-family: sans-serif;
 }
-
 body * {
   box-sizing: border-box;
   user-select: none;
 }
-
 .wrapper {
   position: absolute;
   top: 100px;
@@ -163,32 +161,27 @@ body * {
   background-color: #f5f5f5;
   border: 1px solid #dadadc;
 }
-
 #screens {
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: auto;
 }
-
 .screen-container {
   position: absolute;
   width: 5000px;
   height: 3000px;
 }
-
 .scale-value {
   position: absolute;
   bottom: 100%;
   left: 100px;
 }
-
 .button {
   position: absolute;
   bottom: 100%;
   left: 100px;
 }
-
 #canvas {
   position: absolute;
   top: 80px;

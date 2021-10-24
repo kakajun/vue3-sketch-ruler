@@ -104,7 +104,6 @@ export default defineComponent({
     justify-content: center;
     align-items: center;
   }
-
   .value {
     pointer-events: none;
     transform: scale(0.83);
@@ -131,7 +130,6 @@ export default defineComponent({
     }
   }
 }
-
 .v-container {
   .line {
     left: 0;

@@ -206,20 +206,17 @@ export default {
   position: relative;
   width: 100%;
   background-color: inherit;
-
   &:hover {
     .floatBottomDiv {
       display: inline-flex;
     }
   }
-
   .refer-line-img {
     position: absolute;
     left: 180;
     width: 20px;
     height: 20px;
   }
-
   .screens {
     position: relative;
     display: flex;
@@ -228,13 +225,11 @@ export default {
     overflow: auto;
     justify-content: center;
   }
-
   .canvas-content {
     position: absolute;
     overflow: hidden;
     transform-origin: 0 0;
   }
-
   .floatBottomDiv {
     position: fixed;
     right: 388px; // 0px;
@@ -250,7 +245,6 @@ export default {
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 20px;
     justify-content: center;
-
     .btns {
       margin: 0 5px 0 5px;
     }

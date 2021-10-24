@@ -1,39 +1,19 @@
-// https://stylelint.docschina.org/user-guide/rules/
 module.exports = {
   root: true,
-  processors: [],
-  plugins: ['stylelint-order'],
-  extends: ['stylelint-config-standard'],
+  plugins: ['stylelint-order', 'stylelint-scss'],
+  extends: ['stylelint-config-standard', 'stylelint-config-prettier'],
+  customSyntax: 'postcss-sass',
   rules: {
-    'selector-pseudo-element-no-unknown': [
+    'declaration-colon-space-before': 'never',
+    'declaration-colon-space-after': 'always-single-line',
+    'at-rule-no-unknown': [
       true,
       {
-        ignorePseudoElements: ['::v-deep']
+        ignoreAtRules: ['include', 'mixin']
       }
     ],
-    'declaration-block-trailing-semicolon': null,
-    'selector-pseudo-class-no-unknown': null,
-    // 允许嵌套的深度最多 5 层
-    'max-nesting-depth': 8,
-    'declaration-bang-space-before': null,
-    'comment-empty-line-before': null,
-    'declaration-empty-line-before': null,
-    'function-comma-newline-after': null,
-    'function-name-case': null,
-    'function-parentheses-newline-inside': null,
-    'function-max-empty-lines': null,
-    'function-whitespace-after': null,
-    indentation: null,
-    'number-leading-zero': null,
-    'number-no-trailing-zeros': null,
-    'rule-empty-line-before': null,
-    'selector-combinator-space-after': null,
-    'selector-list-comma-newline-after': null,
-    'selector-pseudo-element-colon-notation': null,
-    'unit-no-unknown': null,
-    'value-list-max-empty-lines': null,
-    'font-family-no-missing-generic-family-keyword': null,
-    'no-descending-specificity': null,
+    'rule-empty-line-before': ['never'],
+    'no-descending-specificity': null, // 禁止空源
     // 指定声明块内属性的字母顺序
     'order/properties-order': [
       'position',

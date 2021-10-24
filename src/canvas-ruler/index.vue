@@ -9,7 +9,7 @@
   />
 </template>
 <script lang="ts">
-import { drawHorizontalRuler, drawVerticalRuler } from './utils'
+import { drawHorizontalRuler, drawVerticalRuler } from './utils.js'
 import { reactive, ref, onMounted, watch, defineComponent } from 'vue'
 import { canvasProps, CanvasProps } from './canvas-types'
 export default defineComponent({
@@ -20,6 +20,7 @@ export default defineComponent({
     const state = reactive({
       canvasContext: null as CanvasRenderingContext2D | null
     })
+    // 1
     const canvas = ref<HTMLCanvasElement | null>(null)
     onMounted(() => {
       initCanvasRef()
