@@ -52,8 +52,9 @@
 </template>
 
 <script>
+import { ElButton, ElOption, ElTooltip, ElSelect } from 'element-plus'
 export default {
-  name: 'sketTool',
+  name: 'SketTool',
   props: {
     scale: Number,
     config: Object,
@@ -61,6 +62,12 @@ export default {
       type: Number, //尺子宽度,跟视口有关
       require: true
     }
+  },
+  components: {
+    ElButton,
+    ElTooltip,
+    ElOption,
+    ElSelect
   },
   emits: ['getscale', 'setStart', 'getruleWidth'],
   data() {
@@ -159,3 +166,9 @@ export default {
   }
 }
 </script>
+<style>
+/* .floatBottomDiv {
+  margin: 50px;
+  background: #000;
+} */
+</style>

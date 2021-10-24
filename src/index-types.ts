@@ -34,6 +34,7 @@ export const sketchRulerProps = {
     type: Number,
     default: 1
   },
+  config: Object as configType,
   ratio: {
     type: Number,
     default: 1

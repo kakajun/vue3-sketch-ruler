@@ -11,17 +11,33 @@
       :corner-active="true"
       @handleLine="handleLine"
     >
-      <div id="canvas" />
     </SketchRule>
+    <div
+      id="screens"
+      ref="screensRef"
+      @wheel="handleWheel"
+      @scroll="handleScroll"
+    >
+      <div ref="containerRef" class="screen-container">
+        <div id="canvas" :style="canvasStyle" />
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">
-// import { SketchRule } from 'vue3-sketch-ruler'
-// import 'vue3-sketch-ruler/lib/style.css'
-import { computed, defineComponent, ref, reactive, onMounted } from 'vue'
+import { SketchRule } from 'vue3-sketch-ruler'
+import 'vue3-sketch-ruler/lib/style.css'
+import {
+  computed,
+  defineComponent,
+  ref,
+  reactive,
+  onMounted,
+  nextTick
+} from 'vue'
 // import '../../lib/style.css'
 // import { SketchRule } from '../../lib/index.es' // 这里可以换成打包后的
-import { SketchRule } from '../../src/index' // 这里可以换成打包后的
+// import { SketchRule } from '../../src/index' // 这里可以换成打包后的
 const rectWidth = 200
 const rectHeight = 200
 export default defineComponent({
@@ -74,13 +90,51 @@ export default defineComponent({
     const handleLine = (lines: { h: number[]; v: number[] }) => {
       state.lines = lines
     }
+    const handleScroll = () => {
+      const screensRect = document
+        .querySelector('#screens')
+        .getBoundingClientRect()
+      const canvasRect = document
+        .querySelector('#canvas')
+        .getBoundingClientRect()
+
+      // 标尺开始的刻度
+      const startX =
+        (screensRect.left + state.thick - canvasRect.left) / state.scale
+      const startY =
+        (screensRect.top + state.thick - canvasRect.top) / state.scale
+      state.startX = startX
+      state.startY = startY
+    }
+    // 控制缩放值
+    const handleWheel = (e: {
+      ctrlKey: any
+      metaKey: any
+      preventDefault: () => void
+      deltaY: number
+    }) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault()
+        const nextScale = parseFloat(
+          Math.max(0.2, state.scale - e.deltaY / 500).toFixed(2)
+        )
+        state.scale = nextScale
+      }
+      nextTick(() => {
+        handleScroll()
+      })
+    }
 
     return {
       wrapperwithpx,
       wrapperheightpx,
+      screensRef,
+      containerRef,
       state,
       shadow,
       canvasStyle,
+      handleWheel,
+      handleScroll,
       handleLine
     }
   }

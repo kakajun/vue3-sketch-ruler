@@ -166,20 +166,32 @@ export default defineComponent({
     pointer-events: auto;
   }
 }
-.v-container {
-  left: 0;
-  .indicator {
-    width: 100vw;
-    .value {
-      left: 0;
-      width: auto;
-      padding: 0 2px;
-      margin-top: -5px;
-      margin-left: 2px;
-      transform: rotate(-90deg);
-      transform-origin: 0 0;
+.h-container {
+  top: 0;
+  .line {
+    top: 0;
+    height: 100vh;
+    padding-left: 5px;
+    .action {
+      transform: translateX(-24px);
+      .value {
+        margin-left: 4px;
+      }
     }
   }
+  .indicator {
+    top: 0;
+    height: 100vw;
+    .value {
+      width: auto;
+      padding: 0 2px;
+      margin-top: 4px;
+      margin-left: 4px;
+    }
+  }
+}
+.v-container {
+  left: 0;
   .line {
     left: 0;
     width: 100vw;
@@ -192,28 +204,16 @@ export default defineComponent({
       }
     }
   }
-}
-.h-container {
-  top: 0;
   .indicator {
-    top: 0;
-    height: 100vw;
+    width: 100vw;
     .value {
+      left: 0;
       width: auto;
       padding: 0 2px;
-      margin-top: 4px;
-      margin-left: 4px;
-    }
-  }
-  .line {
-    top: 0;
-    height: 100vh;
-    padding-left: 5px;
-    .action {
-      transform: translateX(-24px);
-      .value {
-        margin-left: 4px;
-      }
+      margin-top: -5px;
+      margin-left: 2px;
+      transform: rotate(-90deg);
+      transform-origin: 0 0;
     }
   }
 }

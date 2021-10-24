@@ -38,10 +38,14 @@
       :style="cornerStyle"
       @click="onCornerClick"
     ></a>
+    <inner-box>
+      <slot></slot>
+    </inner-box>
   </div>
 </template>
 
 <script lang="ts">
+import InnerBox from './inner-box.vue'
 import RulerWrapper from './ruler-wrapper.vue'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { sketchRulerProps, SketchRulerProps } from '../index-types'
@@ -49,7 +53,8 @@ import { merge } from 'lodash-es'
 export default defineComponent({
   name: 'SketchRule',
   components: {
-    RulerWrapper
+    RulerWrapper,
+    InnerBox
   },
   props: sketchRulerProps,
   emits: ['onCornerClick', 'handleLine'],
@@ -143,7 +148,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .style-ruler {
   position: absolute;
   z-index: 3; /* 需要比resizer高 */
