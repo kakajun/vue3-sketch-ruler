@@ -1,17 +1,15 @@
 <template>
-  <div class="wrapper">
+  <div>
     <SketchRule
+      class="wrapper"
       :thick="state.thick"
       :scale="state.scale"
-      :start-x="state.startX"
-      :start-y="state.startY"
-      :shadow="shadow"
       :hor-line-arr="state.lines.h"
       :ver-line-arr="state.lines.v"
       :corner-active="true"
       @handleLine="handleLine"
     >
-      <div id="canvas" />
+      <div class="constent" />
     </SketchRule>
   </div>
 </template>
@@ -22,20 +20,13 @@ import { computed, defineComponent, ref, reactive, onMounted } from 'vue'
 // import '../../lib/style.css'
 // import { SketchRule } from '../../lib/index.es' // 这里可以换成打包后的
 import { SketchRule } from '../../src/index' // 这里可以换成打包后的
-const rectWidth = 200
-const rectHeight = 200
 export default defineComponent({
   components: { SketchRule },
   setup() {
-    const screensRef = ref(null)
-    const containerRef = ref(null)
     const state = reactive({
       scale: 1,
-      startX: 0,
       wrapperwith: 1200, // 定义外面容器大小
       wrapperheight: 500,
-      width: 1200,
-      startY: 0,
       lines: {
         h: [0, 200],
         v: [0, 200]
@@ -46,21 +37,7 @@ export default defineComponent({
     })
     const wrapperwithpx = computed(() => state.wrapperwith + 22 + 'px')
     const wrapperheightpx = computed(() => state.wrapperheight + 22 + 'px')
-    const shadow = computed(() => {
-      return {
-        x: 0,
-        y: 0,
-        width: rectWidth,
-        height: rectHeight
-      }
-    })
-    const canvasStyle = computed(() => {
-      return {
-        width: rectWidth,
-        height: rectHeight,
-        transform: `scale(${state.scale})`
-      }
-    })
+
     onMounted(() => {
       // 这里监听窗口变化, 可要可不要
       window.addEventListener('resize', () => {
@@ -68,8 +45,8 @@ export default defineComponent({
         state.wrapperheight = window.innerHeight - 400
       })
       // 滚动居中
-      screensRef.value.scrollLeft =
-        containerRef.value.getBoundingClientRect().width / 2 - 300
+      // screensRef.value.scrollLeft =
+      //   containerRef.value.getBoundingClientRect().width / 2 - 300
     })
     const handleLine = (lines: { h: number[]; v: number[] }) => {
       state.lines = lines
@@ -79,8 +56,6 @@ export default defineComponent({
       wrapperwithpx,
       wrapperheightpx,
       state,
-      shadow,
-      canvasStyle,
       handleLine
     }
   }
@@ -128,7 +103,7 @@ body * {
   bottom: 100%;
   left: 100px;
 }
-#canvas {
+.constent {
   position: absolute;
   top: 80px;
   left: 50%;

@@ -80,6 +80,9 @@ export default defineComponent({
       updateCanvasContext()
       drawRuler()
     })
+    watch([() => props.scale], val => {
+      console.log(val, '666666666')
+    })
     const getValueByOffset = (offset: number, start: number, scale: number) =>
       Math.round(start + offset / scale)
     const handleClick = (e: MouseEvent) => {

@@ -1,5 +1,10 @@
 <template>
-  <div ref="ruler" class="style-ruler">
+  <div
+    ref="ruler"
+    @scroll="setStart"
+    @mousewheel="handleWheel"
+    class="style-ruler"
+  >
     <!-- 水平方向 -->
     <RulerWrapper
       :vertical="false"
@@ -38,16 +43,18 @@
       :style="cornerStyle"
       @click="onCornerClick"
     ></a>
+    <!-- <inner-box v-model="scale" class="inner-box">
+      <slot></slot>
+    </inner-box> -->
     <div
       ref="screensRef"
       class="screens"
-      @mousewheel="handleWheel"
       @click="$emit('ClickOutside2ClearAll', $event)"
     >
-      <div class="canvas-content" :style="canvasStyle">
-        <!-- 放个默认插槽 -->
-        <slot></slot>
-      </div>
+      <!-- <div class="canvas-content" :style="canvasStyle"> -->
+      <!-- 放个默认插槽 -->
+      <slot ref="canvas"></slot>
+      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -55,7 +62,7 @@
 <script lang="ts">
 import InnerBox from './inner-box.vue'
 import RulerWrapper from './ruler-wrapper.vue'
-import { computed, defineComponent, onMounted, ref, nextTick } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { sketchRulerProps, SketchRulerProps } from '../index-types'
 import { merge } from 'lodash-es'
 export default defineComponent({
@@ -66,7 +73,7 @@ export default defineComponent({
   },
   props: sketchRulerProps,
   emits: ['onCornerClick', 'handleLine', 'ClickOutside2ClearAll'],
-  setup(props: SketchRulerProps, { slots, emit }) {
+  setup(props: SketchRulerProps, { emit }) {
     // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
     let scale = ref(1)
     const isImgOpen = ref(true) //眼镜打开
@@ -106,6 +113,7 @@ export default defineComponent({
         },
         props.palette || {}
       )
+      // console.log(finalObj, '6666')
       return finalObj
     })
     const cornerActiveClass = computed(() => {
@@ -117,11 +125,10 @@ export default defineComponent({
     onMounted(() => {
       if (ruler.value) {
         const refruler = ruler.value.getBoundingClientRect()
+        // console.log(refruler, '666666')
         width.value = refruler.width - 21
         height.value = refruler.height - 21
       }
-      // 初始化尺子阴影和线条
-      setStart()
     })
     const cornerStyle = computed(() => {
       return {
@@ -145,7 +152,7 @@ export default defineComponent({
         paddingRight: '20px',
         paddingBottom: '30px',
         // zIndex: 10,
-        transform: `scale(${scale.value})`
+        transform: `scale(${scale})`
       }
       return css
     })
@@ -155,28 +162,27 @@ export default defineComponent({
     const imgClick = () => {
       props.isShowReferLine = !props.isShowReferLine
     }
-
+    const canvas = ref<HTMLElement | null>(null)
     const screensRef = ref<HTMLElement | null>(null)
     const setStart = () => {
-      nextTick(() => {
-        if (screensRef.value && slots.default && slots.default()[0].el) {
-          const canvas = slots.default()[0].el as HTMLElement // 获取slot的dom
-          const canvasR = canvas.getBoundingClientRect() // 获取slot的宽高值
-          const screensRect = screensRef.value.getBoundingClientRect()
-          // 标尺开始的刻度
-          const startx =
-            (screensRect.left + props.thick - canvasR.left) / scale.value
-          const starty =
-            (screensRect.top + props.thick - canvasR.top) / scale.value
-          startX.value = startx >> 0
-          startY.value = starty >> 0
-          console.log(startX.value, startY.value)
-        }
-      })
+      if (canvas.value && screensRef.value) {
+        const canvasR = canvas.value.getBoundingClientRect()
+        //↑ 异步加载组件使用
+        const screensRect = screensRef.value.getBoundingClientRect()
+        // 标尺开始的刻度
+        const startx =
+          (screensRect.left + props.thick - canvasR.left) / scale.value
+        const starty =
+          (screensRect.top + props.thick - canvasR.top) / scale.value
+        startX.value = startx >> 0
+        startY.value = starty >> 0
+      }
     }
 
     // 控制缩放值
     const handleWheel = (e: WheelEvent) => {
+      debugger
+      console.log('44444444444')
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault()
         const nextScale = parseFloat(
@@ -201,6 +207,7 @@ export default defineComponent({
       setStart,
       handleWheel,
       screensRef,
+      canvas,
       startY,
       startX,
       imgClick,
@@ -239,7 +246,7 @@ export default defineComponent({
   height: 100%;
   overflow: hidden;
   font-size: 12px;
-  // pointer-events: none;
+  pointer-events: none;
   justify-content: center;
   span {
     line-height: 1;
