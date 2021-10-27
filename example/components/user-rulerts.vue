@@ -3,6 +3,8 @@
     <SketchRule
       :thick="state.thick"
       :scale="state.scale"
+      :width="582"
+      :height="482"
       :start-x="state.startX"
       :start-y="state.startY"
       :shadow="shadow"
@@ -35,9 +37,8 @@ import {
   onMounted,
   nextTick
 } from 'vue'
-// import '../../lib/style.css'
-// import { SketchRule } from '../../lib/index.es' // 这里可以换成打包后的
-// import { SketchRule } from '../../src/index' // 这里可以换成打包后的
+// import { SketchRule } from '/lib/index.es.js?3242' // 这里可以换成打包后的
+// import '/lib/style.css'
 const rectWidth = 200
 const rectHeight = 200
 export default defineComponent({
@@ -46,22 +47,17 @@ export default defineComponent({
     const screensRef = ref(null)
     const containerRef = ref(null)
     const state = reactive({
-      scale: 1,
+      scale: 1, //658813476562495, //1,
       startX: 0,
-      wrapperwith: 1200, // 定义外面容器大小
-      wrapperheight: 500,
-      width: 1200,
       startY: 0,
       lines: {
-        h: [0, 200],
-        v: [0, 200]
+        h: [100, 200],
+        v: [100, 200]
       },
       thick: 20,
       isShowRuler: true, // 显示标尺
       isShowReferLine: true // 显示参考线
     })
-    const wrapperwithpx = computed(() => state.wrapperwith + 22 + 'px')
-    const wrapperheightpx = computed(() => state.wrapperheight + 22 + 'px')
     const shadow = computed(() => {
       return {
         x: 0,
@@ -78,18 +74,15 @@ export default defineComponent({
       }
     })
     onMounted(() => {
-      // 这里监听窗口变化, 可要可不要
-      window.addEventListener('resize', () => {
-        state.wrapperwith = window.innerWidth - 400
-        state.wrapperheight = window.innerHeight - 400
-      })
       // 滚动居中
       screensRef.value.scrollLeft =
         containerRef.value.getBoundingClientRect().width / 2 - 300
     })
+
     const handleLine = (lines: { h: number[]; v: number[] }) => {
       state.lines = lines
     }
+
     const handleScroll = () => {
       const screensRect = document
         .querySelector('#screens')
@@ -103,6 +96,7 @@ export default defineComponent({
         (screensRect.left + state.thick - canvasRect.left) / state.scale
       const startY =
         (screensRect.top + state.thick - canvasRect.top) / state.scale
+
       state.startX = startX
       state.startY = startY
     }
@@ -126,8 +120,6 @@ export default defineComponent({
     }
 
     return {
-      wrapperwithpx,
-      wrapperheightpx,
       screensRef,
       containerRef,
       state,
@@ -140,7 +132,7 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 body {
   padding: 0;
   margin: 0;
@@ -157,9 +149,8 @@ body * {
   position: absolute;
   top: 100px;
   left: 100px;
-  // vue3 新写法,可以共享js中的变量,必须要写
-  width: v-bind(wrapperwithpx);
-  height: v-bind(wrapperheightpx);
+  width: 600px;
+  height: 500px;
   background-color: #f5f5f5;
   border: 1px solid #dadadc;
 }
@@ -180,7 +171,7 @@ body * {
 .scale-value {
   position: absolute;
   bottom: 100%;
-  left: 100px;
+  left: 0;
 }
 
 .button {
@@ -195,6 +186,7 @@ body * {
   left: 50%;
   width: 200px;
   height: 200px;
+  // margin-left: -80px;
   background: lightblue;
   transform-origin: 50% 0;
 }
