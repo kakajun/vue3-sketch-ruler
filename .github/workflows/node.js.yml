@@ -26,5 +26,5 @@ jobs:
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: dist # The folder the action should deploy.
-          workspace: '1X'
-          target-folder: '1X' # 放在2X目录下
+          workspace: '1x'
+          target-folder: '1x' # 放在2X目录下
