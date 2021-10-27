@@ -32,7 +32,6 @@ export default defineComponent({
     const updateCanvasContext = () => {
       if (canvas.value) {
         const ratio = props.ratio
-        console.log(ratio)
         // 比例宽高
         canvas.value.width = props.width! * ratio!
         canvas.value.height = props.height! * ratio!

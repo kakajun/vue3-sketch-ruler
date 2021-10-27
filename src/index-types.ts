@@ -50,6 +50,14 @@ export const sketchRulerProps = {
     type: Number,
     default: 0
   },
+  width: {
+    type: Number,
+    default: 200
+  },
+  height: {
+    type: Number,
+    default: 200
+  },
   shadow: Object as PropType<ShadowType>,
   horLineArr: {
     type: Array as PropType<Array<number>>,
