@@ -2,10 +2,10 @@
 
 > 在使用vue3中,用于页面展示的缩放操作
 
-## 注意 这里1X版本和vue-sketch-ruler 一样功能, 后面也不再维护, 新功能将会在2X中增加
+
  [![](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)  [![build status](https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml)
 
- 简体中文 | [English](https://github.com/majun2232/vue3sketchRuler/blob/master/README.EN.md)
+ 简体中文 | [English](https://github.com/majun2232/vue3sketchRuler/blob/1x/README.EN.md)
 
 - 💪 Vue 3 Composition API
 - 🔥 Written in TypeScript
@@ -20,9 +20,10 @@
 3. 对shadow和palette参数进行对象合并计算，在以前palette的参数要么都传，要么不传，我这里改进后可以只传需要修改的属性即可，没有修改的可以不传
 4. 对类型进行打包设置（目前还不知道这个类型打包有多大的好处）
 
+## 注意 这里1X版本和vue-sketch-ruler 一样功能, 后面也不再维护, 新功能将会在2X中增加
 ## demo
-案例浏览: [https://majun2232.github.io/vue3sketchRuler/](https://majun2232.github.io/vue3sketchRuler)
-![image](https://github.com/majun2232/vue3sketchRuler/blob/master/example/assets/demo.png)
+案例浏览: [https://majun2232.github.io/vue3sketchRuler/1x](https://majun2232.github.io/vue3sketchRuler/1x)
+![image](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/assets/demo.png)
 
 ## 安装
 > 支持全局导入和模块导入
@@ -112,8 +113,8 @@ export default {
 });
 </script>
 ```
-参考一个完整的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/master/example/components/UserRuler.vue)
-vue3 api 的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/master/example/components/UserRulerts.vue)
+参考一个完整的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/UserRuler.vue)
+vue3 api 的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/UserRulerts.vue)
 
 ## api
 ### 接口 <TypeScript>
