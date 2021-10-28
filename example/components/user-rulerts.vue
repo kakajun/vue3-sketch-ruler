@@ -28,7 +28,7 @@
 // import { SketchRule } from 'vue3-sketch-ruler'
 // import 'vue3-sketch-ruler/lib/style.css'
 // import { SketchRule } from '/lib/index.es.js'
-import '/lib/style.css'
+// import '/lib/style.css'
 import {
   computed,
   defineComponent,
@@ -38,7 +38,7 @@ import {
   nextTick
 } from 'vue'
 import { SketchRule } from '../../src/index' // 这里可以换成打包后的
-import '/lib/style.css'
+
 const rectWidth = 200
 const rectHeight = 200
 export default defineComponent({
