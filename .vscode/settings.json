@@ -99,12 +99,14 @@
   "[scss]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": false,
+      "source.fixAll.eslint": true,
+         "eslint.autoFixOnSave" : true,
       "source.fixAll.stylelint": true
     }
   },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    // "editor.defaultFormatter": "esbenp.prettier-vscode"
+       "editor.defaultFormatter": "EditorConfig.EditorConfig"
   },
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

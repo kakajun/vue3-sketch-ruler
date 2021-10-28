@@ -19,6 +19,8 @@
 3. 对shadow和palette参数进行对象合并计算，在以前palette的参数要么都传，要么不传，我这里改进后可以只传需要修改的属性即可，没有修改的可以不传
 4. 对类型进行打包设置（目前还不知道这个类型打包有多大的好处）
 
+## 注意
+如果迁移过来的工程,使用和vue-sketch-ruler一样功能的,请使用1X版本,2X版本是经过改造后的,功能和1X一样,但配置简化了,新工程建议使用2X版本构建
 ## demo
 案例浏览: [https://majun2232.github.io/vue3sketchRuler/](https://majun2232.github.io/vue3sketchRuler)
 ![image](https://github.com/majun2232/vue3sketchRuler/blob/master/example/assets/demo.png)

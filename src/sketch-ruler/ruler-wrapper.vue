@@ -190,7 +190,6 @@ export default defineComponent({
     }
   }
 }
-
 .v-container {
   left: 0;
   .line {

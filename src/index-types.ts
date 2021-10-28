@@ -22,7 +22,10 @@ export interface MenuType {
     hoverBgColor?: string
   }
 }
-
+interface configType {
+  width: number
+  height: number
+}
 export interface ShadowType {
   x: number
   y: number
@@ -30,10 +33,7 @@ export interface ShadowType {
   height: number
 }
 export const sketchRulerProps = {
-  scale: {
-    type: Number,
-    default: 1
-  },
+  config: Object as PropType<configType>,
   ratio: {
     type: Number,
     default: 1
@@ -43,13 +43,6 @@ export const sketchRulerProps = {
     default: 16
   },
   palette: Object as PropType<PaletteType>,
-  startX: {
-    type: Number
-  },
-  startY: {
-    type: Number,
-    default: 0
-  },
   shadow: Object as PropType<ShadowType>,
   horLineArr: {
     type: Array as PropType<Array<number>>,
