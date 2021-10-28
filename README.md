@@ -20,7 +20,8 @@
 3. 对shadow和palette参数进行对象合并计算，在以前palette的参数要么都传，要么不传，我这里改进后可以只传需要修改的属性即可，没有修改的可以不传
 4. 对类型进行打包设置（目前还不知道这个类型打包有多大的好处）
 
-## 注意 这里1X版本和vue-sketch-ruler 一样功能, 后面也不再维护, 新功能将会在2X中增加
+## 注意
+这里1X版本和vue-sketch-ruler 一样功能, 后面也不再维护, 新功能将会在2X中增加
 ## demo
 案例浏览: [https://majun2232.github.io/vue3sketchRuler/1x](https://majun2232.github.io/vue3sketchRuler/1x)
 ![image](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/assets/demo.png)
@@ -67,7 +68,7 @@ import 'vue3-sketch-ruler/lib/style.css'
 - [] 左上角的眼睛，点击能控制红线显影
 - [] 加入单元测试功能
 
-这是个开源业余做的功能，有兴趣加强该插件的小伙伴欢迎加入，也欢迎大家提pr或者issue，，或者邮箱给我留言，253495832@qq.com
+这是个开源业余做的功能，有兴趣加强该插件的小伙伴欢迎加入，也欢迎大家提pr或者issue
 ## 使用
 ```
 <template>
@@ -79,10 +80,8 @@ import 'vue3-sketch-ruler/lib/style.css'
         :startX="startX"
         :startY="startY"
         :shadow="shadow"
-        :horLineArr="lines.h"
-        :verLineArr="lines.v"
+        :lines="lines"
         :cornerActive="true"
-        @handleLine="handleLine"
         @onCornerClick="handleCornerClick"
     >
 </template>
@@ -117,29 +116,6 @@ export default {
 vue3 api 的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/UserRulerts.vue)
 
 ## api
-### 接口 <TypeScript>
-```
-interface Lines {
-    h: number[],
-    v:  Array<Number>,
-}
-interface Shadow {
-    x: number,
-    y: number,
-    width: number,
-    height: number
-}
-interface Palette {
-    bgColor: string, // ruler bg color
-    longfgColor: string, // ruler longer mark color
-    shortfgColor: string, // ruler shorter mark color
-    fontColor: string, // ruler font color
-    shadowColor: string, // ruler shadow color
-    lineColor: string,
-    borderColor: string',
-    cornerActiveColor: string,
-}
-```
 ### 属性
 
 |  属性名称|  描述 | 类型 | 默认值 |
@@ -151,16 +127,18 @@ interface Palette {
 | startX | x轴标尺开始的坐标数值 | Number | 0 |
 | startY | y轴标尺开始的坐标数值 | Number | 0 |
 | shadow |  阴影的参数  | Shadow | 0 |
-| horLineArr | 初始化水平标尺上的参考线 | Array<number> | [] |
-| verLineArr | 初始化垂直标尺上的参考线  | Array<number> | [] |
+| lines | 初始化水平标尺上的参考线 | object<Array> | {h:[],v:[]} |
 | palette | 标尺的样式配置参数 | Palette | {bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',shortfgColor: '#C8CDD0',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',} |
 
-
+### 更新说明
+v1.1.11
+1. 废弃掉 :horLineArr="lines.h"  和 :verLineArr="lines.v"  统一整合为lines对象传入,回调handleLine也废弃掉, 没什么用,如果不想要lines,就直接让lines={}
+2. 干掉一些没用的样式(是真没用,之前的工程也没用,我只是翻过来没用仔细研究代码,所以不会影响之前迁移的项目)
 ### Event
 
 | 事件名称 | 描述 | 回调参数 |
 | --- | --- | --- |
-| handleLine | 在横纵标尺上操作参考线（新增或移除） | Lines  |
+| handleCornerClick | 左上角点击事件 |   |
 
 ## 引用
 vue标尺组件 [vue-sketch-ruler](https://github.com/chuxiaoguo/vue-sketch-ruler.git)

@@ -4,13 +4,13 @@
 
 [![]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667 )]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667 ) [! [build status]( https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml/badge.svg?branch=master )]( https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml )
 
-Simplified Chinese | [English]（ https://github.com/majun2232/vue3sketchRuler/blob/master/README.EN.md )
+Simplified Chinese | [English]（ https://github.com/majun2232/vue3sketchRuler/blob/1x/README.EN.md )
 
 - 💪 Vue 3 Composition API
 
 - 🔥 Written in TypeScript
 
-#Vue 3 + vite + TS package sketchrule
+# Vue 3 + vite + TS package sketchrule
 
 Because the project was upgraded to vite, I found that the original plug-in Vue sketch ruler would report an error when used in vue3. Here, I repackaged a copy with vite. The packaged plug-in works the same as the original and supports the use in vue3 and vite
 
@@ -26,13 +26,16 @@ The original code has been improved and optimized here. The function is the same
 
 4. Package the type (I don't know the benefits of packaging this type yet)
 
+## Note
+ that the 1x version has the same function as Vue sketch ruler, and will not be maintained later. The new function will be added in 2x
+
 ## demo
 
-Case browsing:[ https://majun2232.github.io/vue3sketchRuler/ ]( https://majun2232.github.io/vue3sketchRuler )
+Case browsing:[ https://majun2232.github.io/vue3sketchRuler/1x ]( https://majun2232.github.io/vue3sketchRuler/1x )
 
-![image]( https://github.com/majun2232/vue3sketchRuler/blob/master/example/assets/demo.png )
+![image]( https://github.com/majun2232/vue3sketchRuler/blob/1x/example/assets/demo.png )
 
-##Installation
+## Installation
 
 >Supports global import and module import
 
@@ -46,7 +49,7 @@ yarn add vue3-sketch-ruler
 
 ```
 
-##Introduction mode
+## Introduction mode
 
 Copy the packaged dist package and import it with import. The following two reference methods are supported
 
@@ -72,7 +75,7 @@ components: SketchRule
 
 ```
 
-##Supported features
+## Supported features
 
 -[x] ruler rendering
 
@@ -86,7 +89,7 @@ components: SketchRule
 
 -[x] toggles the reference line status, showing or hiding
 
-##Future supported features
+## Future supported features
 
 -[] add canvas mouse drag function
 
@@ -98,149 +101,60 @@ components: SketchRule
 
 -[] add unit test function
 
-This is an open source amateur function. If you are interested in strengthening the plug-in, you are welcome to join. You are also welcome to mention PR or issue, or email me a message, 253495832@qq.com
+This is an open source amateur function. If you are interested in strengthening the plug-in, you are welcome to join. You are also welcome to mention PR or issue
 
-##Use
+## Use
 
 ```
-
 <template>
-
-<SketchRule
-
-:thick="thick"
-
-:scale="scale"
-
-:width="582"
-
-:height="482"
-
-:startX="startX"
-
-:startY="startY"
-
-:shadow="shadow"
-
-:horLineArr="lines.h"
-
-:verLineArr="lines.v"
-
-:cornerActive="true"
-
-@handleLine="handleLine"
-
-@onCornerClick="handleCornerClick"
-
->
-
+    <SketchRule
+        :thick="thick"
+        :scale="scale"
+        :width="582"
+        :height="482"
+        :startX="startX"
+        :startY="startY"
+        :shadow="shadow"
+        :lines="lines"
+        :cornerActive="true"
+        @onCornerClick="handleCornerClick"
+    >
 </template>
-
 <script>
-
 import Vue from 'vue';
-
 import {SketchRule} from "vue-sketch-ruler";
-
 const rectWidth = 160;
-
 const rectHeight = 200;
 
 export default {
-
-data() {
-
-return {
-
-scale: 2, //658813476562495, //1,
-
-startX: 0,
-
-startY: 0,
-
-lines: {
-
-h: [100, 200],
-
-v: [100, 200]
-
-},
-
-thick: 20,
-
-isShowRuler: true,
-
-isShowReferLine: true
-
-}
-
-},
-
-components: {
-
-SketchRule
-
-}
-
+    data() {
+        return {
+            scale: 2, //658813476562495, //1,
+            startX: 0,
+            startY: 0,
+            lines: {
+                h: [100, 200],
+                v: [100, 200]
+            },
+            thick: 20,
+            isShowRuler: true,
+            isShowReferLine: true
+        }
+    },
+    components: {
+        SketchRule
+    }
 });
-
 </script>
-
 ```
 
-Refer to a complete example, [click here]（ https://github.com/majun2232/vue3sketchRuler/blob/master/example/components/UserRuler.vue )
+Refer to a complete example, [click here]（ https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/UserRuler.vue )
 
-Vue3 API example, [click here]（ https://github.com/majun2232/vue3sketchRuler/blob/master/example/components/UserRulerts.vue )
+Vue3 API example, [click here]（ https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/UserRulerts.vue )
 
 ## api
 
-###Interface < typescript >
-
-```
-
-interface Lines {
-
-h: number[],
-
-v: Array<Number>,
-
-}
-
-interface Shadow {
-
-x: number,
-
-y: number,
-
-width: number,
-
-height: number
-
-}
-
-interface Palette {
-
-bgColor: string, // ruler bg color
-
-longfgColor: string, // ruler longer mark color
-
-shortfgColor: string, // ruler shorter mark color
-
-fontColor: string, // ruler font color
-
-shadowColor: string, // ruler shadow color
-
-lineColor: string,
-
-borderColor: string',
-
-cornerActiveColor: string,
-
-}
-
-```
-
-###Attributes
+### Attributes
 
 |Attribute name | description | type | default value|
 
@@ -260,11 +174,17 @@ cornerActiveColor: string,
 
 |Shadow | shadow | 0|
 
-|Horlinearray | initializes the reference line | array < number > | [] on the horizontal ruler|
-
-|Verlinearray | initializes the reference line | array < number > | [] on the vertical ruler|
+|Lines | initialize the reference line | object < array > | {H: [], V: []} on the horizontal ruler|
 
 |Palette | style configuration parameters of the ruler | palette | {bgcolor:'rgba (225225, 0) ', longfgcolor:' #babbbc ', shortfgcolor:' #c8cdd0 ', fontcolor:' #7d8694 ', shadowcolor:' #e8e8 ', linecolor:' #eb5648 ', bordercolor:' #dadc ', coreactivecolor:' RGB (235, 86, 72, 0.6),}|
+
+### Update description
+
+v1.1.11
+
+1. Discard: horlinearr = "lines. H" and: verlinearr = "lines. V" are unified into lines objects. The callback handleline is also discarded. It's useless. If you don't want lines, just let lines = {}
+
+2. Kill some useless styles (it's really useless, and the previous projects are useless. I just turn over and don't need to study the code carefully, so it won't affect the previously migrated projects)
 
 ### Event
 
@@ -272,9 +192,9 @@ cornerActiveColor: string,
 
 | --- | --- | --- |
 
-|Handleline | operate the reference line (add or remove) on the horizontal and vertical ruler | lines|
+|Handlecornerclick | click event in the upper left corner ||
 
-##Quote
+## Quote
 
 Vue ruler assembly [Vue sketch ruler]（ https://github.com/chuxiaoguo/vue-sketch-ruler.git )
 

@@ -3,15 +3,13 @@
     <SketchRule
       :thick="state.thick"
       :scale="state.scale"
-      :width="582"
-      :height="482"
+      :width="780"
+      :height="480"
       :start-x="state.startX"
       :start-y="state.startY"
       :shadow="shadow"
-      :hor-line-arr="state.lines.h"
-      :ver-line-arr="state.lines.v"
       :corner-active="true"
-      @handleLine="handleLine"
+      :lines="state.lines"
     >
     </SketchRule>
     <div
@@ -27,8 +25,10 @@
   </div>
 </template>
 <script lang="ts">
-import { SketchRule } from 'vue3-sketch-ruler'
-import 'vue3-sketch-ruler/lib/style.css'
+// import { SketchRule } from 'vue3-sketch-ruler'
+// import 'vue3-sketch-ruler/lib/style.css'
+import { SketchRule } from '/lib/index.es.js'
+import '/lib/style.css'
 import {
   computed,
   defineComponent,
@@ -37,7 +37,7 @@ import {
   onMounted,
   nextTick
 } from 'vue'
-// import { SketchRule } from '/lib/index.es.js?3242' // 这里可以换成打包后的
+// import { SketchRule } from '../../src/index' // 这里可以换成打包后的
 // import '/lib/style.css'
 const rectWidth = 200
 const rectHeight = 200
@@ -51,8 +51,8 @@ export default defineComponent({
       startX: 0,
       startY: 0,
       lines: {
-        h: [100, 200],
-        v: [100, 200]
+        h: [0, 200],
+        v: [0, 200]
       },
       thick: 20,
       isShowRuler: true, // 显示标尺
@@ -78,10 +78,6 @@ export default defineComponent({
       screensRef.value.scrollLeft =
         containerRef.value.getBoundingClientRect().width / 2 - 300
     })
-
-    const handleLine = (lines: { h: number[]; v: number[] }) => {
-      state.lines = lines
-    }
 
     const handleScroll = () => {
       const screensRect = document
@@ -126,8 +122,7 @@ export default defineComponent({
       shadow,
       canvasStyle,
       handleWheel,
-      handleScroll,
-      handleLine
+      handleScroll
     }
   }
 })
@@ -149,7 +144,11 @@ body * {
   position: absolute;
   top: 100px;
   left: 100px;
-  width: 600px;
+  /* 特别注意,这个width要和传入组件的width成对应关系,
+   也就是 780width +thick20 =800
+   否则影子不和容器搭配,这个在2X中会进行自动匹配修正,省得配置麻烦
+    */
+  width: 800px;
   height: 500px;
   background-color: #f5f5f5;
   border: 1px solid #dadadc;

@@ -1,4 +1,5 @@
 <template>
+<!-- 线的显示 -->
   <div
     v-show="showLine"
     class="line"
@@ -41,7 +42,6 @@ export default defineComponent({
       const border = props.vertical
         ? { borderTop: borderValue }
         : { borderLeft: borderValue }
-
       const cursorValue = props.isShowReferLine
         ? props.vertical
           ? 'ns-resize'
@@ -118,32 +118,5 @@ export default defineComponent({
     visibility: visible;
   }
 }
-.h-container {
-  .line {
-    top: 0;
-    height: 100vh;
-    padding-left: 5px;
-    .action {
-      transform: translateX(-24px);
-      .value {
-        margin-left: 4px;
-      }
-    }
-  }
-}
 
-.v-container {
-  .line {
-    left: 0;
-    width: 100vw;
-    padding-top: 5px;
-    .action {
-      transform: translateY(-24px);
-      flex-direction: column;
-      .value {
-        margin-top: 4px;
-      }
-    }
-  }
-}
 </style>

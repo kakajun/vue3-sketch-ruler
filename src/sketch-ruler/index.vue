@@ -9,12 +9,11 @@
       :thick="thick"
       :ratio="ratio"
       :start="startX"
-      :lines="horLineArr"
+      :lines="lines.h"
       :select-start="shadowCpu.x"
       :select-length="shadowCpu.width"
       :scale="scale"
       :palette="paletteCpu"
-      @onLineChange="handleLineChange"
     />
     <!-- 竖直方向 -->
     <RulerWrapper
@@ -25,12 +24,11 @@
       :thick="thick"
       :ratio="ratio"
       :start="startY"
-      :lines="verLineArr"
+      :lines="lines.v"
       :select-start="shadowCpu.y"
       :select-length="shadowCpu.height"
       :scale="scale"
       :palette="paletteCpu"
-      @onLineChange="handleLineChange"
     />
     <a
       class="corner"
@@ -111,19 +109,12 @@ export default defineComponent({
     const onCornerClick = (e: MouseEvent) => {
       emit('onCornerClick', e)
     }
-    const handleLineChange = (arr: Array<number>, vertical: string) => {
-      const newLines = vertical
-        ? { h: props.horLineArr, v: [...arr] }
-        : { h: [...arr], v: props.verLineArr }
-      emit('handleLine', newLines)
-    }
     return {
       paletteCpu,
       shadowCpu,
       cornerActiveClass,
       cornerStyle,
-      onCornerClick,
-      handleLineChange
+      onCornerClick
     }
   }
 })

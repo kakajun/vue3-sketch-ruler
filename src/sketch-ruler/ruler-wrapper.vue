@@ -52,7 +52,6 @@ export default defineComponent({
     RulerLine
   },
   props: wrapperProps,
-  emits: ['onLineChange'],
   setup(props: WrapperProps, { emit }) {
     const isDraggingLine = ref(false)
     const showIndicator = ref(false)
@@ -75,12 +74,6 @@ export default defineComponent({
       return props.vertical ? vContainer : hContainer
     })
 
-    const lineStyle = computed(() => {
-      return {
-        borderTop: `1px solid ${props.palette?.lineColor}`,
-        cursor: props.isShowReferLine ? 'ns-resize' : 'none'
-      }
-    })
     const indicatorStyle = computed(() => {
       const indicatorOffset = (valueNum.value - props.start) * props.scale!
       let positionKey = 'top'
@@ -95,7 +88,7 @@ export default defineComponent({
 
     const handleNewLine = (value: number) => {
       props.lines.push(value)
-      emit('onLineChange', props.lines, props.vertical)
+      console.log(props.lines, 'props.lines')
     }
     const handleIndicatorShow = (value: number) => {
       if (!isDraggingLine.value) {
@@ -138,7 +131,6 @@ export default defineComponent({
       valueNum,
       rwClassName,
       rwStyle,
-      lineStyle,
       indicatorStyle,
       handleNewLine,
       handleLineDown,
