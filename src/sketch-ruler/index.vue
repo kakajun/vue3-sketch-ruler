@@ -10,8 +10,8 @@
       :ratio="ratio"
       :start="startX"
       :lines="lines.h"
-      :select-start="shadowCpu.x"
-      :select-length="shadowCpu.width"
+      :select-start="shadow.x"
+      :select-length="shadow.width"
       :scale="scale"
       :palette="paletteCpu"
     />
@@ -25,8 +25,8 @@
       :ratio="ratio"
       :start="startY"
       :lines="lines.v"
-      :select-start="shadowCpu.y"
-      :select-length="shadowCpu.height"
+      :select-start="shadow.y"
+      :select-length="shadow.height"
       :scale="scale"
       :palette="paletteCpu"
     />
@@ -43,7 +43,7 @@
 import RulerWrapper from './ruler-wrapper.vue'
 import { computed, defineComponent } from 'vue'
 import { sketchRulerProps, SketchRulerProps } from '../index-types'
-import { merge } from 'lodash-es'
+
 export default defineComponent({
   name: 'SketchRule',
   components: {
@@ -53,18 +53,23 @@ export default defineComponent({
   emits: ['onCornerClick', 'handleLine'],
   setup(props: SketchRulerProps, { emit }) {
     // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
-    const shadowCpu = computed(() => {
-      return merge(
-        {
-          x: 0,
-          y: 0,
-          width: 200,
-          height: 200
-        },
-        props.shadow || {}
-      )
-    })
+
     const paletteCpu = computed(() => {
+      function merge(obj: { [key: string]: any }, o: { [key: string]: any }) {
+        Object.keys(obj).forEach(key => {
+          if (key && obj.hasOwnProperty(key)) {
+            if (typeof o['key'] === 'object') {
+              console.log(key, 'keykeykey')
+              obj[key] = merge(obj[key], o[key])
+            } else if (o.hasOwnProperty(key)) {
+              debugger
+              obj[key] = o[key]
+              console.log(obj)
+            }
+          }
+        })
+        return obj
+      }
       const finalObj = merge(
         {
           bgColor: 'rgba(225,225,225, 0)', // ruler bg color
@@ -89,7 +94,7 @@ export default defineComponent({
         },
         props.palette || {}
       )
-      // console.log(finalObj, '6666')
+      console.log(finalObj, '6666')
       return finalObj
     })
     const cornerActiveClass = computed(() => {
@@ -111,13 +116,16 @@ export default defineComponent({
     }
     return {
       paletteCpu,
-      shadowCpu,
       cornerActiveClass,
       cornerStyle,
       onCornerClick
     }
   }
 })
+
+function key(key: any, arg1: (string: any) => void) {
+  throw new Error('Function not implemented.')
+}
 </script>
 
 <style lang="scss">

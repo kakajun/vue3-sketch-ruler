@@ -10,8 +10,6 @@
 </template>
 <script lang="ts">
 import {
-  drawHorizontalRuler,
-  drawVerticalRuler,
   drawCavaseRuler
 } from './utils'
 import { reactive, ref, onMounted, watch, defineComponent } from 'vue'

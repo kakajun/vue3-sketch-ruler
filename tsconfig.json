@@ -12,9 +12,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "baseUrl": ".",
-    // "paths": {
-    //   "@/*": ["./*"]
-    // },
+    // "suppressImplicitAnyIndexErrors": true,
     "lib": ["esnext", "dom"]
   },
   "include": ["src/**/*"]
