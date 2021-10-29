@@ -82,7 +82,6 @@ import 'vue3-sketch-ruler/lib/style.css'
         :shadow="shadow"
         :lines="lines"
         :cornerActive="true"
-        @onCornerClick="handleCornerClick"
     >
 </template>
 <script>

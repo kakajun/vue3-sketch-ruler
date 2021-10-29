@@ -10,10 +10,9 @@
       :select-start="selectStart"
       :select-length="selectLength"
       :palette="palette"
+      v-model:valueNum="valueNum"
+      v-model:showIndicator="showIndicator"
       @onAddLine="handleNewLine"
-      @onIndicatorShow="handleIndicatorShow"
-      @onIndicatorMove="handleIndicatorMove"
-      @onIndicatorHide="handleIndicatorHide"
     >
     </CanvasRuler>
     <div v-show="isShowReferLine" class="lines">
@@ -52,7 +51,7 @@ export default defineComponent({
     RulerLine
   },
   props: wrapperProps,
-  setup(props: WrapperProps, { emit }) {
+  setup(props: WrapperProps) {
     const isDraggingLine = ref(false)
     const showIndicator = ref(false)
     const valueNum = ref(0)
@@ -88,21 +87,6 @@ export default defineComponent({
 
     const handleNewLine = (value: number) => {
       props.lines.push(value)
-      console.log(props.lines, 'props.lines')
-    }
-    const handleIndicatorShow = (value: number) => {
-      if (!isDraggingLine.value) {
-        showIndicator.value = true
-        valueNum.value = value
-      }
-    }
-    const handleIndicatorMove = (value: number) => {
-      if (showIndicator.value) {
-        valueNum.value = value
-      }
-    }
-    const handleIndicatorHide = () => {
-      showIndicator.value = false
     }
     const handleLineDown = () => {
       isDraggingLine.value = true
@@ -118,12 +102,10 @@ export default defineComponent({
         handleLineRemove(index)
       } else {
         props.lines[index] = value
-        emit('onLineChange', props.lines, props.vertical)
       }
     }
     const handleLineRemove = (index: any) => {
       props.lines.splice(index, 1)
-      emit('onLineChange', props.lines, props.vertical)
     }
     return {
       isDraggingLine,
@@ -135,9 +117,6 @@ export default defineComponent({
       handleNewLine,
       handleLineDown,
       handleLineRelease,
-      handleIndicatorMove,
-      handleIndicatorShow,
-      handleIndicatorHide,
       handleLineRemove
     }
   }

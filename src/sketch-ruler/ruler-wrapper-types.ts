@@ -21,7 +21,8 @@ export const wrapperProps = {
     default: 0
   },
   lines: {
-    type: Array as PropType<Array<number>>
+    type: Array as PropType<Array<number>>,
+    default: () => []
   },
   selectStart: {
     type: Number

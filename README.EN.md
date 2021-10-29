@@ -117,7 +117,6 @@ This is an open source amateur function. If you are interested in strengthening 
         :shadow="shadow"
         :lines="lines"
         :cornerActive="true"
-        @onCornerClick="handleCornerClick"
     >
 </template>
 <script>
