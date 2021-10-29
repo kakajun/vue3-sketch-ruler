@@ -133,6 +133,10 @@ vue3 api 的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler
 v1.1.11
 1. 废弃掉 :horLineArr="lines.h"  和 :verLineArr="lines.v"  统一整合为lines对象传入,回调handleLine也废弃掉, 没什么用,如果不想要lines,就直接让lines={}
 2. 干掉一些没用的样式(是真没用,之前的工程也没用,我只是翻过来没用仔细研究代码,所以不会影响之前迁移的项目)
+
+v1.1.12
+1. 把方法进行合并
+2. 把lodash去掉,原打包体积由43k减少到19.6k
 ### Event
 
 | 事件名称 | 描述 | 回调参数 |

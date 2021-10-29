@@ -1,6 +1,6 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "1.1.11",
+  "version": "1.1.12",
   "author": "kakajun <253495832@qq.com>",
   "license": "MIT",
   "private2": true,
@@ -44,7 +44,6 @@
     "gh-pages": "^3.2.3",
     "husky": "^7.0.4",
     "lint-staged": "^11.2.3",
-    "lodash-es": "^4.17.21",
     "prettier": "^2.4.1",
     "pretty-quick": "^3.1.1",
     "sass": "^1.43.4",
