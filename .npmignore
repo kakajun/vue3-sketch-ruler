@@ -1,7 +1,10 @@
 ##npm 发布忽略
 .github
 dist/
-
+.husky
+README.EN.md
+.eslintrc.js
+.eslintignore
 node_modules/
 example
 public/
