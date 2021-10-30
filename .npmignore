@@ -1,7 +1,7 @@
 ##npm 发布忽略
 .github
 dist/
-.husky
+
 node_modules/
 example
 public/
