@@ -1,12 +1,12 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "1.1.12",
+  "version": "1.1.13",
   "author": "kakajun <253495832@qq.com>",
   "license": "MIT",
   "private2": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/majun2232/vue3sketchRuler"
+    "url": "https://github.com/majun2232/vue3sketchRuler/1x"
   },
   "typings": "lib/types/index.d.ts",
   "main": "lib/index.es.js",
@@ -67,5 +67,5 @@
   "bugs": {
     "url": "https://github.com/majun2232/vue3sketchRuler/issues"
   },
-  "homepage": "https://github.com/majun2232/vue3sketchRuler/blob/master/README.md"
+  "homepage": "https://github.com/majun2232/vue3sketchRuler/blob/1x/README.md"
 }

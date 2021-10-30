@@ -1,0 +1,18 @@
+##npm 发布忽略
+.github
+dist/
+.husky
+node_modules/
+example
+public/
+.vscode
+src/
+.prettierignore
+.stylelintignore
+commitlint.config.js
+index.html
+prettier.config.js
+stylelint.config.js
+tsconfig.json
+vite.config.js
+vite.demo.js
