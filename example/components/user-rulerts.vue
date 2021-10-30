@@ -92,7 +92,6 @@ export default defineComponent({
         (screensRect.left + state.thick - canvasRect.left) / state.scale
       const startY =
         (screensRect.top + state.thick - canvasRect.top) / state.scale
-
       state.startX = startX
       state.startY = startY
     }

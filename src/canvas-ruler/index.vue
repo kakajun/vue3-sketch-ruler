@@ -65,7 +65,6 @@ export default defineComponent({
           options
         )
       } else if (state.canvasContext) {
-        console.log(props.selectStart, ' props.selectStart')
         drawCavaseRuler(
           state.canvasContext,
           props.start!,

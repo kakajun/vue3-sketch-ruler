@@ -12,16 +12,20 @@
 
 
 # Vue 3 + Vite + ts 打包sketchRuler
-由于项目升级成vite， 发现原来的插件vue-sketch-ruler，用到vue3中会报错， 这边我重新用vite打包了一份， 打包后的插件和原来功一样， 且支持在vue3和vite中使用
+
+## 说明
 ---
+
+由于项目升级成vite， 发现原来的插件vue-sketch-ruler，用到vue3中会报错， 这边我重新用vite打包了一份， 打包后的插件和原来功一样， 且支持在vue3和vite中使用
+
 这边对原代码进行了改进优化，功能目前和之前vue3-sketch-ruler一样，还没时间优化，主要改进分为以下几点
 1. vue3的eslint修复和styleLint和pretty的代码格式化，支持适应vue3中使用sketchRuler，同时改写为vue3 Composition API 的写法
 2. 用typerscript进行重构，对类型进行定义，同时方便后续扩展
 3. 对shadow和palette参数进行对象合并计算，在以前palette的参数要么都传，要么不传，我这里改进后可以只传需要修改的属性即可，没有修改的可以不传
-4. 对类型进行打包设置（目前还不知道这个类型打包有多大的好处）
+4. 对类型进行打包设置（支持ts类型提示）
 
 ## 注意
-这里1X版本和vue-sketch-ruler 一样功能, 后面也不再维护, 新功能将会在2X中增加
+这里1X版本和vue-sketch-ruler 一样功能, 后面没有什么bug的话,不再维护, 新功能将会在未来2X中增加,老工程迁移过来的建议使用1x版本, 新项目建议使用2X,做到0配置
 ## demo
 案例浏览: [https://majun2232.github.io/vue3sketchRuler/1x](https://majun2232.github.io/vue3sketchRuler/1x)
 ![image](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/assets/demo.png)
@@ -33,7 +37,7 @@ npm install --save vue3-sketch-ruler
 
 or
 
-yarn add vue3-sketch-ruler
+yarn add vue3-sketch-ruler -S
 ```
 
 ## 引入方式
@@ -89,7 +93,6 @@ import Vue from 'vue';
 import {SketchRule} from "vue-sketch-ruler";
 const rectWidth = 160;
 const rectHeight = 200;
-
 export default {
     data() {
         return {
@@ -117,9 +120,9 @@ vue3 api 的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler
 ## api
 ### 属性
 
-|  属性名称|  描述 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| scale | 初始化标尺的缩放 | Number | 2 |
+|  属性名称|  描述    | 类型 | 默认值 |
+| --- | ---    | --- | --- |
+| scale | 初始化标尺的缩放     | Number | 2 |
 | thick | 标尺的厚度 | Number | 16 |
 | width | 放置标尺窗口的宽度  | Number | - |
 | height | 放置标尺窗口的高度  | Number | - |
@@ -127,8 +130,9 @@ vue3 api 的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler
 | startY | y轴标尺开始的坐标数值 | Number | 0 |
 | shadow |  阴影的参数  | Shadow | 0 |
 | lines | 初始化水平标尺上的参考线 | object<Array> | {h:[],v:[]} |
-| palette | 标尺的样式配置参数 | Palette | {bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',shortfgColor: '#C8CDD0',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',} |
+| palette | 标尺的样式配置参数     | Palette | 如下|
 
+palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',shortfgColor: '#C8CDD0',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',}
 ### 更新说明
 v1.1.11
 1. 废弃掉 :horLineArr="lines.h"  和 :verLineArr="lines.v"  统一整合为lines对象传入,回调handleLine也废弃掉, 没什么用,如果不想要lines,就直接让lines={}

@@ -28,7 +28,6 @@
         :vertical="vertical"
         :is-show-refer-line="isShowReferLine"
         @onRemove="handleLineRemove"
-        @onMouseDown="handleLineDown"
         @onRelease="handleLineRelease"
       >
       </RulerLine>
@@ -52,7 +51,6 @@ export default defineComponent({
   },
   props: wrapperProps,
   setup(props: WrapperProps) {
-    const isDraggingLine = ref(false)
     const showIndicator = ref(false)
     const valueNum = ref(0)
     const rwClassName = computed(() => {
@@ -88,16 +86,11 @@ export default defineComponent({
     const handleNewLine = (value: number) => {
       props.lines.push(value)
     }
-    const handleLineDown = () => {
-      isDraggingLine.value = true
-    }
     const handleLineRelease = (value: number, index: number) => {
-      isDraggingLine.value = false
       // 左右或上下超出时, 删除该条对齐线
       const offset = value - props.start
       const maxOffset =
         (props.vertical ? props.height : props.width) / props.scale!
-
       if (offset < 0 || offset > maxOffset) {
         handleLineRemove(index)
       } else {
@@ -108,14 +101,12 @@ export default defineComponent({
       props.lines.splice(index, 1)
     }
     return {
-      isDraggingLine,
       showIndicator,
       valueNum,
       rwClassName,
       rwStyle,
       indicatorStyle,
       handleNewLine,
-      handleLineDown,
       handleLineRelease,
       handleLineRemove
     }

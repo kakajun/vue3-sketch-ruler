@@ -62,7 +62,18 @@ export const sketchRulerProps = {
     type: Number,
     default: 200
   },
-  shadow: Object as PropType<ShadowType>,
+  shadow: {
+    type: Object as PropType<ShadowType>,
+    default: () => {
+      return {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0
+      }
+    }
+  },
+
   lines: {
     type: Object as PropType<lineType>,
     default: () => {

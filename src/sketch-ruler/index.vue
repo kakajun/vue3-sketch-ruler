@@ -53,18 +53,14 @@ export default defineComponent({
   emits: ['onCornerClick', 'handleLine'],
   setup(props: SketchRulerProps, { emit }) {
     // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
-
     const paletteCpu = computed(() => {
       function merge(obj: { [key: string]: any }, o: { [key: string]: any }) {
         Object.keys(obj).forEach(key => {
           if (key && obj.hasOwnProperty(key)) {
             if (typeof o['key'] === 'object') {
-              console.log(key, 'keykeykey')
               obj[key] = merge(obj[key], o[key])
             } else if (o.hasOwnProperty(key)) {
-              debugger
               obj[key] = o[key]
-              console.log(obj)
             }
           }
         })
@@ -94,13 +90,11 @@ export default defineComponent({
         },
         props.palette || {}
       )
-      console.log(finalObj, '6666')
       return finalObj
     })
     const cornerActiveClass = computed(() => {
       return props.cornerActive ? ' active' : ''
     })
-
     const cornerStyle = computed(() => {
       return {
         backgroundColor: paletteCpu.value.bgColor,
@@ -110,7 +104,6 @@ export default defineComponent({
         borderBottom: `1px solid ${paletteCpu.value.borderColor}`
       }
     })
-
     const onCornerClick = (e: MouseEvent) => {
       emit('onCornerClick', e)
     }
@@ -122,10 +115,6 @@ export default defineComponent({
     }
   }
 })
-
-function key(key: any, arg1: (string: any) => void) {
-  throw new Error('Function not implemented.')
-}
 </script>
 
 <style lang="scss">
