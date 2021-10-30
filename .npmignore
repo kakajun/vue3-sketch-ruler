@@ -9,6 +9,7 @@ node_modules/
 example
 public/
 .vscode
+jest.config.js
 src/
 .prettierignore
 .stylelintignore
