@@ -11,18 +11,21 @@
 
 
 # Vue 3 + Vite + ts 打包sketchRuler
-由于项目升级成vite， 发现原来的插件vue-sketch-ruler，用到vue3中会报错， 这边我重新用vite打包了一份， 打包后的插件和原来功一样， 且支持在vue3和vite中使用
+## 说明
 ---
+由于项目升级成vite， 发现原来的插件vue-sketch-ruler，用到vue3中会报错， 这边我重新用vite打包了一份， 打包后的插件和原来功一样， 且支持在vue3和vite中使用
+
 这边对原代码进行了改进优化，功能目前和之前vue3-sketch-ruler一样，还没时间优化，主要改进分为以下几点
 1. vue3的eslint修复和styleLint和pretty的代码格式化，支持适应vue3中使用sketchRuler，同时改写为vue3 Composition API 的写法
 2. 用typerscript进行重构，对类型进行定义，同时方便后续扩展
 3. 对shadow和palette参数进行对象合并计算，在以前palette的参数要么都传，要么不传，我这里改进后可以只传需要修改的属性即可，没有修改的可以不传
-4. 对类型进行打包设置（目前还不知道这个类型打包有多大的好处）
+4. 对类型进行打包设置
+5. 为了避免1x版本繁琐的配置(真的很繁琐,我之前用这个配置,啥都要传,挺难调的),这里支持0配置启用组件,内部自动进行宽高,阴影等配置,达到开箱即用的目的
 
 ## 注意
-如果迁移过来的工程,使用和vue-sketch-ruler一样功能的,请使用1X版本,2X版本是经过改造后的,功能和1X一样,但配置简化了,新工程建议使用2X版本构建
+如果迁移过来的工程,使用和vue-sketch-ruler一样功能的,请使用1X版本,2X版本是经过改造后的,功能和1X一样,但配置简化了,新工程建议使用2X版本构建,免去配置麻烦,后面还将新增更多功能,尽量达到开箱即用的目的
 ## demo
-案例浏览: [https://majun2232.github.io/vue3sketchRuler/](https://majun2232.github.io/vue3sketchRuler)
+案例浏览: [https://majun2232.github.io/vue3sketchRuler/2x](https://majun2232.github.io/vue3sketchRuler/2x)
 ![image](https://github.com/majun2232/vue3sketchRuler/blob/master/example/assets/demo.png)
 
 ## 安装
@@ -58,7 +61,7 @@ import 'vue3-sketch-ruler/lib/style.css'
 - [x] 切换标尺状态，显示或隐藏
 - [x] 参考线管理（增加删除）
 - [x] 切换参考线状态，显示或隐藏
-
+- [x] 0配置获得所有功能
 ## 未来支持的功能
 
 - [] 加入画布鼠标拖动功能
@@ -67,7 +70,7 @@ import 'vue3-sketch-ruler/lib/style.css'
 - [] 左上角的眼睛，点击能控制红线显影
 - [] 加入单元测试功能
 
-这是个开源业余做的功能，有兴趣加强该插件的小伙伴欢迎加入，也欢迎大家提pr或者issue，，或者邮箱给我留言，253495832@qq.com
+这是个开源业余做的功能，有兴趣加强该插件的小伙伴欢迎加入，也欢迎大家提pr或者issue
 ## 使用
 ```
 <template>
@@ -78,10 +81,8 @@ import 'vue3-sketch-ruler/lib/style.css'
       :start-x="state.startX"
       :start-y="state.startY"
       :shadow="shadow"
-      :hor-line-arr="state.lines.h"
-      :ver-line-arr="state.lines.v"
+      :lines="lines"
       :corner-active="true"
-      @handleLine="handleLine"
     >
     </SketchRule>
     <div
@@ -299,9 +300,9 @@ vue3 api 的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler
 | shadow |  阴影的参数  | Shadow | 0 |
 | horLineArr | 初始化水平标尺上的参考线 | Array<number> | [] |
 | verLineArr | 初始化垂直标尺上的参考线  | Array<number> | [] |
-| palette | 标尺的样式配置参数 | Palette | {bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',shortfgColor: '#C8CDD0',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',} |
+| palette | 标尺的样式配置参数     | Palette | 如下|
 
-
+palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',shortfgColor: '#C8CDD0',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',}
 ### Event
 
 | 事件名称 | 描述 | 回调参数 |

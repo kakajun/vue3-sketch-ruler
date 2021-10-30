@@ -2,6 +2,7 @@
   <div ref="ruler" class="style-ruler">
     <!-- 水平方向 -->
     <RulerWrapper
+      class="ruler"
       :vertical="false"
       :width="width"
       :height="thick"
@@ -9,15 +10,15 @@
       :thick="thick"
       :ratio="ratio"
       :start="startX"
-      :lines="horLineArr"
-      :select-start="shadowCpu.x"
-      :select-length="shadowCpu.width"
+      :lines="lines.h"
+      :select-start="shadow.x"
+      :select-length="shadow.width"
       :scale="scale"
       :palette="paletteCpu"
-      @onLineChange="handleLineChange"
     />
     <!-- 竖直方向 -->
     <RulerWrapper
+      class="ruler"
       :vertical="true"
       :width="thick"
       :height="height"
@@ -25,12 +26,11 @@
       :thick="thick"
       :ratio="ratio"
       :start="startY"
-      :lines="verLineArr"
-      :select-start="shadowCpu.y"
-      :select-length="shadowCpu.height"
+      :lines="lines.v"
+      :select-start="shadow.y"
+      :select-length="shadow.height"
       :scale="scale"
       :palette="paletteCpu"
-      @onLineChange="handleLineChange"
     />
     <a
       class="corner"
@@ -53,16 +53,15 @@
 </template>
 
 <script lang="ts">
-import InnerBox from './inner-box.vue'
+// import InnerBox from './inner-box.vue'
 import RulerWrapper from './ruler-wrapper.vue'
 import { computed, defineComponent, onMounted, ref, nextTick } from 'vue'
 import { sketchRulerProps, SketchRulerProps } from '../index-types'
-import { merge } from 'lodash-es'
 export default defineComponent({
   name: 'SketchRule',
   components: {
-    RulerWrapper,
-    InnerBox
+    RulerWrapper
+    // InnerBox
   },
   props: sketchRulerProps,
   emits: ['onCornerClick', 'handleLine', 'ClickOutside2ClearAll'],
@@ -70,18 +69,19 @@ export default defineComponent({
     // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
     let scale = ref(1)
     const isImgOpen = ref(true) //眼镜打开
-    const shadowCpu = computed(() => {
-      return merge(
-        {
-          x: 0,
-          y: 0,
-          width: 200,
-          height: 200
-        },
-        props.shadow || {}
-      )
-    })
     const paletteCpu = computed(() => {
+      function merge(obj: { [key: string]: any }, o: { [key: string]: any }) {
+        Object.keys(obj).forEach(key => {
+          if (key && obj.hasOwnProperty(key)) {
+            if (typeof o['key'] === 'object') {
+              obj[key] = merge(obj[key], o[key])
+            } else if (o.hasOwnProperty(key)) {
+              obj[key] = o[key]
+            }
+          }
+        })
+        return obj
+      }
       const finalObj = merge(
         {
           bgColor: 'rgba(225,225,225, 0)', // ruler bg color
@@ -108,6 +108,7 @@ export default defineComponent({
       )
       return finalObj
     })
+
     const cornerActiveClass = computed(() => {
       return props.cornerActive ? ' active' : ''
     })
@@ -188,14 +189,13 @@ export default defineComponent({
       }
       setStart()
     }
+    /**
+     * @description:左上角点击事件
+     * @param {*}
+     * @return {*}
+     */
     const onCornerClick = (e: MouseEvent) => {
       emit('onCornerClick', e)
-    }
-    const handleLineChange = (arr: Array<number>, vertical: string) => {
-      const newLines = vertical
-        ? { h: props.horLineArr, v: [...arr] }
-        : { h: [...arr], v: props.verLineArr }
-      emit('handleLine', newLines)
     }
     return {
       setStart,
@@ -211,11 +211,9 @@ export default defineComponent({
       height,
       ruler,
       paletteCpu,
-      shadowCpu,
       cornerActiveClass,
       cornerStyle,
-      onCornerClick,
-      handleLineChange
+      onCornerClick
     }
   }
 })
@@ -229,21 +227,26 @@ export default defineComponent({
   height: 20px;
 }
 .inner-box {
-  z-index: 4;
+  // z-index: 4;
 }
-.style-ruler,
-.screens {
+.ruler {
   position: absolute;
+  // position: relative;
   z-index: 3; /* 需要比resizer高 */
+}
+.style-ruler {
+  position: relative;
   width: 100%; /* scrollbar width */
   height: 100%;
-  overflow: hidden;
-  font-size: 12px;
-  // pointer-events: none;
-  justify-content: center;
   span {
     line-height: 1;
   }
+}
+.screens {
+  width: 100%; /* scrollbar width */
+  height: 100%;
+  overflow: hidden;
+  justify-content: center;
 }
 .corner {
   position: absolute;

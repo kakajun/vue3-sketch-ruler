@@ -32,6 +32,10 @@ export interface ShadowType {
   width: number
   height: number
 }
+interface lineType {
+  h?: Array<number>
+  v?: Array<number>
+}
 export const sketchRulerProps = {
   config: Object as PropType<configType>,
   ratio: {
@@ -43,17 +47,24 @@ export const sketchRulerProps = {
     default: 16
   },
   palette: Object as PropType<PaletteType>,
-  shadow: Object as PropType<ShadowType>,
-  horLineArr: {
-    type: Array as PropType<Array<number>>,
+  shadow: {
+    type: Object as PropType<ShadowType>,
     default: () => {
-      return [100, 200]
+      return {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0
+      }
     }
   },
-  verLineArr: {
-    type: Array as PropType<Array<number>>,
+  lines: {
+    type: Object as PropType<lineType>,
     default: () => {
-      return [100, 200]
+      return {
+        h: [],
+        v: []
+      }
     }
   },
   cornerActive: {

@@ -1,13 +1,12 @@
 <template>
-  <div>
+  <div class="demo-wrapper">
+    <div class="title">2021/10/28</div>
     <SketchRule
       class="wrapper"
       :thick="state.thick"
       :scale="state.scale"
-      :hor-line-arr="state.lines.h"
-      :ver-line-arr="state.lines.v"
       :corner-active="true"
-      @handleLine="handleLine"
+      v-model="state.lines"
     >
       <div class="constent" />
     </SketchRule>
@@ -25,7 +24,7 @@ export default defineComponent({
   setup() {
     const state = reactive({
       scale: 1,
-      wrapperwith: 1200, // 定义外面容器大小
+      wrapperwith: 1000, // 定义外面容器大小
       wrapperheight: 500,
       lines: {
         h: [0, 200],
@@ -48,29 +47,27 @@ export default defineComponent({
       // screensRef.value.scrollLeft =
       //   containerRef.value.getBoundingClientRect().width / 2 - 300
     })
-    const handleLine = (lines: { h: number[]; v: number[] }) => {
-      state.lines = lines
-    }
 
     return {
       wrapperwithpx,
       wrapperheightpx,
       state,
-      handleLine
     }
   }
 })
 </script>
 <style lang="scss" scoped>
-body {
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-  font-family: sans-serif;
+.title {
+  position: absolute;
+  font-size: 30px;
+  top: 50px;
+  left: 400px;
 }
-body * {
+.demo-wrapper {
   box-sizing: border-box;
-  user-select: none;
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 .wrapper {
   position: absolute;

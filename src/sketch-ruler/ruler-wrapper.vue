@@ -10,10 +10,9 @@
       :select-start="selectStart"
       :select-length="selectLength"
       :palette="palette"
+      v-model:valueNum="valueNum"
+      v-model:showIndicator="showIndicator"
       @onAddLine="handleNewLine"
-      @onIndicatorShow="handleIndicatorShow"
-      @onIndicatorMove="handleIndicatorMove"
-      @onIndicatorHide="handleIndicatorHide"
     >
     </CanvasRuler>
     <div v-show="isShowReferLine" class="lines">
@@ -29,7 +28,6 @@
         :vertical="vertical"
         :is-show-refer-line="isShowReferLine"
         @onRemove="handleLineRemove"
-        @onMouseDown="handleLineDown"
         @onRelease="handleLineRelease"
       >
       </RulerLine>
@@ -52,9 +50,7 @@ export default defineComponent({
     RulerLine
   },
   props: wrapperProps,
-  emits: ['onLineChange'],
-  setup(props: WrapperProps, { emit }) {
-    const isDraggingLine = ref(false)
+  setup(props: WrapperProps) {
     const showIndicator = ref(false)
     const valueNum = ref(0)
     const rwClassName = computed(() => {
@@ -75,12 +71,6 @@ export default defineComponent({
       return props.vertical ? vContainer : hContainer
     })
 
-    const lineStyle = computed(() => {
-      return {
-        borderTop: `1px solid ${props.palette?.lineColor}`,
-        cursor: props.isShowReferLine ? 'ns-resize' : 'none'
-      }
-    })
     const indicatorStyle = computed(() => {
       const indicatorOffset = (valueNum.value - props.start) * props.scale!
       let positionKey = 'top'
@@ -95,57 +85,29 @@ export default defineComponent({
 
     const handleNewLine = (value: number) => {
       props.lines.push(value)
-      emit('onLineChange', props.lines, props.vertical)
-    }
-    const handleIndicatorShow = (value: number) => {
-      if (!isDraggingLine.value) {
-        showIndicator.value = true
-        valueNum.value = value
-      }
-    }
-    const handleIndicatorMove = (value: number) => {
-      if (showIndicator.value) {
-        valueNum.value = value
-      }
-    }
-    const handleIndicatorHide = () => {
-      showIndicator.value = false
-    }
-    const handleLineDown = () => {
-      isDraggingLine.value = true
     }
     const handleLineRelease = (value: number, index: number) => {
-      isDraggingLine.value = false
       // 左右或上下超出时, 删除该条对齐线
       const offset = value - props.start
       const maxOffset =
         (props.vertical ? props.height : props.width) / props.scale!
-
       if (offset < 0 || offset > maxOffset) {
         handleLineRemove(index)
       } else {
         props.lines[index] = value
-        emit('onLineChange', props.lines, props.vertical)
       }
     }
     const handleLineRemove = (index: any) => {
       props.lines.splice(index, 1)
-      emit('onLineChange', props.lines, props.vertical)
     }
     return {
-      isDraggingLine,
       showIndicator,
       valueNum,
       rwClassName,
       rwStyle,
-      lineStyle,
       indicatorStyle,
       handleNewLine,
-      handleLineDown,
       handleLineRelease,
-      handleIndicatorMove,
-      handleIndicatorShow,
-      handleIndicatorHide,
       handleLineRemove
     }
   }
@@ -190,6 +152,7 @@ export default defineComponent({
     }
   }
 }
+
 .v-container {
   left: 0;
   .line {

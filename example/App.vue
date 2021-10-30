@@ -5,17 +5,7 @@ import UserRuler from './components/user-rulerts.vue'
 </script>
 
 <template>
-  <span>2021/10/21</span>
   <UserRuler />
 </template>
 
-<style>
-#app {
-  margin-top: 60px;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  text-align: center;
-}
-</style>
+<style></style>
