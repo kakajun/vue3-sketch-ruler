@@ -1,9 +1,10 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "1.1.17",
+  "version": "1.1.20",
   "author": "kakajun <253495832@qq.com>",
   "license": "MIT",
-  "private2": true,
+  "private": false,
+  "files": ["/lib"],
   "repository": {
     "type": "git",
     "url": "https://github.com/majun2232/vue3sketchRuler/tree/1x"
@@ -62,7 +63,8 @@
     "vite": "^2.6.10",
     "vite-plugin-dts": "^0.9.2",
     "vue": "^3.2.20",
-     "jest": "^27.3.1"
+     "jest": "^27.3.1",
+     "vue3-sketch-ruler":"1.1.20"
   },
   "keywords": [
     "vue3",
