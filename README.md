@@ -2,31 +2,37 @@
 
 > 在使用vue3中,用于页面展示的缩放操作
 
+
  [![](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)  [![build status](https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml)
 
- 简体中文 | [English](https://github.com/majun2232/vue3sketchRuler/blob/master/README.EN.md)
+ 简体中文 | [English](https://github.com/majun2232/vue3sketchRuler/blob/1x/README.EN.md)
 
 - 💪 Vue 3 Composition API
 - 🔥 Written in TypeScript
 
 
 # Vue 3 + Vite + ts 打包sketchRuler
+
 ## 说明
 ---
+插件应用范围: 适合作为低代码平台操作页面缩放工具,比如做图工具如, 大屏可视化, 做图工具图怪兽等,类似ps的缩放效果.
+
+应用案例: [avue大屏可视化工具](https://data.avuejs.com/build/1)
+![image](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/assets/dp.png)
+
 由于项目升级成vite， 发现原来的插件vue-sketch-ruler，用到vue3中会报错， 这边我重新用vite打包了一份， 打包后的插件和原来功一样， 且支持在vue3和vite中使用
 
 这边对原代码进行了改进优化，功能目前和之前vue3-sketch-ruler一样，还没时间优化，主要改进分为以下几点
 1. vue3的eslint修复和styleLint和pretty的代码格式化，支持适应vue3中使用sketchRuler，同时改写为vue3 Composition API 的写法
 2. 用typerscript进行重构，对类型进行定义，同时方便后续扩展
 3. 对shadow和palette参数进行对象合并计算，在以前palette的参数要么都传，要么不传，我这里改进后可以只传需要修改的属性即可，没有修改的可以不传
-4. 对类型进行打包设置
-5. 为了避免1x版本繁琐的配置(真的很繁琐,我之前用这个配置,啥都要传,挺难调的),这里支持0配置启用组件,内部自动进行宽高,阴影等配置,达到开箱即用的目的
+4. 对类型进行打包设置（支持ts类型提示）
 
 ## 注意
-如果迁移过来的工程,使用和vue-sketch-ruler一样功能的,请使用1X版本,2X版本是经过改造后的,功能和1X一样,但配置简化了,新工程建议使用2X版本构建,免去配置麻烦,后面还将新增更多功能,尽量达到开箱即用的目的
+这里1X版本和vue-sketch-ruler 一样功能, 后面没有什么bug的话,不再维护, 新功能将会在未来2X中增加,老工程迁移过来的建议使用1x版本, 新项目建议使用2X,做到0配置
 ## demo
-案例浏览: [https://majun2232.github.io/vue3sketchRuler/2x](https://majun2232.github.io/vue3sketchRuler/2x)
-![image](https://github.com/majun2232/vue3sketchRuler/blob/master/example/assets/demo.png)
+案例浏览: [https://majun2232.github.io/vue3sketchRuler/1x](https://majun2232.github.io/vue3sketchRuler/1x)
+![image](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/assets/demo.png)
 
 ## 安装
 > 支持全局导入和模块导入
@@ -35,7 +41,7 @@ npm install --save vue3-sketch-ruler
 
 or
 
-yarn add vue3-sketch-ruler
+yarn add vue3-sketch-ruler -S
 ```
 
 ## 引入方式
@@ -74,240 +80,76 @@ import 'vue3-sketch-ruler/lib/style.css'
 ## 使用
 ```
 <template>
-  <div class="wrapper">
     <SketchRule
-      :thick="state.thick"
-      :scale="state.scale"
-      :start-x="state.startX"
-      :start-y="state.startY"
-      :shadow="shadow"
-      :lines="lines"
-      :corner-active="true"
+        :thick="thick"
+        :scale="scale"
+        :width="582"
+        :height="482"
+        :startX="startX"
+        :startY="startY"
+        :shadow="shadow"
+        :lines="lines"
+        :cornerActive="true"
     >
-    </SketchRule>
-    <div
-      id="screens"
-      ref="screensRef"
-      @wheel="handleWheel"
-      @scroll="handleScroll"
-    >
-      <div ref="containerRef" class="screen-container">
-        <div id="canvas" :style="canvasStyle" />
-      </div>
-    </div>
-  </div>
 </template>
-<script lang="ts">
-import { SketchRule } from 'vue3-sketch-ruler'
-import 'vue3-sketch-ruler/lib/style.css'
-import {
-  computed,
-  defineComponent,
-  ref,
-  reactive,
-  onMounted,
-  nextTick
-} from 'vue'
-// import { SketchRule } from '../../src/index' // 这里可以换成打包后的
-const rectWidth = 200
-const rectHeight = 200
-export default defineComponent({
-  components: { SketchRule },
-  data() {
-    return {
-      height: '500px',
-      font: {
-        size: '2em'
-      }
+<script>
+import Vue from 'vue';
+import {SketchRule} from "vue-sketch-ruler";
+const rectWidth = 160;
+const rectHeight = 200;
+export default {
+    data() {
+        return {
+            scale: 2, //658813476562495, //1,
+            startX: 0,
+            startY: 0,
+            lines: {
+                h: [100, 200],
+                v: [100, 200]
+            },
+            thick: 20,
+            isShowRuler: true,
+            isShowReferLine: true
+        }
+    },
+    components: {
+        SketchRule
     }
-  },
-  setup() {
-    const screensRef = ref(null)
-    const containerRef = ref(null)
-    const state = reactive({
-      scale: 1,
-      startX: 0,
-      wrapperwith: 1200,  // 定义外面容器大小
-      wrapperheight: 500,
-      width: 1200,
-      startY: 0,
-      lines: {
-        h: [0, 200],
-        v: [0, 200]
-      },
-      thick: 20,
-      isShowRuler: true, // 显示标尺
-      isShowReferLine: true // 显示参考线
-    })
-
-    const wrapperwithpx = computed(() => state.wrapperwith + 22 + 'px')
-    const wrapperheightpx = computed(() => state.wrapperheight + 22 + 'px')
-    const shadow = computed(() => {
-      return {
-        x: 0,
-        y: 0,
-        width: rectWidth,
-        height: rectHeight
-      }
-    })
-    const canvasStyle = computed(() => {
-      return {
-        width: rectWidth,
-        height: rectHeight,
-        transform: `scale(${state.scale})`
-      }
-    })
-    onMounted(() => {
-      // 这里监听窗口变化, 可要可不要
-      // window.addEventListener('resize', () => {
-      //   state.wrapperwith = window.innerWidth - 400
-      //   state.wrapperheight = window.innerHeight - 400
-      // })
-      // 滚动居中
-      screensRef.value.scrollLeft =
-        containerRef.value.getBoundingClientRect().width / 2 - 300
-    })
-
-    const handleLine = (lines: { h: number[]; v: number[] }) => {
-      state.lines = lines
-    }
-
-    const handleScroll = () => {
-      const screensRect = document
-        .querySelector('#screens')
-        .getBoundingClientRect()
-      const canvasRect = document
-        .querySelector('#canvas')
-        .getBoundingClientRect()
-
-      // 标尺开始的刻度
-      const startX =
-        (screensRect.left + state.thick - canvasRect.left) / state.scale
-      const startY =
-        (screensRect.top + state.thick - canvasRect.top) / state.scale
-
-      state.startX = startX
-      state.startY = startY
-    }
-    // 控制缩放值
-    const handleWheel = (e: {
-      ctrlKey: any
-      metaKey: any
-      preventDefault: () => void
-      deltaY: number
-    }) => {
-      if (e.ctrlKey || e.metaKey) {
-        e.preventDefault()
-        const nextScale = parseFloat(
-          Math.max(0.2, state.scale - e.deltaY / 500).toFixed(2)
-        )
-        state.scale = nextScale
-      }
-      nextTick(() => {
-        handleScroll()
-      })
-    }
-
-    return {
-      wrapperwithpx,
-      wrapperheightpx,
-      screensRef,
-      containerRef,
-      state,
-      shadow,
-      canvasStyle,
-      handleWheel,
-      handleScroll,
-      handleLine
-    }
-  }
-})
+});
 </script>
-<style lang="scss" scoped>
-body {
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-  font-family: sans-serif;
-}
-
-body * {
-  box-sizing: border-box;
-  user-select: none;
-}
-
-.wrapper {
-  position: absolute;
-  top: 100px;
-  left: 100px;
-  // vue3 新写法,可以共享js中的变量,必须要写
-  width: v-bind(wrapperwithpx);
-  height: v-bind(wrapperheightpx);
-  background-color: #f5f5f5;
-  border: 1px solid #dadadc;
-}
-
-#screens {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-}
-
-.screen-container {
-  position: absolute;
-  width: 5000px;
-  height: 3000px;
-}
-
-.scale-value {
-  position: absolute;
-  bottom: 100%;
-  left: 100px;
-}
-
-.button {
-  position: absolute;
-  bottom: 100%;
-  left: 100px;
-}
-
-#canvas {
-  position: absolute;
-  top: 80px;
-  left: 50%;
-  width: 200px;
-  height: 200px;
-  background: lightblue;
-  transform-origin: 50% 0;
-}
-</style>
-
 ```
-## 如果是需要查看普通方式写法[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/master/example/components/user-ruler.vue)
-参考一个完整的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/master/example/components/UserRuler.vue)
-vue3 api 的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/master/example/components/UserRulerts.vue)
+参考一个完整的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/UserRuler.vue)
+vue3 api 的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/UserRulerts.vue)
 
-
+## api
 ### 属性
 
-|  属性名称|  描述 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| scale | 初始化标尺的缩放 | Number | 2 |
+|  属性名称|  描述    | 类型 | 默认值 |
+| --- | ---    | --- | --- |
+| scale | 初始化标尺的缩放     | Number | 2 |
 | thick | 标尺的厚度 | Number | 16 |
+| width | 放置标尺窗口的宽度  | Number | - |
+| height | 放置标尺窗口的高度  | Number | - |
 | startX | x轴标尺开始的坐标数值 | Number | 0 |
 | startY | y轴标尺开始的坐标数值 | Number | 0 |
 | shadow |  阴影的参数  | Shadow | 0 |
-| horLineArr | 初始化水平标尺上的参考线 | Array<number> | [] |
-| verLineArr | 初始化垂直标尺上的参考线  | Array<number> | [] |
+| lines | 初始化水平标尺上的参考线 | object<Array> | {h:[],v:[]} |
 | palette | 标尺的样式配置参数     | Palette | 如下|
 
 palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',shortfgColor: '#C8CDD0',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',}
+### 更新说明
+v1.1.11
+1. 废弃掉 :horLineArr="lines.h"  和 :verLineArr="lines.v"  统一整合为lines对象传入,回调handleLine也废弃掉, 没什么用,如果不想要lines,就直接让lines={}
+2. 干掉一些没用的样式(是真没用,之前的工程也没用,我只是翻过来没用仔细研究代码,所以不会影响之前迁移的项目)
+
+v1.2.1
+1. 把方法进行合并,干掉一些不必要的事件,采用v-model传递参数,优化代码
+2. 把lodash去掉,原打包体积由43k减少到19.6k, 稳定版,强烈推荐升级
 ### Event
 
 | 事件名称 | 描述 | 回调参数 |
 | --- | --- | --- |
-| handleLine | 在横纵标尺上操作参考线（新增或移除） | Lines  |
+| handleCornerClick | 左上角点击事件 |   |
 
 ## 引用
 vue标尺组件 [vue-sketch-ruler](https://github.com/chuxiaoguo/vue-sketch-ruler.git)

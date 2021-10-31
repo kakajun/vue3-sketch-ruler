@@ -1,20 +1,16 @@
-##npm 发布忽略
 .github
-dist/
 .husky
-README.EN.md
-.eslintrc.js
-.eslintignore
-node_modules/
-example
-public/
 .vscode
-jest.config.js
+example
 src/
+.eslintignore
+.eslintrc.js
 .prettierignore
 .stylelintignore
 commitlint.config.js
 index.html
+jest.config.js
+package.json
 prettier.config.js
 stylelint.config.js
 tsconfig.json
