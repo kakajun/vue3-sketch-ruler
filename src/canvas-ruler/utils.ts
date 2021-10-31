@@ -10,7 +10,7 @@ const getGridSize = (scale: number) => {
 
 const FONT_SCALE = 0.83 // 10 / 12
 
-export const drawCavaseRuler = (
+const drawCavaseRuler = (
   ctx: CanvasRenderingContext2D,
   start: number,
   selectStart: number,
@@ -18,6 +18,7 @@ export const drawCavaseRuler = (
   options: { scale: number; width: number; height: number; palette: any },
   h?: boolean //横向为true,纵向缺省
 ) => {
+  // console.log(shadow, 'shadowshadow')
   const { scale, width, height, palette } = options
   const { bgColor, fontColor, shadowColor, ratio, longfgColor, shortfgColor } =
     palette
@@ -29,14 +30,15 @@ export const drawCavaseRuler = (
   // 1. 画标尺底色
   ctx.fillStyle = bgColor
   ctx.fillRect(0, 0, width, height)
+
   // 2. 画阴影
   if (selectLength) {
-    const pos = (selectStart - start) * scale // 阴影起点坐标
-    const shadowLength = selectLength * scale // 阴影宽度
+    const shadowX = (selectStart - start) * scale // 阴影起点坐标
+    const shadowWidth = selectLength * scale // 阴影宽度
     ctx.fillStyle = shadowColor
     h
-      ? ctx.fillRect(pos, 0, shadowLength, (height * 3) / 8)
-      : ctx.fillRect(0, pos, (width * 3) / 8, shadowLength)
+      ? ctx.fillRect(shadowX, 0, shadowWidth, (height * 3) / 8)
+      : ctx.fillRect(0, shadowX, (width * 3) / 8, shadowWidth)
   }
 
   const gridSize = getGridSize(scale) // 每小格表示的宽度
@@ -47,8 +49,8 @@ export const drawCavaseRuler = (
   const startValue = Math.floor(start / gridSize) * gridSize // 绘制起点的刻度(略小于start, 且是gridSize的整数倍)
   const startValue10 = Math.floor(start / gridSize10) * gridSize10 // 长间隔绘制起点的刻度(略小于start, 且是gridSize10的整数倍)
 
-  const offset = ((startValue - start) / gridSize) * gridPixel // 起点刻度距离ctx原点(start)的px距离
-  const offset10 = ((startValue10 - start) / gridSize10) * gridPixel10 // 长间隔起点刻度距离ctx原点(start)的px距离
+  const offsetX = ((startValue - start) / gridSize) * gridPixel // 起点刻度距离ctx原点(start)的px距离
+  const offsetX10 = ((startValue10 - start) / gridSize10) * gridPixel10 // 长间隔起点刻度距离ctx原点(start)的px距离
   const endValue = start + Math.ceil(h ? width : height / scale) // 终点刻度(略超出标尺宽度即可)
 
   // 3. 画刻度和文字(因为刻度遮住了阴影)
@@ -64,17 +66,17 @@ export const drawCavaseRuler = (
     value < endValue;
     value += gridSize10, count++
   ) {
-    const a = offset10 + count * gridPixel10 + 0.5 // prevent canvas 1px line blurry
-    h ? ctx.moveTo(a, 0) : ctx.moveTo(a, 0)
+    const x = offsetX10 + count * gridPixel10 + 0.5 // prevent canvas 1px line blurry
+    h ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
     ctx.save()
-    h ? ctx.translate(a, height * 0.4) : ctx.translate(width * 0.4, a)
+    h ? ctx.translate(x, height * 0.4) : ctx.translate(width * 0.4, x)
     if (!h) {
       ctx.rotate(-Math.PI / 2) // 旋转 -90 度
     }
     ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
     ctx.fillText(value.toString(), 4 * ratio, 7 * ratio)
     ctx.restore()
-    h ? ctx.lineTo(a, (height * 9) / 16) : ctx.lineTo((width * 9) / 16, a)
+    h ? ctx.lineTo(x, (height * 9) / 16) : ctx.lineTo((width * 9) / 16, x)
   }
   ctx.stroke()
   ctx.closePath()
@@ -87,10 +89,10 @@ export const drawCavaseRuler = (
     value < endValue;
     value += gridSize, count++
   ) {
-    const a = offset + count * gridPixel + 0.5 // prevent canvas 1px line blurry
-    h ? ctx.moveTo(a, 0) : ctx.moveTo(0, a)
+    const x = offsetX + count * gridPixel + 0.5 // prevent canvas 1px line blurry
+    h ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
     if (value % gridSize10 !== 0) {
-      h ? ctx.lineTo(a, (height * 1) / 4) : ctx.lineTo((width * 1) / 4, a)
+      h ? ctx.lineTo(x, (height * 1) / 4) : ctx.lineTo((width * 1) / 4, x)
     }
   }
   ctx.stroke()
@@ -99,3 +101,4 @@ export const drawCavaseRuler = (
   // 恢复ctx matrix
   ctx.setTransform(1, 0, 0, 1, 0, 0)
 }
+export default drawCavaseRuler

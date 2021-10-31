@@ -9,9 +9,7 @@
   />
 </template>
 <script lang="ts">
-import {
-  drawCavaseRuler
-} from './utils'
+import drawCavaseRuler from './utils'
 import { reactive, ref, onMounted, watch, defineComponent } from 'vue'
 import { canvasProps, CanvasProps } from './canvas-types'
 export default defineComponent({
