@@ -1,112 +1,197 @@
 <template>
-  <div class="demo-wrapper">
-    <div class="title">2021/10/28</div>
+  <div class="top">缩放比例:{{ state.scale }}</div>
+  <div class="wrapper">
     <SketchRule
-      class="wrapper"
       :thick="state.thick"
       :scale="state.scale"
+      :width="1380"
+      :height="780"
+      :start-x="state.startX"
+      :start-y="state.startY"
+      :shadow="shadow"
       :corner-active="true"
-      v-model="state.lines"
+      :lines="state.lines"
     >
-      <div class="constent" />
     </SketchRule>
+    <div
+      id="screens"
+      ref="screensRef"
+      @wheel="handleWheel"
+      @scroll="handleScroll"
+    >
+      <div ref="containerRef" class="screen-container">
+        <div id="canvas" :style="canvasStyle" />
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">
 // import { SketchRule } from 'vue3-sketch-ruler'
 // import 'vue3-sketch-ruler/lib/style.css'
-import { computed, defineComponent, ref, reactive, onMounted } from 'vue'
-// import '../../lib/style.css'
-// import { SketchRule } from '../../lib/index.es' // 这里可以换成打包后的
+// import { SketchRule } from '../../lib/index.es'
+// import '/lib/style.css'
+import {
+  computed,
+  defineComponent,
+  ref,
+  reactive,
+  onMounted,
+  nextTick
+} from 'vue'
 import { SketchRule } from '../../src/index' // 这里可以换成打包后的
+
+const rectWidth = 600
+const rectHeight = 320
 export default defineComponent({
   components: { SketchRule },
   setup() {
+    const screensRef = ref(null)
+    const containerRef = ref(null)
     const state = reactive({
-      scale: 1,
-      wrapperwith: 1000, // 定义外面容器大小
-      wrapperheight: 500,
+      scale: 2, //658813476562495, //1,
+      startX: 0,
+      startY: 0,
       lines: {
-        h: [0, 200],
-        v: [0, 200]
+        h: [433, 588],
+        v: [33, 143]
       },
       thick: 20,
       isShowRuler: true, // 显示标尺
       isShowReferLine: true // 显示参考线
     })
-    const wrapperwithpx = computed(() => state.wrapperwith + 22 + 'px')
-    const wrapperheightpx = computed(() => state.wrapperheight + 22 + 'px')
-
+    const shadow = computed(() => {
+      return {
+        x: 0,
+        y: 0,
+        width: rectWidth,
+        height: rectHeight
+      }
+    })
+    const canvasStyle = computed(() => {
+      return {
+        width: rectWidth,
+        height: rectHeight,
+        transform: `scale(${state.scale})`
+      }
+    })
     onMounted(() => {
-      // 这里监听窗口变化, 可要可不要
-      window.addEventListener('resize', () => {
-        state.wrapperwith = window.innerWidth - 400
-        state.wrapperheight = window.innerHeight - 400
-      })
       // 滚动居中
-      // screensRef.value.scrollLeft =
-      //   containerRef.value.getBoundingClientRect().width / 2 - 300
+      screensRef.value.scrollLeft =
+        containerRef.value.getBoundingClientRect().width / 2 - 400
     })
 
+    const handleScroll = () => {
+      const screensRect = document
+        .querySelector('#screens')
+        .getBoundingClientRect()
+      const canvasRect = document
+        .querySelector('#canvas')
+        .getBoundingClientRect()
+
+      // 标尺开始的刻度
+      const startX =
+        (screensRect.left + state.thick - canvasRect.left) / state.scale
+      const startY =
+        (screensRect.top + state.thick - canvasRect.top) / state.scale
+      state.startX = startX
+      state.startY = startY
+    }
+    // 控制缩放值
+    const handleWheel = (e: {
+      ctrlKey: any
+      metaKey: any
+      preventDefault: () => void
+      deltaY: number
+    }) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault()
+        const nextScale = parseFloat(
+          Math.max(0.2, state.scale - e.deltaY / 500).toFixed(2)
+        )
+        state.scale = nextScale
+      }
+      nextTick(() => {
+        handleScroll()
+      })
+    }
+
     return {
-      wrapperwithpx,
-      wrapperheightpx,
+      screensRef,
+      containerRef,
       state,
+      shadow,
+      canvasStyle,
+      handleWheel,
+      handleScroll
     }
   }
 })
 </script>
-<style lang="scss" scoped>
-.title {
+<style lang="scss">
+.top {
   position: absolute;
-  font-size: 30px;
-  top: 50px;
-  left: 400px;
+  right: 100px;
+  font-size: 20px;
 }
-.demo-wrapper {
+body {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  font-family: sans-serif;
+}
+
+body * {
   box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  position: relative;
+  user-select: none;
 }
+
 .wrapper {
   position: absolute;
   top: 100px;
-  left: 100px;
-  // vue3 新写法,可以共享js中的变量,必须要写
-  width: v-bind(wrapperwithpx);
-  height: v-bind(wrapperheightpx);
+  left: 240px;
+  /* 特别注意,这个width要和传入组件的width成对应关系,
+   也就是 780width +thick20 =800
+   否则影子不和容器搭配,这个在2X中会进行自动匹配修正,省得配置麻烦
+    */
+  width: 1400px;
+  height: 800px;
   background-color: #f5f5f5;
   border: 1px solid #dadadc;
 }
+
 #screens {
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: auto;
 }
+
 .screen-container {
   position: absolute;
   width: 5000px;
   height: 3000px;
 }
+
 .scale-value {
   position: absolute;
   bottom: 100%;
-  left: 100px;
+  left: 0;
 }
+
 .button {
   position: absolute;
   bottom: 100%;
   left: 100px;
 }
-.constent {
+
+#canvas {
   position: absolute;
   top: 80px;
   left: 50%;
-  width: 200px;
-  height: 200px;
-  background: lightblue;
+  width: 600px;
+  height: 320px;
+  background: url('../assets/bg.jfif') no-repeat;
+  background-size: 100% 100%;
   transform-origin: 50% 0;
 }
 </style>

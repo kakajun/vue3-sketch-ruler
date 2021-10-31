@@ -1,5 +1,5 @@
 <template>
-  <!-- 线的显示 -->
+<!-- 线的显示 -->
   <div
     v-show="showLine"
     class="line"
@@ -118,4 +118,5 @@ export default defineComponent({
     visibility: visible;
   }
 }
+
 </style>

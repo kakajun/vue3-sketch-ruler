@@ -22,10 +22,7 @@ export interface MenuType {
     hoverBgColor?: string
   }
 }
-interface configType {
-  width: number
-  height: number
-}
+
 export interface ShadowType {
   x: number
   y: number
@@ -37,7 +34,10 @@ interface lineType {
   v?: Array<number>
 }
 export const sketchRulerProps = {
-  config: Object as PropType<configType>,
+  scale: {
+    type: Number,
+    default: 1
+  },
   ratio: {
     type: Number,
     default: 1
@@ -47,6 +47,21 @@ export const sketchRulerProps = {
     default: 16
   },
   palette: Object as PropType<PaletteType>,
+  startX: {
+    type: Number
+  },
+  startY: {
+    type: Number,
+    default: 0
+  },
+  width: {
+    type: Number,
+    default: 200
+  },
+  height: {
+    type: Number,
+    default: 200
+  },
   shadow: {
     type: Object as PropType<ShadowType>,
     default: () => {
@@ -58,6 +73,7 @@ export const sketchRulerProps = {
       }
     }
   },
+
   lines: {
     type: Object as PropType<lineType>,
     default: () => {

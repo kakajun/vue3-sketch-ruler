@@ -9,9 +9,7 @@
   />
 </template>
 <script lang="ts">
-import {
-  drawCavaseRuler
-} from './utils'
+import { drawCavaseRuler } from './utils'
 import { reactive, ref, onMounted, watch, defineComponent } from 'vue'
 import { canvasProps, CanvasProps } from './canvas-types'
 export default defineComponent({
@@ -56,22 +54,14 @@ export default defineComponent({
         palette: props.palette!
       }
 
-      if (props.vertical && state.canvasContext) {
-        drawCavaseRuler(
-          state.canvasContext,
-          props.start!,
-          props.selectStart!,
-          props.selectLength!,
-          options
-        )
-      } else if (state.canvasContext) {
+      if (state.canvasContext) {
         drawCavaseRuler(
           state.canvasContext,
           props.start!,
           props.selectStart!,
           props.selectLength!,
           options,
-          true
+          !props.vertical
         )
       }
     }
@@ -103,9 +93,7 @@ export default defineComponent({
     }
     return {
       handle,
-      state,
-      canvas,
-      initCanvasRef
+      canvas
     }
   }
 })
