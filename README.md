@@ -15,6 +15,10 @@
 
 ## 说明
 ---
+插件应用范围: 适合作为低代码平台操作页面缩放工具,比如做图工具如, 大屏可视化, 做图工具图怪兽等,类似ps的缩放效果.
+
+应用案例: [avue大屏可视化工具](https://data.avuejs.com/build/1)
+![image](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/assets/dp.png)
 
 由于项目升级成vite， 发现原来的插件vue-sketch-ruler，用到vue3中会报错， 这边我重新用vite打包了一份， 打包后的插件和原来功一样， 且支持在vue3和vite中使用
 

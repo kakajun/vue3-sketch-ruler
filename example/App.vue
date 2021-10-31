@@ -5,7 +5,12 @@ import UserRuler from './components/user-rulerts.vue'
 </script>
 
 <template>
-  <span>2021/10/21</span>
+  <div>
+    <a href="https://data.avuejs.com/build/1" target="_blank" class="redlink">
+      实例地址:https://data.avuejs.com/build/1
+    </a>
+    <div>按住Ctril+鼠标滚轮可以缩放页面</div>
+  </div>
   <UserRuler />
 </template>
 
