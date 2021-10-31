@@ -4,7 +4,7 @@
     <SketchRule
       :thick="state.thick"
       :scale="state.scale"
-      :width="1180"
+      :width="1380"
       :height="780"
       :start-x="state.startX"
       :start-y="state.startY"
@@ -40,15 +40,15 @@ import {
 } from 'vue'
 import { SketchRule } from '../../src/index' // 这里可以换成打包后的
 
-const rectWidth = 200
-const rectHeight = 200
+const rectWidth = 600
+const rectHeight = 320
 export default defineComponent({
   components: { SketchRule },
   setup() {
     const screensRef = ref(null)
     const containerRef = ref(null)
     const state = reactive({
-      scale: 1.5, //658813476562495, //1,
+      scale: 2, //658813476562495, //1,
       startX: 0,
       startY: 0,
       lines: {
@@ -77,7 +77,7 @@ export default defineComponent({
     onMounted(() => {
       // 滚动居中
       screensRef.value.scrollLeft =
-        containerRef.value.getBoundingClientRect().width / 2 - 300
+        containerRef.value.getBoundingClientRect().width / 2 - 400
     })
 
     const handleScroll = () => {
@@ -130,7 +130,7 @@ export default defineComponent({
 <style lang="scss">
 .top {
   position: absolute;
-  right: 200px;
+  right: 100px;
   font-size: 20px;
 }
 body {
@@ -153,7 +153,7 @@ body * {
    也就是 780width +thick20 =800
    否则影子不和容器搭配,这个在2X中会进行自动匹配修正,省得配置麻烦
     */
-  width: 1200px;
+  width: 1400px;
   height: 800px;
   background-color: #f5f5f5;
   border: 1px solid #dadadc;
