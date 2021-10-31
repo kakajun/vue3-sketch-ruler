@@ -48,7 +48,8 @@ export const sketchRulerProps = {
   },
   palette: Object as PropType<PaletteType>,
   startX: {
-    type: Number
+    type: Number,
+    default: 0
   },
   startY: {
     type: Number,
@@ -93,4 +94,37 @@ export const sketchRulerProps = {
     default: true
   }
 }
+
+export const sketchRulerWrapperProps = {
+  ratio: {
+    type: Number,
+    default: 1
+  },
+  thick: {
+    type: Number,
+    default: 16
+  },
+  palette: Object as PropType<PaletteType>,
+  lines: {
+    type: Object as PropType<lineType>,
+    default: () => {
+      return {
+        h: [],
+        v: []
+      }
+    }
+  },
+  cornerActive: {
+    type: Boolean,
+    default: false
+  },
+
+  isShowReferLine: {
+    type: Boolean,
+    default: true
+  }
+}
 export type SketchRulerProps = ExtractPropTypes<typeof sketchRulerProps>
+export type SketchRulerWrapperProps = ExtractPropTypes<
+  typeof sketchRulerWrapperProps
+>

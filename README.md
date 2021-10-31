@@ -29,7 +29,7 @@
 4. 对类型进行打包设置（支持ts类型提示）
 
 ## 注意
-这里1X版本和vue-sketch-ruler 一样功能, 后面没有什么bug的话,不再维护, 新功能将会在未来2X中增加,老工程迁移过来的建议使用1x版本, 新项目建议使用2X,做到0配置
+本插件提供两个组件,其中SketchRule和vue-sketch-ruler 一样功能, 新功能将在sketch-ruler-wrapper中增加,使用该组件可以做到0配置,内部引入vue-sketch-ruler,做到自动识别外部容器大小和传入组件大小,做到节省配置时间,开箱即用, 同时兼容以前老的写法
 ## demo
 案例浏览: [https://majun2232.github.io/vue3sketchRuler/1x](https://majun2232.github.io/vue3sketchRuler/1x)
 ![image](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/assets/demo.png)
@@ -60,6 +60,15 @@ import 'vue3-sketch-ruler/lib/style.css'
  components: SketchRule
 ```
 
+新增加的0配置组件sketch-ruler-wrapper引入方式
+```
+import { SketchRuleWrapper } from 'vue3-sketch-ruler'
+import 'vue3-sketch-ruler/lib/style.css'
+
+ components: { SketchRuleWrapper }
+```
+
+
 ## 支持的功能
 - [x] 标尺渲染
 - [x] 缩放内容，重绘标尺
@@ -67,7 +76,8 @@ import 'vue3-sketch-ruler/lib/style.css'
 - [x] 切换标尺状态，显示或隐藏
 - [x] 参考线管理（增加删除）
 - [x] 切换参考线状态，显示或隐藏
-- [x] 0配置获得所有功能
+- [x] 兼容引入SketchRule老工程组件
+- [x] 支持0配置引入尺规组件
 ## 未来支持的功能
 
 - [] 加入画布鼠标拖动功能

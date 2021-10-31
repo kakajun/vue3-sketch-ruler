@@ -13,8 +13,7 @@
       v-model:valueNum="valueNum"
       v-model:showIndicator="showIndicator"
       @onAddLine="handleNewLine"
-    >
-    </CanvasRuler>
+    />
     <div v-show="isShowReferLine" class="lines">
       <RulerLine
         v-for="(v, i) in lines"
@@ -29,8 +28,7 @@
         :is-show-refer-line="isShowReferLine"
         @onRemove="handleLineRemove"
         @onRelease="handleLineRelease"
-      >
-      </RulerLine>
+      />
     </div>
     <div v-show="showIndicator" class="indicator" :style="indicatorStyle">
       <div class="value">{{ valueNum }}</div>

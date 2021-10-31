@@ -1,7 +1,8 @@
 <script setup>
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import UserRuler from './components/user-rulerts.vue'
+// import UserRuler from './components/user-rulerts.vue'
+import RulertsWrapper from './components/user-ruler-wrapper.vue'
 </script>
 
 <template>
@@ -11,7 +12,8 @@ import UserRuler from './components/user-rulerts.vue'
     </a>
     <div>按住Ctril+鼠标滚轮可以缩放页面</div>
   </div>
-  <UserRuler />
+  <!-- <UserRuler /> -->
+  <RulertsWrapper></RulertsWrapper>
 </template>
 
 <style>
