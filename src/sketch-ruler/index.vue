@@ -134,7 +134,6 @@ export default defineComponent({
   position: absolute;
   top: 0;
   left: 0;
-
   pointer-events: auto;
   cursor: pointer;
   box-sizing: content-box;

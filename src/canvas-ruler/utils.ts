@@ -10,7 +10,7 @@ const getGridSize = (scale: number) => {
 
 const FONT_SCALE = 0.83 // 10 / 12
 
-const drawCavaseRuler = (
+export const drawCavaseRuler = (
   ctx: CanvasRenderingContext2D,
   start: number,
   selectStart: number,
@@ -18,7 +18,6 @@ const drawCavaseRuler = (
   options: { scale: number; width: number; height: number; palette: any },
   h?: boolean //横向为true,纵向缺省
 ) => {
-  // console.log(shadow, 'shadowshadow')
   const { scale, width, height, palette } = options
   const { bgColor, fontColor, shadowColor, ratio, longfgColor, shortfgColor } =
     palette
@@ -51,7 +50,7 @@ const drawCavaseRuler = (
 
   const offsetX = ((startValue - start) / gridSize) * gridPixel // 起点刻度距离ctx原点(start)的px距离
   const offsetX10 = ((startValue10 - start) / gridSize10) * gridPixel10 // 长间隔起点刻度距离ctx原点(start)的px距离
-  const endValue = start + Math.ceil(h ? width : height / scale) // 终点刻度(略超出标尺宽度即可)
+  const endValue = start + Math.ceil((h ? width : height) / scale) // 终点刻度(略超出标尺宽度即可)
 
   // 3. 画刻度和文字(因为刻度遮住了阴影)
   ctx.beginPath() // 一定要记得开关路径,因为clearRect并不能清除掉路径,如果不关闭路径下次绘制时会接着上次的绘制
@@ -101,4 +100,3 @@ const drawCavaseRuler = (
   // 恢复ctx matrix
   ctx.setTransform(1, 0, 0, 1, 0, 0)
 }
-export default drawCavaseRuler
