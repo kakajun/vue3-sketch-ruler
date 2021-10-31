@@ -27,7 +27,7 @@
 <script lang="ts">
 // import { SketchRule } from 'vue3-sketch-ruler'
 // import 'vue3-sketch-ruler/lib/style.css'
-// import { SketchRule } from '/lib/index.es.js'
+// import { SketchRule } from '../../lib/index.es'
 // import '/lib/style.css'
 import {
   computed,
