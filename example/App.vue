@@ -1,12 +1,19 @@
 <script setup>
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import UserRuler from './components/user-rulerts.vue'
+// import UserRuler from './components/user-rulerts.vue'
+import RulertsWrapper from './components/user-ruler-wrapper.vue'
 </script>
 
 <template>
-  <span>2021/10/21</span>
-  <UserRuler />
+  <div>
+    <a href="https://data.avuejs.com/build/1" target="_blank" class="redlink">
+      实例地址:https://data.avuejs.com/build/1
+    </a>
+    <div>按住Ctril+鼠标滚轮可以缩放页面</div>
+  </div>
+  <!-- <UserRuler /> -->
+  <RulertsWrapper></RulertsWrapper>
 </template>
 
 <style>

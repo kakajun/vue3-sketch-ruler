@@ -3,6 +3,8 @@
     <SketchRule
       :thick="thick"
       :scale="scale"
+      :width="582"
+      :height="482"
       :start-x="startX"
       :start-y="startY"
       :shadow="shadow"
@@ -26,9 +28,10 @@
   </div>
 </template>
 <script>
-import { SketchRule } from 'vue3-sketch-ruler'
-import 'vue3-sketch-ruler/lib/style.css'
-// import { SketchRule } from '../../src/index' // 这里可以换成打包后的
+import { SketchRule, _SketchRuleComponent } from '../../src/index.ts'
+// import { SketchRule } from '/lib/index.es.js?3242' // 这里可以换成打包后的
+// import '/lib/style.css'
+// console.log(_SketchRuleComponent, '7777777')
 const rectWidth = 200
 const rectHeight = 200
 export default {
@@ -38,11 +41,9 @@ export default {
       scale: 2, //658813476562495, //1,
       startX: 0,
       startY: 0,
-      wrapperwith: 1200,
-      wrapperheight: 600,
       lines: {
-        h: [0, 200],
-        v: [0, 200]
+        h: [100, 200],
+        v: [100, 200]
       },
       thick: 20,
       isShowRuler: true, // 显示标尺
@@ -50,12 +51,6 @@ export default {
     }
   },
   computed: {
-    wrapperwithpx() {
-      return this.wrapperwith + 'px'
-    },
-    wrapperheightpx() {
-      return this.wrapperheight + 'px'
-    },
     shadow() {
       return {
         x: 0,
@@ -125,47 +120,54 @@ body {
   overflow: hidden;
   font-family: sans-serif;
 }
+
 body * {
   box-sizing: border-box;
   user-select: none;
 }
+
 .wrapper {
   position: absolute;
   top: 100px;
   left: 100px;
-  // vue3 新写法,可以共享js中的变量,必须要写
-  width: v-bind(wrapperwithpx);
-  height: v-bind(wrapperheightpx);
+  width: 600px;
+  height: 500px;
   background-color: #f5f5f5;
   border: 1px solid #dadadc;
 }
+
 #screens {
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: auto;
 }
+
 .screen-container {
   position: absolute;
   width: 5000px;
   height: 3000px;
 }
+
 .scale-value {
   position: absolute;
   bottom: 100%;
   left: 0;
 }
+
 .button {
   position: absolute;
   bottom: 100%;
   left: 100px;
 }
+
 #canvas {
   position: absolute;
   top: 80px;
   left: 50%;
-  width: 200px;
+  width: 160px;
   height: 200px;
+  margin-left: -80px;
   background: lightblue;
   transform-origin: 50% 0;
 }

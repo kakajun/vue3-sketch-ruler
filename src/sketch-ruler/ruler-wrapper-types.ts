@@ -22,9 +22,7 @@ export const wrapperProps = {
   },
   lines: {
     type: Array as PropType<Array<number>>,
-    default: () => {
-      return [100, 200]
-    }
+    default: () => []
   },
   selectStart: {
     type: Number

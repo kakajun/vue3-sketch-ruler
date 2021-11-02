@@ -2,20 +2,20 @@
   <canvas
     ref="canvas"
     class="ruler"
-    @click="handleClick"
-    @mouseenter="handleEnter"
-    @mousemove="handleMove"
-    @mouseleave="handleLeave"
+    @click="handle($event, 'click')"
+    @mouseenter="handle($event, 'enter')"
+    @mousemove="handle($event, 'move')"
+    @mouseleave="$emit('update:showIndicator', false)"
   />
 </template>
 <script lang="ts">
-import { drawHorizontalRuler, drawVerticalRuler } from './utils'
+import { drawCavaseRuler } from './utils'
 import { reactive, ref, onMounted, watch, defineComponent } from 'vue'
 import { canvasProps, CanvasProps } from './canvas-types'
 export default defineComponent({
   name: 'CanvasRuler',
   props: canvasProps,
-  emits: ['onAddLine', 'onIndicatorShow', 'onIndicatorMove', 'onIndicatorHide'],
+  emits: ['onAddLine', 'update:showIndicator', 'update:valueNum'],
   setup(props: CanvasProps, { emit }) {
     const state = reactive({
       canvasContext: null as CanvasRenderingContext2D | null
@@ -32,7 +32,6 @@ export default defineComponent({
     const updateCanvasContext = () => {
       if (canvas.value) {
         const ratio = props.ratio
-        console.log(ratio)
         // 比例宽高
         canvas.value.width = props.width! * ratio!
         canvas.value.height = props.height! * ratio!
@@ -48,7 +47,6 @@ export default defineComponent({
       }
     }
     const drawRuler = () => {
-      // console.log(props.selectStart!, props.scale!, '8888')
       const options = {
         scale: props.scale!,
         width: props.width!,
@@ -56,19 +54,14 @@ export default defineComponent({
         palette: props.palette!
       }
 
-      if (props.vertical && state.canvasContext) {
-        drawVerticalRuler(
+      if (state.canvasContext) {
+        drawCavaseRuler(
           state.canvasContext,
           props.start!,
-          { y: props.selectStart!, height: props.selectLength! },
-          options
-        )
-      } else if (state.canvasContext) {
-        drawHorizontalRuler(
-          state.canvasContext,
-          props.start!,
-          { x: props.selectStart!, width: props.selectLength! },
-          options
+          props.selectStart!,
+          props.selectLength!,
+          options,
+          !props.vertical
         )
       }
     }
@@ -80,37 +73,27 @@ export default defineComponent({
       updateCanvasContext()
       drawRuler()
     })
-    watch([() => props.scale], val => {
-      console.log(val, '666666666')
-    })
-    const getValueByOffset = (offset: number, start: number, scale: number) =>
-      Math.round(start + offset / scale)
-    const handleClick = (e: MouseEvent) => {
+    const handle = (e: MouseEvent, key: string) => {
+      const getValueByOffset = (offset: number, start: number, scale: number) =>
+        Math.round(start + offset / scale)
       const offset = props.vertical ? e.offsetY : e.offsetX
       const value = getValueByOffset(offset, props.start!, props.scale!)
-      emit('onAddLine', value)
-    }
-    const handleEnter = (e: MouseEvent) => {
-      const offset = props.vertical ? e.offsetY : e.offsetX
-      const value = getValueByOffset(offset, props.start!, props.scale!)
-      emit('onIndicatorShow', value)
-    }
-    const handleMove = (e: MouseEvent) => {
-      const offset = props.vertical ? e.offsetY : e.offsetX
-      const value = getValueByOffset(offset, props.start!, props.scale!)
-      emit('onIndicatorMove', value)
-    }
-    const handleLeave = () => {
-      emit('onIndicatorHide')
+      switch (key) {
+        case 'click':
+          emit('onAddLine', value)
+          break
+        case 'enter':
+          emit('update:valueNum', value)
+          emit('update:showIndicator', true)
+          break
+        default:
+          emit('update:valueNum', value)
+          break
+      }
     }
     return {
-      state,
-      canvas,
-      initCanvasRef,
-      handleClick,
-      handleEnter,
-      handleMove,
-      handleLeave
+      handle,
+      canvas
     }
   }
 })
