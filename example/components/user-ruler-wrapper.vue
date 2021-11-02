@@ -1,7 +1,7 @@
 <template>
-  <div class="wrapper">
+  <div>
     <div class="top">缩放比例:{{ state.scale }}</div>
-    <SketchRuleWrapper>
+    <SketchRuleWrapper class="wrapper">
       <div class="canvas" />
     </SketchRuleWrapper>
   </div>
@@ -28,7 +28,6 @@ export default {
     })
     const wrapperwithpx = computed(() => state.wrapperwith + 22 + 'px')
     const wrapperheightpx = computed(() => state.wrapperheight + 22 + 'px')
-
     onMounted(() => {
       // 这里监听窗口变化, 可要可不要
       window.addEventListener('resize', () => {
@@ -63,10 +62,12 @@ export default {
   border: 1px solid #dadadc;
 }
 .canvas {
-  left: 0;
-  top: 0;
+  top: 80px;
   width: 600px;
   height: 320px;
+  // left: 50%;
+  position: absolute;
+  // transform-origin: 50% 0;
   background: url('../assets/bg.jfif') no-repeat;
   background-size: 100% 100%;
 }

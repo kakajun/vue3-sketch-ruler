@@ -36,6 +36,7 @@ interface lineType {
 export const sketchRulerProps = {
   scale: {
     type: Number,
+
     default: 1
   },
   ratio: {

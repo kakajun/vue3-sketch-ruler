@@ -172,12 +172,6 @@ body * {
   height: 3000px;
 }
 
-.scale-value {
-  position: absolute;
-  bottom: 100%;
-  left: 0;
-}
-
 .button {
   position: absolute;
   bottom: 100%;

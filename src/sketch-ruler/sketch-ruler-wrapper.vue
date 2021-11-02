@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="rule-wrapper" ref="ruler">
     <SketchRule
       :thick="thick"
       :scale="scale"
@@ -16,8 +16,12 @@
     >
     </SketchRule>
     <div class="screens" ref="screensRef" @wheel="handleWheel">
-      <div ref="containerRef" class="screen-container">
-        <div class="canvas" :style="canvasStyle">
+      <div
+        ref="containerRef"
+        class="screen-container canvas-wrapper"
+        :style="canvasStyle"
+      >
+        <div class="">
           <slot></slot>
         </div>
       </div>
@@ -33,50 +37,85 @@ export default defineComponent({
   name: 'SketchRulerWrapper',
   components: { SketchRule },
   props: sketchRulerWrapperProps,
-  emits: ['handleLine', 'ClickOutside2ClearAll'],
-  setup(props: SketchRulerWrapperProps, { slots }) {
+  emits: ['handleLine', 'getscele', 'ClickOutside2ClearAll'],
+  setup(props: SketchRulerWrapperProps, { slots, attrs }) {
     let scale = ref(1)
     const paletteCpu = computed(() => getPalette(props.palette))
     const ruler = ref<HTMLElement | null>(null)
-    let width = ref(0)
+    let width = ref(0) // 尺规外部容器宽
     let height = ref(0)
     const screensRef = ref<HTMLElement | null>(null)
     const containerRef = ref<HTMLElement | null>(null)
     onMounted(() => {
+      console.log(attrs, 'attrsattrs')
       if (ruler.value) {
         const refruler = ruler.value.getBoundingClientRect()
         width.value = refruler.width - 21
         height.value = refruler.height - 21
+        console.log(width.value, height.value, ' width.value')
       }
-      // 滚动居中
-      if (screensRef.value && containerRef.value) {
-        screensRef.value.scrollLeft =
-          containerRef.value &&
-          containerRef.value.getBoundingClientRect().width / 2 - 400
-      }
-
+      getInitAttributes()
       // 初始化尺子阴影和线条
-      setStart()
+      getCavasAttributes()
+      // 滚动居中
+      console.log(canvasWidth.value, 'canvasWidth.value')
+      if (canvasWidth.value && screensRef.value) {
+        let leftNum =
+          containerRef.value &&
+          containerRef.value.getBoundingClientRect().width - canvasWidth.value
+        screensRef.value.scrollLeft = leftNum! / 2
+      }
     })
 
     let startX = ref(0)
     let startY = ref(0)
+    let canvasWidth = ref(0)
+    let canvasHeight = ref(0)
     const setStart = () => {
       nextTick(() => {
-        if (screensRef.value && slots.default && slots.default()[0].el) {
-          const canvas = slots.default()[0].el as HTMLElement // 获取slot的dom
-          const canvasR = canvas.getBoundingClientRect() // 获取slot的宽高值
-          const screensRect = screensRef.value.getBoundingClientRect()
-          // 标尺开始的刻度
-          const startx =
-            (screensRect.left + props.thick - canvasR.left) / scale.value
-          const starty =
-            (screensRect.top + props.thick - canvasR.top) / scale.value
-          startX.value = startx >> 0
-          startY.value = starty >> 0
-          // console.log(startX.value, startY.value)
-        }
+        // 一定要用nextTick,否则缩放图形会飘
+        getCavasAttributes()
       })
+    }
+
+    let initWidth: number = 0
+    let initHeght: number = 0
+    /**
+     * @description: 获取初始画布大小值,因为需要给slot也注入样式,所以先要知道最开始是多大的
+     * @param {*}
+     * @return {*}
+     */
+    const getInitAttributes = () => {
+      if (screensRef.value && slots.default && slots.default()[0].el) {
+        const canvas = slots.default()[0].el as HTMLElement // 获取slot的dom
+        console.log(canvas.style, 'canvas')
+        const canvasR = canvas.getBoundingClientRect() // 获取slot的宽高值
+        initWidth = canvasR.width
+        initHeght = canvasR.height
+      }
+    }
+
+    const getCavasAttributes = () => {
+      if (screensRef.value && slots.default && slots.default()[0].el) {
+        const canvas = slots.default()[0].el as HTMLElement // 获取slot的dom
+        console.log(canvas.style, 'canvas')
+        canvas.style.transform = `scale(${scale.value})`
+        canvas.style.left = '0px'
+        canvas.style.width = initWidth * scale.value + 'px' // 动态给外层注入宽高
+        canvas.style.height = initHeght * scale.value + 'px'
+        canvas.style.transformOrigin = '50% 0'
+        const canvasR = canvas.getBoundingClientRect() // 获取slot的宽高值
+        canvasWidth.value = canvasR.width
+        canvasHeight.value = canvasR.height
+        const screensRect = screensRef.value.getBoundingClientRect()
+        // 标尺开始的刻度
+        const startx =
+          (screensRect.left + props.thick - canvasR.left) / scale.value
+        const starty =
+          (screensRect.top + props.thick - canvasR.top) / scale.value
+        startX.value = startx >> 0
+        startY.value = starty >> 0
+      }
     }
 
     // 控制缩放值
@@ -89,25 +128,27 @@ export default defineComponent({
         // if (nextScale > 1.5) scale.value = 1.5
         // else if (nextScale < 0.5) scale.value = 0.5
         scale.value = nextScale
+        // emit('getscele', scale.value)
+        console.log(scale.value, 'scale.value')
       }
       setStart()
     }
-
+    const canvasStyle = computed(() => {
+      return {
+        width: canvasWidth.value + 'px',
+        height: canvasHeight.value + 'px',
+        transform: `scale(${scale.value})`
+      }
+    })
     const shadow = computed(() => {
       return {
         x: 0,
         y: 0,
-        width: width.value,
-        height: height.value
+        width: canvasWidth.value,
+        height: canvasHeight.value
       }
     })
-    const canvasStyle = computed(() => {
-      return {
-        width: width.value,
-        height: height.value,
-        transform: `scale(${scale.value})`
-      }
-    })
+
     const handleCornerClick = () => {
       return
     }
@@ -117,6 +158,7 @@ export default defineComponent({
       scale,
       startX,
       width,
+      ruler,
       height,
       startY,
       paletteCpu,
@@ -129,6 +171,10 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
+.rule-wrapper {
+  width: 100%;
+  height: 100%;
+}
 .screens {
   position: absolute;
   width: 100%;
@@ -142,24 +188,11 @@ export default defineComponent({
   height: 3000px;
 }
 
-.scale-value {
-  position: absolute;
-  bottom: 100%;
-  left: 0;
-}
-
-.button {
-  position: absolute;
-  bottom: 100%;
-  left: 100px;
-}
-
-.canvas {
-  position: relative;
-  top: 80px;
+.canvas-wrapper {
+  top: 100px;
+  background: #000;
   left: 50%;
-  width: 600px;
-  height: 320px;
+  position: relative;
   transform-origin: 50% 0;
 }
 </style>
