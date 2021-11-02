@@ -5,7 +5,7 @@
 
  [![](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)  [![build status](https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml)
 
- 简体中文 | [English](https://github.com/majun2232/vue3sketchRuler/blob/1x/README.EN.md)
+ 简体中文 | [English](https://github.com/majun2232/vue3sketchRuler/blob/2x/README.EN.md)
 
 - 💪 Vue 3 Composition API
 - 🔥 Written in TypeScript
@@ -15,10 +15,10 @@
 
 ## 说明
 ---
-插件应用范围: 适合作为低代码平台操作页面缩放工具,比如做图工具如, 大屏可视化, 做图工具图怪兽等,类似ps的缩放效果.
+插件应用范围: 适合作为低代码平台操作页面缩放工具,比如做图工具如, 大屏可视化, 做图工具图怪兽等,类似ps的缩放效果. 2x还在bug修复阶段,将在近期推出,2x将抛出两个组件,一个组件兼容1x功能,另外一个组件将加入新特性,真正实现0配置,敬请期待!
 
 应用案例: [avue大屏可视化工具](https://data.avuejs.com/build/1)
-![image](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/assets/dp.png)
+![image](https://github.com/majun2232/vue3sketchRuler/blob/2x/example/assets/dp.png)
 
 由于项目升级成vite， 发现原来的插件vue-sketch-ruler，用到vue3中会报错， 这边我重新用vite打包了一份， 打包后的插件和原来功一样， 且支持在vue3和vite中使用
 
@@ -31,8 +31,8 @@
 ## 注意
 本插件提供两个组件,其中SketchRule和vue-sketch-ruler 一样功能, 新功能将在sketch-ruler-wrapper中增加,使用该组件可以做到0配置,内部引入vue-sketch-ruler,做到自动识别外部容器大小和传入组件大小,做到节省配置时间,开箱即用, 同时兼容以前老的写法
 ## demo
-案例浏览: [https://majun2232.github.io/vue3sketchRuler/1x](https://majun2232.github.io/vue3sketchRuler/1x)
-![image](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/assets/demo.png)
+案例浏览: [https://majun2232.github.io/vue3sketchRuler/1x](https://majun2232.github.io/vue3sketchRuler/2x)
+![image](https://github.com/majun2232/vue3sketchRuler/blob/master/example/assets/demo.png)
 
 ## 安装
 > 支持全局导入和模块导入
@@ -128,8 +128,8 @@ export default {
 });
 </script>
 ```
-参考一个完整的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/UserRuler.vue)
-vue3 api 的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/UserRulerts.vue)
+参考一个完整的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/master/example/components/UserRuler.vue)
+vue3 api 的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/master/example/components/UserRulerts.vue)
 
 ## api
 ### 属性
