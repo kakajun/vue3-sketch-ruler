@@ -7,6 +7,8 @@ export interface MagnifyProvide {
   zoomSize: ElRect
   setZoomVisible: (val: boolean) => void
   setFollowInfo: (val: PrveiwInfo) => void
+  draggleRate: number
+  prevSize: { w: number; h: number }
   setZoomImgInfo: (val: { w: number; h: number }) => void
 }
 

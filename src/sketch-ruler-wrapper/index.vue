@@ -38,16 +38,20 @@ export default defineComponent({
       type: String,
       required: true
     },
-    defaultPrevSize: {
+    prevSize: {
       type: Object,
       default: () => ({
         width: 450,
         height: 450
       })
     },
-    defaultZoomSize: {
+    zoomSize: {
       type: Object,
       default: () => null
+    },
+    draggleRate: {
+      type: Number,
+      default: 0.3
     }
   },
   emits: ['on-preview-click'],
@@ -69,69 +73,35 @@ export default defineComponent({
       w: 0,
       h: 0
     })
-
-    const zoomSize = reactive({
-      w: 10,
-      h: 10
-    })
-    // 框架的wrapper
-    const prevSize = reactive({
-      w: 0,
-      h: 0
-    })
-
     const setZoomImgInfo = (v: { h: number; w: number }) => {
       zoomImgSize.w = v.w
       zoomImgSize.h = v.h
     }
-
+    /* 遮罩大小 */
     const followSize = computed(() => {
       return {
-        w: prevSize.w * (zoomSize.w / zoomImgSize.w),
-        h: prevSize.h * (zoomSize.h / zoomImgSize.h)
+        /* 视口宽（小图的显示容器） = 大视口宽（大图的显示容器）/大展品宽（大图） * 小展品（小图） */
+        // w: prevSize.w * (zoomSize.w / zoomImgSize.w),
+        // h: prevSize.h * (zoomSize.h / zoomImgSize.h)
+        w: 100,
+        h: 100
       }
     })
     /* 整个框架的wrapper */
     const previewStyle = computed(() => {
       return {
-        width: prevSize.w + 'px',
-        height: prevSize.h + 'px'
+        width: props.prevSize.w + 'px',
+        height: props.prevSize.h + 'px'
       }
     })
 
-    /**
-     * @description: 预览大小
-     * @param {*}
-     * @return {*}
-     */
-    function initZoomSize() {
-      zoomSize.w = props.defaultZoomSize.width
-      zoomSize.h = props.defaultZoomSize.height
-    }
-
-    /**
-     * @description: 初始化外部传参过来wrapper
-     * @param {*}
-     * @return {*}
-     */
-    function initPrevSize() {
-      prevSize.w = props.defaultPrevSize.width
-      prevSize.h = props.defaultPrevSize.height
-    }
-
-    function init() {
-      initPrevSize()
-      initZoomSize()
-    }
-
-    onMounted(() => {
-      init()
-    })
     provide('magnify', {
       prveiwInfo,
       setZoomImgInfo,
+      prevSize: props.prevSize,
       followSize,
-      zoomSize
+      zoomSize: props.zoomSize,
+      draggleRate: props.draggleRate
     })
     const handleClick = (event: MouseEvent) => {
       emit('on-preview-click', event)
@@ -141,8 +111,6 @@ export default defineComponent({
       prveiwInfo,
       zoomImgSize,
       followSize,
-      zoomSize,
-      prevSize,
       previewStyle
     }
   }

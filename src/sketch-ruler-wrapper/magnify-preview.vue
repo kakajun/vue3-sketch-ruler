@@ -1,5 +1,10 @@
 <template>
-  <div class="vue-magnify-preview" ref="previewWarrperRef">
+  <!-- 小图片 -->
+  <div
+    class="vue-magnify-preview"
+    :style="wrapperStyle"
+    ref="previewWarrperRef"
+  >
     <slot />
 
     <!-- 遮罩 -->
@@ -24,11 +29,14 @@ export default {
   components: {},
   setup() {
     const followRef = ref(null)
+    /* 获取小图框子定位 */
     const previewWarrperRef = ref(null)
     const { offsetLeft, offsetTop, isInside, width, height, x, y } =
       useHoverElement(previewWarrperRef)
-    const { prveiwInfo, followSize } = inject('magnify') as MagnifyProvide
-
+    const { prveiwInfo, followSize, prevSize, draggleRate } = inject(
+      'magnify'
+    ) as MagnifyProvide
+    /* 设置遮罩样式 */
     const followStyle = computed(() => {
       const { width: fWidth, height: fHeight } = useElementRect(followRef)
       const maxLeft = width.value - fWidth.value
@@ -44,12 +52,18 @@ export default {
       prveiwInfo.followMaxX = maxLeft
       prveiwInfo.followMaxY = maxTop
 
-      console.log(prveiwInfo, '3333')
+      // console.log(prveiwInfo, '3333')
       return {
         width: followSize.value.w + 'px',
         height: followSize.value.h + 'px',
         left: left + 'px',
         top: top + 'px'
+      }
+    })
+    const wrapperStyle = computed(() => {
+      return {
+        width: draggleRate * prevSize.w + 'px',
+        height: draggleRate * prevSize.h + 'px'
       }
     })
     return {
@@ -60,17 +74,21 @@ export default {
       isInside,
       followRef,
       followStyle,
-      previewWarrperRef
+      previewWarrperRef,
+      wrapperStyle
     }
   }
 }
 </script>
 <style>
 .vue-magnify-preview {
+  z-index: 3;
   right: 0;
+  bottom: 0;
   overflow: hidden;
   position: absolute;
-  border: 1px solid grey;
+  border: 1px solid rgb(253, 6, 6);
+  /* border: 1px solid grey; */
 }
 .vue-magnify-preview > img {
   width: 100%;

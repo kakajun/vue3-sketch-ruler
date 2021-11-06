@@ -1,4 +1,5 @@
 <template>
+  <!-- 大图 -->
   <div
     class="vue-magnify-zoom"
     ref="zoomRef"
@@ -71,6 +72,7 @@ export default {
   border: 1px solid #eee;
   overflow: hidden;
   position: absolute;
+  left: 0;
   top: 0;
 }
 </style>

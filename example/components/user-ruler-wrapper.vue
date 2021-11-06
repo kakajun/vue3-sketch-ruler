@@ -1,9 +1,10 @@
 <template>
   <div class="home">
     <SketchRuleWrapper
-      :defaultZoomSize="state.defaultZoomSize"
-      :defaultPrevSize="state.defaultPrevSize"
+      :zoomSize="state.zoomSize"
+      :prevSize="state.prevSize"
       class="wrapper"
+      :draggleRate="state.draggleRate"
       :preview-img="previewImg"
       :zoom-img="zoomImg"
       @on-preview-click="handleClick"
@@ -18,7 +19,8 @@
 // @ is an alias to /src
 import { defineComponent } from 'vue'
 import previewImg from '../assets/product/onepuls8-pro.jpg'
-import zoomImg from '../assets/product/onepuls8-pro-zoom.jpg'
+// import zoomImg from '../assets/bg.png'
+import zoomImg from '../assets/bg.jpeg'
 import { computed, reactive, onMounted } from 'vue'
 import { SketchRuleWrapper } from '../../src/index' // 这里可以换成打包后的
 export default defineComponent({
@@ -27,18 +29,17 @@ export default defineComponent({
   setup() {
     const state = reactive({
       /*预览大小*/
-      defaultZoomSize: {
-        width: 50,
-        height: 30
+      zoomSize: {
+        w: window.innerWidth - 400, // 定义外面容器大小,
+        h: window.innerHeight - 300
       },
+      draggleRate: 0.3,
       /* 整个视图大小 */
-      defaultPrevSize: {
-        width: 500,
-        height: 300
+      prevSize: {
+        w: window.innerWidth - 400, // 定义外面容器大小,
+        h: window.innerHeight - 300
       },
       scale: 1,
-      wrapperwith: window.innerWidth - 400, // 定义外面容器大小
-      wrapperheight: window.innerHeight - 300,
       lines: {
         h: [433, 588],
         v: [33, 143]
@@ -47,8 +48,8 @@ export default defineComponent({
       isShowRuler: true, // 显示标尺
       isShowReferLine: true // 显示参考线
     })
-    const wrapperwithpx = computed(() => state.wrapperwith + 22 + 'px')
-    const wrapperheightpx = computed(() => state.wrapperheight + 22 + 'px')
+    const wrapperwithpx = computed(() => state.prevSize.w + 22 + 'px')
+    const wrapperheightpx = computed(() => state.prevSize.h + 22 + 'px')
     const handleClick = e => {
       console.log(e)
     }
