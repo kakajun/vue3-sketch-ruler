@@ -1,4 +1,5 @@
-const getPalette = palette => {
+import { PaletteType } from '../index-types'
+const getPalette = (palette: PaletteType | undefined) => {
   function merge(obj: { [key: string]: any }, o: { [key: string]: any }) {
     Object.keys(obj).forEach(key => {
       if (key && obj.hasOwnProperty(key)) {
@@ -17,7 +18,6 @@ const getPalette = palette => {
       longfgColor: '#BABBBC', // ruler longer mark color
       shortfgColor: '#C8CDD0', // ruler shorter mark color
       fontColor: '#7D8694', // ruler font color
-      shadowColor: '#E8E8E8', // ruler shadow color
       lineColor: '#EB5648',
       borderColor: '#DADADC',
       cornerActiveColor: 'rgb(235, 86, 72, 0.6)',

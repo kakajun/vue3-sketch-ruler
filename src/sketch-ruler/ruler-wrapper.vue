@@ -2,14 +2,9 @@
   <div :class="rwClassName" :style="rwStyle">
     <CanvasRuler
       :vertical="vertical"
-      :scale="scale"
       :width="width"
       :height="height"
       :start="start"
-      :ratio="ratio"
-      :select-start="selectStart"
-      :select-length="selectLength"
-      :palette="palette"
       v-model:valueNum="valueNum"
       v-model:showIndicator="showIndicator"
       @onAddLine="handleNewLine"
@@ -20,10 +15,7 @@
         :key="v + i"
         :index="i"
         :value="v >> 0"
-        :scale="scale"
         :start="start"
-        :thick="thick"
-        :palette="palette"
         :vertical="vertical"
         :is-show-refer-line="isShowReferLine"
         @onRemove="handleLineRemove"
@@ -39,8 +31,9 @@
 <script lang="ts">
 import RulerLine from './ruler-line.vue'
 import CanvasRuler from '../canvas-ruler/index.vue'
-import { ref, computed, defineComponent } from 'vue'
+import { ref, computed, defineComponent, inject } from 'vue'
 import { wrapperProps, WrapperProps } from './ruler-wrapper-types'
+import { SketchRulerProps } from 'src/index-types'
 export default defineComponent({
   name: 'RulerWrapper',
   components: {
@@ -49,6 +42,9 @@ export default defineComponent({
   },
   props: wrapperProps,
   setup(props: WrapperProps) {
+    const { isShowReferLine, scale, palette, thick } = inject(
+      'sketch'
+    ) as SketchRulerProps
     const showIndicator = ref(false)
     const valueNum = ref(0)
     const rwClassName = computed(() => {
@@ -57,27 +53,27 @@ export default defineComponent({
     })
     const rwStyle = computed(() => {
       const hContainer = {
-        width: `calc(100% - ${props.thick}px)`,
-        height: `${props.thick! + 1}px`,
-        left: `${props.thick}` + 'px'
+        width: `calc(100% - ${thick}px)`,
+        height: `${thick! + 1}px`,
+        left: `${thick}` + 'px'
       }
       const vContainer = {
-        width: `${props.thick && props.thick + 1}px`,
-        height: `calc(100% - ${props.thick}px)`,
-        top: `${props.thick}` + 'px'
+        width: `${thick && thick + 1}px`,
+        height: `calc(100% - ${thick}px)`,
+        top: `${thick}` + 'px'
       }
       return props.vertical ? vContainer : hContainer
     })
 
     const indicatorStyle = computed(() => {
-      const indicatorOffset = (valueNum.value - props.start) * props.scale!
+      const indicatorOffset = (valueNum.value - props.start) * scale
       let positionKey = 'top'
       let boderKey = 'borderLeft'
       positionKey = props.vertical ? 'top' : 'left'
       boderKey = props.vertical ? 'borderBottom' : 'borderLeft'
       return {
         [positionKey]: indicatorOffset + 'px',
-        [boderKey]: `1px solid ${props.palette?.lineColor}`
+        [boderKey]: `1px solid ${palette?.lineColor}`
       }
     })
 
@@ -87,8 +83,7 @@ export default defineComponent({
     const handleLineRelease = (value: number, index: number) => {
       // 左右或上下超出时, 删除该条对齐线
       const offset = value - props.start
-      const maxOffset =
-        (props.vertical ? props.height : props.width) / props.scale!
+      const maxOffset = (props.vertical ? props.height : props.width) / scale
       if (offset < 0 || offset > maxOffset) {
         handleLineRemove(index)
       } else {
@@ -99,6 +94,7 @@ export default defineComponent({
       props.lines.splice(index, 1)
     }
     return {
+      isShowReferLine,
       showIndicator,
       valueNum,
       rwClassName,

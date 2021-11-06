@@ -10,13 +10,15 @@
 </template>
 <script lang="ts">
 import { drawCavaseRuler } from './utils'
-import { reactive, ref, onMounted, watch, defineComponent } from 'vue'
+import { reactive, ref, onMounted, watch, defineComponent, inject } from 'vue'
 import { canvasProps, CanvasProps } from './canvas-types'
+import { SketchRulerProps } from 'src/index-types'
 export default defineComponent({
   name: 'CanvasRuler',
   props: canvasProps,
   emits: ['onAddLine', 'update:showIndicator', 'update:valueNum'],
   setup(props: CanvasProps, { emit }) {
+    const { scale, ratio, palette } = inject('sketch') as SketchRulerProps
     const state = reactive({
       canvasContext: null as CanvasRenderingContext2D | null
     })
@@ -31,13 +33,12 @@ export default defineComponent({
     }
     const updateCanvasContext = () => {
       if (canvas.value) {
-        const ratio = props.ratio
         // 比例宽高
-        canvas.value.width = props.width! * ratio!
-        canvas.value.height = props.height! * ratio!
+        canvas.value.width = props.width! * ratio
+        canvas.value.height = props.height! * ratio
         const ctx = state.canvasContext
         if (ctx) {
-          ctx.font = `${12 * ratio!}px -apple-system,
+          ctx.font = `${12 * ratio}px -apple-system,
                 "Helvetica Neue", ".SFNSText-Regular",
                 "SF UI Text", Arial, "PingFang SC", "Hiragino Sans GB",
                 "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif`
@@ -48,18 +49,16 @@ export default defineComponent({
     }
     const drawRuler = () => {
       const options = {
-        scale: props.scale!,
+        scale: scale,
         width: props.width!,
         height: props.height!,
-        palette: props.palette!
+        palette: palette
       }
 
       if (state.canvasContext) {
         drawCavaseRuler(
           state.canvasContext,
           props.start!,
-          props.selectStart!,
-          props.selectLength!,
           options,
           !props.vertical
         )
@@ -77,7 +76,7 @@ export default defineComponent({
       const getValueByOffset = (offset: number, start: number, scale: number) =>
         Math.round(start + offset / scale)
       const offset = props.vertical ? e.offsetY : e.offsetX
-      const value = getValueByOffset(offset, props.start!, props.scale!)
+      const value = getValueByOffset(offset, props.start!, scale)
       switch (key) {
         case 'click':
           emit('onAddLine', value)

@@ -1,9 +1,5 @@
 import { PropType, ExtractPropTypes } from 'vue'
 export const wrapperProps = {
-  scale: Number,
-  ratio: Number,
-  thick: Number,
-  palette: Object,
   vertical: {
     type: Boolean,
     default: true

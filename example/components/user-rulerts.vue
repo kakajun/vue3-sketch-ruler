@@ -91,6 +91,7 @@ export default defineComponent({
       // 标尺开始的刻度
       const startX =
         (screensRect.left + state.thick - canvasRect.left) / state.scale
+      console.log(screensRect.left, state.thick, canvasRect.left, 'startX')
       const startY =
         (screensRect.top + state.thick - canvasRect.top) / state.scale
       state.startX = startX

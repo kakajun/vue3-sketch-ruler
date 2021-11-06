@@ -13,33 +13,18 @@ const FONT_SCALE = 0.83 // 10 / 12
 export const drawCavaseRuler = (
   ctx: CanvasRenderingContext2D,
   start: number,
-  selectStart: number,
-  selectLength: number,
   options: { scale: number; width: number; height: number; palette: any },
   h?: boolean //横向为true,纵向缺省
 ) => {
   const { scale, width, height, palette } = options
-  const { bgColor, fontColor, shadowColor, ratio, longfgColor, shortfgColor } =
-    palette
+  const { bgColor, fontColor, ratio, longfgColor, shortfgColor } = palette
 
   // 缩放ctx, 以简化计算
   ctx.scale(ratio, ratio)
   ctx.clearRect(0, 0, width, height)
-
   // 1. 画标尺底色
   ctx.fillStyle = bgColor
   ctx.fillRect(0, 0, width, height)
-
-  // 2. 画阴影
-  if (selectLength) {
-    const shadowX = (selectStart - start) * scale // 阴影起点坐标
-    const shadowWidth = selectLength * scale // 阴影宽度
-    ctx.fillStyle = shadowColor
-    h
-      ? ctx.fillRect(shadowX, 0, shadowWidth, (height * 3) / 8)
-      : ctx.fillRect(0, shadowX, (width * 3) / 8, shadowWidth)
-  }
-
   const gridSize = getGridSize(scale) // 每小格表示的宽度
   const gridPixel = gridSize * scale
   const gridSize10 = gridSize * 10 // 每大格表示的宽度

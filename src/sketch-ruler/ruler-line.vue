@@ -1,5 +1,5 @@
 <template>
-<!-- 线的显示 -->
+  <!-- 线的显示 -->
   <div
     v-show="showLine"
     class="line"
@@ -13,23 +13,28 @@
   </div>
 </template>
 <script lang="ts">
-import { ref, computed, onMounted, defineComponent } from 'vue'
+import { ref, computed, onMounted, defineComponent, inject } from 'vue'
 import { lineProps, LineProps } from './ruler-line-types'
+import { SketchRulerProps } from 'src/index-types'
 export default defineComponent({
   name: 'LineRuler',
   props: lineProps,
   emits: ['onMouseDown', 'onRelease', 'onRemove'],
   setup(props: LineProps, { emit }) {
+    const { isShowReferLine, scale, palette, thick } = inject(
+      'sketch'
+    ) as SketchRulerProps
     const startValue = ref(0)
     const showLine = ref(true)
     onMounted(() => {
       startValue.value = props.value!
+      console.log(startValue.value, '')
     })
     const setShowLine = (offset: number) => {
       showLine.value = offset >= 0
     }
     const offset = computed(() => {
-      const offset = (startValue.value - props.start!) * props.scale!
+      const offset = (startValue.value - props.start!) * scale
       setShowLine(offset)
       const positionValue = offset + 'px'
       const position = props.vertical
@@ -38,11 +43,12 @@ export default defineComponent({
       return position
     })
     const borderCursor = computed(() => {
-      const borderValue = `1px solid ${props.palette?.lineColor}`
+      console.log(palette?.lineColor, 'palette.lineColor')
+      const borderValue = `1px solid ${palette?.lineColor}`
       const border = props.vertical
         ? { borderTop: borderValue }
         : { borderLeft: borderValue }
-      const cursorValue = props.isShowReferLine
+      const cursorValue = isShowReferLine
         ? props.vertical
           ? 'ns-resize'
           : 'ew-resize'
@@ -54,8 +60,8 @@ export default defineComponent({
     })
     const actionStyle = computed(() => {
       const actionStyle = props.vertical
-        ? { left: props.thick + 'px' }
-        : { top: props.thick + 'px' }
+        ? { left: thick + 'px' }
+        : { top: thick + 'px' }
       return actionStyle
     })
 
@@ -66,9 +72,7 @@ export default defineComponent({
       emit('onMouseDown')
       const onMove = (e: MouseEvent) => {
         const currentD = props.vertical ? e.clientY : e.clientX
-        const newValue = Math.round(
-          initValue + (currentD - startD) / props.scale!
-        )
+        const newValue = Math.round(initValue + (currentD - startD) / scale)
         startValue.value = newValue
       }
       const onEnd = () => {
@@ -118,5 +122,4 @@ export default defineComponent({
     visibility: visible;
   }
 }
-
 </style>

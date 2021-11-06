@@ -4,7 +4,6 @@ export interface PaletteType {
   longfgColor?: string
   shortfgColor?: string
   fontColor?: string
-  shadowColor?: string
   lineColor?: string
   borderColor?: string
   cornerActiveColor?: string
@@ -22,12 +21,15 @@ export interface MenuType {
     hoverBgColor?: string
   }
 }
-
-export interface ShadowType {
-  x: number
-  y: number
-  width: number
-  height: number
+/*
+TODO 本来Provide需要重新定义一下,不能用SketchRulerProps粗暴的就规范了
+因为palette对象merge后每个都有值
+ */
+export interface RulerProvide {
+  isShowReferLine: {
+    type: Boolean
+    default: true
+  }
 }
 interface lineType {
   h?: Array<number>
@@ -64,17 +66,6 @@ export const sketchRulerProps = {
     type: Number,
     default: 200
   },
-  shadow: {
-    type: Object as PropType<ShadowType>,
-    default: () => {
-      return {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0
-      }
-    }
-  },
 
   lines: {
     type: Object as PropType<lineType>,
@@ -100,6 +91,14 @@ export const sketchRulerWrapperProps = {
   ratio: {
     type: Number,
     default: 1
+  },
+  screenWidth: {
+    type: Number,
+    default: 1440
+  },
+  screenHeight: {
+    type: Number,
+    default: 1000
   },
   thick: {
     type: Number,

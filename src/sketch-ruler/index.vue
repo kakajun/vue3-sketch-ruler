@@ -5,30 +5,16 @@
       :vertical="false"
       :width="width"
       :height="thick"
-      :is-show-refer-line="isShowReferLine"
-      :thick="thick"
-      :ratio="ratio"
       :start="startX"
       :lines="lines.h"
-      :select-start="shadow.x"
-      :select-length="shadow.width"
-      :scale="scale"
-      :palette="paletteCpu"
     />
     <!-- 竖直方向 -->
     <RulerWrapper
       :vertical="true"
       :width="thick"
       :height="height"
-      :is-show-refer-line="isShowReferLine"
-      :thick="thick"
-      :ratio="ratio"
       :start="startY"
       :lines="lines.v"
-      :select-start="shadow.y"
-      :select-length="shadow.height"
-      :scale="scale"
-      :palette="paletteCpu"
     />
     <a
       class="corner"
@@ -41,8 +27,8 @@
 
 <script lang="ts">
 import RulerWrapper from './ruler-wrapper.vue'
-import { computed, defineComponent } from 'vue'
-import { sketchRulerProps, SketchRulerProps } from './index-types'
+import { computed, defineComponent, provide } from 'vue'
+import { sketchRulerProps, SketchRulerProps } from '../index-types'
 import getPalette from './mixin'
 export default defineComponent({
   name: 'SketchRule',
@@ -53,24 +39,31 @@ export default defineComponent({
   emits: ['onCornerClick', 'handleLine'],
   setup(props: SketchRulerProps, { emit }) {
     // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
-    const paletteCpu = computed(() => getPalette(props.palette))
+    const paletteCpu = getPalette(props.palette)
     const cornerActiveClass = computed(() => {
       return props.cornerActive ? ' active' : ''
     })
     const cornerStyle = computed(() => {
       return {
-        backgroundColor: paletteCpu.value.bgColor,
+        backgroundColor: paletteCpu.bgColor,
         width: props.thick + 'px',
         height: props.thick + 'px',
-        borderRight: `1px solid ${paletteCpu.value.borderColor}`,
-        borderBottom: `1px solid ${paletteCpu.value.borderColor}`
+        borderRight: `1px solid ${paletteCpu.borderColor}`,
+        borderBottom: `1px solid ${paletteCpu.borderColor}`
       }
     })
     const onCornerClick = (e: MouseEvent) => {
+      console.log(paletteCpu)
       emit('onCornerClick', e)
     }
+    provide('sketch', {
+      thick: props.thick,
+      palette: paletteCpu,
+      ratio: props.ratio,
+      scale: props.scale,
+      isShowReferLine: props.isShowReferLine
+    })
     return {
-      paletteCpu,
       cornerActiveClass,
       cornerStyle,
       onCornerClick

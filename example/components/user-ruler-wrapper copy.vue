@@ -1,41 +1,20 @@
 <template>
-  <div class="home">
-    <SketchRuleWrapper
-      :defaultZoomSize="state.defaultZoomSize"
-      :defaultPrevSize="state.defaultPrevSize"
-      class="wrapper"
-      :preview-img="previewImg"
-      :zoom-img="zoomImg"
-      @on-preview-click="handleClick"
-    >
-      <!-- 预览页面 -->
-      <img class="imhhhh" :src="previewImg" />
+  <div>
+    <div class="top">缩放比例:{{ state.scale }}</div>
+    <SketchRuleWrapper class="wrapper">
+      <div class="canvas" />
     </SketchRuleWrapper>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import { defineComponent } from 'vue'
-import previewImg from '../assets/product/onepuls8-pro.jpg'
-import zoomImg from '../assets/product/onepuls8-pro-zoom.jpg'
-import { computed, reactive, onMounted } from 'vue'
 import { SketchRuleWrapper } from '../../src/index' // 这里可以换成打包后的
-export default defineComponent({
-  name: 'user-ruler-wrapper',
+import { computed, reactive, onMounted } from 'vue'
+export default {
+  name: '',
   components: { SketchRuleWrapper },
   setup() {
     const state = reactive({
-      /*预览大小*/
-      defaultZoomSize: {
-        width: 50,
-        height: 30
-      },
-      /* 整个视图大小 */
-      defaultPrevSize: {
-        width: 500,
-        height: 300
-      },
       scale: 1,
       wrapperwith: window.innerWidth - 400, // 定义外面容器大小
       wrapperheight: window.innerHeight - 300,
@@ -49,22 +28,29 @@ export default defineComponent({
     })
     const wrapperwithpx = computed(() => state.wrapperwith + 22 + 'px')
     const wrapperheightpx = computed(() => state.wrapperheight + 22 + 'px')
-    const handleClick = e => {
-      console.log(e)
-    }
+    onMounted(() => {
+      // 这里监听窗口变化, 可要可不要
+      window.addEventListener('resize', () => {
+        state.wrapperwith = window.innerWidth - 400
+        state.wrapperheight = window.innerHeight - 400
+      })
+    })
+
     return {
       wrapperwithpx,
       wrapperheightpx,
-      state,
-      previewImg,
-      zoomImg,
-      handleClick
+      state
     }
   }
-})
+}
 </script>
 
 <style lang="scss" scoped>
+.top {
+  position: absolute;
+  right: 100px;
+  font-size: 20px;
+}
 .wrapper {
   position: relative;
   top: 100px;
@@ -74,5 +60,15 @@ export default defineComponent({
   height: v-bind(wrapperheightpx);
   background-color: #f5f5f5;
   border: 1px solid #dadadc;
+}
+.canvas {
+  top: 80px;
+  width: 600px;
+  height: 320px;
+  // left: 50%;
+  // position: absolute;
+  // transform-origin: 50% 0;
+  background: url('../assets/bg.jfif') no-repeat;
+  background-size: 100% 100%;
 }
 </style>
