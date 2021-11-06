@@ -14,27 +14,30 @@
 </template>
 <script lang="ts">
 import { ref, computed, onMounted, defineComponent, inject } from 'vue'
-import { lineProps, LineProps } from './ruler-line-types'
+
 import { SketchRulerProps } from 'src/index-types'
 export default defineComponent({
   name: 'LineRuler',
-  props: lineProps,
+  props: {
+    index: Number,
+    start: Number,
+    vertical: Boolean,
+    value: Number
+  },
   emits: ['onMouseDown', 'onRelease', 'onRemove'],
-  setup(props: LineProps, { emit }) {
-    const { isShowReferLine, scale, palette, thick } = inject(
-      'sketch'
-    ) as SketchRulerProps
+  setup(props, { emit }) {
+    const injectObj = inject('sketch') as SketchRulerProps
+    const { isShowReferLine, palette, thick } = injectObj
     const startValue = ref(0)
     const showLine = ref(true)
     onMounted(() => {
       startValue.value = props.value!
-      console.log(startValue.value, '')
     })
     const setShowLine = (offset: number) => {
       showLine.value = offset >= 0
     }
     const offset = computed(() => {
-      const offset = (startValue.value - props.start!) * scale
+      const offset = (startValue.value - props.start!) * injectObj.scale
       setShowLine(offset)
       const positionValue = offset + 'px'
       const position = props.vertical
@@ -72,7 +75,9 @@ export default defineComponent({
       emit('onMouseDown')
       const onMove = (e: MouseEvent) => {
         const currentD = props.vertical ? e.clientY : e.clientX
-        const newValue = Math.round(initValue + (currentD - startD) / scale)
+        const newValue = Math.round(
+          initValue + (currentD - startD) / injectObj.scale
+        )
         startValue.value = newValue
       }
       const onEnd = () => {

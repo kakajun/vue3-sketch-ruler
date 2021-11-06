@@ -11,14 +11,22 @@
 <script lang="ts">
 import { drawCavaseRuler } from './utils'
 import { reactive, ref, onMounted, watch, defineComponent, inject } from 'vue'
-import { canvasProps, CanvasProps } from './canvas-types'
+
 import { SketchRulerProps } from 'src/index-types'
 export default defineComponent({
   name: 'CanvasRuler',
-  props: canvasProps,
+  props: {
+    showIndicator: Boolean,
+    valueNum: Number,
+    vertical: Boolean,
+    start: Number,
+    width: Number,
+    height: Number
+  },
   emits: ['onAddLine', 'update:showIndicator', 'update:valueNum'],
-  setup(props: CanvasProps, { emit }) {
-    const { scale, ratio, palette } = inject('sketch') as SketchRulerProps
+  setup(props, { emit }) {
+    const injectObj = inject('sketch') as SketchRulerProps
+    const { ratio, palette } = injectObj
     const state = reactive({
       canvasContext: null as CanvasRenderingContext2D | null
     })
@@ -48,8 +56,9 @@ export default defineComponent({
       }
     }
     const drawRuler = () => {
+      console.log(injectObj.scale!, ' canvas.value')
       const options = {
-        scale: scale,
+        scale: injectObj.scale,
         width: props.width!,
         height: props.height!,
         palette: palette
@@ -76,7 +85,7 @@ export default defineComponent({
       const getValueByOffset = (offset: number, start: number, scale: number) =>
         Math.round(start + offset / scale)
       const offset = props.vertical ? e.offsetY : e.offsetX
-      const value = getValueByOffset(offset, props.start!, scale)
+      const value = getValueByOffset(offset, props.start!, injectObj.scale)
       switch (key) {
         case 'click':
           emit('onAddLine', value)

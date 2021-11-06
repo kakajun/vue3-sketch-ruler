@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import RulerWrapper from './ruler-wrapper.vue'
-import { computed, defineComponent, provide } from 'vue'
+import { computed, defineComponent, provide, readonly, reactive } from 'vue'
 import { sketchRulerProps, SketchRulerProps } from '../index-types'
 import getPalette from './mixin'
 export default defineComponent({
@@ -56,13 +56,14 @@ export default defineComponent({
       console.log(paletteCpu)
       emit('onCornerClick', e)
     }
-    provide('sketch', {
+    const provideObj = reactive({
       thick: props.thick,
       palette: paletteCpu,
       ratio: props.ratio,
-      scale: props.scale,
+      scale: computed(() => props.scale), // 特别注意scale后面需要动态响应,所以需要计算一下,后面用到scale也不能用解构,否则不响应
       isShowReferLine: props.isShowReferLine
     })
+    provide('sketch', readonly(provideObj))
     return {
       cornerActiveClass,
       cornerStyle,

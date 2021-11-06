@@ -9,7 +9,7 @@
       v-model:showIndicator="showIndicator"
       @onAddLine="handleNewLine"
     />
-    <div v-show="isShowReferLine" class="lines">
+    <div v-show="injectObj.isShowReferLine" class="lines">
       <RulerLine
         v-for="(v, i) in lines"
         :key="v + i"
@@ -17,7 +17,6 @@
         :value="v >> 0"
         :start="start"
         :vertical="vertical"
-        :is-show-refer-line="isShowReferLine"
         @onRemove="handleLineRemove"
         @onRelease="handleLineRelease"
       />
@@ -31,8 +30,7 @@
 <script lang="ts">
 import RulerLine from './ruler-line.vue'
 import CanvasRuler from '../canvas-ruler/index.vue'
-import { ref, computed, defineComponent, inject } from 'vue'
-import { wrapperProps, WrapperProps } from './ruler-wrapper-types'
+import { ref, computed, defineComponent, inject, PropType } from 'vue'
 import { SketchRulerProps } from 'src/index-types'
 export default defineComponent({
   name: 'RulerWrapper',
@@ -40,11 +38,24 @@ export default defineComponent({
     CanvasRuler,
     RulerLine
   },
-  props: wrapperProps,
-  setup(props: WrapperProps) {
-    const { isShowReferLine, scale, palette, thick } = inject(
-      'sketch'
-    ) as SketchRulerProps
+  props: {
+    vertical: Boolean,
+    width: Number,
+    height: {
+      type: Number
+    },
+    start: {
+      type: Number,
+      default: 0
+    },
+    lines: {
+      type: Array as PropType<Array<number>>,
+      default: () => []
+    }
+  },
+  setup(props) {
+    const injectObj = inject('sketch') as SketchRulerProps
+    const { palette, thick } = injectObj
     const showIndicator = ref(false)
     const valueNum = ref(0)
     const rwClassName = computed(() => {
@@ -66,7 +77,7 @@ export default defineComponent({
     })
 
     const indicatorStyle = computed(() => {
-      const indicatorOffset = (valueNum.value - props.start) * scale
+      const indicatorOffset = (valueNum.value - props.start) * injectObj.scale
       let positionKey = 'top'
       let boderKey = 'borderLeft'
       positionKey = props.vertical ? 'top' : 'left'
@@ -83,7 +94,8 @@ export default defineComponent({
     const handleLineRelease = (value: number, index: number) => {
       // 左右或上下超出时, 删除该条对齐线
       const offset = value - props.start
-      const maxOffset = (props.vertical ? props.height : props.width) / scale
+      const maxOffset =
+        (props.vertical ? props.height! : props.width!) / injectObj.scale
       if (offset < 0 || offset > maxOffset) {
         handleLineRemove(index)
       } else {
@@ -94,7 +106,7 @@ export default defineComponent({
       props.lines.splice(index, 1)
     }
     return {
-      isShowReferLine,
+      injectObj,
       showIndicator,
       valueNum,
       rwClassName,
