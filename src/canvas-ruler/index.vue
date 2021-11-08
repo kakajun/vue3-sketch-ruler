@@ -51,7 +51,8 @@ export default defineComponent({
         scale: props.scale!,
         width: props.width!,
         height: props.height!,
-        palette: props.palette!
+        palette: props.palette!,
+        ratio: props.ratio!
       }
 
       if (state.canvasContext) {
