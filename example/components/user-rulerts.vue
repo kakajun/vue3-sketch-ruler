@@ -20,16 +20,23 @@
       @scroll="handleScroll"
     >
       <div ref="containerRef" class="screen-container">
-        <div id="canvas" :style="canvasStyle" />
+        <SketchRuleWrapper
+          :zoomSize="state.zoomSize"
+          :prevSize="state.prevSize"
+          class="wrapper"
+          :draggleRate="state.draggleRate"
+          :preview-img="previewImg"
+          :zoom-img="zoomImg"
+        >
+          <img class="imhhhh" :src="previewImg" />
+          <!-- <div id="canvas" :style="canvasStyle" /> -->
+        </SketchRuleWrapper>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-// import { SketchRule } from 'vue3-sketch-ruler'
-// import 'vue3-sketch-ruler/lib/style.css'
-// import { SketchRule } from '../../lib/index.es'
-// import '/lib/style.css'
+import RulertsWrapper from '../components/user-ruler-wrapper.vue'
 import {
   computed,
   defineComponent,
@@ -39,15 +46,27 @@ import {
   nextTick
 } from 'vue'
 import { SketchRule } from '../../src/index' // 这里可以换成打包后的
-
+import previewImg from '../assets/product/onepuls8-pro-zoom.jpg'
+import zoomImg from '../assets/bg.jpeg'
 const rectWidth = 600
 const rectHeight = 320
 export default defineComponent({
-  components: { SketchRule },
+  components: { SketchRule, RulertsWrapper },
   setup() {
     const screensRef = ref(null)
     const containerRef = ref(null)
     const state = reactive({
+      /*预览大小*/
+      zoomSize: {
+        w: window.innerWidth - 400, // 定义外面容器大小,
+        h: window.innerHeight - 300
+      },
+      draggleRate: 0.3,
+      /* 整个视图大小 */
+      prevSize: {
+        w: window.innerWidth - 400, // 定义外面容器大小,
+        h: window.innerHeight - 300
+      },
       scale: 2, //658813476562495, //1,
       startX: 0,
       startY: 0,
@@ -74,11 +93,11 @@ export default defineComponent({
         transform: `scale(${state.scale})`
       }
     })
-    onMounted(() => {
-      // 滚动居中
-      screensRef.value.scrollLeft =
-        containerRef.value.getBoundingClientRect().width / 2 - 400
-    })
+    // onMounted(() => {
+    //   // 滚动居中
+    //   screensRef.value.scrollLeft =
+    //     containerRef.value.getBoundingClientRect().width / 2 - 400
+    // })
 
     const handleScroll = () => {
       const screensRect = document
@@ -117,6 +136,8 @@ export default defineComponent({
     }
 
     return {
+      zoomImg,
+      previewImg,
       screensRef,
       containerRef,
       state,
@@ -185,7 +206,7 @@ body * {
   left: 50%;
   width: 600px;
   height: 320px;
-  background: url('../assets/bg.jfif') no-repeat;
+  background: url('../assets/bg.png') no-repeat;
   background-size: 100% 100%;
   transform-origin: 50% 0;
 }

@@ -19,7 +19,7 @@
 // @ is an alias to /src
 import { defineComponent } from 'vue'
 import previewImg from '../assets/product/onepuls8-pro.jpg'
-// import zoomImg from '../assets/bg.png'
+
 import zoomImg from '../assets/bg.jpeg'
 import { computed, reactive, onMounted } from 'vue'
 import { SketchRuleWrapper } from '../../src/index' // 这里可以换成打包后的
