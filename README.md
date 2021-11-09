@@ -28,8 +28,12 @@
 3. 对shadow和palette参数进行对象合并计算，在以前palette的参数要么都传，要么不传，我这里改进后可以只传需要修改的属性即可，没有修改的可以不传
 4. 对类型进行打包设置（支持ts类型提示）
 
+升级过程简单写了一篇掘金文章, 同行或感兴趣的可以留言交流
+
+[掘金:大屏页面缩放插件---升级改造](https://juejin.cn/post/7025195450080690212)
+
 ## 注意
-这里1X版本和vue-sketch-ruler 一样功能, 后面没有什么bug的话,不再维护, 新功能将会在未来2X中增加,老工程迁移过来的建议使用1x版本, 新项目建议使用2X,做到0配置
+这里1X版本和vue-sketch-ruler 一样功能, 后面没有什么bug的话,不再维护, 1x基本不动原有功能,需要下载源码的, 或者提pr的, 请下载1x分支, 新功能将会在未来2X中增加,老工程迁移过来的建议使用1x版本, 新项目建议使用2X,做到0配置(2x难产中, 写了好几个版本觉得不够满意, 不过这个一定会出来的, 雏形已经传到master分支)
 ## demo
 案例浏览: [https://majun2232.github.io/vue3sketchRuler/1x](https://majun2232.github.io/vue3sketchRuler/1x)
 ![image](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/assets/demo.png)
