@@ -15,11 +15,11 @@ export const drawCavaseRuler = (
   start: number,
   selectStart: number,
   selectLength: number,
-  options: { scale: number; width: number; height: number; palette: any },
+  options: { scale: number; width: number; height: number; ratio: number; palette: any },
   h?: boolean //横向为true,纵向缺省
 ) => {
-  const { scale, width, height, palette } = options
-  const { bgColor, fontColor, shadowColor, ratio, longfgColor, shortfgColor } =
+  const { scale, width, height, ratio, palette } = options
+  const { bgColor, fontColor, shadowColor, longfgColor, shortfgColor } =
     palette
 
   // 缩放ctx, 以简化计算
