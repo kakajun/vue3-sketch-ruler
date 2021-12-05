@@ -20,6 +20,9 @@ jobs:
         run: |
           yarn install
           npm run build:demo
+         env:
+          NITRO_PRESET: browser
+          NUXT_ROUTER_BASE: /vue3sketchRuler/
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.5
