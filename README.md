@@ -3,7 +3,7 @@
 > 在使用vue3中,用于页面展示的缩放操作
 
 
- [![](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)  [![build status](https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml)
+ [![](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)  [![build status](https://github.com/majun2232/vue3sketchRuler/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/majun2232/vue3sketchRuler/actions/workflows/BuildPage.yml)
 
  简体中文 | [English](https://github.com/majun2232/vue3sketchRuler/blob/1x/README.EN.md)
 
@@ -27,6 +27,7 @@
 2. 用typerscript进行重构，对类型进行定义，同时方便后续扩展
 3. 对shadow和palette参数进行对象合并计算，在以前palette的参数要么都传，要么不传，我这里改进后可以只传需要修改的属性即可，没有修改的可以不传
 4. 对类型进行打包设置（支持ts类型提示）
+5. 支持Nuxt3插件引入(已经处理了window没有定义的报错)
 
 升级过程简单写了一篇掘金文章, 同行或感兴趣的可以留言交流
 
@@ -99,6 +100,7 @@ import 'vue3-sketch-ruler/lib/style.css'
 <script>
 import Vue from 'vue';
 import {SketchRule} from "vue-sketch-ruler";
+import 'vue3-sketch-ruler/lib/style.css'
 const rectWidth = 160;
 const rectHeight = 200;
 export default {
@@ -122,9 +124,11 @@ export default {
 });
 </script>
 ```
-参考一个完整的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/UserRuler.vue)
-vue3 api 的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/UserRulerts.vue)
+参考一个完整的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/user-ruler.vue)
 
+vue3 api 的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/user-rulerts.vue)
+
+Nuxt3 中使用例子 [点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/Nuxt3.vue)
 ## api
 ### 属性
 
@@ -149,6 +153,9 @@ v1.1.11
 v1.2.3
 1. 把方法进行合并,干掉一些不必要的事件,采用v-model传递参数,优化代码
 2. 把lodash去掉,原打包体积由43k减少到19.6k, 稳定版,强烈推荐升级
+
+v1.2.5
+1. 处理window位置,防止Nuxt在服务端渲染时报错, 支持Nuxt3中正常使用
 ### Event
 
 | 事件名称 | 描述 | 回调参数 |

@@ -20,18 +20,19 @@ export default defineComponent({
     const state = reactive({
       canvasContext: null as CanvasRenderingContext2D | null
     })
+    let ratio = 1
     const canvas = ref<HTMLCanvasElement | null>(null)
     onMounted(() => {
+      ratio = props.ratio || window.devicePixelRatio || 1
       initCanvasRef()
-      updateCanvasContext()
-      drawRuler()
+      updateCanvasContext(ratio)
+      drawRuler(ratio)
     })
     const initCanvasRef = () => {
       state.canvasContext = canvas.value && canvas.value.getContext('2d')
     }
-    const updateCanvasContext = () => {
+    const updateCanvasContext = (ratio: number) => {
       if (canvas.value) {
-        const ratio = props.ratio
         // 比例宽高
         canvas.value.width = props.width! * ratio!
         canvas.value.height = props.height! * ratio!
@@ -46,13 +47,13 @@ export default defineComponent({
         }
       }
     }
-    const drawRuler = () => {
+    const drawRuler = (ratio: number) => {
       const options = {
         scale: props.scale!,
         width: props.width!,
         height: props.height!,
         palette: props.palette!,
-        ratio: props.ratio!
+        ratio: ratio
       }
 
       if (state.canvasContext) {
@@ -68,11 +69,11 @@ export default defineComponent({
     }
     watch(
       () => props.start,
-      () => drawRuler()
+      () => drawRuler(ratio)
     )
     watch([() => props.width, () => props.height], () => {
-      updateCanvasContext()
-      drawRuler()
+      updateCanvasContext(ratio)
+      drawRuler(ratio)
     })
     const handle = (e: MouseEvent, key: string) => {
       const getValueByOffset = (offset: number, start: number, scale: number) =>

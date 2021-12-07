@@ -39,8 +39,8 @@ export const sketchRulerProps = {
     default: 1
   },
   ratio: {
-    type: Number,
-    default: (window && window.devicePixelRatio) || 1
+    type: Number
+    // default: window.devicePixelRatio || 1
   },
   thick: {
     type: Number,
