@@ -7,8 +7,12 @@
 
  简体中文 | [English](https://github.com/majun2232/vue3sketchRuler/blob/1x/README.EN.md)
 
+
+🚀 Features
+--
 - 💪 Vue 3 Composition API
 - 🔥 Written in TypeScript
+- 🔋 SSR Friendly
 
 
 # Vue 3 + Vite + ts 打包sketchRuler
