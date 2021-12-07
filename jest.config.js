@@ -1,6 +1,7 @@
 module.exports = {
   testEnvironment: 'jest-environment-jsdom',
   transform: {
+    '^.+\\.vue$': 'vue-jest',
     '^.+\\.(ts|tsx|js|jsx)$': [
       'babel-jest',
       {
@@ -8,5 +9,6 @@ module.exports = {
         plugins: ['@vue/babel-plugin-jsx']
       }
     ]
-  }
+  },
+  moduleFileExtensions: ['vue', 'js', 'json', 'jsx', 'ts', 'tsx', 'node']
 }
