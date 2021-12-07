@@ -125,8 +125,10 @@ export default {
 </script>
 ```
 参考一个完整的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/user-ruler.vue)
+
 vue3 api 的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/user-rulerts.vue)
-Nuxt3 中使用例子 [点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/Nuxt3.vue.vue)
+
+Nuxt3 中使用例子 [点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/Nuxt3.vue)
 ## api
 ### 属性
 
