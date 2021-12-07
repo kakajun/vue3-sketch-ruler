@@ -2,7 +2,7 @@
 
 >In using vue3, the zoom operation used for page presentation
 
-[![]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667 )]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667 ) [! [build status]( https://github.com/majun2232/vue3sketchRuler/actions/workflows/gh-pages.yml/badge.svg?branch=master )]( https://github.com/majun2232/vue3sketchRuler/actions/workflows/gh-pages.yml )
+[![]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667 )]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667 ) [! [build status]( https://github.com/majun2232/vue3sketchRuler/actions/workflows/gh-pages.yml/badge.svg?branch=1x )]( https://github.com/majun2232/vue3sketchRuler/actions/workflows/gh-pages.yml )
 
 Simplified Chinese | [English]（ https://github.com/majun2232/vue3sketchRuler/blob/1x/README.EN.md )
 
