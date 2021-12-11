@@ -22,6 +22,9 @@ export default defineConfig({
       logDiagnostics: true
     })
   ],
+  optimizeDeps: {
+    exclude: ['vue-demi']
+  },
   resolve: {
     alias: {
       '@': resolve(__dirname)

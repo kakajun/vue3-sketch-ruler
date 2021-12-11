@@ -10,13 +10,24 @@
 </template>
 <script lang="ts">
 import { drawCavaseRuler } from './utils'
-import { reactive, ref, onMounted, watch, defineComponent } from 'vue'
-import { canvasProps, CanvasProps } from './canvas-types'
+import { reactive, ref, onMounted, watch, defineComponent } from 'vue-demi'
 export default defineComponent({
   name: 'CanvasRuler',
-  props: canvasProps,
+  props: {
+    showIndicator: Boolean,
+    valueNum: Number,
+    scale: Number,
+    ratio: Number,
+    palette: Object,
+    vertical: Boolean,
+    start: Number,
+    width: Number,
+    height: Number,
+    selectStart: Number,
+    selectLength: Number
+  },
   emits: ['onAddLine', 'update:showIndicator', 'update:valueNum'],
-  setup(props: CanvasProps, { emit }) {
+  setup(props, { emit }) {
     const state = reactive({
       canvasContext: null as CanvasRenderingContext2D | null
     })

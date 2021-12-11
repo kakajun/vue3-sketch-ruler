@@ -1,4 +1,4 @@
-import { ExtractPropTypes } from 'vue'
+import { ExtractPropTypes } from 'vue-demi'
 export const lineProps = {
   scale: Number,
   thick: Number,

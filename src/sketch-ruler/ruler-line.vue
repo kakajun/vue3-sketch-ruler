@@ -13,7 +13,7 @@
   </div>
 </template>
 <script lang="ts">
-import { ref, computed, onMounted, defineComponent } from 'vue'
+import { ref, computed, onMounted, defineComponent } from 'vue-demi'
 import { lineProps, LineProps } from './ruler-line-types'
 export default defineComponent({
   name: 'LineRuler',
