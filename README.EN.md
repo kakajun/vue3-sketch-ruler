@@ -2,9 +2,9 @@
 
 >In using vue3, the zoom operation used for page presentation
 
-[![]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667 )]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667 ) [! [build status]( https://github.com/majun2232/vue3sketchRuler/actions/workflows/gh-pages.yml/badge.svg?branch=1x )]( https://github.com/majun2232/vue3sketchRuler/actions/workflows/gh-pages.yml )
+[![]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667 )]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667 ) [! [build status]( https://github.com/kakajun/vue3-sketch-ruler/actions/workflows/gh-pages.yml/badge.svg?branch=1x )]( https://github.com/kakajun/vue3-sketch-ruler/actions/workflows/gh-pages.yml )
 
-Simplified Chinese | [English]（ https://github.com/majun2232/vue3sketchRuler/blob/1x/README.EN.md )
+Simplified Chinese | [English]（ https://github.com/kakajun/vue3-sketch-ruler/blob/1x/README.EN.md )
 
 - 💪 Vue 3 Composition API
 
@@ -31,9 +31,9 @@ The original code has been improved and optimized here. The function is the same
 
 ## demo
 
-Case browsing:[ https://majun2232.github.io/vue3sketchRuler/1x ]( https://majun2232.github.io/vue3sketchRuler/1x )
+Case browsing:[ https://kakajun.github.io/vue3-sketch-ruler/1x ]( https://kakajun.github.io/vue3-sketch-ruler/1x )
 
-![image]( https://github.com/majun2232/vue3sketchRuler/blob/1x/example/assets/demo.png )
+![image]( https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/assets/demo.png )
 
 ## Installation
 
@@ -147,9 +147,9 @@ export default {
 </script>
 ```
 
-Refer to a complete example, [click here]（ https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/UserRuler.vue )
+Refer to a complete example, [click here]（ https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/components/UserRuler.vue )
 
-Vue3 API example, [click here]（ https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/UserRulerts.vue )
+Vue3 API example, [click here]（ https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/components/UserRulerts.vue )
 
 ## api
 

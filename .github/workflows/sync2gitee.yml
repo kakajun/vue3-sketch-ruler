@@ -17,7 +17,7 @@ jobs:
           persist-credentials: false
 
       - name: sync github -> gitee
-        uses: https://gitee.com/majun2232/auto-generate-md
+        uses: kakajun/vue3-sketch-ruler@master
         if: env.dst_key && env.dst_token && env.gitee_user
         with:
           # 必选，需要同步的 Github 用户（源）
@@ -27,7 +27,7 @@ jobs:
           # 必选，Gitee公钥对应的私钥，https://gitee.com/profile/sshkeys
           dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
           # 必选，Gitee对应的用于创建仓库的token，https://gitee.com/profile/personal_access_tokens
-          dst_token:  ${{ secrets.GITEE_TOKEN }}
+          dst_token: ${{ secrets.GITEE_TOKEN }}
           # 如果是组织，指定组织即可，默认为用户 user
           # account_type: org
           # 直接取当前项目的仓库名

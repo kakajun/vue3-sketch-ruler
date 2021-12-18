@@ -3,9 +3,9 @@
 > 在使用vue3中,用于页面展示的缩放操作
 
 
- [![](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)  [![build status](https://github.com/majun2232/vue3sketchRuler/actions/workflows/gh-pages.yml/badge.svg?branch=1x)](https://github.com/majun2232/vue3sketchRuler/actions/workflows/gh-pages.yml)
+ [![](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)  [![build status](https://github.com/kakajun/vue3-sketch-ruler/actions/workflows/gh-pages.yml/badge.svg?branch=1x)](https://github.com/kakajun/vue3-sketch-ruler/actions/workflows/gh-pages.yml)
 
- 简体中文 | [English](https://github.com/majun2232/vue3sketchRuler/blob/1x/README.EN.md)
+ 简体中文 | [English](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/README.EN.md)
 
 
 🚀 Features
@@ -22,7 +22,7 @@
 插件应用范围: 适合作为低代码平台操作页面缩放工具,比如做图工具如, 大屏可视化, 做图工具图怪兽等,类似ps的缩放效果.
 
 应用案例: [avue大屏可视化工具](https://data.avuejs.com/build/1)
-![image](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/assets/dp.png)
+![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/assets/dp.png)
 
 由于项目升级成vite， 发现原来的插件vue-sketch-ruler，用到vue3中会报错， 这边我重新用vite打包了一份， 打包后的插件和原来功一样， 且支持在vue3和vite中使用
 
@@ -40,8 +40,8 @@
 ## 注意
 这里1X版本和vue-sketch-ruler 一样功能, 后面没有什么bug的话,不再维护, 1x基本不动原有功能,需要下载源码的, 或者提pr的, 请下载1x分支, 新功能将会在未来2X中增加,老工程迁移过来的建议使用1x版本, 新项目建议使用2X,做到0配置(2x难产中, 写了好几个版本觉得不够满意, 不过这个一定会出来的, 雏形已经传到master分支)
 ## demo
-案例浏览: [https://majun2232.github.io/vue3sketchRuler/1x](https://majun2232.github.io/vue3sketchRuler/1x)
-![image](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/assets/demo.png)
+案例浏览: [https://kakajun.github.io/vue3-sketch-ruler/1x](https://kakajun.github.io/vue3-sketch-ruler/1x)
+![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/assets/demo.png)
 
 ## 安装
 > 支持全局导入和模块导入
@@ -128,11 +128,11 @@ export default {
 });
 </script>
 ```
-参考一个完整的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/user-ruler.vue)
+参考一个完整的例子，[点击这里](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/components/user-ruler.vue)
 
-vue3 api 的例子，[点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/user-rulerts.vue)
+vue3 api 的例子，[点击这里](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/components/user-rulerts.vue)
 
-Nuxt3 中使用例子 [点击这里](https://github.com/majun2232/vue3sketchRuler/blob/1x/example/components/Nuxt3.vue)
+Nuxt3 中使用例子 [点击这里](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/components/Nuxt3.vue)
 ## api
 ### 属性
 
