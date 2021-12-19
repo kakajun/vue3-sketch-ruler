@@ -16,7 +16,7 @@ export default defineConfig({
   plugins: [
     vue(),
     dts({
-      outputDir: 'lib/types',
+      outputDir: 'types',
       staticImport: true,
       insertTypesEntry: true,
       logDiagnostics: true
