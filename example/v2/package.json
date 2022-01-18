@@ -6,7 +6,7 @@
     "build:demo": "vite build --config vite.demo.js"
   },
   "dependencies": {
-     "vite": "^2.7.12",
+    "vite": "^2.7.12",
     "vite-plugin-dts": "^0.9.9",
     "vue-demi": "^0.12.1",
     "vue-template-compiler": "^2.6.14",

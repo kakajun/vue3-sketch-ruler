@@ -29,15 +29,16 @@ jobs:
           workspace: '1x'
           target-folder: '1x' # 放在1X目录下
 
-      - name: Install and Build2 🔧
-        run: |
-          npm run install2
-          npm run build:demo2
 
-      - name: Deploy2 🚀
-        uses: JamesIves/github-pages-deploy-action@4.1.5
-        with:
-          branch: gh-pages # The branch the action should deploy to.
-          folder: dist # The folder the action should deploy.
-          workspace: '1x'
-          target-folder: 'v2' # 放在1X目录下
+      # - name: Install and Build2 🔧
+      #   run: |
+      #     npm run install2
+      #     npm run build:demo2
+
+      # - name: Deploy2 🚀
+      #   uses: JamesIves/github-pages-deploy-action@4.1.5
+      #   with:
+      #     branch: gh-pages # The branch the action should deploy to.
+      #     folder: example/v2/dist # The folder the action should deploy.
+      #     workspace: '1x'
+      #     target-folder: 'v2' # 放在1X目录下
