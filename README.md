@@ -44,16 +44,26 @@
 这里1X版本和vue-sketch-ruler 一样功能, 后面没有什么bug的话,不再维护, 1x基本不动原有功能,需要下载源码的, 或者提pr的, 请下载1x分支, 新功能将会在未来2X中增加,老工程迁移过来的建议使用1x版本, 新项目建议使用2X,做到0配置(2x难产中, 写了好几个版本觉得不够满意, 不过这个一定会出来的, 雏形已经传到master分支)
 ## demo
 案例浏览: [https://kakajun.github.io/vue3-sketch-ruler/1x](https://kakajun.github.io/vue3-sketch-ruler/1x)
-![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v3/assets/demo.png)
+![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v2/assets/demo.png)
 
 ## 安装
 > 支持全局导入和模块导入
+vue3
 ```
-npm install --save vue3-sketch-ruler
+npm install --save vue3-sketch-ruler vue-demi
 
 or
 
-yarn add vue3-sketch-ruler -S
+yarn add vue3-sketch-ruler vue-demi -S
+```
+
+vue2
+```
+npm install --save vue3-sketch-ruler vue-demi @vue/composition-api
+
+or
+
+yarn add vue3-sketch-ruler vue-demi @vue/composition-api -S
 ```
 
 ## 引入方式
