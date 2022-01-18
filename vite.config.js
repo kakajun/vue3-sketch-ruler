@@ -31,17 +31,17 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: 'lib',
+    outDir: 'lib/v3',
     // minify: true, // 不压缩代码,方便开发调试
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'SketchRuler',
       fileName: 'index',
-      formats: ['es']
+      formats: ['es', 'cjs', 'umd']
     },
     rollupOptions: {
       // 确保外部化处理那些你不想打包进库的依赖
-      external: ['vue'],
+      external: ['vue', 'vue-demi'],
       output: {
         banner,
         exports: 'auto'

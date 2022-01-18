@@ -13,6 +13,7 @@
 - 💪 Vue 3 Composition API
 - 🔥 Written in TypeScript
 - 🔋 SSR Friendly
+- 💡 works for both Vue.js 2/3.
 
 
 # Vue 3 + Vite + ts 打包sketchRuler
@@ -20,9 +21,10 @@
 ## 说明
 ---
 插件应用范围: 适合作为低代码平台操作页面缩放工具,比如做图工具如, 大屏可视化, 做图工具图怪兽等,类似ps的缩放效果.
+使用vue-demi, 一套代码,打包两个环境的插件, 同时支持vue2和vue3中进行使用(在npm安装插件时,会自动判断载入对应vue版本的代码)
 
 应用案例: [avue大屏可视化工具](https://data.avuejs.com/build/1)
-![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/assets/dp.png)
+![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v2/assets/dp.png)
 
 由于项目升级成vite， 发现原来的插件vue-sketch-ruler，用到vue3中会报错， 这边我重新用vite打包了一份， 打包后的插件和原来功一样， 且支持在vue3和vite中使用
 
@@ -38,10 +40,11 @@
 [掘金:大屏页面缩放插件---升级改造](https://juejin.cn/post/7025195450080690212)
 
 ## 注意
+1. 该插件如果在vue2/vue3中使用, 需要配套安装vue-demi插件, 本插件没有打包vue-demi, 另外vue-demi只有18.2 kB,非常小,仅做了vue版本切换作用,
 这里1X版本和vue-sketch-ruler 一样功能, 后面没有什么bug的话,不再维护, 1x基本不动原有功能,需要下载源码的, 或者提pr的, 请下载1x分支, 新功能将会在未来2X中增加,老工程迁移过来的建议使用1x版本, 新项目建议使用2X,做到0配置(2x难产中, 写了好几个版本觉得不够满意, 不过这个一定会出来的, 雏形已经传到master分支)
 ## demo
 案例浏览: [https://kakajun.github.io/vue3-sketch-ruler/1x](https://kakajun.github.io/vue3-sketch-ruler/1x)
-![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/assets/demo.png)
+![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v3/assets/demo.png)
 
 ## 安装
 > 支持全局导入和模块导入

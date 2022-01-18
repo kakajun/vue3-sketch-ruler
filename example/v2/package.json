@@ -1,0 +1,18 @@
+{
+  "name": "v2",
+  "scripts": {
+    "dev": "vite --config vite.demo.js",
+    "build": "vite build",
+    "build:demo": "vite build --config vite.demo.js"
+  },
+  "dependencies": {
+     "vite": "^2.7.12",
+    "vite-plugin-dts": "^0.9.9",
+    "vue-demi": "^0.12.1",
+    "vue-template-compiler": "^2.6.14",
+    "vite-plugin-vue2": "1.9.0",
+    "vue": "2.6.14",
+    "@vue/composition-api": "1.4.4",
+    "@vue/compiler-sfc": "3.2.26"
+  }
+}

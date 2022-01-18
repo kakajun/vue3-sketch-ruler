@@ -4,5 +4,5 @@ dist
 yarn.lock
 dist-ssr
 *.local
-lib
+
 types
