@@ -1,5 +1,5 @@
 <template>
-<!-- 线的显示 -->
+  <!-- 线的显示 -->
   <div
     v-show="showLine"
     class="line"
@@ -97,6 +97,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .line {
+  pointer-events: auto;
   position: absolute;
   .action {
     position: absolute;
@@ -118,5 +119,4 @@ export default defineComponent({
     visibility: visible;
   }
 }
-
 </style>
