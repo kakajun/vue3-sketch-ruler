@@ -100,8 +100,8 @@ export default defineComponent({
     const cornerStyle = computed(() => {
       return {
         backgroundImage: isShowReferLine.value
-          ? `url(${eye64})`
-          : `url(${closeEye64})`,
+          ? `url(${props.eyeIcon || eye64})`
+          : `url(${props.closeEyeIcon || closeEye64})`,
         width: props.thick + 'px',
         height: props.thick + 'px',
         borderRight: `1px solid ${paletteCpu.value.borderColor}`,

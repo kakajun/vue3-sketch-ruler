@@ -149,6 +149,8 @@ Nuxt3 中使用例子 [点击这里](https://github.com/kakajun/vue3-sketch-rule
 
 |  属性名称|  描述    | 类型 | 默认值 |
 | --- | ---    | --- | --- |
+| eyeIcon | 左上角眼睛图标 | String | base64眼睛图标 |
+| closeEyeIcon | 左上角闭眼图标   | String | base64闭眼图标 |
 | scale | 初始化标尺的缩放     | Number | 2 |
 | thick | 标尺的厚度 | Number | 16 |
 | width | 放置标尺窗口的宽度  | Number | - |
@@ -174,6 +176,9 @@ v1.2.5
 
 v1.3.1
 1. 使用vue-demi 做到vue2/vue3中能同时使用
+
+v1.3.2
+1. 左上角图标可以自己传入svg图标等, 没传就用默认的
 ### Event
 
 | 事件名称 | 描述 | 回调参数 |
