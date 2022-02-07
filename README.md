@@ -76,13 +76,11 @@ The 1x version here has the same function as Vue sketch ruler. If there are no b
 
 Case browsing:[ https://kakajun.github.io/vue3-sketch-ruler/1x ]( https://kakajun.github.io/vue3-sketch-ruler/1x)
 
-![image]( https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v3/assets/demo.png)
+![image]( https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/assets/demo.png)
 
 ## Installation
 
 >Supports global import and module import
-
-```
 
 vue3
 ```
