@@ -6,7 +6,7 @@
 
 
 
-English  | [中文]（ https://github.com/kakajun/vue3-sketch-ruler/blob/1x/README.CH.md )
+English  | [中文](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/README.CH.md )
 
 
 🚀 Features
@@ -34,7 +34,7 @@ Use Vue Demi, a set of code, package plug-ins in two environments, and support t
 
 
 
-Application case: [Avenue large screen visualization tool]（ https://data.avuejs.com/build/1 )
+Application case: [Avenue large screen visualization tool](https://data.avuejs.com/build/1 )
 
 ! [image]( https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v2/assets/dp.png )
 
@@ -62,7 +62,7 @@ The upgrade process is simple. I wrote a Nuggets article. Peers or interested pa
 
 
 
-[Nuggets: large screen page zoom plug-in - upgrade]（ https://juejin.cn/post/7025195450080690212 )
+[Nuggets: large screen page zoom plug-in - upgrade](https://juejin.cn/post/7025195450080690212 )
 
 
 
@@ -199,15 +199,15 @@ export default {
 </script>
 ```
 
-Refer to a complete example, [click here]（ https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v3/components/user-ruler.vue )
+Refer to a complete example, [click here](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v3/components/user-ruler.vue )
 
 
 
-Vue3 API example, [click here]（ https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v3/components/user-rulerts.vue )
+Vue3 API example, [click here](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v3/components/user-rulerts.vue )
 
 
 
-Examples used in nuxt3 [click here]（ https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v3/components/Nuxt3.vue )
+Examples used in nuxt3 [click here](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v3/components/Nuxt3.vue )
 
 ## api
 
@@ -271,8 +271,8 @@ v1.3.1
 
 ## Quote
 
-Vue ruler assembly [Vue sketch ruler]（ https://github.com/chuxiaoguo/vue-sketch-ruler.git )
+Vue ruler assembly [Vue sketch ruler](https://github.com/chuxiaoguo/vue-sketch-ruler.git )
 
 
 
-A react ruler component from the ink knife [MB sketch ruler]（ https://github.com/mockingbot/mb-sketch-ruler ) .
+A react ruler component from the ink knife [MB sketch ruler](https://github.com/mockingbot/mb-sketch-ruler ) .
