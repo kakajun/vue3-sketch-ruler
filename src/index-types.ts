@@ -34,6 +34,12 @@ interface lineType {
   v?: Array<number>
 }
 export const sketchRulerProps = {
+  eyeIcon: {
+    type: String
+  },
+  closeEyeIcon: {
+    type: String
+  },
   scale: {
     type: Number,
     default: 1

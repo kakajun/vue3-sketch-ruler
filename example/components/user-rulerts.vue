@@ -1,6 +1,7 @@
 <template>
   <div class="top">缩放比例:{{ state.scale }}</div>
   <div class="wrapper">
+    <!-- :eyeIcon="eyeIcon"   这个可以传入图标 -->
     <SketchRule
       :thick="state.thick"
       :scale="state.scale"
@@ -30,6 +31,7 @@
 // import 'vue3-sketch-ruler/lib/style.css'
 // import { SketchRule } from '../../lib/index.es'
 // import '../../lib/style.css'
+import eyeIcon from './eye.svg'
 import {
   computed,
   defineComponent,
@@ -116,6 +118,7 @@ export default defineComponent({
     }
 
     return {
+      eyeIcon,
       screensRef,
       containerRef,
       state,
