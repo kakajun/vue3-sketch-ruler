@@ -7,7 +7,10 @@
 
  简体中文 | [English](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/README.md)
 
+时隔半年,重启mater的新版开发, 大家有兴趣的可以加我微信: ka132300  拉入群, 大家一起讨论
+效果图如下
 
+![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/newruler.png)
 🚀 Features
 --
 - 💪 Vue 3 Composition API
