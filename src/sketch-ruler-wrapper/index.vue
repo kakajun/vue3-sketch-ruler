@@ -4,7 +4,7 @@
       <slot></slot>
     </magnify-preview>
     <magnify-zoom :zoom-img="zoomImg">
-      <!-- <slot></slot> -->
+      <slot></slot>
     </magnify-zoom>
   </section>
 </template>

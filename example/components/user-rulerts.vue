@@ -1,18 +1,6 @@
 <template>
   <div class="top">缩放比例:{{ state.scale }}</div>
   <div class="wrapper">
-    <SketchRule
-      :thick="state.thick"
-      :scale="state.scale"
-      :width="1380"
-      :height="780"
-      :start-x="state.startX"
-      :start-y="state.startY"
-      :shadow="shadow"
-      :corner-active="true"
-      :lines="state.lines"
-    >
-    </SketchRule>
     <div
       id="screens"
       ref="screensRef"
@@ -29,14 +17,12 @@
           :zoom-img="zoomImg"
         >
           <img class="imhhhh" :src="previewImg" />
-          <!-- <div id="canvas" :style="canvasStyle" /> -->
         </SketchRuleWrapper>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import RulertsWrapper from '../components/user-ruler-wrapper.vue'
 import {
   computed,
   defineComponent,
@@ -45,13 +31,13 @@ import {
   onMounted,
   nextTick
 } from 'vue'
-import { SketchRule } from '../../src/index' // 这里可以换成打包后的
+import SketchRuleWrapper from '../../src/index' // 这里可以换成打包后的
 import previewImg from '../assets/product/onepuls8-pro-zoom.jpg'
 import zoomImg from '../assets/bg.jpeg'
 const rectWidth = 600
 const rectHeight = 320
 export default defineComponent({
-  components: { SketchRule, RulertsWrapper },
+  components: { SketchRuleWrapper },
   setup() {
     const screensRef = ref(null)
     const containerRef = ref(null)
