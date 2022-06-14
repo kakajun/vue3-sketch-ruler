@@ -38,60 +38,80 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
 import RulerLine from './ruler-line.vue'
 import CanvasRuler from '../canvas-ruler/index.vue'
 import { ref, computed, defineComponent } from 'vue-demi'
 import { wrapperProps } from './ruler-wrapper-types'
-const props = defineProps(wrapperProps)
-const showIndicator = ref(false)
-const valueNum = ref(0)
-const rwClassName = computed(() => {
-  const className = props.vertical ? 'v-container' : 'h-container'
-  return className
-})
-const rwStyle = computed(() => {
-  const hContainer = {
-    width: `calc(100% - ${props.thick}px)`,
-    height: `${props.thick! + 1}px`,
-    left: `${props.thick}` + 'px'
-  }
-  const vContainer = {
-    width: `${props.thick && props.thick + 1}px`,
-    height: `calc(100% - ${props.thick}px)`,
-    top: `${props.thick}` + 'px'
-  }
-  return props.vertical ? vContainer : hContainer
-})
+export default defineComponent({
+  name: 'RulerWrapper',
+  components: {
+    CanvasRuler,
+    RulerLine
+  },
+  props: wrapperProps,
+  setup(props: WrapperProps) {
+    const showIndicator = ref(false)
+    const valueNum = ref(0)
+    const rwClassName = computed(() => {
+      const className = props.vertical ? 'v-container' : 'h-container'
+      return className
+    })
+    const rwStyle = computed(() => {
+      const hContainer = {
+        width: `calc(100% - ${props.thick}px)`,
+        height: `${props.thick! + 1}px`,
+        left: `${props.thick}` + 'px'
+      }
+      const vContainer = {
+        width: `${props.thick && props.thick + 1}px`,
+        height: `calc(100% - ${props.thick}px)`,
+        top: `${props.thick}` + 'px'
+      }
+      return props.vertical ? vContainer : hContainer
+    })
 
-const indicatorStyle = computed(() => {
-  const indicatorOffset = (valueNum.value - props.start) * props.scale!
-  let positionKey = 'top'
-  let boderKey = 'borderLeft'
-  positionKey = props.vertical ? 'top' : 'left'
-  boderKey = props.vertical ? 'borderBottom' : 'borderLeft'
-  return {
-    [positionKey]: indicatorOffset + 'px',
-    [boderKey]: `1px solid ${props.palette?.lineColor}`
+    const indicatorStyle = computed(() => {
+      const indicatorOffset = (valueNum.value - props.start) * props.scale!
+      let positionKey = 'top'
+      let boderKey = 'borderLeft'
+      positionKey = props.vertical ? 'top' : 'left'
+      boderKey = props.vertical ? 'borderBottom' : 'borderLeft'
+      return {
+        [positionKey]: indicatorOffset + 'px',
+        [boderKey]: `1px solid ${props.palette?.lineColor}`
+      }
+    })
+
+    const handleNewLine = (value: number) => {
+      props.lines.push(value)
+    }
+    const handleLineRelease = (value: number, index: number) => {
+      // 左右或上下超出时, 删除该条对齐线
+      const offset = value - props.start
+      const maxOffset =
+        (props.vertical ? props.height : props.width) / props.scale!
+      if (offset < 0 || offset > maxOffset) {
+        handleLineRemove(index)
+      } else {
+        props.lines[index] = value
+      }
+    }
+    const handleLineRemove = (index: any) => {
+      props.lines.splice(index, 1)
+    }
+    return {
+      showIndicator,
+      valueNum,
+      rwClassName,
+      rwStyle,
+      indicatorStyle,
+      handleNewLine,
+      handleLineRelease,
+      handleLineRemove
+    }
   }
 })
-
-const handleNewLine = (value: number) => {
-  props.lines.push(value)
-}
-const handleLineRelease = (value: number, index: number) => {
-  // 左右或上下超出时, 删除该条对齐线
-  const offset = value - props.start
-  const maxOffset = (props.vertical ? props.height : props.width) / props.scale!
-  if (offset < 0 || offset > maxOffset) {
-    handleLineRemove(index)
-  } else {
-    props.lines[index] = value
-  }
-}
-const handleLineRemove = (index: any) => {
-  props.lines.splice(index, 1)
-}
 </script>
 
 <style lang="scss" scoped>
