@@ -1,4 +1,4 @@
-import { PropType, ExtractPropTypes } from 'vue-demi'
+import { PropType } from 'vue-demi'
 export interface PaletteType {
   bgColor?: string
   longfgColor?: string
@@ -99,4 +99,3 @@ export const sketchRulerProps = {
     default: true
   }
 }
-export type SketchRulerProps = ExtractPropTypes<typeof sketchRulerProps>
