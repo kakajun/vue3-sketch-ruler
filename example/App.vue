@@ -6,7 +6,7 @@ import UserRuler from './components/user-rulerts.vue'
 
 <template>
   <UserRuler />
-  <!-- <RulertsWrapper></RulertsWrapper> -->
+  <el-button type="primary">Primary</el-button>
 </template>
 
 <style>
