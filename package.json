@@ -26,10 +26,10 @@
   "scripts": {
     "postinstall": "node ./scripts/postinstall.js",
     "install2": "cd example/v2 && npm install",
-    "switch2": "node bin/vue-switch.js 2 && vue-demi-switch 2 vue2 ",
-    "switch3": "node bin/vue-switch.js 3",
+    "switch2": "node bin/vue-switch.js 2 && vue-demi-switch 2",
+    "switch3": "node bin/vue-switch.js 3 && vue-demi-switch 3",
     "dev": "npm run switch3 && vite --config vite.demo.js",
-     "build": "npm run build3 && npm run build2",
+    "build": "npm run build3 && npm run build2",
     "build3": "npx vue-demi-switch 3 && vite build",
     "build2": "npx vue-demi-switch 2 && cd example/v2 && vite build",
     "dev2": " npm run switch2 && cd example/v2 && vite --config vite.demo.js",
