@@ -36,9 +36,9 @@ import {
   onMounted,
   nextTick
 } from 'vue-demi'
-// import SketchRule from '../../../lib/index.es.js' // 这里可以换成打包后的
-import SketchRule from '../../../src/index' // 这里可以换成打包后的
-// import '../../../lib/style.css'
+import SketchRule from '../../../lib/index.es.js' // 这里可以换成打包后的
+// import SketchRule from '../../../src/index' // 这里可以换成打包后的
+import '../../../lib/style.css'
 const rectWidth = 600
 const rectHeight = 320
 export default defineComponent({
