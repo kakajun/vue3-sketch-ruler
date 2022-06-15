@@ -1,21 +1,31 @@
 <template>
-  <!-- 小图片 -->
   <div
-    class="vue-magnify-preview"
-    :style="wrapperStyle"
-    ref="previewWarrperRef"
+    class="editor-visual"
+    id="screens"
+    ref="screensRef"
+    @wheel="handleWheel"
+    @scroll="handleScroll"
   >
-    <slot />
+    <div ref="containerRef" class="editor-visual__wrap">
+      <!-- 小图片 -->
+      <div
+        class="vue-magnify-preview"
+        :style="wrapperStyle"
+        ref="previewWarrperRef"
+      >
+        <slot />
 
-    <!-- 遮罩 -->
-    <span
-      class="follow-unit"
-      :style="followStyle"
-      v-show="isInside"
-      ref="followRef"
-    >
-      <i></i>
-    </span>
+        <!-- 遮罩 -->
+        <span
+          class="follow-unit"
+          :style="followStyle"
+          v-show="isInside"
+          ref="followRef"
+        >
+          <i></i>
+        </span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -52,7 +62,7 @@ export default {
       prveiwInfo.followMaxX = maxLeft
       prveiwInfo.followMaxY = maxTop
 
-      // console.log(prveiwInfo, '3333')
+      console.log(prveiwInfo, '3333')
       return {
         width: followSize.value.w + 'px',
         height: followSize.value.h + 'px',
@@ -66,6 +76,41 @@ export default {
         height: draggleRate * prevSize.h + 'px'
       }
     })
+
+    const handleScroll = () => {
+      // const screensRect = document
+      //   .querySelector('#screens')
+      //   .getBoundingClientRect()
+      // const canvasRect = document
+      //   .querySelector('#canvas')
+      //   .getBoundingClientRect()
+      // // 标尺开始的刻度
+      // const startX =
+      //   (screensRect.left + state.thick - canvasRect.left) / state.scale
+      // console.log(startX, 'startX')
+      // const startY =
+      //   (screensRect.top + state.thick - canvasRect.top) / state.scale
+      // state.startX = startX
+      // state.startY = startY
+    }
+    // 控制缩放值
+    const handleWheel = (e: {
+      ctrlKey: any
+      metaKey: any
+      preventDefault: () => void
+      deltaY: number
+    }) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault()
+        const nextScale = parseFloat(
+          Math.max(0.2, state.scale - e.deltaY / 500).toFixed(2)
+        )
+        state.scale = nextScale
+      }
+      nextTick(() => {
+        handleScroll()
+      })
+    }
     return {
       offsetLeft,
       offsetTop,
@@ -81,6 +126,25 @@ export default {
 }
 </script>
 <style>
+.editor-visual {
+  position: absolute;
+  bottom: 52px;
+  left: 0;
+  overflow: hidden;
+  width: 158px;
+  height: 118px;
+  padding: 12px;
+  border-radius: 8px;
+  z-index: 3;
+  display: flex;
+  background: #666666;
+  justify-content: center;
+  align-items: center;
+  transform-origin: 50% 100%;
+}
+.editor-visual__wrap {
+  position: relative;
+}
 .vue-magnify-preview {
   z-index: 3;
   right: 0;

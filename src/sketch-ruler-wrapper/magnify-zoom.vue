@@ -9,8 +9,7 @@
       right: -zoomSize.w - 3 + 'px'
     }"
   >
-    <!-- <slot></slot> -->
-    <img :src="zoomImg" ref="imgRef" />
+    <slot></slot>
   </div>
 </template>
 
@@ -70,6 +69,8 @@ export default {
 <style>
 .vue-magnify-zoom {
   border: 1px solid #eee;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   position: absolute;
   left: 0;

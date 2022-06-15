@@ -1,15 +1,27 @@
 <template>
-  <section class="vue-magnify" :style="previewStyle">
-    <magnify-preview @click="handleClick">
-      <slot></slot>
-    </magnify-preview>
-    <magnify-zoom :zoom-img="zoomImg">
-      <slot></slot>
-    </magnify-zoom>
-  </section>
+  <div class="main-container" :style="{ height: height }">
+    <section class="editor-container">
+      <!-- 中间图形大小previewStyle控制 -->
+      <div class="editor-shell-wrap" :style="previewStyle">
+        <!-- 下面真正宽度 -->
+        <div class="editor-shell" :style="previewStyle">
+          <magnify-zoom :zoom-img="zoomImg">
+            <slot></slot>
+          </magnify-zoom>
+        </div>
+      </div>
+    </section>
+    <!-- 下面工具 -->
+    <editor-bottom></editor-bottom>
+
+    <!-- <magnify-preview @click="handleClick">
+        <slot></slot>
+      </magnify-preview> -->
+  </div>
 </template>
 
 <script lang="ts">
+import editorBottom from './editor-bottom.vue'
 import {
   defineComponent,
   watch,
@@ -18,12 +30,12 @@ import {
   onMounted,
   computed
 } from 'vue'
-import MagnifyPreview from './magnify-preview.vue'
+// import MagnifyPreview from './magnify-preview.vue'
 import MagnifyZoom from './magnify-zoom.vue'
-
 export default defineComponent({
   name: 'sketch-ruler-wrapper',
   props: {
+    height: String,
     /**
      * 展示时的图片
      */
@@ -38,13 +50,6 @@ export default defineComponent({
       type: String,
       required: true
     },
-    prevSize: {
-      type: Object,
-      default: () => ({
-        width: 450,
-        height: 450
-      })
-    },
     zoomSize: {
       type: Object,
       default: () => null
@@ -56,8 +61,9 @@ export default defineComponent({
   },
   emits: ['on-preview-click'],
   components: {
-    MagnifyPreview,
-    MagnifyZoom
+    // MagnifyPreview,
+    MagnifyZoom,
+    editorBottom
   },
   setup(props, { emit }) {
     /* 滑块窗口信息 */
@@ -87,18 +93,24 @@ export default defineComponent({
         h: 100
       }
     })
+    const prevSize = reactive({
+      w: 0,
+      h: 0
+    })
     /* 整个框架的wrapper */
     const previewStyle = computed(() => {
       return {
-        width: props.prevSize.w + 'px',
-        height: props.prevSize.h + 'px'
+        width: 400 + 'px',
+        height: 200 + 'px'
+        // width: prevSize.w + 'px',
+        // height: prevSize.h + 'px'
       }
     })
 
     provide('magnify', {
       prveiwInfo,
       setZoomImgInfo,
-      prevSize: props.prevSize,
+      prevSize,
       followSize,
       zoomSize: props.zoomSize,
       draggleRate: props.draggleRate
@@ -118,9 +130,47 @@ export default defineComponent({
 </script>
 
 <style>
-.vue-magnify {
-  /* width: 100%; */
-  cursor: move;
+.main-container {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  background-color: #f5f5f5;
+  border: 1px solid #dadadc;
+  overflow: hidden;
+}
+.editor-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  overflow: auto;
+  font: 14px/1.5 Arial, PingFangSC-Regular, STHeitiSC-Light, Helvetica Neue;
+  color: #333;
+  background: none;
+  outline: none;
+}
+
+.editor-bottom {
+  display: flex;
+  position: absolute;
+  bottom: 26px;
+  right: 24px;
+  z-index: 2;
+}
+.editor-shell-wrap {
   position: relative;
+  box-sizing: initial;
+  margin: 0 auto;
+  overflow: visible;
+  padding: 30px;
+}
+.editor-shell {
+  background: #000;
+  width: 400px;
+  height: 400px;
 }
 </style>
