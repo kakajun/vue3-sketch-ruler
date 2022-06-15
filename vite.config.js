@@ -2,10 +2,9 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { existsSync, readdirSync, lstatSync, rmdirSync, unlinkSync } from 'fs'
 import { resolve } from 'path'
-
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import dts from 'vite-plugin-dts'
 const pkg = require('./package.json')
 
@@ -19,6 +18,18 @@ const banner = `/*!
 export default defineConfig({
   plugins: [
     vue(),
+    createSvgIconsPlugin({
+      // 指定需要缓存的图标文件夹
+      iconDirs: [path.resolve(process.cwd(), 'src/icons')],
+      // 指定symbolId格式
+      symbolId: 'icon-[dir]-[name]'
+    }),
+    // viteSvgIcons({
+    //   // config svg dir that can config multi
+    //   iconDirs: [resolve(process.cwd(), 'src/icons/nav')],
+    //   // appoint svg icon using mode
+    //   symbolId: 'icon-[dir]-[name]'
+    // }),
     Components({
       // allow auto load markdown components under `./src/components/`
       extensions: ['vue', 'md'],

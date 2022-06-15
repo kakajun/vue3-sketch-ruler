@@ -6,8 +6,8 @@
         style="justify-content: left"
         :style="toolStyle"
       >
-        <Edit style="width: 1em; height: 1em; margin-right: 8px" />
-        <button
+        <svg-icon icon-class="dashboard" class="dashboard" />
+        <!-- <button
           type="button"
           class="eui-button eui-editor-tool-bar-btn eui-button--normal--clear eui-button__icon--only eui-button--middle"
         >
@@ -53,16 +53,17 @@
             </svg>
             37%
           </div>
-        </button>
+        </button>-->
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import SvgIcon from './svg-icon.vue'
 export default {
   name: '',
-  components: {},
+  components: { SvgIcon },
   data() {
     return {
       toolOpen: true
@@ -78,6 +79,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dashboard {
+  font-size: 20px;
+  // color: red;
+}
 .editor-bottom {
   display: flex;
   position: absolute;
@@ -95,10 +100,11 @@ export default {
   box-sizing: border-box;
 }
 .eui-buttons-bar {
+  // background: #000;
   height: 40px;
   padding: 6px 8px;
   border: 1px solid rgba(0, 0, 0, 0.08);
-  background: rgba(238, 242, 248, 0.9);
+  // background: rgba(238, 242, 248, 0.9);
   border-radius: 4px;
   flex-direction: row;
   font-size: 12px;
