@@ -89,11 +89,6 @@ export const sketchRulerProps = {
       }
     }
   },
-  cornerActive: {
-    type: Boolean,
-    default: false
-  },
-
   isShowReferLine: {
     type: Boolean,
     default: true

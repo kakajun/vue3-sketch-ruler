@@ -30,12 +30,7 @@
       :scale="scale"
       :palette="paletteCpu"
     />
-    <a
-      class="corner"
-      :class="cornerActiveClass"
-      :style="cornerStyle"
-      @click="onCornerClick"
-    ></a>
+    <a class="corner" :style="cornerStyle" @click="onCornerClick"></a>
   </div>
 </template>
 
@@ -94,9 +89,6 @@ export default defineComponent({
       )
       return finalObj
     })
-    const cornerActiveClass = computed(() => {
-      return props.cornerActive ? ' active' : ''
-    })
     const cornerStyle = computed(() => {
       return {
         backgroundImage: showReferLine.value
@@ -110,12 +102,11 @@ export default defineComponent({
     })
     const onCornerClick = (e: MouseEvent) => {
       showReferLine.value = !showReferLine.value
-      emit('onCornerClick', e)
+      emit('handleCornerClick', showReferLine.value)
     }
     return {
       showReferLine,
       paletteCpu,
-      cornerActiveClass,
       cornerStyle,
       onCornerClick
     }

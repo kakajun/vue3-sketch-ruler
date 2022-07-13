@@ -10,7 +10,8 @@
       :start-x="state.startX"
       :start-y="state.startY"
       :shadow="shadow"
-      :corner-active="true"
+      :isShowReferLine="state.isShowReferLine"
+      @handleCornerClick="handleCornerClick"
       :lines="state.lines"
     >
     </SketchRule>
@@ -55,7 +56,7 @@ const state = reactive({
   },
   thick: 20,
   isShowRuler: true, // 显示标尺
-  isShowReferLine: true // 显示参考线
+  isShowReferLine: false // 显示参考线
 })
 const shadow = computed(() => {
   return {
@@ -88,6 +89,9 @@ const handleScroll = () => {
   const startY = (screensRect.top + state.thick - canvasRect.top) / state.scale
   state.startX = startX
   state.startY = startY
+}
+const handleCornerClick = e => {
+  console.log('handleCornerClick', e)
 }
 // 控制缩放值
 const handleWheel = (e: {
