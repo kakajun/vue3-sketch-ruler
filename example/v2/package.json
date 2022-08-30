@@ -6,13 +6,13 @@
     "build:demo": "vite build --config vite.demo.js"
   },
   "dependencies": {
-    "@vue/composition-api": "^1.6.2",
+    "@vue/composition-api": "1.6.2",
     "vite": "^2.9.12",
     "vite-plugin-dts": "^1.2.0",
     "vite-plugin-vue2": "2.0.1",
     "vue": "2.6.14",
     "vue-demi": "^0.13.1",
      "sass": "^1.43.4",
-    "vue-template-compiler": "^2.6.14"
+    "vue-template-compiler": "2.6.14"
   }
 }

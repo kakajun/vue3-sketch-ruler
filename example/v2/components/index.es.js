@@ -15,8 +15,8 @@ var __spreadValues = (a, b) => {
   return a;
 };
 /*!
-* vue2 v1.3.5
-* 2022年8月Tue Aug 30 2022 22:27:29 GMT+0800 (中国标准时间)
+* vue2 v1.3.4
+* 2022年6月Tue Jun 14 2022 16:21:35 GMT+0800 (中国标准时间)
 * 制作
 */
 import { defineComponent, ref, onMounted, computed, reactive, watch } from "vue-demi";
@@ -122,7 +122,7 @@ var render$3 = function() {
   }, [_vm._v(_vm._s(_vm.startValue))])])]);
 };
 var staticRenderFns$3 = [];
-var rulerLine_vue_vue_type_style_index_0_scoped_true_lang = "";
+var rulerLine_vue_vue_type_style_index_0_scoped_true_lang = /* @__PURE__ */ (() => ".line[data-v-493b3718]{pointer-events:auto;position:absolute}.line .action[data-v-493b3718]{position:absolute;display:flex;justify-content:center;align-items:center}.line .value[data-v-493b3718]{pointer-events:none;transform:scale(.83)}.line .del[data-v-493b3718]{padding:3px 5px;cursor:pointer;visibility:hidden}.line:hover .del[data-v-493b3718]{visibility:visible}\n")();
 function normalizeComponent(scriptExports, render2, staticRenderFns2, functionalTemplate, injectStyles, scopeId, moduleIdentifier, shadowMode) {
   var options = typeof scriptExports === "function" ? scriptExports.options : scriptExports;
   if (render2) {
@@ -541,7 +541,7 @@ var render$1 = function() {
   }, [_vm._v(_vm._s(_vm.valueNum))])])], 1);
 };
 var staticRenderFns$1 = [];
-var rulerWrapper_vue_vue_type_style_index_0_scoped_true_lang = "";
+var rulerWrapper_vue_vue_type_style_index_0_scoped_true_lang = /* @__PURE__ */ (() => ".line[data-v-3718ebb4],.h-container[data-v-3718ebb4],.v-container[data-v-3718ebb4]{position:absolute}.h-container .lines[data-v-3718ebb4],.v-container .lines[data-v-3718ebb4]{pointer-events:none}.h-container:hover .lines[data-v-3718ebb4],.v-container:hover .lines[data-v-3718ebb4]{pointer-events:auto}.h-container[data-v-3718ebb4]{top:0}.h-container .line[data-v-3718ebb4]{top:0;height:100vh;padding-left:5px}.h-container .line .action[data-v-3718ebb4]{transform:translate(-24px)}.h-container .line .action .value[data-v-3718ebb4]{margin-left:4px}.h-container .indicator[data-v-3718ebb4]{top:0;height:100vw}.h-container .indicator .value[data-v-3718ebb4]{width:auto;padding:0 2px;margin-top:4px;margin-left:4px}.v-container[data-v-3718ebb4]{left:0}.v-container .line[data-v-3718ebb4]{left:0;width:100vw;padding-top:5px}.v-container .line .action[data-v-3718ebb4]{transform:translateY(-24px);flex-direction:column}.v-container .line .action .value[data-v-3718ebb4]{margin-top:4px}.v-container .indicator[data-v-3718ebb4]{width:100vw}.v-container .indicator .value[data-v-3718ebb4]{left:0;width:auto;padding:0 2px;margin-top:-5px;margin-left:2px;transform:rotate(-90deg);transform-origin:0 0}\n")();
 const __cssModules$1 = {};
 var __component__$1 = /* @__PURE__ */ normalizeComponent(__vue2_script$1, render$1, staticRenderFns$1, false, __vue2_injectStyles$1, "3718ebb4", null, null);
 function __vue2_injectStyles$1(context) {
@@ -608,6 +608,10 @@ const sketchRulerProps = {
       };
     }
   },
+  cornerActive: {
+    type: Boolean,
+    default: false
+  },
   isShowReferLine: {
     type: Boolean,
     default: true
@@ -659,6 +663,9 @@ var __vue2_script = defineComponent({
       }, props.palette || {});
       return finalObj;
     });
+    const cornerActiveClass = computed(() => {
+      return props.cornerActive ? " active" : "";
+    });
     const cornerStyle = computed(() => {
       return {
         backgroundImage: showReferLine.value ? `url(${props.eyeIcon || eye64})` : `url(${props.closeEyeIcon || closeEye64})`,
@@ -670,11 +677,12 @@ var __vue2_script = defineComponent({
     });
     const onCornerClick = (e) => {
       showReferLine.value = !showReferLine.value;
-      emit("handleCornerClick", showReferLine.value);
+      emit("onCornerClick", e);
     };
     return {
       showReferLine,
       paletteCpu,
+      cornerActiveClass,
       cornerStyle,
       onCornerClick
     };
@@ -721,6 +729,7 @@ var render = function() {
     }
   }), _c("a", {
     staticClass: "corner",
+    class: _vm.cornerActiveClass,
     style: _vm.cornerStyle,
     on: {
       "click": _vm.onCornerClick
@@ -728,7 +737,7 @@ var render = function() {
   })], 1);
 };
 var staticRenderFns = [];
-var index_vue_vue_type_style_index_0_lang = "";
+var index_vue_vue_type_style_index_0_lang = /* @__PURE__ */ (() => '@charset "UTF-8";.style-ruler{position:absolute;z-index:3;width:100%;height:100%;overflow:hidden;font-size:12px;pointer-events:none}.style-ruler span{line-height:1}.corner{position:absolute;top:0;left:0;pointer-events:auto;cursor:pointer;box-sizing:content-box;transition:all .2s ease-in-out}.indicator{position:absolute;pointer-events:none}.indicator .value{position:absolute;background:white}.ruler{width:100%;height:100%;pointer-events:auto}\n')();
 const __cssModules = {};
 var __component__ = /* @__PURE__ */ normalizeComponent(__vue2_script, render, staticRenderFns, false, __vue2_injectStyles, null, null, null);
 function __vue2_injectStyles(context) {
