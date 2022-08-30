@@ -5,7 +5,7 @@
       :vertical="false"
       :width="width"
       :height="thick"
-      :is-show-refer-line="isShowReferLine"
+      :is-show-refer-line="showReferLine"
       :thick="thick"
       :ratio="ratio"
       :start="startX"
@@ -20,7 +20,7 @@
       :vertical="true"
       :width="thick"
       :height="height"
-      :is-show-refer-line="isShowReferLine"
+      :is-show-refer-line="showReferLine"
       :thick="thick"
       :ratio="ratio"
       :start="startY"
@@ -30,12 +30,7 @@
       :scale="scale"
       :palette="paletteCpu"
     />
-    <a
-      class="corner"
-      :class="cornerActiveClass"
-      :style="cornerStyle"
-      @click="onCornerClick"
-    ></a>
+    <a class="corner" :style="cornerStyle" @click="onCornerClick"></a>
   </div>
 </template>
 
@@ -43,7 +38,7 @@
 import RulerWrapper from './ruler-wrapper.vue'
 import { eye64, closeEye64 } from './cornerImg64'
 import { computed, defineComponent, ref } from 'vue-demi'
-import { sketchRulerProps, SketchRulerProps } from '../index-types'
+import { sketchRulerProps } from '../index-types'
 export default defineComponent({
   name: 'SketchRule',
   components: {
@@ -51,9 +46,9 @@ export default defineComponent({
   },
   props: sketchRulerProps,
   emits: ['onCornerClick', 'handleLine'],
-  setup(props: SketchRulerProps, { emit }) {
-    let isShowReferLine = ref(true)
-    isShowReferLine.value = props.isShowReferLine
+  setup(props, { emit }) {
+    let showReferLine = ref(true)
+    showReferLine.value = props.isShowReferLine
     // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
     const paletteCpu = computed(() => {
       function merge(obj: { [key: string]: any }, o: { [key: string]: any }) {
@@ -94,12 +89,9 @@ export default defineComponent({
       )
       return finalObj
     })
-    const cornerActiveClass = computed(() => {
-      return props.cornerActive ? ' active' : ''
-    })
     const cornerStyle = computed(() => {
       return {
-        backgroundImage: isShowReferLine.value
+        backgroundImage: showReferLine.value
           ? `url(${props.eyeIcon || eye64})`
           : `url(${props.closeEyeIcon || closeEye64})`,
         width: props.thick + 'px',
@@ -109,13 +101,12 @@ export default defineComponent({
       }
     })
     const onCornerClick = (e: MouseEvent) => {
-      isShowReferLine.value = !isShowReferLine.value
-      emit('onCornerClick', e)
+      showReferLine.value = !showReferLine.value
+      emit('handleCornerClick', showReferLine.value)
     }
     return {
-      isShowReferLine,
+      showReferLine,
       paletteCpu,
-      cornerActiveClass,
       cornerStyle,
       onCornerClick
     }

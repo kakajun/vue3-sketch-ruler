@@ -6,11 +6,9 @@ import dts from 'vite-plugin-dts'
 const pkg = require('./package.json')
 
 emptyDir(resolve(__dirname, 'types'))
-const banner = `/*!
-* ${pkg.name} v${pkg.version}
-* ${new Date().getFullYear()}年${new Date().getMonth() + 1}月${new Date()}
-* 制作
-*/`
+const banner = `/*!${pkg.name} v${pkg.version}${new Date().getFullYear()}年${
+  new Date().getMonth() + 1
+}月${new Date()}制作*/`
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [

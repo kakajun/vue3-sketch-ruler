@@ -74,6 +74,7 @@ export default defineComponent({
       }
     })
     onMounted(() => {
+      alert('msg')
       // 滚动居中
       screensRef.value.scrollLeft =
         containerRef.value.getBoundingClientRect().width / 2 - 400

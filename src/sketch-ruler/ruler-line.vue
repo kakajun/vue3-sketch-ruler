@@ -14,10 +14,19 @@
 </template>
 <script lang="ts">
 import { ref, computed, onMounted, defineComponent } from 'vue-demi'
-import { lineProps, LineProps } from './ruler-line-types'
+
 export default defineComponent({
   name: 'LineRuler',
-  props: lineProps,
+  props: {
+    scale: Number,
+    thick: Number,
+    palette: Object,
+    index: Number,
+    start: Number,
+    vertical: Boolean,
+    value: Number,
+    isShowReferLine: Boolean
+  },
   emits: ['onMouseDown', 'onRelease', 'onRemove'],
   setup(props: LineProps, { emit }) {
     const startValue = ref(0)

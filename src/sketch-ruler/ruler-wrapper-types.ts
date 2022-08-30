@@ -1,4 +1,4 @@
-import { PropType, ExtractPropTypes } from 'vue-demi'
+import { PropType } from 'vue-demi'
 export const wrapperProps = {
   scale: Number,
   ratio: Number,
@@ -34,5 +34,3 @@ export const wrapperProps = {
     type: Boolean
   }
 }
-
-export type WrapperProps = ExtractPropTypes<typeof wrapperProps>

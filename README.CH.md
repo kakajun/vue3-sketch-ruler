@@ -7,7 +7,10 @@
 
  简体中文 | [English](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/README.md)
 
+时隔半年,重启mater的新版开发, 大家有兴趣的可以加我微信: ka132300  拉入群, 大家一起讨论
+效果图如下
 
+![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/newruler.png)
 🚀 Features
 --
 - 💪 Vue 3 Composition API
@@ -180,6 +183,14 @@ v1.2.5
 
 v1.3.1
 1. 使用vue-demi 做到vue2/vue3中能同时使用
+
+v1.3.4
+全部更新vue的各种插件
+感悟: 时隔这么久, 在更新版本时还是不那么顺利切换vue, 就是说vue2和vue3再互相切换中, 还是会有不知名的bug, 来验证我是否打包正确了, 或者切换版本正确了, 还有些小伙伴也和我有同样的困惑, 发邮件问我, 为此我另外又建了一个工程, vue2-sketch-ruler 可以在我工程里面找到, 这个里面的代码和这边是一样的, 版本插件也一样, 能够跑起来, 验证vue3代码打包成vue2能使用的插件, 如果大家还是有相同的困惑也像我这样子验证一下
+当我确定能够行的通时, 那么只需要运行npm run build 那么两个版本的代码都打包好了
+
+注意事项:
+1. 由于vue2打包不支持script标签中直接写setup, 本来我都已经升级了setup方式能减少很多代码, 但打包v2报错, 无赖我又只能还原回去, 不知道后面 @vue/composition-api  会不会支持这种打包方式,目前我已经更新到了最新的1.6.2, 依然不支持,等后面再关注!
 ### Event
 
 | 事件名称 | 描述 | 回调参数 |
