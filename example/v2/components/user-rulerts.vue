@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="top">缩放比例:{{ state.scale }}</div>
+    <button class="right" @click="showLineClick">辅助线开关</button>
     <div class="wrapper">
       <SketchRule
         :thick="state.thick"
@@ -37,9 +38,10 @@ import {
   nextTick
 } from 'vue-demi'
 
-import SketchRule from '../../../lib/v2/index.es'
-// import SketchRule from '../src/index' // 这里可以换成打包后的
-// import SketchRule from '../../../src/index.ts'
+// import SketchRule from '../../../lib/v2/index.es.js'
+// import SketchRule from '../../../src/index' // 这里可以换成打包后的
+import SketchRule from '../index.es.js'
+// import SketchRule from './index.es.js'
 import '../../../lib/v2/style.css'
 const rectWidth = 600
 const rectHeight = 320
@@ -115,7 +117,10 @@ export default defineComponent({
         handleScroll()
       })
     }
-
+    const showLineClick = () => {
+      state.isShowReferLine = !state.isShowReferLine
+      console.log(state.isShowReferLine, 'state.isShowReferLine')
+    }
     return {
       screensRef,
       containerRef,
@@ -123,13 +128,20 @@ export default defineComponent({
       shadow,
       canvasStyle,
       handleWheel,
-      handleScroll
+      handleScroll,
+      showLineClick
     }
   }
 })
 </script>
 <style lang="scss">
 .top {
+  position: absolute;
+  right: 100px;
+  font-size: 20px;
+}
+.right {
+  top: 200px;
   position: absolute;
   right: 100px;
   font-size: 20px;

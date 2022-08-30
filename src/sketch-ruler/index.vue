@@ -37,7 +37,7 @@
 <script lang="ts">
 import RulerWrapper from './ruler-wrapper.vue'
 import { eye64, closeEye64 } from './cornerImg64'
-import { computed, defineComponent, ref } from 'vue-demi'
+import { computed, defineComponent, ref, watch } from 'vue-demi'
 import { sketchRulerProps } from '../index-types'
 export default defineComponent({
   name: 'SketchRule',
@@ -104,6 +104,9 @@ export default defineComponent({
       showReferLine.value = !showReferLine.value
       emit('handleCornerClick', showReferLine.value)
     }
+    watch([() => props.isShowReferLine], () => {
+      showReferLine.value = props.isShowReferLine
+    })
     return {
       showReferLine,
       paletteCpu,

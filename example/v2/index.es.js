@@ -1,22 +1,6 @@
-var __defProp = Object.defineProperty;
-var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues = (a, b) => {
-  for (var prop in b || (b = {}))
-    if (__hasOwnProp.call(b, prop))
-      __defNormalProp(a, prop, b[prop]);
-  if (__getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(b)) {
-      if (__propIsEnum.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    }
-  return a;
-};
 /*!
 * vue2 v1.3.5
-* 2022年8月Tue Aug 30 2022 22:27:29 GMT+0800 (中国标准时间)
+* 2022年8月Tue Aug 30 2022 23:26:43 GMT+0800 (中国标准时间)
 * 制作
 */
 import { defineComponent, ref, onMounted, computed, reactive, watch } from "vue-demi";
@@ -54,9 +38,10 @@ var __vue2_script$3 = defineComponent({
       const borderValue = `1px solid ${(_a = props.palette) == null ? void 0 : _a.lineColor}`;
       const border = props.vertical ? { borderTop: borderValue } : { borderLeft: borderValue };
       const cursorValue = props.isShowReferLine ? props.vertical ? "ns-resize" : "ew-resize" : "none";
-      return __spreadValues({
-        cursor: cursorValue
-      }, border);
+      return {
+        cursor: cursorValue,
+        ...border
+      };
     });
     const actionStyle = computed(() => {
       const actionStyle2 = props.vertical ? { left: props.thick + "px" } : { top: props.thick + "px" };
@@ -68,7 +53,9 @@ var __vue2_script$3 = defineComponent({
       emit("onMouseDown");
       const onMove = (e2) => {
         const currentD = props.vertical ? e2.clientY : e2.clientX;
-        const newValue = Math.round(initValue + (currentD - startD) / props.scale);
+        const newValue = Math.round(
+          initValue + (currentD - startD) / props.scale
+        );
         startValue.value = newValue;
       };
       const onEnd = () => {
@@ -153,7 +140,10 @@ function normalizeComponent(scriptExports, render2, staticRenderFns2, functional
     options._ssrRegister = hook;
   } else if (injectStyles) {
     hook = shadowMode ? function() {
-      injectStyles.call(this, (options.functional ? this.parent : this).$root.$options.shadowRoot);
+      injectStyles.call(
+        this,
+        (options.functional ? this.parent : this).$root.$options.shadowRoot
+      );
     } : injectStyles;
   }
   if (hook) {
@@ -175,7 +165,16 @@ function normalizeComponent(scriptExports, render2, staticRenderFns2, functional
   };
 }
 const __cssModules$3 = {};
-var __component__$3 = /* @__PURE__ */ normalizeComponent(__vue2_script$3, render$3, staticRenderFns$3, false, __vue2_injectStyles$3, "493b3718", null, null);
+var __component__$3 = /* @__PURE__ */ normalizeComponent(
+  __vue2_script$3,
+  render$3,
+  staticRenderFns$3,
+  false,
+  __vue2_injectStyles$3,
+  "493b3718",
+  null,
+  null
+);
 function __vue2_injectStyles$3(context) {
   for (let o in __cssModules$3) {
     this[o] = __cssModules$3[o];
@@ -306,10 +305,20 @@ var __vue2_script$2 = defineComponent({
         ratio: ratio2
       };
       if (state.canvasContext) {
-        drawCavaseRuler(state.canvasContext, props.start, props.selectStart, props.selectLength, options, !props.vertical);
+        drawCavaseRuler(
+          state.canvasContext,
+          props.start,
+          props.selectStart,
+          props.selectLength,
+          options,
+          !props.vertical
+        );
       }
     };
-    watch(() => props.start, () => drawRuler(ratio));
+    watch(
+      () => props.start,
+      () => drawRuler(ratio)
+    );
     watch([() => props.width, () => props.height], () => {
       updateCanvasContext(ratio);
       drawRuler(ratio);
@@ -362,7 +371,16 @@ var render$2 = function() {
 };
 var staticRenderFns$2 = [];
 const __cssModules$2 = {};
-var __component__$2 = /* @__PURE__ */ normalizeComponent(__vue2_script$2, render$2, staticRenderFns$2, false, __vue2_injectStyles$2, null, null, null);
+var __component__$2 = /* @__PURE__ */ normalizeComponent(
+  __vue2_script$2,
+  render$2,
+  staticRenderFns$2,
+  false,
+  __vue2_injectStyles$2,
+  null,
+  null,
+  null
+);
 function __vue2_injectStyles$2(context) {
   for (let o in __cssModules$2) {
     this[o] = __cssModules$2[o];
@@ -543,7 +561,16 @@ var render$1 = function() {
 var staticRenderFns$1 = [];
 var rulerWrapper_vue_vue_type_style_index_0_scoped_true_lang = "";
 const __cssModules$1 = {};
-var __component__$1 = /* @__PURE__ */ normalizeComponent(__vue2_script$1, render$1, staticRenderFns$1, false, __vue2_injectStyles$1, "3718ebb4", null, null);
+var __component__$1 = /* @__PURE__ */ normalizeComponent(
+  __vue2_script$1,
+  render$1,
+  staticRenderFns$1,
+  false,
+  __vue2_injectStyles$1,
+  "3718ebb4",
+  null,
+  null
+);
 function __vue2_injectStyles$1(context) {
   for (let o in __cssModules$1) {
     this[o] = __cssModules$1[o];
@@ -636,27 +663,30 @@ var __vue2_script = defineComponent({
         });
         return obj;
       }
-      const finalObj = merge({
-        bgColor: "rgba(225,225,225, 0)",
-        longfgColor: "#BABBBC",
-        shortfgColor: "#C8CDD0",
-        fontColor: "#7D8694",
-        shadowColor: "#E8E8E8",
-        lineColor: "#EB5648",
-        borderColor: "#DADADC",
-        cornerActiveColor: "rgb(235, 86, 72, 0.6)",
-        menu: {
-          bgColor: "#fff",
-          dividerColor: "#DBDBDB",
-          listItem: {
-            textColor: "#415058",
-            hoverTextColor: "#298DF8",
-            disabledTextColor: "rgba(65, 80, 88, 0.4)",
+      const finalObj = merge(
+        {
+          bgColor: "rgba(225,225,225, 0)",
+          longfgColor: "#BABBBC",
+          shortfgColor: "#C8CDD0",
+          fontColor: "#7D8694",
+          shadowColor: "#E8E8E8",
+          lineColor: "#EB5648",
+          borderColor: "#DADADC",
+          cornerActiveColor: "rgb(235, 86, 72, 0.6)",
+          menu: {
             bgColor: "#fff",
-            hoverBgColor: "#F2F2F2"
+            dividerColor: "#DBDBDB",
+            listItem: {
+              textColor: "#415058",
+              hoverTextColor: "#298DF8",
+              disabledTextColor: "rgba(65, 80, 88, 0.4)",
+              bgColor: "#fff",
+              hoverBgColor: "#F2F2F2"
+            }
           }
-        }
-      }, props.palette || {});
+        },
+        props.palette || {}
+      );
       return finalObj;
     });
     const cornerStyle = computed(() => {
@@ -672,6 +702,9 @@ var __vue2_script = defineComponent({
       showReferLine.value = !showReferLine.value;
       emit("handleCornerClick", showReferLine.value);
     };
+    watch([() => props.isShowReferLine], () => {
+      showReferLine.value = props.isShowReferLine;
+    });
     return {
       showReferLine,
       paletteCpu,
@@ -730,7 +763,16 @@ var render = function() {
 var staticRenderFns = [];
 var index_vue_vue_type_style_index_0_lang = "";
 const __cssModules = {};
-var __component__ = /* @__PURE__ */ normalizeComponent(__vue2_script, render, staticRenderFns, false, __vue2_injectStyles, null, null, null);
+var __component__ = /* @__PURE__ */ normalizeComponent(
+  __vue2_script,
+  render,
+  staticRenderFns,
+  false,
+  __vue2_injectStyles,
+  null,
+  null,
+  null
+);
 function __vue2_injectStyles(context) {
   for (let o in __cssModules) {
     this[o] = __cssModules[o];

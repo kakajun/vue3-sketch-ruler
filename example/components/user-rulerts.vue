@@ -1,5 +1,6 @@
 <template>
   <div class="top">缩放比例:{{ state.scale }}</div>
+  <button class="right" @click="showLineClick">辅助线开关</button>
   <div class="wrapper">
     <!-- :eyeIcon="eyeIcon"   这个可以传入图标 -->
     <SketchRule
@@ -111,9 +112,20 @@ const handleWheel = (e: {
     handleScroll()
   })
 }
+const showLineClick = () => {
+  state.isShowReferLine = !state.isShowReferLine
+  console.log(state.isShowReferLine, 'state.isShowReferLine')
+}
 </script>
 <style lang="scss">
 .top {
+  position: absolute;
+  right: 100px;
+  font-size: 20px;
+}
+
+.right {
+  top: 200px;
   position: absolute;
   right: 100px;
   font-size: 20px;
