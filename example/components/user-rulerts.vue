@@ -1,5 +1,5 @@
 <template>
-  <div class="top">缩放11比例:{{ state.scale }}</div>
+  <div class="top">缩放比例:{{ state.scale }}</div>
   <button class="right" @click="showLineClick">辅助线开关</button>
   <div class="wrapper">
     <!-- :eyeIcon="eyeIcon"   这个可以传入图标 -->
@@ -33,15 +33,8 @@
 // import 'vue3-sketch-ruler/lib/style.css'
 // import { SketchRule } from '../../lib/index.es'
 // import '../../lib/style.css'
-import eyeIcon from './eye.svg'
-import {
-  computed,
-  defineComponent,
-  ref,
-  reactive,
-  onMounted,
-  nextTick
-} from 'vue'
+// import eyeIcon from './eye.svg'
+import { computed, ref, reactive, onMounted, nextTick } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
 const rectWidth = 600
 const rectHeight = 320
