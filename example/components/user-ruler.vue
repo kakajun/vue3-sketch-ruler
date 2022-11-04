@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    222222222222
     <SketchRule
       :thick="thick"
       :scale="scale"
@@ -11,7 +12,6 @@
       :hor-line-arr="lines.h"
       :ver-line-arr="lines.v"
       :corner-active="true"
-      @handleLine="handleLine"
       @onCornerClick="handleCornerClick"
     >
     </SketchRule>
@@ -74,10 +74,8 @@ export default {
       this.$refs.containerRef.getBoundingClientRect().width / 2 - 300 // 300 = #screens.width / 2
   },
   methods: {
-    handleLine(lines) {
-      this.lines = lines
-    },
     handleCornerClick() {
+      console.log('点击了角落')
       return
     },
     handleScroll() {

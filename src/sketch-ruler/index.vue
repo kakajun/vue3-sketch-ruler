@@ -45,7 +45,7 @@ export default defineComponent({
     RulerWrapper
   },
   props: sketchRulerProps,
-  emits: ['onCornerClick', 'handleLine'],
+  emits: ['onCornerClick'],
   setup(props, { emit }) {
     let showReferLine = ref(true)
     showReferLine.value = props.isShowReferLine
@@ -102,7 +102,7 @@ export default defineComponent({
     })
     const onCornerClick = (e: MouseEvent) => {
       showReferLine.value = !showReferLine.value
-      emit('handleCornerClick', showReferLine.value)
+      emit('onCornerClick', showReferLine.value)
     }
     watch([() => props.isShowReferLine], () => {
       showReferLine.value = props.isShowReferLine

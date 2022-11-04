@@ -269,7 +269,7 @@ v1.3.1
 
 | --- | --- | --- |
 
-|Handlecornerclick | click event in the upper left corner|
+|onCornerClick | click event in the upper left corner|
 
 ## Quote
 

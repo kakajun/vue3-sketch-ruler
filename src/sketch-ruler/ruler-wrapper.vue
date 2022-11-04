@@ -50,7 +50,7 @@ export default defineComponent({
     RulerLine
   },
   props: wrapperProps,
-  setup(props: WrapperProps) {
+  setup(props) {
     const showIndicator = ref(false)
     const valueNum = ref(0)
     const rwClassName = computed(() => {

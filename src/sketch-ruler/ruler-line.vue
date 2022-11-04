@@ -28,7 +28,7 @@ export default defineComponent({
     isShowReferLine: Boolean
   },
   emits: ['onMouseDown', 'onRelease', 'onRemove'],
-  setup(props: LineProps, { emit }) {
+  setup(props, { emit }) {
     const startValue = ref(0)
     const showLine = ref(true)
     onMounted(() => {

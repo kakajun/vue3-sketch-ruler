@@ -1,5 +1,5 @@
 <template>
-  <div class="top">缩放比例:{{ state.scale }}</div>
+  <div class="top">缩放11比例:{{ state.scale }}</div>
   <button class="right" @click="showLineClick">辅助线开关</button>
   <div class="wrapper">
     <!-- :eyeIcon="eyeIcon"   这个可以传入图标 -->
@@ -12,7 +12,7 @@
       :start-y="state.startY"
       :shadow="shadow"
       :isShowReferLine="state.isShowReferLine"
-      @handleCornerClick="handleCornerClick"
+      @onCornerClick="handleCornerClick"
       :lines="state.lines"
     >
     </SketchRule>

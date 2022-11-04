@@ -195,7 +195,7 @@ v1.3.4
 
 | 事件名称 | 描述 | 回调参数 |
 | --- | --- | --- |
-| handleCornerClick | 左上角点击事件 |   |
+| onCornerClick | 左上角点击事件 |   |
 
 ## 引用
 vue标尺组件 [vue-sketch-ruler](https://github.com/chuxiaoguo/vue-sketch-ruler.git)
