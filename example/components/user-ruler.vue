@@ -1,6 +1,5 @@
 <template>
   <div class="wrapper">
-    222222222222
     <SketchRule
       :thick="thick"
       :scale="scale"
