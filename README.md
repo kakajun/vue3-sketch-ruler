@@ -159,14 +159,13 @@ Nuxt3 中使用例子 [点击这里](https://github.com/kakajun/vue3-sketch-rule
 | thick | 标尺的厚度 | Number | 16 |
 | width | 放置标尺窗口的宽度  | Number | - |
 | height | 放置标尺窗口的高度  | Number | - |
-| height | 放置标尺窗口的高度  | Number | - |
-| height | 放置标尺窗口的高度  | Number | - |
+| eyeIcon |睁眼图标  | String | - |
+| closeEyeIcon | 闭眼图标  | String | - |
 | startX | x轴标尺开始的坐标数值 | Number | 0 |
 | startY | y轴标尺开始的坐标数值 | Number | 0 |
 | shadow |  阴影的参数  | Shadow | 0 |
 | lines | 初始化水平标尺上的参考线 | object<Array> | {h:[],v:[]} |
 | palette | 标尺的样式配置参数     | Palette | 如下|
-
 
 palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',shortfgColor: '#C8CDD0',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',}
 ### 更新说明
