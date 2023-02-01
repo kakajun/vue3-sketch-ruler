@@ -145,11 +145,11 @@ export default {
 });
 </script>
 ```
-参考一个完整的例子，[点击这里](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v3/components/user-ruler.vue)
+参考一个完整的例子，[点击这里](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/components/user-ruler.vue)
 
-vue3 api 的例子，[点击这里](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v3/components/user-rulerts.vue)
+vue3 api 的例子，[点击这里](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/components/user-rulerts.vue)
 
-Nuxt3 中使用例子 [点击这里](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v3/components/Nuxt3.vue)
+Nuxt3 中使用例子 [点击这里](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/components/Nuxt3.vue)
 ## api
 ### 属性
 
