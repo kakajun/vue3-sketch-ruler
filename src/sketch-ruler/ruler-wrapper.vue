@@ -12,9 +12,8 @@
       :palette="palette"
       v-model:valueNum="valueNum"
       v-model:showIndicator="showIndicator"
-      @onAddLine="handleNewLine"
-    >
-    </CanvasRuler>
+      @on-addLine="handleNewLine"
+    />
     <div v-show="isShowReferLine" class="lines">
       <RulerLine
         v-for="(v, i) in lines"
@@ -27,10 +26,9 @@
         :palette="palette"
         :vertical="vertical"
         :is-show-refer-line="isShowReferLine"
-        @onRemove="handleLineRemove"
-        @onRelease="handleLineRelease"
-      >
-      </RulerLine>
+        @on-remove="handleLineRemove"
+        @on-release="handleLineRelease"
+      />
     </div>
     <div v-show="showIndicator" class="indicator" :style="indicatorStyle">
       <div class="value">{{ valueNum }}</div>
@@ -89,8 +87,7 @@ export default defineComponent({
     const handleLineRelease = (value: number, index: number) => {
       // 左右或上下超出时, 删除该条对齐线
       const offset = value - props.start
-      const maxOffset =
-        (props.vertical ? props.height : props.width) / props.scale!
+      const maxOffset = (props.vertical ? props.height : props.width) / props.scale!
       if (offset < 0 || offset > maxOffset) {
         handleLineRemove(index)
       } else {

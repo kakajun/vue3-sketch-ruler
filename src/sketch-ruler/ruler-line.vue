@@ -1,11 +1,6 @@
 <template>
   <!-- 线的显示 -->
-  <div
-    v-show="showLine"
-    class="line"
-    :style="[offset, borderCursor]"
-    @mousedown="handleDown"
-  >
+  <div v-show="showLine" class="line" :style="[offset, borderCursor]" @mousedown="handleDown">
     <div class="action" :style="actionStyle">
       <span class="del" @click="handleRemove">&times;</span>
       <span class="value">{{ startValue }}</span>
@@ -41,16 +36,12 @@ export default defineComponent({
       const offset = (startValue.value - props.start!) * props.scale!
       setShowLine(offset)
       const positionValue = offset + 'px'
-      const position = props.vertical
-        ? { top: positionValue }
-        : { left: positionValue }
+      const position = props.vertical ? { top: positionValue } : { left: positionValue }
       return position
     })
     const borderCursor = computed(() => {
       const borderValue = `1px solid ${props.palette?.lineColor}`
-      const border = props.vertical
-        ? { borderTop: borderValue }
-        : { borderLeft: borderValue }
+      const border = props.vertical ? { borderTop: borderValue } : { borderLeft: borderValue }
       const cursorValue = props.isShowReferLine
         ? props.vertical
           ? 'ns-resize'
@@ -75,9 +66,7 @@ export default defineComponent({
       emit('onMouseDown')
       const onMove = (e: MouseEvent) => {
         const currentD = props.vertical ? e.clientY : e.clientX
-        const newValue = Math.round(
-          initValue + (currentD - startD) / props.scale!
-        )
+        const newValue = Math.round(initValue + (currentD - startD) / props.scale!)
         startValue.value = newValue
       }
       const onEnd = () => {

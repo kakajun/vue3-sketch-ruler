@@ -1,72 +1,71 @@
-/*
- * @Description:
- * @Autor: ZY
- * @Date: 2020-12-07 10:30:20
- * @LastEditors: ZY
- * @LastEditTime: 2020-12-07 11:00:37
- */
-module.exports = {
+// @ts-check
+const { defineConfig } = require('eslint-define-config')
+module.exports = defineConfig({
   root: true,
   env: {
-    node: true
+    browser: true,
+    node: true,
+    es6: true
+  },
+  parser: 'vue-eslint-parser',
+  parserOptions: {
+    parser: '@typescript-eslint/parser',
+    ecmaVersion: 2020,
+    sourceType: 'module',
+    jsxPragma: 'React',
+    ecmaFeatures: {
+      jsx: true
+    }
   },
   extends: [
-    'plugin:vue/vue3-strongly-recommended',
-    '@vue/standard',
-    '@vue/typescript/recommended'
+    'plugin:vue/vue3-recommended',
+    'plugin:@typescript-eslint/recommended',
+    'prettier',
+    'plugin:prettier/recommended'
   ],
-  parserOptions: {
-    ecmaVersion: 2020
-  },
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    '@typescript-eslint/ban-types': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/member-delimiter-style': [
-      'error',
-      {
-        multiline: {
-          delimiter: 'none'
-        },
-        singleline: {
-          delimiter: 'comma'
-        }
-      }
-    ],
+    'vue/no-setup-props-destructure': 'off',
+    'vue/script-setup-uses-vars': 'error',
+    'vue/no-reserved-component-names': 'off',
+    '@typescript-eslint/ban-ts-ignore': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
-    'space-before-function-paren': ['error', 'never'],
-    'vue/array-bracket-spacing': 'error',
-    'vue/arrow-spacing': 'error',
-    'vue/block-spacing': 'error',
-    'vue/brace-style': 'error',
-    'vue/camelcase': 'error',
-    'vue/comma-dangle': 'error',
-    'vue/component-name-in-template-casing': 'error',
-    'vue/eqeqeq': 'error',
-    'vue/key-spacing': 'error',
-    'vue/match-component-file-name': 'error',
-    'vue/object-curly-spacing': 'error',
-    'no-useless-escape': 'off',
-    '@typescript-eslint/no-this-alias': [
+    '@typescript-eslint/no-var-requires': 'off',
+    '@typescript-eslint/no-empty-function': 'off',
+    'vue/custom-event-name-casing': 'off',
+    'no-use-before-define': 'off',
+    '@typescript-eslint/no-use-before-define': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
+    '@typescript-eslint/ban-types': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    'no-unused-vars': 'off',
+    'space-before-function-paren': 'off',
+
+    'vue/attributes-order': 'off',
+    'vue/one-component-per-file': 'off',
+    'vue/html-closing-bracket-newline': 'off',
+    'vue/max-attributes-per-line': 'off',
+    'vue/multiline-html-element-content-newline': 'off',
+    'vue/singleline-html-element-content-newline': 'off',
+    'vue/attribute-hyphenation': 'off',
+    'vue/require-default-prop': 'off',
+    'vue/require-explicit-emits': 'off',
+    'vue/require-toggle-inside-transition': 'off',
+    'vue/html-self-closing': [
       'error',
       {
-        allowDestructuring: true, // Allow `const { props, state } = this`; false by default
-        allowedNames: ['self'] // Allow `const self = this`; `[]` by default
+        html: {
+          void: 'always',
+          normal: 'never',
+          component: 'always'
+        },
+        svg: 'always',
+        math: 'always'
       }
     ],
-    'vue/attribute-hyphenation': 'off',
-    'vue/custom-event-name-casing': 'off'
-  },
-  overrides: [
-    {
-      files: [
-        '**/__tests__/*.{j,t}s?(x)',
-        '**/tests/unit/**/*.spec.{j,t}s?(x)'
-      ],
-      env: {
-        jest: true
-      }
-    }
-  ]
-}
+    'vue/multi-word-component-names': 'off',
+    'vue/no-v-html': 'off'
+  }
+})

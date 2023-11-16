@@ -6,7 +6,7 @@
     @mouseenter="handle($event, 'enter')"
     @mousemove="handle($event, 'move')"
     @mouseleave="$emit('update:showIndicator', false)"
-  />
+  ></canvas>
 </template>
 <script lang="ts">
 import { drawCavaseRuler } from './utils'

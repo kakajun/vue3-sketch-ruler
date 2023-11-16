@@ -1,10 +1,6 @@
-*.js
-*.png
-*.eot
-*.ttf
-*.woff
-
-/dist/
-/lib/
-/public/
-.output.js
+/dist/*
+/public/*
+public/*
+/dist*
+/src/types/env.d.ts
+/docs/**/*

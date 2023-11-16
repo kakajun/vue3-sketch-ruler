@@ -19,8 +19,7 @@ export const drawCavaseRuler = (
   h?: boolean //横向为true,纵向缺省
 ) => {
   const { scale, width, height, ratio, palette } = options
-  const { bgColor, fontColor, shadowColor, longfgColor, shortfgColor } =
-    palette
+  const { bgColor, fontColor, shadowColor, longfgColor, shortfgColor } = palette
 
   // 缩放ctx, 以简化计算
   ctx.scale(ratio, ratio)
@@ -60,11 +59,7 @@ export const drawCavaseRuler = (
 
   // 长间隔和短间隔需要两次绘制，才可以完成不同颜色的设置；分开放到两个for循环是为了节省性能，因为如果放到一个for循环的话，每次循环都会重新绘制操作dom
   // 绘制长间隔和文字
-  for (
-    let value = startValue10, count = 0;
-    value < endValue;
-    value += gridSize10, count++
-  ) {
+  for (let value = startValue10, count = 0; value < endValue; value += gridSize10, count++) {
     const x = offsetX10 + count * gridPixel10 + 0.5 // prevent canvas 1px line blurry
     h ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
     ctx.save()
@@ -83,11 +78,7 @@ export const drawCavaseRuler = (
   // 绘制短间隔
   ctx.beginPath()
   ctx.strokeStyle = shortfgColor
-  for (
-    let value = startValue, count = 0;
-    value < endValue;
-    value += gridSize, count++
-  ) {
+  for (let value = startValue, count = 0; value < endValue; value += gridSize, count++) {
     const x = offsetX + count * gridPixel + 0.5 // prevent canvas 1px line blurry
     h ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
     if (value % gridSize10 !== 0) {

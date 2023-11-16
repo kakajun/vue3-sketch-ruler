@@ -1,40 +1,61 @@
-// https://stylelint.docschina.org/user-guide/rules/
 module.exports = {
   root: true,
-  processors: [],
   plugins: ['stylelint-order'],
+  customSyntax: 'postcss-html',
   extends: ['stylelint-config-standard'],
   rules: {
-    'selector-pseudo-element-no-unknown': [
+    'selector-pseudo-class-no-unknown': [
       true,
       {
-        ignorePseudoElements: ['::v-deep']
+        ignorePseudoClasses: ['global', 'deep']
       }
     ],
-    'declaration-block-trailing-semicolon': null,
-    'selector-pseudo-class-no-unknown': null,
-    // 允许嵌套的深度最多 5 层
-    'max-nesting-depth': 8,
-    'declaration-bang-space-before': null,
-    'comment-empty-line-before': null,
-    'declaration-empty-line-before': null,
-    'function-comma-newline-after': null,
-    'function-name-case': null,
-    'function-parentheses-newline-inside': null,
-    'function-max-empty-lines': null,
-    'function-whitespace-after': null,
-    indentation: null,
-    'number-leading-zero': null,
-    'number-no-trailing-zeros': null,
-    'rule-empty-line-before': null,
-    'selector-combinator-space-after': null,
-    'selector-list-comma-newline-after': null,
-    'selector-pseudo-element-colon-notation': null,
-    'unit-no-unknown': null,
-    'value-list-max-empty-lines': null,
-    'font-family-no-missing-generic-family-keyword': null,
+    'at-rule-no-unknown': [
+      true,
+      {
+        ignoreAtRules: ['function', 'if', 'each', 'include', 'mixin']
+      }
+    ],
+    'media-query-no-invalid': null,
+    'function-no-unknown': null,
+    'no-empty-source': null,
+    'named-grid-areas-no-invalid': null,
     'no-descending-specificity': null,
-    // 指定声明块内属性的字母顺序
+    'font-family-no-missing-generic-family-keyword': null,
+    'declaration-block-trailing-semicolon': null,
+    'rule-empty-line-before': [
+      'always',
+      {
+        ignore: ['after-comment', 'first-nested']
+      }
+    ],
+    'unit-no-unknown': [
+      true,
+      {
+        ignoreUnits: ['rpx']
+      }
+    ],
+    'order/order': [
+      [
+        'dollar-variables',
+        'custom-properties',
+        'at-rules',
+        'declarations',
+        {
+          type: 'at-rule',
+          name: 'supports'
+        },
+        {
+          type: 'at-rule',
+          name: 'media'
+        },
+        'rules'
+      ],
+      {
+        severity: 'warning'
+      }
+    ],
+    // Specify the alphabetical order of the attributes in the declaration block
     'order/properties-order': [
       'position',
       'top',
@@ -183,5 +204,29 @@ module.exports = {
       'unicode-bidi',
       'speak'
     ]
-  }
+  },
+  ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.tsx', '**/*.ts'],
+  overrides: [
+    {
+      files: ['*.vue', '**/*.vue', '*.html', '**/*.html'],
+      extends: ['stylelint-config-recommended', 'stylelint-config-html'],
+      rules: {
+        'keyframes-name-pattern': null,
+        'selector-class-pattern': null,
+        'no-duplicate-selectors': null,
+        'selector-pseudo-class-no-unknown': [
+          true,
+          {
+            ignorePseudoClasses: ['deep', 'global']
+          }
+        ],
+        'selector-pseudo-element-no-unknown': [
+          true,
+          {
+            ignorePseudoElements: ['v-deep', 'v-global', 'v-slotted']
+          }
+        ]
+      }
+    }
+  ]
 }

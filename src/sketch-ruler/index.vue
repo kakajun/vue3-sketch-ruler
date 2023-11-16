@@ -52,7 +52,7 @@ export default defineComponent({
     // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
     const paletteCpu = computed(() => {
       function merge(obj: { [key: string]: any }, o: { [key: string]: any }) {
-        Object.keys(obj).forEach(key => {
+        Object.keys(obj).forEach((key) => {
           if (key && obj.hasOwnProperty(key)) {
             if (typeof o['key'] === 'object') {
               obj[key] = merge(obj[key], o[key])
