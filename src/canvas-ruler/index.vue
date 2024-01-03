@@ -24,7 +24,11 @@ export default defineComponent({
     width: Number,
     height: Number,
     selectStart: Number,
-    selectLength: Number
+    selectLength: Number,
+    startNumX: Number,
+    endNumX: Number,
+    startNumY: Number,
+    endNumY: Number
   },
   emits: ['onAddLine', 'update:showIndicator', 'update:valueNum'],
   setup(props, { emit }) {
@@ -64,6 +68,10 @@ export default defineComponent({
         width: props.width!,
         height: props.height!,
         palette: props.palette!,
+        startNumX: props.startNumX,
+        endNumX: props.endNumX,
+        startNumY: props.startNumY,
+        endNumY: props.endNumY,
         ratio: ratio
       }
 

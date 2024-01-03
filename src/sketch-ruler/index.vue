@@ -14,6 +14,8 @@
       :select-length="shadow.width"
       :scale="scale"
       :palette="paletteCpu"
+      :startNumX="startNumX"
+      :endNumX="endNumX"
     />
     <!-- 竖直方向 -->
     <RulerWrapper
@@ -29,6 +31,8 @@
       :select-length="shadow.height"
       :scale="scale"
       :palette="paletteCpu"
+      :startNumY="startNumY"
+      :endNumY="endNumY"
     />
     <a class="corner" :style="cornerStyle" @click="onCornerClick"></a>
   </div>
@@ -120,16 +124,20 @@ export default defineComponent({
 <style lang="scss">
 .style-ruler {
   position: absolute;
-  z-index: 3; /* 需要比resizer高 */
-  width: 100%; /* scrollbar width */
+  z-index: 3;
+  /* 需要比resizer高 */
+  width: 100%;
+  /* scrollbar width */
   height: 100%;
   overflow: hidden;
   font-size: 12px;
   pointer-events: none;
+
   span {
     line-height: 1;
   }
 }
+
 .corner {
   position: absolute;
   top: 0;
@@ -143,6 +151,7 @@ export default defineComponent({
 .indicator {
   position: absolute;
   pointer-events: none;
+
   .value {
     position: absolute;
     background: white;

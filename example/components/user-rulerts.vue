@@ -4,7 +4,6 @@
   <div class="wrapper">
     <!--  这个可以传入图标 -->
     <SketchRule
-
       :thick="state.thick"
       :scale="state.scale"
       :width="580"
@@ -12,23 +11,21 @@
       :start-x="state.startX"
       :start-y="state.startY"
       :shadow="shadow"
+      :startNumX="0"
+      :endNumX="600"
+      :startNumY="0"
+      :endNumY="320"
       :isShowReferLine="state.isShowReferLine"
       @onCornerClick="handleCornerClick"
       :lines="state.lines"
-    >
-    </SketchRule>
-    <div
-      id="screens"
-      ref="screensRef"
-      @wheel="handleWheel"
-      @scroll="handleScroll"
-    >
+    />
+    <div id="screens" ref="screensRef" @wheel="handleWheel" @scroll="handleScroll">
       <div ref="containerRef" class="screen-container">
-        <div id="canvas" :style="canvasStyle" />
+        <div id="canvas" :style="canvasStyle"></div>
       </div>
     </div>
   </div>
-  <BlackSketchRule></BlackSketchRule>
+  <BlackSketchRule />
 </template>
 <script setup lang="ts">
 // import { SketchRule } from 'vue3-sketch-ruler'
@@ -72,8 +69,7 @@ const canvasStyle = computed(() => {
 })
 onMounted(() => {
   // 滚动居中
-  screensRef.value.scrollLeft =
-    containerRef.value.getBoundingClientRect().width / 2 - 400
+  screensRef.value.scrollLeft = containerRef.value.getBoundingClientRect().width / 2 - 400
 })
 
 const handleScroll = () => {
@@ -81,13 +77,12 @@ const handleScroll = () => {
   const canvasRect = document.querySelector('#canvas').getBoundingClientRect()
 
   // 标尺开始的刻度
-  const startX =
-    (screensRect.left + state.thick - canvasRect.left) / state.scale
+  const startX = (screensRect.left + state.thick - canvasRect.left) / state.scale
   const startY = (screensRect.top + state.thick - canvasRect.top) / state.scale
   state.startX = startX
   state.startY = startY
 }
-const handleCornerClick = e => {
+const handleCornerClick = (e) => {
   console.log('handleCornerClick', e)
 }
 // 控制缩放值
@@ -99,9 +94,7 @@ const handleWheel = (e: {
 }) => {
   if (e.ctrlKey || e.metaKey) {
     e.preventDefault()
-    const nextScale = parseFloat(
-      Math.max(0.2, state.scale - e.deltaY / 500).toFixed(2)
-    )
+    const nextScale = parseFloat(Math.max(0.2, state.scale - e.deltaY / 500).toFixed(2))
     state.scale = nextScale
   }
   nextTick(() => {

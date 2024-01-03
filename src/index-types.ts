@@ -92,5 +92,21 @@ export const sketchRulerProps = {
   isShowReferLine: {
     type: Boolean,
     default: true
+  },
+  startNumX: {
+    type: Number,
+    default: -Infinity
+  },
+  endNumX: {
+    type: Number,
+    default: Infinity
+  },
+  startNumY: {
+    type: Number,
+    default: -Infinity
+  },
+  endNumY: {
+    type: Number,
+    default: Infinity
   }
 }

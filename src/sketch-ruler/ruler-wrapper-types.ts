@@ -3,6 +3,10 @@ export const wrapperProps = {
   scale: Number,
   ratio: Number,
   thick: Number,
+  startNumX: Number,
+  endNumX: Number,
+  startNumY: Number,
+  endNumY: Number,
   palette: Object,
   vertical: {
     type: Boolean,
