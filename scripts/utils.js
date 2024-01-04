@@ -20,7 +20,7 @@ function copy(name, version) {
 }
 
 function switchVersion(version) {
-  copy('index.mjs.js', version)
+  copy('index.mjs', version)
   copy('index.js', version)
   copy('index.umd.js', version)
   copy('style.css', version)

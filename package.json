@@ -20,7 +20,7 @@
   },
   "sideEffects": false,
   "typings": "types/index.d.ts",
-  "main": "lib/index.mjs.js",
+  "main": "lib/index.mjs",
   "module": "lib/index.js",
   "style": "lib/style.css",
   "scripts": {
