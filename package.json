@@ -1,6 +1,6 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "1.3.11",
+  "version": "1.3.12",
   "author": "kakajun <253495832@qq.com>",
   "license": "MIT",
   "private": false,
@@ -20,8 +20,8 @@
   },
   "sideEffects": false,
   "typings": "types/index.d.ts",
-  "main": "lib/index.es.js",
-  "module": "lib/index.es.js",
+  "main": "lib/index.mjs.js",
+  "module": "lib/index.js",
   "style": "lib/style.css",
   "scripts": {
     "postinstall": "node ./scripts/postinstall.js",
