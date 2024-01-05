@@ -1,4 +1,4 @@
-import { DefineComponent, Ref, ComponentOptionsMixin, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue-demi';
+import { DefineComponent, Ref, ComponentOptionsMixin, PublicProps, ExtractPropTypes } from 'vue-demi';
 declare const _default: DefineComponent<{
     showIndicator: BooleanConstructor;
     valueNum: NumberConstructor;
@@ -18,7 +18,7 @@ declare const _default: DefineComponent<{
 }, {
     handle: (e: MouseEvent, key: string) => void;
     canvas: Ref<HTMLCanvasElement | null>;
-}, unknown, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ("onAddLine" | "update:showIndicator" | "update:valueNum")[], "onAddLine" | "update:showIndicator" | "update:valueNum", VNodeProps & AllowedComponentProps & ComponentCustomProps, Readonly<ExtractPropTypes<{
+}, unknown, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ("onAddLine" | "update:showIndicator" | "update:valueNum")[], "onAddLine" | "update:showIndicator" | "update:valueNum", PublicProps, Readonly<ExtractPropTypes<{
     showIndicator: BooleanConstructor;
     valueNum: NumberConstructor;
     scale: NumberConstructor;

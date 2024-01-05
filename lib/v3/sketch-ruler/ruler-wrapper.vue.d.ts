@@ -1,4 +1,4 @@
-import { DefineComponent, PropType, Ref, ComputedRef, ComponentOptionsMixin, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue-demi';
+import { DefineComponent, PropType, Ref, ComputedRef, ComponentOptionsMixin, PublicProps, ExtractPropTypes } from 'vue-demi';
 declare const _default: DefineComponent<{
     scale: NumberConstructor;
     ratio: NumberConstructor;
@@ -56,7 +56,7 @@ declare const _default: DefineComponent<{
     handleNewLine: (value: number) => void;
     handleLineRelease: (value: number, index: number) => void;
     handleLineRemove: (index: any) => void;
-}, unknown, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, VNodeProps & AllowedComponentProps & ComponentCustomProps, Readonly<ExtractPropTypes<{
+}, unknown, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<{
     scale: NumberConstructor;
     ratio: NumberConstructor;
     thick: NumberConstructor;

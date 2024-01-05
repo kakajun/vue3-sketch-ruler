@@ -1,4 +1,4 @@
-import { DefineComponent, Ref, ComputedRef, ComponentOptionsMixin, VNodeProps, AllowedComponentProps, ComponentCustomProps, ExtractPropTypes } from 'vue-demi';
+import { DefineComponent, Ref, ComputedRef, ComponentOptionsMixin, PublicProps, ExtractPropTypes } from 'vue-demi';
 declare const _default: DefineComponent<{
     scale: NumberConstructor;
     thick: NumberConstructor;
@@ -36,7 +36,7 @@ declare const _default: DefineComponent<{
     }>;
     handleDown: (e: MouseEvent) => void;
     handleRemove: () => void;
-}, unknown, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ("onMouseDown" | "onRelease" | "onRemove")[], "onMouseDown" | "onRelease" | "onRemove", VNodeProps & AllowedComponentProps & ComponentCustomProps, Readonly<ExtractPropTypes<{
+}, unknown, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ("onMouseDown" | "onRelease" | "onRemove")[], "onMouseDown" | "onRelease" | "onRemove", PublicProps, Readonly<ExtractPropTypes<{
     scale: NumberConstructor;
     thick: NumberConstructor;
     palette: ObjectConstructor;
