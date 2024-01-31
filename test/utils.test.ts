@@ -1,6 +1,6 @@
 import { createCanvas, CanvasRenderingContext2D } from 'canvas'
 import { drawCavaseRuler } from '../src/canvas-ruler/utils'
-
+import { describe, expect, test, beforeEach, it } from 'vitest'
 describe('drawCavaseRuler', () => {
   let ctx: CanvasRenderingContext2D
 
@@ -29,7 +29,6 @@ describe('drawCavaseRuler', () => {
     }
 
     drawCavaseRuler(ctx, 0, 0, 0, options, true)
-
     // 在这里，您可以添加一些断言来验证 canvas 的状态
     // 例如，检查背景颜色是否已正确设置
     // 这可能需要一些额外的工作，因为直接验证 canvas 的像素可能比较复杂

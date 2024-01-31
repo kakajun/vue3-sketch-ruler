@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils'
+import { expect, test } from 'vitest'
 import Hello from './Hello.vue'
 
 test('mount component', async () => {

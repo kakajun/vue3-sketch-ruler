@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { existsSync, readdirSync, lstatSync, rmdirSync, unlinkSync } from 'fs'
@@ -14,12 +15,15 @@ export default defineConfig({
   plugins: [
     vue(),
     dts({
-      outputDir: 'types',
+      outDir: 'types',
       staticImport: true,
-      insertTypesEntry: true,
-      logDiagnostics: true
+      insertTypesEntry: true
     })
   ],
+  test: {
+    globals: true,
+    environment: 'jsdom'
+  },
   optimizeDeps: {
     exclude: ['vue-demi']
   },
