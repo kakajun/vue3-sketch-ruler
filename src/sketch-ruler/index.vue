@@ -58,7 +58,7 @@ export default defineComponent({
       function merge(obj: { [key: string]: any }, o: { [key: string]: any }) {
         Object.keys(obj).forEach((key) => {
           if (key && obj.hasOwnProperty(key)) {
-            if (typeof o['key'] === 'object') {
+            if (typeof o[key] === 'object') {
               obj[key] = merge(obj[key], o[key])
             } else if (o.hasOwnProperty(key)) {
               obj[key] = o[key]

@@ -43,7 +43,7 @@
     "lint:style": "stylelint --fix \"./src/**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
     "lint:lint-staged": "lint-staged -c ",
     "prepare": "is-ci || husky install",
-    "test": "jest"
+    "test": "vitest"
   },
   "lint-staged": {
     "*.{ts,tsx,js,vue,less}": "prettier --write",
@@ -53,7 +53,6 @@
   "devDependencies": {
     "@babel/preset-env": "^7.23.9",
     "@babel/preset-typescript": "^7.23.3",
-    "@types/jest": "^29.5.11",
     "@typescript-eslint/eslint-plugin": "^6.20.0",
     "@typescript-eslint/parser": "^6.20.0",
     "@vitejs/plugin-vue": "^5.0.3",
@@ -69,7 +68,6 @@
     "gh-pages": "^6.1.1",
     "husky": "^9.0.7",
     "is-ci": "^3.0.1",
-    "jest": "^29.7.0",
     "lint-staged": "^15.2.0",
     "postcss-html": "^1.6.0",
     "prettier": "^3.2.4",
@@ -87,6 +85,9 @@
     "vue": "^3.4.15",
     "vue-demi": "^0.14.6",
     "vue-jest": "^3.0.7",
+    "vitest": "^1.2.2",
+    "jsdom": "^24.0.0",
+    "canvas":"^2.11.2",
     "vue-types": "^5.1.1"
   },
   "peerDependencies": {

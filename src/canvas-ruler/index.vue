@@ -68,10 +68,10 @@ export default defineComponent({
         width: props.width!,
         height: props.height!,
         palette: props.palette!,
-        startNumX: props.startNumX,
-        endNumX: props.endNumX,
-        startNumY: props.startNumY,
-        endNumY: props.endNumY,
+        startNumX: props.startNumX!,
+        endNumX: props.endNumX!,
+        startNumY: props.startNumY!,
+        endNumY: props.endNumY!,
         ratio: ratio
       }
 
