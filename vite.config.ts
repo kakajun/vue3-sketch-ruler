@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import { existsSync, readdirSync, lstatSync, rmdirSync, unlinkSync } from 'fs'
 import { resolve } from 'path'
 import dts from 'vite-plugin-dts'
-const pkg = require('./package.json')
+import pkg from './package.json';
 
 emptyDir(resolve(__dirname, 'types'))
 const banner = `/*!${pkg.name} v${pkg.version}${new Date().getFullYear()}年${
