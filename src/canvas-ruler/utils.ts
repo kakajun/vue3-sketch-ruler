@@ -30,7 +30,7 @@ export const drawCavaseRuler = (
 ) => {
   const { scale, width, height, ratio, palette } = options
   const { bgColor, fontColor, shadowColor, longfgColor, shortfgColor } = palette
-  console.log(start, 'startstart')
+  // console.log(start, 'startstart')
   const startNum = h ? options.startNumX : options.startNumY
   const endNum = h ? options.endNumX : options.endNumY
   // 缩放ctx, 以简化计算

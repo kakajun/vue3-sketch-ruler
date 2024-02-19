@@ -11,24 +11,18 @@
       :hor-line-arr="lines.h"
       :ver-line-arr="lines.v"
       :corner-active="true"
-      @onCornerClick="handleCornerClick"
-    >
-    </SketchRule>
-    <div
-      id="screens"
-      ref="screensRef"
-      @wheel="handleWheel"
-      @scroll="handleScroll"
-    >
+      @on-corner-click="handleCornerClick"
+    />
+    <div id="screens" ref="screensRef" @wheel="handleWheel" @scroll="handleScroll">
       <div ref="containerRef" class="screen-container">
-        <div id="canvas" :style="canvasStyle" />
+        <div id="canvas" :style="canvasStyle"></div>
       </div>
     </div>
   </div>
 </template>
 <script>
 import { SketchRule, _SketchRuleComponent } from '../../src/index.ts'
-// import { SketchRule } from '/lib/index.es.js?3242' // 这里可以换成打包后的
+// import { SketchRule } from '/lib/index.js?3242' // 这里可以换成打包后的
 // import '/lib/style.css'
 // console.log(_SketchRuleComponent, '7777777')
 const rectWidth = 200
@@ -78,18 +72,12 @@ export default {
       return
     },
     handleScroll() {
-      const screensRect = document
-        .querySelector('#screens')
-        .getBoundingClientRect()
-      const canvasRect = document
-        .querySelector('#canvas')
-        .getBoundingClientRect()
+      const screensRect = document.querySelector('#screens').getBoundingClientRect()
+      const canvasRect = document.querySelector('#canvas').getBoundingClientRect()
 
       // 标尺开始的刻度
-      const startX =
-        (screensRect.left + this.thick - canvasRect.left) / this.scale
-      const startY =
-        (screensRect.top + this.thick - canvasRect.top) / this.scale
+      const startX = (screensRect.left + this.thick - canvasRect.left) / this.scale
+      const startY = (screensRect.top + this.thick - canvasRect.top) / this.scale
 
       this.startX = startX
       this.startY = startY
@@ -98,9 +86,7 @@ export default {
     handleWheel(e) {
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault()
-        const nextScale = parseFloat(
-          Math.max(0.2, this.scale - e.deltaY / 500).toFixed(2)
-        )
+        const nextScale = parseFloat(Math.max(0.2, this.scale - e.deltaY / 500).toFixed(2))
         this.scale = nextScale
       }
       this.$nextTick(() => {
