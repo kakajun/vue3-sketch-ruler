@@ -29,7 +29,5 @@ jobs:
       - name: Deploy 🚀
         uses: peaceiris/actions-gh-pages@v3
         with:
-          branch: gh-pages # The branch the action should deploy to.
-          folder: dist # The folder the action should deploy.
-          workspace: '1x'
-          target-folder: '1x' # 放在1X目录下
+          publish_dir: dist # The folder the action should deploy.
+          github_token: ${{ secrets.PERSONAL_SECRET_TOKEN2 }}
