@@ -43,7 +43,7 @@
 
 ## demo
 
-案例浏览: [https://kakajun.github.io/vue3-sketch-ruler/1x](https://kakajun.github.io/vue3-sketch-ruler/1x) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/assets/demo.png)
+案例浏览: [https://kakajun.github.io/vue3-sketch-ruler](https://kakajun.github.io/vue3-sketch-ruler) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/assets/demo.png)
 
 ## 安装
 
