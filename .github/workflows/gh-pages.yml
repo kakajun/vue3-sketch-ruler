@@ -30,4 +30,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           publish_dir: dist # The folder the action should deploy.
-          github_token: ${{ secrets.PERSONAL_SECRET_TOKEN2 }}
+
+          github_token: ${{ secrets.GITHUB_TOKEN }}
