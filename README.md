@@ -183,11 +183,6 @@ palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',shortfgColor: '#
 
 ### 更新说明
 
-v1.1.11
-
-1. 废弃掉 :horLineArr="lines.h" 和 :verLineArr="lines.v" 统一整合为lines对象传入,回调handleLine也废弃掉, 没什么用,如果不想要lines,就直接让lines={}
-2. 干掉一些没用的样式(是真没用,之前的工程也没用,我只是翻过来没用仔细研究代码,所以不会影响之前迁移的项目)
-
 v1.2.3
 
 1. 把方法进行合并,干掉一些不必要的事件,采用v-model传递参数,优化代码
