@@ -104,7 +104,7 @@ export default defineComponent({
         borderBottom: `1px solid ${paletteCpu.value.borderColor}`
       }
     })
-    const onCornerClick = (e: MouseEvent) => {
+    const onCornerClick = () => {
       showReferLine.value = !showReferLine.value
       emit('onCornerClick', showReferLine.value)
     }
