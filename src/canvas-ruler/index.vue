@@ -6,47 +6,54 @@
     @mouseenter="handle($event, 'enter')"
     @mousemove="handle($event, 'move')"
     @mouseleave="$emit('update:showIndicator', false)"
-  />
+  ></canvas>
 </template>
 <script lang="ts">
 import { drawCavaseRuler } from './utils'
-import { reactive, ref, onMounted, watch, defineComponent, inject } from 'vue'
-
-import { SketchRulerProps } from 'src/index-types'
+import { reactive, ref, onMounted, watch, defineComponent } from 'vue-demi'
 export default defineComponent({
   name: 'CanvasRuler',
   props: {
     showIndicator: Boolean,
     valueNum: Number,
+    scale: Number,
+    ratio: Number,
+    palette: Object,
     vertical: Boolean,
     start: Number,
     width: Number,
-    height: Number
+    height: Number,
+    selectStart: Number,
+    selectLength: Number,
+    startNumX: Number,
+    endNumX: Number,
+    startNumY: Number,
+    endNumY: Number
   },
   emits: ['onAddLine', 'update:showIndicator', 'update:valueNum'],
   setup(props, { emit }) {
-    const injectObj = inject('sketch') as SketchRulerProps
-    const { ratio, palette } = injectObj
     const state = reactive({
       canvasContext: null as CanvasRenderingContext2D | null
     })
+    let ratio = 1
     const canvas = ref<HTMLCanvasElement | null>(null)
     onMounted(() => {
+      ratio = props.ratio || window.devicePixelRatio || 1
       initCanvasRef()
-      updateCanvasContext()
-      drawRuler()
+      updateCanvasContext(ratio)
+      drawRuler(ratio)
     })
     const initCanvasRef = () => {
       state.canvasContext = canvas.value && canvas.value.getContext('2d')
     }
-    const updateCanvasContext = () => {
+    const updateCanvasContext = (ratio: number) => {
       if (canvas.value) {
         // 比例宽高
-        canvas.value.width = props.width! * ratio
-        canvas.value.height = props.height! * ratio
+        canvas.value.width = props.width! * ratio!
+        canvas.value.height = props.height! * ratio!
         const ctx = state.canvasContext
         if (ctx) {
-          ctx.font = `${12 * ratio}px -apple-system,
+          ctx.font = `${12 * ratio!}px -apple-system,
                 "Helvetica Neue", ".SFNSText-Regular",
                 "SF UI Text", Arial, "PingFang SC", "Hiragino Sans GB",
                 "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif`
@@ -55,19 +62,25 @@ export default defineComponent({
         }
       }
     }
-    const drawRuler = () => {
-      console.log(injectObj.scale!, ' canvas.value')
+    const drawRuler = (ratio: number) => {
       const options = {
-        scale: injectObj.scale,
+        scale: props.scale!,
         width: props.width!,
         height: props.height!,
-        palette: palette
+        palette: props.palette!,
+        startNumX: props.startNumX!,
+        endNumX: props.endNumX!,
+        startNumY: props.startNumY!,
+        endNumY: props.endNumY!,
+        ratio: ratio
       }
 
       if (state.canvasContext) {
         drawCavaseRuler(
           state.canvasContext,
           props.start!,
+          props.selectStart!,
+          props.selectLength!,
           options,
           !props.vertical
         )
@@ -75,17 +88,17 @@ export default defineComponent({
     }
     watch(
       () => props.start,
-      () => drawRuler()
+      () => drawRuler(ratio)
     )
     watch([() => props.width, () => props.height], () => {
-      updateCanvasContext()
-      drawRuler()
+      updateCanvasContext(ratio)
+      drawRuler(ratio)
     })
     const handle = (e: MouseEvent, key: string) => {
       const getValueByOffset = (offset: number, start: number, scale: number) =>
         Math.round(start + offset / scale)
       const offset = props.vertical ? e.offsetY : e.offsetX
-      const value = getValueByOffset(offset, props.start!, injectObj.scale)
+      const value = getValueByOffset(offset, props.start!, props.scale!)
       switch (key) {
         case 'click':
           emit('onAddLine', value)

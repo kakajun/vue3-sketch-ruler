@@ -2,23 +2,36 @@
   <div :class="rwClassName" :style="rwStyle">
     <CanvasRuler
       :vertical="vertical"
+      :scale="scale"
       :width="width"
       :height="height"
       :start="start"
+      :ratio="ratio"
+      :startNumX="startNumX"
+      :endNumX="endNumX"
+      :startNumY="startNumY"
+      :endNumY="endNumY"
+      :select-start="selectStart"
+      :select-length="selectLength"
+      :palette="palette"
       v-model:valueNum="valueNum"
       v-model:showIndicator="showIndicator"
-      @onAddLine="handleNewLine"
+      @on-addLine="handleNewLine"
     />
-    <div v-show="injectObj.isShowReferLine" class="lines">
+    <div v-show="isShowReferLine" class="lines">
       <RulerLine
         v-for="(v, i) in lines"
         :key="v + i"
         :index="i"
         :value="v >> 0"
+        :scale="scale"
         :start="start"
+        :thick="thick"
+        :palette="palette"
         :vertical="vertical"
-        @onRemove="handleLineRemove"
-        @onRelease="handleLineRelease"
+        :is-show-refer-line="isShowReferLine"
+        @on-remove="handleLineRemove"
+        @on-release="handleLineRelease"
       />
     </div>
     <div v-show="showIndicator" class="indicator" :style="indicatorStyle">
@@ -30,32 +43,16 @@
 <script lang="ts">
 import RulerLine from './ruler-line.vue'
 import CanvasRuler from '../canvas-ruler/index.vue'
-import { ref, computed, defineComponent, inject, PropType } from 'vue'
-import { SketchRulerProps } from 'src/index-types'
+import { ref, computed, defineComponent } from 'vue-demi'
+import { wrapperProps } from './ruler-wrapper-types'
 export default defineComponent({
   name: 'RulerWrapper',
   components: {
     CanvasRuler,
     RulerLine
   },
-  props: {
-    vertical: Boolean,
-    width: Number,
-    height: {
-      type: Number
-    },
-    start: {
-      type: Number,
-      default: 0
-    },
-    lines: {
-      type: Array as PropType<Array<number>>,
-      default: () => []
-    }
-  },
+  props: wrapperProps,
   setup(props) {
-    const injectObj = inject('sketch') as SketchRulerProps
-    const { palette, thick } = injectObj
     const showIndicator = ref(false)
     const valueNum = ref(0)
     const rwClassName = computed(() => {
@@ -64,27 +61,27 @@ export default defineComponent({
     })
     const rwStyle = computed(() => {
       const hContainer = {
-        width: `calc(100% - ${thick}px)`,
-        height: `${thick! + 1}px`,
-        left: `${thick}` + 'px'
+        width: `calc(100% - ${props.thick}px)`,
+        height: `${props.thick! + 1}px`,
+        left: `${props.thick}` + 'px'
       }
       const vContainer = {
-        width: `${thick && thick + 1}px`,
-        height: `calc(100% - ${thick}px)`,
-        top: `${thick}` + 'px'
+        width: `${props.thick && props.thick + 1}px`,
+        height: `calc(100% - ${props.thick}px)`,
+        top: `${props.thick}` + 'px'
       }
       return props.vertical ? vContainer : hContainer
     })
 
     const indicatorStyle = computed(() => {
-      const indicatorOffset = (valueNum.value - props.start) * injectObj.scale
+      const indicatorOffset = (valueNum.value - props.start) * props.scale!
       let positionKey = 'top'
       let boderKey = 'borderLeft'
       positionKey = props.vertical ? 'top' : 'left'
       boderKey = props.vertical ? 'borderBottom' : 'borderLeft'
       return {
         [positionKey]: indicatorOffset + 'px',
-        [boderKey]: `1px solid ${palette?.lineColor}`
+        [boderKey]: `1px solid ${props.palette?.lineColor}`
       }
     })
 
@@ -94,8 +91,7 @@ export default defineComponent({
     const handleLineRelease = (value: number, index: number) => {
       // 左右或上下超出时, 删除该条对齐线
       const offset = value - props.start
-      const maxOffset =
-        (props.vertical ? props.height! : props.width!) / injectObj.scale
+      const maxOffset = (props.vertical ? props.height : props.width) / props.scale!
       if (offset < 0 || offset > maxOffset) {
         handleLineRemove(index)
       } else {
@@ -106,7 +102,6 @@ export default defineComponent({
       props.lines.splice(index, 1)
     }
     return {
-      injectObj,
       showIndicator,
       valueNum,
       rwClassName,

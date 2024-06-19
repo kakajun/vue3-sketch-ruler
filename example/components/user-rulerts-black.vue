@@ -1,41 +1,38 @@
 <template>
-  <div class="top">缩放比例:{{ state.scale }}</div>
-  <button class="right" @click="showLineClick">辅助线开关</button>
-  <div class="wrapper">
-    <!--  这个可以传入图标 -->
+  <div class="wrapper2">
     <SketchRule
+      :eyeIcon="eyeIcon"
+      :closeEyeIcon="closeEyeIcon"
       :thick="state.thick"
-      :scale="state.scale"
+      :scale="state.scale2"
+      :palette="state.palette"
       :width="580"
       :height="580"
       :start-x="state.startX"
       :start-y="state.startY"
       :shadow="shadow"
-      :startNumX="0"
-      :endNumX="600"
-      :startNumY="0"
-      :endNumY="320"
       :isShowReferLine="state.isShowReferLine"
       @onCornerClick="handleCornerClick"
       :lines="state.lines"
-    />
-    <div id="screens" ref="screensRef" @wheel="handleWheel" @scroll="handleScroll">
+    >
+    </SketchRule>
+    <div
+      id="screens2"
+      ref="screensRef"
+      @wheel="handleWheel"
+      @scroll="handleScroll"
+    >
       <div ref="containerRef" class="screen-container">
-        <div id="canvas" :style="canvasStyle"></div>
+        <div id="canvas2" :style="canvasStyle" />
       </div>
     </div>
   </div>
-  <BlackSketchRule />
 </template>
 <script setup lang="ts">
-// import { SketchRule } from 'vue3-sketch-ruler'
-// import 'vue3-sketch-ruler/lib/style.css'
-// import { SketchRule } from '../../lib/index.es'
-// import '../../lib/style.css'
-
+import eyeIcon from './eye.svg'
+import closeEyeIcon from './closeEyeIcon.svg'
 import { computed, ref, reactive, onMounted, nextTick } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
-import BlackSketchRule from './user-rulerts-black.vue' // 这里可以换成打包后的
 const rectWidth = 600
 const rectHeight = 320
 const screensRef = ref(null)
@@ -48,9 +45,19 @@ const state = reactive({
     h: [433, 588],
     v: [33, 143]
   },
+  palette: {
+    bgColor: '#181b24', // ruler bg color
+    longfgColor: '#BABBBC', // ruler longer mark color
+    shortfgColor: '#9C9C9C', // ruler shorter mark color
+    fontColor: '#DEDEDE', // ruler font color
+    shadowColor: '#525252', // ruler shadow color
+    lineColor: '#EB5648',
+    borderColor: '#B5B5B5',
+    cornerActiveColor: '#fff'
+  },
   thick: 20,
   isShowRuler: true, // 显示标尺
-  isShowReferLine: false // 显示参考线
+  isShowReferLine: true // 显示参考线
 })
 const shadow = computed(() => {
   return {
@@ -69,20 +76,24 @@ const canvasStyle = computed(() => {
 })
 onMounted(() => {
   // 滚动居中
-  screensRef.value.scrollLeft = containerRef.value.getBoundingClientRect().width / 2 - 400
+  screensRef.value.scrollLeft =
+    containerRef.value.getBoundingClientRect().width / 2 - 400
 })
 
 const handleScroll = () => {
-  const screensRect = document.querySelector('#screens').getBoundingClientRect()
-  const canvasRect = document.querySelector('#canvas').getBoundingClientRect()
+  const screensRect = document
+    .querySelector('#screens2')
+    .getBoundingClientRect()
+  const canvasRect = document.querySelector('#canvas2').getBoundingClientRect()
 
   // 标尺开始的刻度
-  const startX = (screensRect.left + state.thick - canvasRect.left) / state.scale
+  const startX =
+    (screensRect.left + state.thick - canvasRect.left) / state.scale
   const startY = (screensRect.top + state.thick - canvasRect.top) / state.scale
   state.startX = startX
   state.startY = startY
 }
-const handleCornerClick = (e) => {
+const handleCornerClick = e => {
   console.log('handleCornerClick', e)
 }
 // 控制缩放值
@@ -94,7 +105,9 @@ const handleWheel = (e: {
 }) => {
   if (e.ctrlKey || e.metaKey) {
     e.preventDefault()
-    const nextScale = parseFloat(Math.max(0.2, state.scale - e.deltaY / 500).toFixed(2))
+    const nextScale = parseFloat(
+      Math.max(0.2, state.scale - e.deltaY / 500).toFixed(2)
+    )
     state.scale = nextScale
   }
   nextTick(() => {
@@ -131,10 +144,10 @@ body * {
   user-select: none;
 }
 
-.wrapper {
+.wrapper2 {
   position: absolute;
   top: 100px;
-  left: 140px;
+  right: 140px;
   /* 特别注意,这个width要和传入组件的width成对应关系,
    也就是 780width +thick20 =800
    否则影子不和容器搭配,这个在2X中会进行自动匹配修正,省得配置麻烦
@@ -143,13 +156,17 @@ body * {
   height: 600px;
   background-color: #f5f5f5;
   border: 1px solid #dadadc;
+  .value {
+    color: white;
+  }
 }
 
-#screens {
+#screens2 {
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: auto;
+  background: black;
 }
 
 .screen-container {
@@ -170,7 +187,7 @@ body * {
   left: 100px;
 }
 
-#canvas {
+#canvas2 {
   position: absolute;
   top: 80px;
   left: 50%;

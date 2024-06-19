@@ -10,7 +10,6 @@ export interface PaletteType {
   cornerActiveColor?: string
   menu?: MenuType
 }
-
 export interface MenuType {
   bgColor?: string
   dividerColor?: string
@@ -22,7 +21,6 @@ export interface MenuType {
     hoverBgColor?: string
   }
 }
-
 export interface ShadowType {
   x: number
   y: number
@@ -33,80 +31,74 @@ export interface lineType {
   h?: Array<number>
   v?: Array<number>
 }
-export const sketchRulerProps = {
+export declare const sketchRulerProps: {
   eyeIcon: {
-    type: String
-  },
+    type: StringConstructor
+  }
   closeEyeIcon: {
-    type: String
-  },
+    type: StringConstructor
+  }
   scale: {
-    type: Number,
-    default: 1
-  },
+    type: NumberConstructor
+    default: number
+  }
   ratio: {
-    type: Number
-    // default: window.devicePixelRatio || 1
-  },
+    type: NumberConstructor
+  }
   thick: {
-    type: Number,
-    default: 16
-  },
-  palette: Object as PropType<PaletteType>,
+    type: NumberConstructor
+    default: number
+  }
+  palette: PropType<PaletteType>
   startX: {
-    type: Number
-  },
+    type: NumberConstructor
+  }
   startY: {
-    type: Number,
-    default: 0
-  },
+    type: NumberConstructor
+    default: number
+  }
   width: {
-    type: Number,
-    default: 200
-  },
+    type: NumberConstructor
+    default: number
+  }
   height: {
-    type: Number,
-    default: 200
-  },
+    type: NumberConstructor
+    default: number
+  }
   shadow: {
-    type: Object as PropType<ShadowType>,
+    type: PropType<ShadowType>
     default: () => {
-      return {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0
-      }
+      x: number
+      y: number
+      width: number
+      height: number
     }
-  },
-
+  }
   lines: {
-    type: Object as PropType<lineType>,
+    type: PropType<lineType>
     default: () => {
-      return {
-        h: [],
-        v: []
-      }
+      h: never[]
+      v: never[]
     }
-  },
+  }
   isShowReferLine: {
-    type: Boolean,
-    default: true
-  },
+    type: BooleanConstructor
+    default: boolean
+  }
   startNumX: {
-    type: Number,
-    default: -Infinity
-  },
+    type: NumberConstructor
+    default: number
+  }
   endNumX: {
-    type: Number,
-    default: Infinity
-  },
+    type: NumberConstructor
+    default: number
+  }
   startNumY: {
-    type: Number,
-    default: -Infinity
-  },
+    type: NumberConstructor
+    default: number
+  }
   endNumY: {
-    type: Number,
-    default: Infinity
+    type: NumberConstructor
+    default: number
   }
 }

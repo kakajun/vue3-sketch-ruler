@@ -9,7 +9,6 @@ src/
 .stylelintignore
 commitlint.config.js
 index.html
-jest.config.js
 package.json
 prettier.config.js
 stylelint.config.js

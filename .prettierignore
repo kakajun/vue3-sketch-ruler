@@ -1,11 +1,11 @@
-# Ignore artifacts:
-**/*es.js
-**/*.html
-**/*.txt
-**/*.md
-**/*.svg
-**/*.ttf
-**/*.woff
-**/*.eot
-package.json
-node_modules
+/node_modules/**
+/dist/
+/dist*
+/public/*
+/docs/*
+/vite.config.ts
+/src/types/env.d.ts
+/src/types/auto-components.d.ts
+/src/types/auto-imports.d.ts
+/docs/**/*
+CHANGELOG

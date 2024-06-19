@@ -1,11 +1,6 @@
 <template>
   <!-- 线的显示 -->
-  <div
-    v-show="showLine"
-    class="line"
-    :style="[offset, borderCursor]"
-    @mousedown="handleDown"
-  >
+  <div v-show="showLine" class="line" :style="[offset, borderCursor]" @mousedown="handleDown">
     <div class="action" :style="actionStyle">
       <span class="del" @click="handleRemove">&times;</span>
       <span class="value">{{ startValue }}</span>
@@ -13,21 +8,22 @@
   </div>
 </template>
 <script lang="ts">
-import { ref, computed, onMounted, defineComponent, inject } from 'vue'
+import { ref, computed, onMounted, defineComponent } from 'vue-demi'
 
-import { SketchRulerProps } from 'src/index-types'
 export default defineComponent({
   name: 'LineRuler',
   props: {
+    scale: Number,
+    thick: Number,
+    palette: Object,
     index: Number,
     start: Number,
     vertical: Boolean,
-    value: Number
+    value: Number,
+    isShowReferLine: Boolean
   },
   emits: ['onMouseDown', 'onRelease', 'onRemove'],
   setup(props, { emit }) {
-    const injectObj = inject('sketch') as SketchRulerProps
-    const { isShowReferLine, palette, thick } = injectObj
     const startValue = ref(0)
     const showLine = ref(true)
     onMounted(() => {
@@ -37,21 +33,16 @@ export default defineComponent({
       showLine.value = offset >= 0
     }
     const offset = computed(() => {
-      const offset = (startValue.value - props.start!) * injectObj.scale
+      const offset = (startValue.value - props.start!) * props.scale!
       setShowLine(offset)
       const positionValue = offset + 'px'
-      const position = props.vertical
-        ? { top: positionValue }
-        : { left: positionValue }
+      const position = props.vertical ? { top: positionValue } : { left: positionValue }
       return position
     })
     const borderCursor = computed(() => {
-      console.log(palette?.lineColor, 'palette.lineColor')
-      const borderValue = `1px solid ${palette?.lineColor}`
-      const border = props.vertical
-        ? { borderTop: borderValue }
-        : { borderLeft: borderValue }
-      const cursorValue = isShowReferLine
+      const borderValue = `1px solid ${props.palette?.lineColor}`
+      const border = props.vertical ? { borderTop: borderValue } : { borderLeft: borderValue }
+      const cursorValue = props.isShowReferLine
         ? props.vertical
           ? 'ns-resize'
           : 'ew-resize'
@@ -63,8 +54,8 @@ export default defineComponent({
     })
     const actionStyle = computed(() => {
       const actionStyle = props.vertical
-        ? { left: thick + 'px' }
-        : { top: thick + 'px' }
+        ? { left: props.thick + 'px' }
+        : { top: props.thick + 'px' }
       return actionStyle
     })
 
@@ -75,9 +66,7 @@ export default defineComponent({
       emit('onMouseDown')
       const onMove = (e: MouseEvent) => {
         const currentD = props.vertical ? e.clientY : e.clientX
-        const newValue = Math.round(
-          initValue + (currentD - startD) / injectObj.scale
-        )
+        const newValue = Math.round(initValue + (currentD - startD) / props.scale!)
         startValue.value = newValue
       }
       const onEnd = () => {
@@ -106,6 +95,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .line {
+  pointer-events: auto;
   position: absolute;
   .action {
     position: absolute;

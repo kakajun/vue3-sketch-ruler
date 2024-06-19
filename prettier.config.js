@@ -1,14 +1,22 @@
 module.exports = {
+  printWidth: 100, // 每行代码长度（默认80）
+  tabWidth: 2, // 每个tab相当于多少个空格（默认2）ab进行缩进（默认false）
+  useTabs: false, // 是否使用tab
+  semi: false, // 声明结尾使用分号(默认true)
+  vueIndentScriptAndStyle: false,
+  singleQuote: true, // 使用单引号（默认false）
+  quoteProps: 'as-needed',
+  bracketSpacing: true, // 对象字面量的大括号间使用空格（默认true）
+  trailingComma: 'none', // 多行使用拖尾逗号（默认none）
+  jsxSingleQuote: false,
+  // 箭头函数参数括号 默认avoid 可选 avoid| always
+  // avoid 能省略括号的时候就省略 例如x => x
+  // always 总是有括号
+  arrowParens: 'always',
+  insertPragma: false,
+  requirePragma: false,
+  proseWrap: 'never',
+  htmlWhitespaceSensitivity: 'strict',
   endOfLine: 'auto',
-  tabWidth: 2, // tab缩进大小, 默认为2
-  useTabs: false, // 使用tab缩进, 默认false
-  semi: false, // 行末分号, 默认true
-  singleQuote: true, // 使用单引号, 默认false
-  quoteProps: 'as-needed', // 仅在需要时在对象属性周围添加引号, 默认'as-needed'
-  trailingComma: 'none', // 结尾是否强制添加逗号，默认none, 可选 none|es5|all
-  bracketSpacing: true, // 对象中的空格, 默认true
-  jsxSingleQuote: false, // jsx中是否使用单引号, 默认false
-  // endOfLine: 'lf', // 定义结尾换行符 \n \r \n\r，默认auto
-  arrowParens: 'avoid', // (x) => {} 箭头函数参数只有一个时是否要有小括号, avoid: 省略括号
-  vueIndentScriptAndStyle: false // vue文件的script标签和Style标签下的内容需要缩进, 默认false
+  rangeStart: 0
 }

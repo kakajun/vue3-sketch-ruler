@@ -1,7 +1,11 @@
 node_modules
 .DS_Store
 dist
-yarn.lock
 dist-ssr
 *.local
-lib
+/dist*
+*-lock.*
+pnpm-debug
+auto-*.d.ts
+.idea
+.history
