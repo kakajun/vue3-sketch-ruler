@@ -1,4 +1,4 @@
-import { PropType } from 'vue-demi'
+import { PropType } from 'vue'
 export interface PaletteType {
   bgColor?: string
   longfgColor?: string

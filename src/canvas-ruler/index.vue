@@ -10,7 +10,7 @@
 </template>
 <script lang="ts">
 import { drawCavaseRuler } from './utils'
-import { reactive, ref, onMounted, watch, defineComponent } from 'vue-demi'
+import { reactive, ref, onMounted, watch, defineComponent } from 'vue'
 export default defineComponent({
   name: 'CanvasRuler',
   props: {

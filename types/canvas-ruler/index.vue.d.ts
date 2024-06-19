@@ -1,10 +1,4 @@
-import {
-  DefineComponent,
-  Ref,
-  ComponentOptionsMixin,
-  PublicProps,
-  ExtractPropTypes
-} from 'vue-demi'
+import { DefineComponent, Ref, ComponentOptionsMixin, PublicProps, ExtractPropTypes } from 'vue'
 declare const _default: DefineComponent<
   {
     showIndicator: BooleanConstructor

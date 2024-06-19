@@ -19,7 +19,7 @@
 
 ---
 
-插件应用范围: 适合作为低代码平台操作页面缩放工具,比如做图工具如, 大屏可视化, 做图工具图怪兽等,类似ps的缩放效果. 使用vue-demi, 一套代码,打包两个环境的插件, 同时支持vue2和vue3中进行使用(在npm安装插件时,会自动判断载入对应vue版本的代码)
+插件应用范围: 适合作为低代码平台操作页面缩放工具,比如做图工具如, 大屏可视化, 做图工具图怪兽等,类似ps的缩放效果.
 
 应用案例: [avue大屏可视化工具](https://data.avuejs.com/build/1) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v2/assets/dp.png)
 
@@ -39,7 +39,7 @@
 
 ## 注意
 
-1. 该插件如果在vue2/vue3中使用, 需要配套安装vue-demi插件, 本插件没有打包vue-demi, 另外vue-demi只有18.2 kB,非常小,仅做了vue版本切换作用, 这里1X版本和vue-sketch-ruler 一样功能, 后面没有什么bug的话,不再维护, 1x基本不动原有功能,需要下载源码的, 或者提pr的, 请下载1x分支, 新功能将会在未来2X中增加,老工程迁移过来的建议使用1x版本, 新项目建议使用2X,做到0配置(2x难产中, 写了好几个版本觉得不够满意, 不过这个一定会出来的, 雏形已经传到master分支)
+1. 该插件如果在vue3中使用, 这里1X版本和vue-sketch-ruler 一样功能, 后面没有什么bug的话,不再维护, 1x基本不动原有功能,需要下载源码的, 或者提pr的, 请下载1x分支, 新功能将会在master中增加
 
 ## demo
 
@@ -52,21 +52,21 @@
 vue3
 
 ```
-npm install --save vue3-sketch-ruler vue-demi
+npm install --save vue3-sketch-ruler
 
 or
 
-yarn add vue3-sketch-ruler vue-demi -S
+yarn add vue3-sketch-ruler  -S
 ```
 
 vue2
 
 ```
-npm install --save vue3-sketch-ruler vue-demi @vue/composition-api
+npm install --save vue3-sketch-ruler  @vue/composition-api
 
 or
 
-yarn add vue3-sketch-ruler vue-demi @vue/composition-api -S
+yarn add vue3-sketch-ruler  @vue/composition-api -S
 ```
 
 ## 引入方式
@@ -183,28 +183,6 @@ palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',shortfgColor: '#
 
 ### 更新说明
 
-v1.2.3
-
-1. 把方法进行合并,干掉一些不必要的事件,采用v-model传递参数,优化代码
-2. 把lodash去掉,原打包体积由43k减少到19.6k, 稳定版,强烈推荐升级
-
-v1.2.5
-
-1. 处理window位置,防止Nuxt在服务端渲染时报错, 支持Nuxt3中正常使用
-
-v1.3.1
-
-1. 使用vue-demi 做到vue2/vue3中能同时使用
-
-v1.3.4全部更新vue的各种插件感悟: 时隔这么久, 在更新版本时还是不那么顺利切换vue, 就是说vue2和vue3再互相切换中, 还是会有不知名的bug, 来验证我是否打包正确了, 或者切换版本正确了, 还有些小伙伴也和我有同样的困惑, 发邮件问我, 为此我另外又建了一个工程, vue2-sketch-ruler 可以在我工程里面找到, 这个里面的代码和这边是一样的, 版本插件也一样, 能够跑起来, 验证vue3代码打包成vue2能使用的插件, 如果大家还是有相同的困惑也像我这样子验证一下当我确定能够行的通时, 那么只需要运行npm run build 那么两个版本的代码都打包好了
-
-v1.3.13
-
-应issue [#22](https://github.com/kakajun/vue3-sketch-ruler/issues/22) 要求, 这边添加尺规刻度开始和结束范围, 不定义, 不影响原本使用
-
-注意事项:
-
-1. 由于vue2打包不支持script标签中直接写setup, 本来我都已经升级了setup方式能减少很多代码, 但打包v2报错, 无赖我又只能还原回去, 不知道后面 @vue/composition-api 会不会支持这种打包方式,目前我已经更新到了最新的1.6.2, 依然不支持,等后面再关注!
 
 ### Event
 

@@ -24,9 +24,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom'
   },
-  optimizeDeps: {
-    exclude: ['vue-demi']
-  },
+
   resolve: {
     alias: {
       '@': resolve(__dirname)
@@ -43,7 +41,7 @@ export default defineConfig({
     },
     rollupOptions: {
       // 确保外部化处理那些你不想打包进库的依赖
-      external: ['vue', 'vue-demi'],
+      external: ['vue'],
       output: {
         banner,
         exports: 'auto'

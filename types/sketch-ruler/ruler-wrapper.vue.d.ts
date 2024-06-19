@@ -6,7 +6,7 @@ import {
   ComponentOptionsMixin,
   PublicProps,
   ExtractPropTypes
-} from 'vue-demi'
+} from 'vue'
 declare const _default: DefineComponent<
   {
     scale: NumberConstructor

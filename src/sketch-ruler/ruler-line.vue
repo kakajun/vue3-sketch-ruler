@@ -8,7 +8,7 @@
   </div>
 </template>
 <script lang="ts">
-import { ref, computed, onMounted, defineComponent } from 'vue-demi'
+import { ref, computed, onMounted, defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'LineRuler',

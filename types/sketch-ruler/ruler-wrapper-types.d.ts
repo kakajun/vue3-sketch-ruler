@@ -1,4 +1,4 @@
-import { PropType } from 'vue-demi'
+import { PropType } from 'vue'
 export declare const wrapperProps: {
   scale: NumberConstructor
   ratio: NumberConstructor

@@ -43,7 +43,7 @@
 <script lang="ts">
 import RulerLine from './ruler-line.vue'
 import CanvasRuler from '../canvas-ruler/index.vue'
-import { ref, computed, defineComponent } from 'vue-demi'
+import { ref, computed, defineComponent } from 'vue'
 import { wrapperProps } from './ruler-wrapper-types'
 export default defineComponent({
   name: 'RulerWrapper',
