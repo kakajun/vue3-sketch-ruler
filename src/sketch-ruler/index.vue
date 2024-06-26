@@ -1,13 +1,14 @@
 <template>
   <div id="mb-ruler" class="style-ruler mb-ruler">
-    <slot name="btn"></slot>
+    <slot
+      name="btn"
+      :resetMethod="resetMethod"
+      :zoomInMethod="zoomInMethod"
+      :zoomOutMethod="zoomOutMethod"
+    ></slot>
     <div class="zoomable-parent" :style="canvasStyle" @wheel="handleWheel">
       <div class="zoomable">
-        <slot
-          :resetMethod="resetMethod"
-          :zoomInMethod="zoomInMethod"
-          :zoomOutMethod="zoomOutMethod"
-        ></slot>
+        <slot></slot>
       </div>
     </div>
     <!-- 水平方向 -->

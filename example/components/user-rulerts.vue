@@ -17,7 +17,6 @@
         :startNumY="0"
         :endNumY="320"
         ref="sketchrule"
-        v-slot="{ resetMethod, zoomInMethod, zoomOutMethod }"
         :isShowReferLine="state.isShowReferLine"
         @onCornerClick="handleCornerClick"
         :lines="state.lines"
@@ -27,10 +26,12 @@
             <img class="img-style" :src="bgImg" alt="" />>
           </div>
         </template>
-        <template #btn class="btns">
-          <button class="btn reset-btn" @click="resetMethod">还原</button>
-          <button class="btn zoomin-btn" @click="zoomInMethod">放大</button>
-          <button class="btn zoomout-btn" @click="zoomOutMethod">缩小</button>
+        <template #btn="{ resetMethod, zoomInMethod, zoomOutMethod }">
+          <div class="btns">
+            <button class="btn reset-btn" @click="resetMethod">还原</button>
+            <button class="btn zoomin-btn" @click="zoomInMethod">放大</button>
+            <button class="btn zoomout-btn" @click="zoomOutMethod">缩小</button>
+          </div>
         </template>
       </SketchRule>
     </div>
@@ -195,5 +196,6 @@ body * {
   display: flex;
   bottom: 20px;
   right: 40px;
+  z-index: 999;
 }
 </style>
