@@ -1,47 +1,61 @@
 <template>
-  <div class="top">缩放比例:{{ state.scale }}</div>
-  <button class="right" @click="showLineClick">辅助线开关</button>
-  <div class="wrapper">
-    <!--  这个可以传入图标 -->
-    <SketchRule
-      :thick="state.thick"
-      :scale="state.scale"
-      :width="580"
-      :height="580"
-      :start-x="state.startX"
-      :start-y="state.startY"
-      :shadow="shadow"
-      :startNumX="0"
-      :endNumX="600"
-      :startNumY="0"
-      :endNumY="320"
-      :isShowReferLine="state.isShowReferLine"
-      @onCornerClick="handleCornerClick"
-      :lines="state.lines"
-    />
-    <div id="screens" ref="screensRef" @wheel="handleWheel" @scroll="handleScroll">
-      <div ref="containerRef" class="screen-container">
-        <div id="canvas" :style="canvasStyle"></div>
-      </div>
+  <div>
+    <div class="top">缩放比例:{{ state.scale }}</div>
+    <button class="right" @click="showLineClick">辅助线开关</button>
+    <div class="wrapper" :style="canvasStyle">
+      <!--  这个可以传入图标 -->
+      <SketchRule
+        :thick="state.thick"
+        v-model:scale="state.scale"
+        :width="rectWidth"
+        :height="rectHeight"
+        :start-x="state.startX"
+        :start-y="state.startY"
+        :shadow="shadow"
+        :startNumX="0"
+        :endNumX="1200"
+        :startNumY="0"
+        :endNumY="320"
+        ref="sketchrule"
+        v-slot="{ resetMethod, zoomInMethod, zoomOutMethod }"
+        :isShowReferLine="state.isShowReferLine"
+        @onCornerClick="handleCornerClick"
+        :lines="state.lines"
+      >
+        <template #default>
+          <div data-type="page" :style="canvasStyle">
+            <img class="img-style" :src="bgImg" alt="" />>
+          </div>
+        </template>
+        <template #btn class="btns">
+          <button class="btn reset-btn" @click="resetMethod">还原</button>
+          <button class="btn zoomin-btn" @click="zoomInMethod">放大</button>
+          <button class="btn zoomout-btn" @click="zoomOutMethod">缩小</button>
+        </template>
+      </SketchRule>
     </div>
   </div>
-  <BlackSketchRule />
 </template>
 <script setup lang="ts">
 // import { SketchRule } from 'vue3-sketch-ruler'
 // import 'vue3-sketch-ruler/lib/style.css'
 // import { SketchRule } from '../../lib/index.es'
 // import '../../lib/style.css'
-
+import bgImg from '../assets/bg.png'
 import { computed, ref, reactive, onMounted, nextTick } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
-import BlackSketchRule from './user-rulerts-black.vue' // 这里可以换成打包后的
-const rectWidth = 600
-const rectHeight = 320
-const screensRef = ref(null)
-const containerRef = ref(null)
+const rectWidth = 1200
+const rectHeight = 600
+const sketchrule = ref()
+// 另外一个方法调用内部方法
+const zoomOutMethod2 = () => {
+  if (sketchrule.value && typeof sketchrule.value.zoomOutMethod === 'function') {
+    console.log(sketchrule.value)
+    sketchrule.value.zoomOutMethod()
+  }
+}
 const state = reactive({
-  scale: 0.75, //658813476562495, //1,
+  scale: 0.75,
   startX: 0,
   startY: 0,
   lines: {
@@ -50,8 +64,9 @@ const state = reactive({
   },
   thick: 20,
   isShowRuler: true, // 显示标尺
-  isShowReferLine: false // 显示参考线
+  isShowReferLine: true // 显示参考线
 })
+
 const shadow = computed(() => {
   return {
     x: 0,
@@ -60,16 +75,12 @@ const shadow = computed(() => {
     height: rectHeight
   }
 })
+
 const canvasStyle = computed(() => {
   return {
-    width: rectWidth,
-    height: rectHeight,
-    transform: `scale(${state.scale})`
+    width: `${rectWidth}px`,
+    height: `${rectHeight}px`
   }
-})
-onMounted(() => {
-  // 滚动居中
-  screensRef.value.scrollLeft = containerRef.value.getBoundingClientRect().width / 2 - 400
 })
 
 const handleScroll = () => {
@@ -135,12 +146,6 @@ body * {
   position: absolute;
   top: 100px;
   left: 140px;
-  /* 特别注意,这个width要和传入组件的width成对应关系,
-   也就是 780width +thick20 =800
-   否则影子不和容器搭配,这个在2X中会进行自动匹配修正,省得配置麻烦
-    */
-  width: 600px;
-  height: 600px;
   background-color: #f5f5f5;
   border: 1px solid #dadadc;
 }
@@ -172,12 +177,23 @@ body * {
 
 #canvas {
   position: absolute;
-  top: 80px;
-  left: 50%;
-  width: 600px;
+  top: 0;
+  left: 0;
+  width: 800px;
   height: 320px;
   background: url('../assets/bg.jfif') no-repeat;
   background-size: 100% 100%;
   transform-origin: 50% 0;
+}
+
+.img-style {
+  width: 100%;
+  height: 100%;
+}
+.btns {
+  position: absolute;
+  display: flex;
+  bottom: 20px;
+  right: 40px;
 }
 </style>

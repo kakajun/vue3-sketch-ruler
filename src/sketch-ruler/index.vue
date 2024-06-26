@@ -1,5 +1,15 @@
 <template>
   <div id="mb-ruler" class="style-ruler mb-ruler">
+    <slot name="btn"></slot>
+    <div class="zoomable-parent" :style="canvasStyle" @wheel="handleWheel">
+      <div class="zoomable">
+        <slot
+          :resetMethod="resetMethod"
+          :zoomInMethod="zoomInMethod"
+          :zoomOutMethod="zoomOutMethod"
+        ></slot>
+      </div>
+    </div>
     <!-- 水平方向 -->
     <RulerWrapper
       :vertical="false"
@@ -41,12 +51,14 @@
 <script setup lang="ts">
 import RulerWrapper from './ruler-wrapper.vue'
 import { eye64, closeEye64 } from './cornerImg64'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted, defineExpose } from 'vue'
 import { sketchRulerProps } from '../index-types'
+import Panzoom from './panzoom'
 const props = defineProps(sketchRulerProps)
-const emit = defineEmits(['onCornerClick'])
+const emit = defineEmits(['onCornerClick', 'update:scale'])
 
 const showReferLine = ref(props.isShowReferLine)
+const panzoomInstance = ref<Panzoom | null>(null)
 // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
 const paletteCpu = computed(() => {
   function merge(obj: { [key: string]: any }, o: { [key: string]: any }) {
@@ -98,6 +110,59 @@ const cornerStyle = computed(() => {
     borderBottom: `1px solid ${paletteCpu.value.borderColor}`
   }
 })
+const canvasStyle = computed(() => {
+  return {
+    background: '#ff9',
+    marginTop: props.thick + 'px',
+    marginLeft: props.thick + 'px',
+    width: props.width - props.thick + 'px',
+    height: props.height - props.thick + 'px'
+  }
+})
+onMounted(() => {
+  initPanzoom()
+})
+
+const initPanzoom = () => {
+  // document: https://github.com/timmywil/panzoom
+  const elem = document.querySelector('.zoomable')
+  if (elem) {
+    panzoomInstance.value = Panzoom(elem, {
+      contain: 'inside',
+      startScale: props.scale,
+      cursor: 'default',
+      smoothScroll: true,
+      ...props.panzoomOption
+    })
+    elem.addEventListener('panzoomchange', (event) => {
+      emit('update:scale', event.detail.scale)
+      console.log(event.detail.scale, 'event.detail.scale')
+    })
+    // This demo binds to ctrlKey + wheel
+    parent.addEventListener('wheel', function (e) {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault()
+        panzoomInstance.value.zoomWithWheel(e)
+      }
+    })
+  }
+}
+const resetMethod = () => {
+  panzoomInstance.value.reset()
+}
+
+const zoomInMethod = () => {
+  panzoomInstance.value.zoomIn()
+}
+
+const zoomOutMethod = () => {
+  panzoomInstance.value.zoomOut()
+}
+const handleWheel = (e: MouseEvent) => {
+  if (e.ctrlKey || e.metaKey) {
+    e.preventDefault()
+  }
+}
 const onCornerClick = () => {
   showReferLine.value = !showReferLine.value
   emit('onCornerClick', showReferLine.value)
@@ -105,11 +170,18 @@ const onCornerClick = () => {
 watch([() => props.isShowReferLine], () => {
   showReferLine.value = props.isShowReferLine
 })
+
+// 使用defineExpose来暴露方法
+defineExpose({
+  resetMethod,
+  zoomInMethod,
+  zoomOutMethod
+})
 </script>
 
 <style lang="scss">
 .style-ruler {
-  position: absolute;
+  position: relative;
   z-index: 3;
   /* 需要比resizer高 */
   width: 100%;
@@ -117,8 +189,6 @@ watch([() => props.isShowReferLine], () => {
   height: 100%;
   overflow: hidden;
   font-size: 12px;
-  pointer-events: none;
-
   span {
     line-height: 1;
   }

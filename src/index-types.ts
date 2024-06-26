@@ -108,5 +108,6 @@ export const sketchRulerProps = {
   endNumY: {
     type: Number,
     default: Infinity
-  }
+  },
+  panzoomOption: Object
 }
