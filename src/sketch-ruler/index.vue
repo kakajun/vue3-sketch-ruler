@@ -23,7 +23,7 @@
       :lines="lines.h"
       :select-start="shadow.x"
       :select-length="shadow.width"
-      :scale="scale"
+      :scale="ownScale"
       :palette="paletteCpu"
       :startNumX="startNumX"
       :endNumX="endNumX"
@@ -40,7 +40,7 @@
       :lines="lines.v"
       :select-start="shadow.y"
       :select-length="shadow.height"
-      :scale="scale"
+      :scale="ownScale"
       :palette="paletteCpu"
       :startNumY="startNumY"
       :endNumY="endNumY"
@@ -52,12 +52,14 @@
 <script setup lang="ts">
 import RulerWrapper from './ruler-wrapper.vue'
 import { eye64, closeEye64 } from './cornerImg64'
-import { computed, ref, watch, onMounted, defineExpose } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { sketchRulerProps } from '../index-types'
 import Panzoom from './panzoom'
 const props = defineProps(sketchRulerProps)
 const emit = defineEmits(['onCornerClick', 'update:scale'])
-
+const startX = ref(0)
+const startY = ref(0)
+const ownScale = ref(0)
 const showReferLine = ref(props.isShowReferLine)
 const panzoomInstance = ref<Panzoom | null>(null)
 // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
@@ -100,6 +102,11 @@ const paletteCpu = computed(() => {
   )
   return finalObj
 })
+// const startX = computed(() => {
+//   if (!panzoomInstance.value) return 0
+//   const { x, y } = panzoomInstance.value.getPan()
+//   return -x
+// })
 const cornerStyle = computed(() => {
   return {
     backgroundImage: showReferLine.value
@@ -129,21 +136,39 @@ const initPanzoom = () => {
   const elem = document.querySelector('.zoomable')
   if (elem) {
     panzoomInstance.value = Panzoom(elem, {
-      contain: 'inside',
+      noBind: true,
+      // contain: 'inside',
       startScale: props.scale,
       cursor: 'default',
       smoothScroll: true,
       ...props.panzoomOption
     })
     elem.addEventListener('panzoomchange', (event) => {
-      emit('update:scale', event.detail.scale)
-      console.log(event.detail.scale, 'event.detail.scale')
+      const { x, y, scale } = event.detail
+      console.log(event.detail, 'event.detail')
+
+      // emit('update:scale', scale)
+      // ownScale.value = scale
+      startX.value = -x / scale
+      startY.value = -y / scale
     })
     // This demo binds to ctrlKey + wheel
     parent.addEventListener('wheel', function (e) {
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault()
         panzoomInstance.value.zoomWithWheel(e)
+      }
+    })
+    // 让按下空格键才能移动画布
+    parent.addEventListener('keydown', function (e) {
+      if (e.key === ' ') {
+        panzoomInstance.value.bind()
+      }
+    })
+
+    parent.addEventListener('keyup', function (e) {
+      if (e.key === ' ') {
+        panzoomInstance.value.destroy()
       }
     })
   }

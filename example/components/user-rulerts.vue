@@ -9,9 +9,7 @@
         v-model:scale="state.scale"
         :width="rectWidth"
         :height="rectHeight"
-        :start-x="state.startX"
         :start-y="state.startY"
-        :shadow="shadow"
         :startNumX="0"
         :endNumX="1200"
         :startNumY="0"
@@ -56,9 +54,7 @@ const zoomOutMethod2 = () => {
   }
 }
 const state = reactive({
-  scale: 0.75,
-  startX: 0,
-  startY: 0,
+  scale: 1,
   lines: {
     h: [433, 588],
     v: [33, 143]

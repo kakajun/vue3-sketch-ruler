@@ -53,13 +53,6 @@ export const sketchRulerProps = {
     default: 16
   },
   palette: Object as PropType<PaletteType>,
-  startX: {
-    type: Number
-  },
-  startY: {
-    type: Number,
-    default: 0
-  },
   width: {
     type: Number,
     default: 200
