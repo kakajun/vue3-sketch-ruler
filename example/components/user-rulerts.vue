@@ -2,7 +2,7 @@
   <div>
     <div class="top">缩放比例:{{ state.scale }}</div>
     <button class="right" @click="showLineClick">辅助线开关</button>
-    <div class="wrapper" :style="canvasStyle">
+    <div class="wrapper" :style="rectStyle">
       <!--  这个可以传入图标 -->
       <SketchRule
         :thick="state.thick"
@@ -11,9 +11,9 @@
         :height="rectHeight"
         :start-y="state.startY"
         :startNumX="0"
-        :endNumX="1200"
+        :endNumX="canvasWidth"
         :startNumY="0"
-        :endNumY="320"
+        :endNumY="canvasHeight"
         ref="sketchrule"
         :isShowReferLine="state.isShowReferLine"
         @onCornerClick="handleCornerClick"
@@ -45,6 +45,9 @@ import { computed, ref, reactive, onMounted, nextTick } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
 const rectWidth = 1200
 const rectHeight = 600
+const canvasWidth = 800
+const canvasHeight = 400
+
 const sketchrule = ref()
 // 另外一个方法调用内部方法
 const zoomOutMethod2 = () => {
@@ -56,8 +59,8 @@ const zoomOutMethod2 = () => {
 const state = reactive({
   scale: 1,
   lines: {
-    h: [433, 588],
-    v: [33, 143]
+    h: [0, 588],
+    v: [0, 143]
   },
   thick: 20,
   isShowRuler: true, // 显示标尺
@@ -73,42 +76,26 @@ const shadow = computed(() => {
   }
 })
 
-const canvasStyle = computed(() => {
+const rectStyle = computed(() => {
   return {
     width: `${rectWidth}px`,
     height: `${rectHeight}px`
   }
 })
 
-const handleScroll = () => {
-  const screensRect = document.querySelector('#screens').getBoundingClientRect()
-  const canvasRect = document.querySelector('#canvas').getBoundingClientRect()
+const canvasStyle = computed(() => {
+  return {
+    margin: '0 auto', // 画布水平居中就靠它
+    width: `${canvasWidth}px`,
+    height: `${canvasHeight}px`,
+    background: '#000'
+  }
+})
 
-  // 标尺开始的刻度
-  const startX = (screensRect.left + state.thick - canvasRect.left) / state.scale
-  const startY = (screensRect.top + state.thick - canvasRect.top) / state.scale
-  state.startX = startX
-  state.startY = startY
-}
 const handleCornerClick = (e) => {
   console.log('handleCornerClick', e)
 }
-// 控制缩放值
-const handleWheel = (e: {
-  ctrlKey: any
-  metaKey: any
-  preventDefault: () => void
-  deltaY: number
-}) => {
-  if (e.ctrlKey || e.metaKey) {
-    e.preventDefault()
-    const nextScale = parseFloat(Math.max(0.2, state.scale - e.deltaY / 500).toFixed(2))
-    state.scale = nextScale
-  }
-  nextTick(() => {
-    handleScroll()
-  })
-}
+
 const showLineClick = () => {
   state.isShowReferLine = !state.isShowReferLine
   console.log(state.isShowReferLine, 'state.isShowReferLine')

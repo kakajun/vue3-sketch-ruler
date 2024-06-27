@@ -6,8 +6,8 @@
       :zoomInMethod="zoomInMethod"
       :zoomOutMethod="zoomOutMethod"
     ></slot>
-    <div class="zoomable-parent" :style="canvasStyle" @wheel="handleWheel">
-      <div class="zoomable">
+    <div class="canvasedit-parent" :style="canvasStyle" @wheel="handleWheel">
+      <div class="canvasedit">
         <slot></slot>
       </div>
     </div>
@@ -52,14 +52,14 @@
 <script setup lang="ts">
 import RulerWrapper from './ruler-wrapper.vue'
 import { eye64, closeEye64 } from './cornerImg64'
-import { computed, ref, watch, onMounted } from 'vue'
+import { computed, ref, watch, onMounted, nextTick } from 'vue'
 import { sketchRulerProps } from '../index-types'
 import Panzoom from './panzoom'
 const props = defineProps(sketchRulerProps)
 const emit = defineEmits(['onCornerClick', 'update:scale'])
 const startX = ref(0)
 const startY = ref(0)
-const ownScale = ref(0)
+const ownScale = ref(1)
 const showReferLine = ref(props.isShowReferLine)
 const panzoomInstance = ref<Panzoom | null>(null)
 // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
@@ -102,11 +102,7 @@ const paletteCpu = computed(() => {
   )
   return finalObj
 })
-// const startX = computed(() => {
-//   if (!panzoomInstance.value) return 0
-//   const { x, y } = panzoomInstance.value.getPan()
-//   return -x
-// })
+
 const cornerStyle = computed(() => {
   return {
     backgroundImage: showReferLine.value
@@ -124,7 +120,8 @@ const canvasStyle = computed(() => {
     marginTop: props.thick + 'px',
     marginLeft: props.thick + 'px',
     width: props.width - props.thick + 'px',
-    height: props.height - props.thick + 'px'
+    height: props.height - props.thick + 'px',
+    padding: props.topPadding + 'px'
   }
 })
 onMounted(() => {
@@ -133,24 +130,30 @@ onMounted(() => {
 
 const initPanzoom = () => {
   // document: https://github.com/timmywil/panzoom
-  const elem = document.querySelector('.zoomable')
-  if (elem) {
+  const elem = document.querySelector('.canvasedit')
+  const parentEle = document.querySelector('.canvasedit-parent')
+  if (elem && parentEle) {
+    const parentRect = parentEle.getBoundingClientRect()
     panzoomInstance.value = Panzoom(elem, {
       noBind: true,
-      // contain: 'inside',
       startScale: props.scale,
       cursor: 'default',
       smoothScroll: true,
       ...props.panzoomOption
     })
     elem.addEventListener('panzoomchange', (event) => {
-      const { x, y, scale } = event.detail
-      console.log(event.detail, 'event.detail')
+      const { scale } = event.detail
+      emit('update:scale', scale)
+      setTimeout(() => {
+        ownScale.value = scale
+        // 处理尺规的初始位置
+        const children = elem.children[0].getBoundingClientRect()
+        console.log(children, 'ccccccccccc')
+        console.log(parentRect.left, 'parentRect.left')
 
-      // emit('update:scale', scale)
-      // ownScale.value = scale
-      startX.value = -x / scale
-      startY.value = -y / scale
+        startX.value = (parentRect.left - children.left) / scale
+        startY.value = (parentRect.top - children.top) / scale
+      }, 0)
     })
     // This demo binds to ctrlKey + wheel
     parent.addEventListener('wheel', function (e) {
@@ -211,7 +214,6 @@ defineExpose({
   z-index: 3;
   /* 需要比resizer高 */
   width: 100%;
-  /* scrollbar width */
   height: 100%;
   overflow: hidden;
   font-size: 12px;
@@ -244,5 +246,12 @@ defineExpose({
   width: 100%;
   height: 100%;
   pointer-events: auto;
+}
+.canvasedit-parent {
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+}
+.canvasedit {
 }
 </style>

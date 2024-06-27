@@ -66,6 +66,7 @@
     "stylelint-config-recommended": "^14.0.0",
     "stylelint-config-standard": "^36.0.0",
     "stylelint-order": "^6.0.4",
+    "happy-dom": "^14.12.3",
     "typescript": "5.4.5",
     "vite": "5.3.1",
     "vite-plugin-dts": "3.9.1",
