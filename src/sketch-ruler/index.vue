@@ -169,12 +169,12 @@ const initPanzoom = () => {
       if (dimsOut) {
         console.log(event.detail, 'event.detail')
         emit('update:scale', scale)
-        setTimeout(() => {
-          ownScale.value = scale
-        }, 0)
+        ownScale.value = scale
         const left = (dimsOut.parent.left - dimsOut.elem.left) / scale
         const top = (dimsOut.parent.top - dimsOut.elem.top) / scale
         startX.value = left
+        console.log(startX.value * scale, 'startX.value')
+        console.log(scale, 'scale')
         startY.value = top
       }
     })

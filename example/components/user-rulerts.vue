@@ -56,7 +56,7 @@ const zoomOutMethod2 = () => {
   }
 }
 const state = reactive({
-  scale: 1,
+  scale: 0.5,
   lines: {
     h: [0, 588],
     v: [0, 143]
