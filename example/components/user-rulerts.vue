@@ -1,7 +1,10 @@
 <template>
-  <div>
-    <div class="top">缩放比例:{{ state.scale }}</div>
-    <button class="right" @click="showLineClick">辅助线开关</button>
+  <div class="demo">
+    <div class="top">
+      <div class="scale"> 缩放比例:{{ cpuScale }} </div>
+      <button class="right" @click="showLineClick">辅助线开关</button>
+    </div>
+
     <div class="wrapper" :style="rectStyle">
       <!--  这个可以传入图标 -->
       <SketchRule
@@ -82,6 +85,10 @@ const rectStyle = computed(() => {
   }
 })
 
+const cpuScale = computed(() => {
+  return state.scale.toFixed(2)
+})
+
 const canvasStyle = computed(() => {
   return {
     // margin: '0 auto', // 画布水平居中就靠它
@@ -100,16 +107,24 @@ const showLineClick = () => {
 }
 </script>
 <style lang="scss">
+.demo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 水平居中 */
+}
 .top {
-  position: absolute;
-  left: 0px;
+  display: flex;
+  margin-bottom: 10px;
+  justify-content: center;
+  width: 100%;
   font-size: 20px;
+  .scale {
+    margin-right: 10px;
+  }
 }
 
 .right {
-  top: 200px;
-  position: absolute;
-  left: 0px;
   font-size: 20px;
 }
 body {
@@ -125,47 +140,13 @@ body * {
 }
 
 .wrapper {
-  position: absolute;
-  top: 100px;
-  left: 140px;
+  margin: 0 auto;
   background-color: #f5f5f5;
   border: 1px solid #dadadc;
 }
 
-#screens {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-}
-
-.screen-container {
-  position: absolute;
-  width: 5000px;
-  height: 3000px;
-}
-
-.scale-value {
-  position: absolute;
-  bottom: 100%;
-  left: 0;
-}
-
 .button {
-  position: absolute;
   bottom: 100%;
-  left: 100px;
-}
-
-#canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 800px;
-  height: 320px;
-  background: url('../assets/bg.jfif') no-repeat;
-  background-size: 100% 100%;
-  transform-origin: 50% 0;
 }
 
 .img-style {

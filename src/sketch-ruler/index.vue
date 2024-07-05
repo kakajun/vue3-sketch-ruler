@@ -6,7 +6,7 @@
       :zoomInMethod="zoomInMethod"
       :zoomOutMethod="zoomOutMethod"
     ></slot>
-    <div class="canvasedit-parent" :style="canvasStyle" @wheel="handleWheel">
+    <div class="canvasedit-parent" :style="canvasStyle" @wheel.prevent="">
       <div class="canvasedit">
         <slot></slot>
       </div>
@@ -57,6 +57,7 @@ import { sketchRulerProps } from '../index-types'
 import Panzoom from './panzoom'
 const props = defineProps(sketchRulerProps)
 const emit = defineEmits(['onCornerClick', 'update:scale'])
+const elem = ref(null)
 const startX = ref(0)
 const startY = ref(0)
 const ownScale = ref(1)
@@ -121,7 +122,6 @@ const canvasStyle = computed(() => {
     marginLeft: props.thick + 'px',
     width: props.width - props.thick + 'px',
     height: props.height - props.thick + 'px'
-    // padding: props.topPadding + 'px'
   }
 })
 onMounted(() => {
@@ -130,77 +130,81 @@ onMounted(() => {
 
 const initPanzoom = () => {
   // document: https://github.com/timmywil/panzoom
-  const elem = document.querySelector('.canvasedit')
+  elem.value = document.querySelector('.canvasedit')
+  initStart()
+  panzoomInstance.value = Panzoom(elem.value, {
+    noBind: true,
+    startScale: props.scale,
+    cursor: 'default',
+    startX: -startX.value,
+    startY: -startY.value,
+    smoothScroll: true,
+    ...props.panzoomOption
+  })
+
+  elem.value.addEventListener('panzoomchange', (event) => {
+    const { scale, dimsOut } = event.detail
+    if (dimsOut) {
+      console.log(event.detail, 'event.detail')
+      emit('update:scale', scale)
+      ownScale.value = scale
+      const left = (dimsOut.parent.left - dimsOut.elem.left) / scale
+      const top = (dimsOut.parent.top - dimsOut.elem.top) / scale
+      startX.value = left
+      console.log(startX.value * scale, 'startX.value')
+      console.log(scale, 'scale')
+      startY.value = top
+    }
+  })
+  // This demo binds to ctrlKey + wheel
+  parent.addEventListener('wheel', function (e) {
+    if (e.ctrlKey || e.metaKey) {
+      // e.preventDefault()
+      panzoomInstance.value.zoomWithWheel(e)
+    }
+  })
+  // 让按下空格键才能移动画布
+  parent.addEventListener('keydown', function (e) {
+    if (e.key === ' ') {
+      panzoomInstance.value.bind()
+    }
+  })
+
+  parent.addEventListener('keyup', function (e) {
+    if (e.key === ' ') {
+      panzoomInstance.value.destroy()
+    }
+  })
+}
+
+const initStart = () => {
   const parentEle = document.querySelector('.canvasedit-parent')
-  if (elem && parentEle) {
-    const parentRect = parentEle.getBoundingClientRect()
-    panzoomInstance.value = Panzoom(elem, {
-      noBind: true,
-      startScale: props.scale,
-      cursor: 'default',
-      smoothScroll: true,
-      ...props.panzoomOption
-    })
-
-    setTimeout(() => {
-      // 处理尺规的初始位置
-      const children = elem.children[0].getBoundingClientRect()
-      console.log(children, 'ccccccccccc')
-      console.log(parentRect, 'parentRect')
-      // 算出居中时的位置,上下也居中
-      const { width, height } = parentRect
-      if (width > children.width) {
-        startX.value = -(width - children.width) / 2
-        if (height > children.height) {
-          startY.value = -(height - children.height) / 2
-        } else {
-          // 子图太大, 那么00 开始
-          startY.value = 0
-        }
-      } else {
-        // 子图太大, 那么00 开始
-        startX.value = 0
-        startY.value = 0
-      }
-      panzoomInstance.value.pan(-startX.value, -startY.value)
-    }, 0)
-    elem.addEventListener('panzoomchange', (event) => {
-      const { scale, dimsOut } = event.detail
-      if (dimsOut) {
-        console.log(event.detail, 'event.detail')
-        emit('update:scale', scale)
-        ownScale.value = scale
-        const left = (dimsOut.parent.left - dimsOut.elem.left) / scale
-        const top = (dimsOut.parent.top - dimsOut.elem.top) / scale
-        startX.value = left
-        console.log(startX.value * scale, 'startX.value')
-        console.log(scale, 'scale')
-        startY.value = top
-      }
-    })
-    // This demo binds to ctrlKey + wheel
-    parent.addEventListener('wheel', function (e) {
-      if (e.ctrlKey || e.metaKey) {
-        e.preventDefault()
-        panzoomInstance.value.zoomWithWheel(e)
-      }
-    })
-    // 让按下空格键才能移动画布
-    parent.addEventListener('keydown', function (e) {
-      if (e.key === ' ') {
-        panzoomInstance.value.bind()
-      }
-    })
-
-    parent.addEventListener('keyup', function (e) {
-      if (e.key === ' ') {
-        panzoomInstance.value.destroy()
-      }
-    })
+  const parentRect = parentEle.getBoundingClientRect()
+  // 处理尺规的初始位置
+  const children = elem.value.children[0].getBoundingClientRect()
+  console.log(children, 'ccccccccccc')
+  console.log(parentRect, 'parentRect')
+  // 算出居中时的位置,上下也居中
+  const { width, height } = parentRect
+  if (width > children.width) {
+    startX.value = -(width - children.width) / 2
+    if (height > children.height) {
+      startY.value = -(height - children.height) / 2
+    } else {
+      // 子图太大, 那么00 开始
+      startY.value = 0
+    }
+  } else {
+    // 子图太大, 那么00 开始
+    startX.value = 0
+    startY.value = 0
   }
 }
 const resetMethod = () => {
   panzoomInstance.value.reset()
+  // setTimeout(() => {
+  //   initStart()
+  // }, 1500)
 }
 
 const zoomInMethod = () => {
@@ -210,11 +214,7 @@ const zoomInMethod = () => {
 const zoomOutMethod = () => {
   panzoomInstance.value.zoomOut()
 }
-const handleWheel = (e: MouseEvent) => {
-  if (e.ctrlKey || e.metaKey) {
-    e.preventDefault()
-  }
-}
+
 const onCornerClick = () => {
   showReferLine.value = !showReferLine.value
   emit('onCornerClick', showReferLine.value)
