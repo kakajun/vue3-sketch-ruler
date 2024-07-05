@@ -9,7 +9,6 @@
         v-model:scale="state.scale"
         :width="rectWidth"
         :height="rectHeight"
-        :start-y="state.startY"
         :startNumX="0"
         :endNumX="canvasWidth"
         :startNumY="0"
@@ -64,7 +63,7 @@ const state = reactive({
   },
   thick: 20,
   isShowRuler: true, // 显示标尺
-  isShowReferLine: true // 显示参考线
+  isShowReferLine: false // 显示参考线
 })
 
 const shadow = computed(() => {
@@ -85,10 +84,9 @@ const rectStyle = computed(() => {
 
 const canvasStyle = computed(() => {
   return {
-    margin: '0 auto', // 画布水平居中就靠它
+    // margin: '0 auto', // 画布水平居中就靠它
     width: `${canvasWidth}px`,
-    height: `${canvasHeight}px`,
-    background: '#000'
+    height: `${canvasHeight}px`
   }
 })
 

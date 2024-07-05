@@ -120,8 +120,8 @@ const canvasStyle = computed(() => {
     marginTop: props.thick + 'px',
     marginLeft: props.thick + 'px',
     width: props.width - props.thick + 'px',
-    height: props.height - props.thick + 'px',
-    padding: props.topPadding + 'px'
+    height: props.height - props.thick + 'px'
+    // padding: props.topPadding + 'px'
   }
 })
 onMounted(() => {
@@ -141,19 +141,42 @@ const initPanzoom = () => {
       smoothScroll: true,
       ...props.panzoomOption
     })
-    elem.addEventListener('panzoomchange', (event) => {
-      const { scale } = event.detail
-      emit('update:scale', scale)
-      setTimeout(() => {
-        ownScale.value = scale
-        // 处理尺规的初始位置
-        const children = elem.children[0].getBoundingClientRect()
-        console.log(children, 'ccccccccccc')
-        console.log(parentRect.left, 'parentRect.left')
 
-        startX.value = (parentRect.left - children.left) / scale
-        startY.value = (parentRect.top - children.top) / scale
-      }, 0)
+    setTimeout(() => {
+      // 处理尺规的初始位置
+      const children = elem.children[0].getBoundingClientRect()
+      console.log(children, 'ccccccccccc')
+      console.log(parentRect, 'parentRect')
+      // 算出居中时的位置,上下也居中
+      const { width, height } = parentRect
+      if (width > children.width) {
+        startX.value = -(width - children.width) / 2
+        if (height > children.height) {
+          startY.value = -(height - children.height) / 2
+        } else {
+          // 子图太大, 那么00 开始
+          startY.value = 0
+        }
+      } else {
+        // 子图太大, 那么00 开始
+        startX.value = 0
+        startY.value = 0
+      }
+      panzoomInstance.value.pan(-startX.value, -startY.value)
+    }, 0)
+    elem.addEventListener('panzoomchange', (event) => {
+      const { scale, dimsOut } = event.detail
+      if (dimsOut) {
+        console.log(event.detail, 'event.detail')
+        emit('update:scale', scale)
+        setTimeout(() => {
+          ownScale.value = scale
+        }, 0)
+        const left = (dimsOut.parent.left - dimsOut.elem.left) / scale
+        const top = (dimsOut.parent.top - dimsOut.elem.top) / scale
+        startX.value = left
+        startY.value = top
+      }
     })
     // This demo binds to ctrlKey + wheel
     parent.addEventListener('wheel', function (e) {
@@ -230,28 +253,5 @@ defineExpose({
   cursor: pointer;
   box-sizing: content-box;
   transition: all 0.2s ease-in-out;
-}
-
-.indicator {
-  position: absolute;
-  pointer-events: none;
-
-  .value {
-    position: absolute;
-    background: white;
-  }
-}
-
-.ruler {
-  width: 100%;
-  height: 100%;
-  pointer-events: auto;
-}
-.canvasedit-parent {
-  // display: flex;
-  // justify-content: center;
-  // align-items: center;
-}
-.canvasedit {
 }
 </style>
