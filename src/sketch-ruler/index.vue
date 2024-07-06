@@ -29,7 +29,7 @@
       :endNumX="endNumX"
     />
     <!-- 竖直方向 -->
-    <!-- <RulerWrapper
+    <RulerWrapper
       :vertical="true"
       :width="thick"
       :height="height"
@@ -44,7 +44,7 @@
       :palette="paletteCpu"
       :startNumY="startNumY"
       :endNumY="endNumY"
-    /> -->
+    />
     <a class="corner" :style="cornerStyle" @click="onCornerClick"></a>
   </div>
 </template>
@@ -60,6 +60,8 @@ const emit = defineEmits(['onCornerClick', 'update:scale'])
 const elem = ref(null)
 const startX = ref(0)
 const startY = ref(0)
+const zoomStartX = ref(0)
+const zoomStartY = ref(0)
 const ownScale = ref(1)
 const showReferLine = ref(props.isShowReferLine)
 const panzoomInstance = ref<Panzoom | null>(null)
@@ -136,8 +138,8 @@ const initPanzoom = () => {
     noBind: true,
     startScale: props.scale,
     cursor: 'default',
-    startX: -startX.value,
-    startY: -startY.value,
+    startX: zoomStartX.value,
+    startY: zoomStartY.value,
     smoothScroll: true,
     ...props.panzoomOption
   })
@@ -177,34 +179,30 @@ const initPanzoom = () => {
   })
 }
 
+/**
+ * @desc: 处理初始化画布居中位置
+ */
 const initStart = () => {
   const parentEle = document.querySelector('.canvasedit-parent')
   const parentRect = parentEle.getBoundingClientRect()
-  // 处理尺规的初始位置
   const children = elem.value.children[0].getBoundingClientRect()
-  console.log(children, 'ccccccccccc')
-  console.log(parentRect, 'parentRect')
-  // 算出居中时的位置,上下也居中
   const { width, height } = parentRect
   if (width > children.width) {
-    startX.value = -(width - children.width) / 2
+    zoomStartX.value = (width - children.width) / 2
     if (height > children.height) {
-      startY.value = -(height - children.height) / 2
+      zoomStartY.value = (height - children.height) / 2
     } else {
       // 子图太大, 那么00 开始
-      startY.value = 0
+      zoomStartY.value = 0
     }
   } else {
     // 子图太大, 那么00 开始
-    startX.value = 0
-    startY.value = 0
+    zoomStartY.value = 0
+    zoomStartX.value = 0
   }
 }
 const resetMethod = () => {
   panzoomInstance.value.reset()
-  // setTimeout(() => {
-  //   initStart()
-  // }, 1500)
 }
 
 const zoomInMethod = () => {

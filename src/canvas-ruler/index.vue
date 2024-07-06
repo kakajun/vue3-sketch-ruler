@@ -41,7 +41,7 @@ export default defineComponent({
       ratio = props.ratio || window.devicePixelRatio || 1
       initCanvasRef()
       updateCanvasContext(ratio)
-      drawRuler(ratio)
+      // drawRuler(ratio)
     })
     const initCanvasRef = () => {
       state.canvasContext = canvas.value && canvas.value.getContext('2d')
@@ -63,6 +63,8 @@ export default defineComponent({
       }
     }
     const drawRuler = (ratio: number) => {
+      console.log('drawRuler', props.scale)
+
       const options = {
         scale: props.scale!,
         width: props.width!,
@@ -88,7 +90,11 @@ export default defineComponent({
     }
     watch(
       () => props.start,
-      () => drawRuler(ratio)
+      () => {
+        console.log('start', props.start)
+
+        drawRuler(ratio)
+      }
     )
     watch([() => props.width, () => props.height], () => {
       updateCanvasContext(ratio)

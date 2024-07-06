@@ -66,7 +66,7 @@ const state = reactive({
   },
   thick: 20,
   isShowRuler: true, // 显示标尺
-  isShowReferLine: false // 显示参考线
+  isShowReferLine: true // 显示参考线
 })
 
 const shadow = computed(() => {
