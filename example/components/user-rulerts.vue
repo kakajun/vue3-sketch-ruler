@@ -59,7 +59,7 @@ const zoomOutMethod2 = () => {
   }
 }
 const state = reactive({
-  scale: 0.5,
+  scale: 1,
   lines: {
     h: [0, 588],
     v: [0, 143]
@@ -91,7 +91,6 @@ const cpuScale = computed(() => {
 
 const canvasStyle = computed(() => {
   return {
-    // margin: '0 auto', // 画布水平居中就靠它
     width: `${canvasWidth}px`,
     height: `${canvasHeight}px`
   }

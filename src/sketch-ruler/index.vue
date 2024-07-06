@@ -29,7 +29,7 @@
       :endNumX="endNumX"
     />
     <!-- 竖直方向 -->
-    <RulerWrapper
+    <!-- <RulerWrapper
       :vertical="true"
       :width="thick"
       :height="height"
@@ -44,7 +44,7 @@
       :palette="paletteCpu"
       :startNumY="startNumY"
       :endNumY="endNumY"
-    />
+    /> -->
     <a class="corner" :style="cornerStyle" @click="onCornerClick"></a>
   </div>
 </template>

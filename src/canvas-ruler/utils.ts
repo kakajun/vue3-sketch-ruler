@@ -55,23 +55,25 @@ export const drawCavaseRuler = (
   const gridPixel = gridSize * scale
   const gridSize10 = gridSize * 10 // 每大格表示的宽度
   const gridPixel10 = gridSize10 * scale
+  console.log(gridSize, 'gridSize')
+  console.log(gridPixel10, 'gridPixel10')
 
-  const startValue = Math.floor(start / gridSize) * gridSize // 绘制起点的刻度(略小于start, 且是gridSize的整数倍)
-  const startValue10 = Math.floor(start / gridSize10) * gridSize10 // 长间隔绘制起点的刻度(略小于start, 且是gridSize10的整数倍)
-
+  const startValue = Math.floor(start / gridSize) * gridSize // 绘制起点的刻度
+  const startValue10 = Math.floor(start / gridSize10) * gridSize10 // 长间隔绘制起点的刻度
+  console.log(startValue, 'startValue')
   const offsetX = ((startValue - start) / gridSize) * gridPixel // 起点刻度距离ctx原点(start)的px距离
   const offsetX10 = ((startValue10 - start) / gridSize10) * gridPixel10 // 长间隔起点刻度距离ctx原点(start)的px距离
-  const endValue = start + Math.ceil((h ? width : height) / scale) // 终点刻度(略超出标尺宽度即可)
-
+  const endValue = start + Math.ceil((h ? width : height) / scale) // 终点刻度
   // 3. 画刻度和文字(因为刻度遮住了阴影)
-  ctx.beginPath() // 一定要记得开关路径,因为clearRect并不能清除掉路径,如果不关闭路径下次绘制时会接着上次的绘制
+  ctx.beginPath()
 
   ctx.fillStyle = fontColor
   ctx.strokeStyle = longfgColor
 
-  // 长间隔和短间隔需要两次绘制，才可以完成不同颜色的设置；分开放到两个for循环是为了节省性能，因为如果放到一个for循环的话，每次循环都会重新绘制操作dom
   // 绘制长间隔和文字
   for (let value = startValue10, count = 0; value < endValue; value += gridSize10, count++) {
+    console.log(endNum, 'endNum')
+
     if (value >= startNum && value <= endNum) {
       const x = offsetX10 + count * gridPixel10 + 0.5 // prevent canvas 1px line blurry
       h ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
@@ -93,7 +95,11 @@ export const drawCavaseRuler = (
     ctx.strokeStyle = shortfgColor
     for (let value = startValue, count = 0; value < endValue; value += gridSize, count++) {
       if (value >= startNum && value <= endNum) {
+        console.log(value, 'value')
+
         const x = offsetX + count * gridPixel + 0.5 // prevent canvas 1px line blurry
+        // console.log(x, 'x')
+
         h ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
         if (value % gridSize10 !== 0) {
           h ? ctx.lineTo(x, (height * 1) / 4) : ctx.lineTo((width * 1) / 4, x)
