@@ -1,5 +1,5 @@
 <template>
-  <div id="mb-ruler" class="style-ruler mb-ruler">
+  <div class="sketch-ruler">
     <slot
       name="btn"
       :resetMethod="resetMethod"
@@ -29,7 +29,7 @@
       :endNumX="endNumX"
     />
     <!-- 竖直方向 -->
-    <!-- <RulerWrapper
+    <RulerWrapper
       :vertical="true"
       :width="thick"
       :height="height"
@@ -44,7 +44,7 @@
       :palette="paletteCpu"
       :startNumY="startNumY"
       :endNumY="endNumY"
-    /> -->
+    />
     <a class="corner" :style="cornerStyle" @click="onCornerClick"></a>
   </div>
 </template>
@@ -232,7 +232,7 @@ defineExpose({
 </script>
 
 <style lang="scss">
-.style-ruler {
+.sketch-ruler {
   position: relative;
   z-index: 3;
   /* 需要比resizer高 */
@@ -243,15 +243,15 @@ defineExpose({
   span {
     line-height: 1;
   }
-}
 
-.corner {
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: auto;
-  cursor: pointer;
-  box-sizing: content-box;
-  transition: all 0.2s ease-in-out;
+  .corner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: auto;
+    cursor: pointer;
+    box-sizing: content-box;
+    transition: all 0.2s ease-in-out;
+  }
 }
 </style>

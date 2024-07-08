@@ -64,7 +64,6 @@ export default defineComponent({
     }
     const drawRuler = (ratio: number) => {
       console.log('drawRuler', props.scale)
-
       const options = {
         scale: props.scale!,
         width: props.width!,
