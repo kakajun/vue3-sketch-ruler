@@ -70,12 +70,12 @@ const rwStyle = computed(() => {
 
 const indicatorStyle = computed(() => {
   const indicatorOffset = (valueNum.value - props.start) * props.scale!
-  let positionKey = 'top'
-  let boderKey = 'borderLeft'
-  positionKey = props.vertical ? 'top' : 'left'
-  boderKey = props.vertical ? 'borderBottom' : 'borderLeft'
+  let positionKey = props.vertical ? 'top' : 'left'
+  let gepKey = props.vertical ? 'left' : 'top'
+  let boderKey = props.vertical ? 'borderBottom' : 'borderLeft'
   return {
     [positionKey]: indicatorOffset + 'px',
+    [gepKey]: props.thick + 'px',
     [boderKey]: `1px solid ${props.palette?.lineColor}`
   }
 })
@@ -126,6 +126,7 @@ const handleLineRemove = (index: any) => {
     }
   }
   .indicator {
+    position: absolute;
     top: 0;
     height: 100vw;
     .value {

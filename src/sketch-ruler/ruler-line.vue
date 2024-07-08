@@ -87,12 +87,8 @@ function handleRemove() {
   emit('onRemove', props.index)
 }
 
-// 定义响应式引用
 const showLabel = ref(false)
-
-// 更新鼠标位置
 const handleMouseMove = (event) => {
-  // console.log(event, 'event')
   offsetLine.value = props.vertical ? event.offsetX : event.offsetY
 }
 
