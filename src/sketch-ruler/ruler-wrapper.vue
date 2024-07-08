@@ -34,6 +34,7 @@
         @on-release="handleLineRelease"
       />
     </div>
+
     <div v-show="showIndicator" class="indicator" :style="indicatorStyle">
       <div class="value">{{ valueNum }}</div>
     </div>
@@ -111,6 +112,9 @@ const handleLineRemove = (index: any) => {
   &:hover .lines {
     pointer-events: auto;
   }
+  .indicator {
+    position: absolute;
+  }
 }
 .h-container {
   top: 0;
@@ -118,15 +122,8 @@ const handleLineRemove = (index: any) => {
     top: 0;
     height: 100vh;
     padding-left: 5px;
-    .action {
-      transform: translateX(-24px);
-      .value {
-        margin-left: 4px;
-      }
-    }
   }
   .indicator {
-    position: absolute;
     top: 0;
     height: 100vw;
     .value {
@@ -139,18 +136,9 @@ const handleLineRemove = (index: any) => {
 }
 
 .v-container {
-  left: 0;
   .line {
-    left: 0;
     width: 100vw;
     padding-top: 5px;
-    .action {
-      transform: translateY(-24px);
-      flex-direction: column;
-      .value {
-        margin-top: 4px;
-      }
-    }
   }
   .indicator {
     width: 100vw;

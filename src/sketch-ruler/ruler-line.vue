@@ -103,18 +103,6 @@ const labelContent = computed(() => {
   position: absolute;
   .action {
     position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .del {
-    padding: 3px 5px;
-    cursor: pointer;
-    visibility: hidden;
-  }
-  &:hover .del {
-    visibility: visible;
   }
 }
 
