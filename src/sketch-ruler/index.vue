@@ -29,7 +29,7 @@
       :endNumX="endNumX"
     />
     <!-- 竖直方向 -->
-    <RulerWrapper
+    <!-- <RulerWrapper
       :vertical="true"
       :width="thick"
       :height="height"
@@ -44,7 +44,7 @@
       :palette="paletteCpu"
       :startNumY="startNumY"
       :endNumY="endNumY"
-    />
+    /> -->
     <a class="corner" :style="cornerStyle" @click="onCornerClick"></a>
   </div>
 </template>
@@ -134,6 +134,8 @@ const initPanzoom = () => {
   // document: https://github.com/timmywil/panzoom
   elem.value = document.querySelector('.canvasedit')
   initStart()
+  console.log(zoomStartX.value, 'zoomStartX.value')
+  console.log(zoomStartY.value, 'zoomStartY.value')
   panzoomInstance.value = Panzoom(elem.value, {
     noBind: true,
     startScale: props.scale,
@@ -180,7 +182,7 @@ const initPanzoom = () => {
 }
 
 /**
- * @desc: 处理初始化画布居中位置
+ * @desc: 处理初始化画布居中位置, TODO 要考虑外部浏览器的缩放
  */
 const initStart = () => {
   const parentEle = document.querySelector('.canvasedit-parent')
@@ -188,9 +190,9 @@ const initStart = () => {
   const children = elem.value.children[0].getBoundingClientRect()
   const { width, height } = parentRect
   if (width > children.width) {
-    zoomStartX.value = (width - children.width) / 2
+    zoomStartX.value = (width - props.thick - children.width) / 2
     if (height > children.height) {
-      zoomStartY.value = (height - children.height) / 2
+      zoomStartY.value = (height - props.thick - children.height) / 2
     } else {
       // 子图太大, 那么00 开始
       zoomStartY.value = 0

@@ -5,13 +5,16 @@
     class="line"
     :style="{ ...offsetStyle, ...borderCursor }"
     @mouseenter="showLabel = true"
-    @mousemove="handleMouseMove"
     @mouseleave="showLabel = false"
+    @mousemove="handleMouseMove"
     @mousedown="handleMouseDown"
   >
     <div class="action" :style="actionStyle">
-      <span v-if="showLabel" class="value">{{ labelContent }}</span>
+      <span class="del" @click="handleRemove">&times;</span>
+      <span class="value">{{ startValue }}</span>
     </div>
+    <!-- 鼠标悬停时显示的标签 -->
+    <div v-if="showLabel" class="hover-label" :style="labelStyle"> {{ labelContent }} </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -26,7 +29,7 @@ interface Props {
   value: number
   isShowReferLine: boolean
 }
-const offsetLine = ref(0)
+
 const props = defineProps<Props>()
 const emit = defineEmits(['onMouseDown', 'onRelease', 'onRemove'])
 
@@ -48,9 +51,11 @@ const borderCursor = computed(() => {
   }
 })
 
-const actionStyle = computed(() => ({
-  [props.vertical ? 'left' : 'top']: `${offsetLine.value}px`
-}))
+const actionStyle = computed(() => {
+  const offsetPx = (startValue.value - props.start) * props.scale
+  return props.vertical ? { top: `${offsetPx}px` } : { left: `${offsetPx}px` }
+  // [props.vertical ? 'left' : 'top']: `${props.thick}px`
+})
 
 onMounted(() => {
   startValue.value = props.value ?? 0
@@ -71,10 +76,6 @@ function handleMouseDown(e: MouseEvent) {
   document.addEventListener(
     'mouseup',
     () => {
-      if (!showLine.value) {
-        handleRemove()
-      }
-
       document.removeEventListener('mousemove', moveHandler)
       emit('onRelease', startValue.value, props.index)
     },
@@ -83,17 +84,31 @@ function handleMouseDown(e: MouseEvent) {
 }
 
 function handleRemove() {
-  console.log('删除', props.index)
   emit('onRemove', props.index)
 }
 
 // 定义响应式引用
 const showLabel = ref(false)
+const labelStyle = ref({ left: 0, top: 0 })
+
+// 鼠标进入时显示标签
+const handleMouseEnter = () => {
+  showLabel.value = true
+}
+
+// 鼠标离开时隐藏标签
+const handleMouseLeave = () => {
+  showLabel.value = false
+}
 
 // 更新鼠标位置
 const handleMouseMove = (event) => {
-  // console.log(event, 'event')
-  offsetLine.value = props.vertical ? event.offsetX : event.offsetY
+  console.log(event, 'event')
+
+  labelStyle.value = {
+    left: event.clientX + 'px',
+    top: event.clientY + 'px'
+  }
 }
 
 const labelContent = computed(() => {
@@ -112,6 +127,10 @@ const labelContent = computed(() => {
     align-items: center;
   }
 
+  .value {
+    pointer-events: none;
+    transform: scale(0.83);
+  }
   .del {
     padding: 3px 5px;
     cursor: pointer;
@@ -122,8 +141,8 @@ const labelContent = computed(() => {
   }
 }
 
-.value {
-  transform: scale(0.83);
+.hover-label {
+  position: absolute;
   color: white;
   background-color: black;
   padding: 5px;
