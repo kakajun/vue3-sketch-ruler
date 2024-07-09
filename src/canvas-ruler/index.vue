@@ -35,13 +35,12 @@ const emit = defineEmits(['onAddLine', 'update:showIndicator', 'update:valueNum'
 const state = reactive({
   canvasContext: null as CanvasRenderingContext2D | null
 })
-let ratio = 1
+let ratioValue = 1
 const canvas = ref<HTMLCanvasElement | null>(null)
 onMounted(() => {
-  ratio = props.ratio || window.devicePixelRatio || 1
+  ratioValue = props.ratio || window.devicePixelRatio || 1
   initCanvasRef()
-  updateCanvasContext(ratio)
-  // drawRuler(ratio)
+  updateCanvasContext(ratioValue)
 })
 const initCanvasRef = () => {
   state.canvasContext = canvas.value && canvas.value.getContext('2d')
@@ -92,12 +91,12 @@ watch(
   () => {
     console.log('start', props.start)
 
-    drawRuler(ratio)
+    drawRuler(ratioValue)
   }
 )
 watch([() => props.width, () => props.height], () => {
-  updateCanvasContext(ratio)
-  drawRuler(ratio)
+  updateCanvasContext(ratioValue)
+  drawRuler(ratioValue)
 })
 const handle = (e: MouseEvent, key: string) => {
   const getValueByOffset = (offset: number, start: number, scale: number) =>

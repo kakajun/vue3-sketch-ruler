@@ -16,7 +16,7 @@
       :palette="palette"
       v-model:valueNum="valueNum"
       v-model:showIndicator="showIndicator"
-      @on-addLine="handleNewLine"
+      @on-add-line="handleNewLine"
     />
     <div v-show="isShowReferLine" class="lines">
       <RulerLine
