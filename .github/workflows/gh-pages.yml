@@ -1,0 +1,32 @@
+
+name: gh-pages
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install and Build 🔧
+        run: |
+          bun i
+          bun run build:demo
+
+      - name: Deploy 🚀
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_dir: dist # The folder the action should deploy.
+
+          github_token: ${{ secrets.GITHUB_TOKEN }}
