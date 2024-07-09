@@ -29,7 +29,7 @@ export const drawCavaseRuler = (
   isHorizontal?: boolean //横向为true,纵向缺省
 ) => {
   const { scale, width, height, ratio, palette } = options
-  const { bgColor, fontColor, shadowColor, longfgColor, shortfgColor } = palette
+  const { bgColor, fontColor, shadowColor, longfgColor } = palette
   // console.log(start, 'startstart')
   const startNum = isHorizontal ? options.startNumX : options.startNumY
   const endNum = isHorizontal ? options.endNumX : options.endNumY

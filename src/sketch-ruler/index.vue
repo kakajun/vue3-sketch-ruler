@@ -83,7 +83,6 @@ const paletteCpu = computed(() => {
     {
       bgColor: 'rgba(225,225,225, 0)', // ruler bg color
       longfgColor: '#BABBBC', // ruler longer mark color
-      shortfgColor: '#C8CDD0', // ruler shorter mark color
       fontColor: '#7D8694', // ruler font color
       shadowColor: '#E8E8E8', // ruler shadow color
       lineColor: '#EB5648',

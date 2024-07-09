@@ -1,17 +1,17 @@
 # vue3-sketch-ruler
 
-> 在使用vue3/vue2中,用于页面展示的缩放操作
+> 此版本只在vue3中使用,用于页面展示的缩放操作, 最新版本为2X master 分支, 如果需要学习vue-demi关于vue2/vue3通用组件的, 请切换到1x分支
 
-[![](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667) [![build status](https://github.com/kakajun/vue3-sketch-ruler/actions/workflows/gh-pages.yml/badge.svg?branch=1x)](https://github.com/kakajun/vue3-sketch-ruler/actions/workflows/gh-pages.yml)
-
-简体中文 | [English](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/README.EN.md)
+[![](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667) [![build status](https://github.com/kakajun/vue3-sketch-ruler/actions/workflows/gh-pages.yml/badge.svg?branch=master)](https://github.com/kakajun/vue3-sketch-ruler/actions/workflows/gh-pages.yml)
 
 ## 🚀 Features
 
 - 💪 Vue 3 Composition API
 - 🔥 Written in TypeScript
 - 🔋 SSR Friendly
-- 💡 works for both Vue.js 2/3.
+- 💡 以鼠标为中心缩放页面
+- 📦 减化配置
+- 💎 提供还原, 放大, 缩小的功能
 
 # Vue 3 + Vite + ts 打包sketchRuler
 
@@ -21,52 +21,33 @@
 
 插件应用范围: 适合作为低代码平台操作页面缩放工具,比如做图工具如, 大屏可视化, 做图工具图怪兽等,类似ps的缩放效果.
 
-应用案例: [avue大屏可视化工具](https://data.avuejs.com/build/1) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v2/assets/dp.png)
+<!-- 应用案例: [avue大屏可视化工具](https://data.avuejs.com/build/1) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v2/assets/dp.png) -->
 
-由于项目升级成vite， 发现原来的插件vue-sketch-ruler，用到vue3中会报错， 这边我重新用vite打包了一份， 打包后的插件和原来功一样， 且支持在vue3和vite中使用
+## ✨ 升级改造
 
-这边对原代码进行了改进优化，功能目前和之前vue3-sketch-ruler一样，还没时间优化，主要改进分为以下几点
-
-1. vue3的eslint修复和styleLint和pretty的代码格式化，支持适应vue3中使用sketchRuler，同时改写为vue3 Composition API 的写法
-2. 用typerscript进行重构，对类型进行定义，同时方便后续扩展
-3. 对shadow和palette参数进行对象合并计算，在以前palette的参数要么都传，要么不传，我这里改进后可以只传需要修改的属性即可，没有修改的可以不传
-4. 对类型进行打包设置（支持ts类型提示）
-5. 支持Nuxt3插件引入(已经处理了window没有定义的报错)
+1. 在原来1X版本中满足基本的缩放和标注辅助线的功能, 但是缩放时, 是固定以画面左上角位缩放点, 这样子在实际操作中会很不方便，所以这里对缩放功能进行了改进，以鼠标为中心缩放页面，这样在操作中会更方便。
+2. 对辅助线做了调整, 减少了细刻度的绘制, 因为已经有刻度显示, 删除后画面更加简洁
+3. 辅助线位置显示跟随鼠标移动
+4. 删除辅助线是以拖拽线条到编辑框外即可
+5. 新增还原, 放大, 缩小的API
+6. 修改引用方式, 减少繁琐的配置
 
 升级过程简单写了一篇掘金文章, 同行或感兴趣的可以留言交流
 
 [掘金:大屏页面缩放插件---升级改造](https://juejin.cn/post/7025195450080690212)
 
-## 注意
-
-1. 该插件如果在vue3中使用, 这里1X版本和vue-sketch-ruler 一样功能, 后面没有什么bug的话,不再维护, 1x基本不动原有功能,需要下载源码的, 或者提pr的, 请下载1x分支, 新功能将会在master中增加
-
 ## demo
 
-案例浏览: [https://kakajun.github.io/vue3-sketch-ruler](https://kakajun.github.io/vue3-sketch-ruler) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/assets/demo.png)
+案例浏览: [https://kakajun.github.io/vue3-sketch-ruler](https://kakajun.github.io/vue3-sketch-ruler) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/master/example/assets/newDemo.png)
 
 ## 安装
 
 > 支持全局导入和模块导入
 
-vue3
-
-```
+```js
 npm install --save vue3-sketch-ruler
 
-or
-
 yarn add vue3-sketch-ruler  -S
-```
-
-vue2
-
-```
-npm install --save vue3-sketch-ruler  @vue/composition-api
-
-or
-
-yarn add vue3-sketch-ruler  @vue/composition-api -S
 ```
 
 ## 引入方式
@@ -98,12 +79,11 @@ import 'vue3-sketch-ruler/lib/style.css'
 - [x] 参考线管理（增加删除）
 - [x] 支持参考线任意地方拖拽
 - [x] 左上角的眼睛，点击能控制红线显影
-- [x] vue2/vue3 中通用本插件
+- [x] 提供右下角按钮缩放,还原所需API
 
 ## 未来支持的功能
 
-- [] 加入画布鼠标拖动功能
-- [] 右下角有个鼠标进入缩放小功能
+- [] 缩放导航功能
 - [] 加入单元测试功能
 
 这是个开源业余做的功能，有兴趣加强该插件的小伙伴欢迎加入，也欢迎大家提pr或者issue
@@ -111,51 +91,45 @@ import 'vue3-sketch-ruler/lib/style.css'
 ## 使用
 
 ```
-<template>
-    <SketchRule
-        :thick="thick"
-        :scale="scale"
-        :width="582"
-        :height="482"
-        :startX="startX"
-        :startY="startY"
-        :shadow="shadow"
-        :lines="lines"
-    >
-</template>
-<script>
+<SketchRule
+  :thick="state.thick"
+  v-model:scale="state.scale"
+  :width="rectWidth"
+  :height="rectHeight"
+  :startNumX="0"
+  :endNumX="canvasWidth"
+  :startNumY="0"
+  :endNumY="canvasHeight"
+  ref="sketchrule"
+  :isShowReferLine="state.isShowReferLine"
+  @onCornerClick="handleCornerClick"
+  :lines="state.lines"
+>
+  <template #default>
+    <div data-type="page" :style="canvasStyle">
+      <img class="img-style" :src="bgImg" alt="" />>
+    </div>
+  </template>
+  <template #btn="{ resetMethod, zoomInMethod, zoomOutMethod }">
+    <div class="btns">
+      <button class="btn reset-btn" @click="resetMethod">还原</button>
+      <button class="btn zoomin-btn" @click="zoomInMethod">放大</button>
+      <button class="btn zoomout-btn" @click="zoomOutMethod">缩小</button>
+    </div>
+  </template>
+</SketchRule>
+
 import Vue from 'vue';
 import {SketchRule} from "vue-sketch-ruler";
 import 'vue3-sketch-ruler/lib/style.css'
-const rectWidth = 160;
-const rectHeight = 200;
-export default {
-    data() {
-        return {
-            scale: 2, //658813476562495, //1,
-            startX: 0,
-            startY: 0,
-            lines: {
-                h: [100, 200],
-                v: [100, 200]
-            },
-            thick: 20,
-            isShowRuler: true,
-            isShowReferLine: true
-        }
-    },
-    components: {
-        SketchRule
-    }
-});
-</script>
+const rectWidth = 1200
+const rectHeight = 600
+const canvasWidth = 800
+const canvasHeight = 400
+
 ```
 
-参考一个完整的例子，[点击这里](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/components/user-ruler.vue)
-
-vue3 api 的例子，[点击这里](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/components/user-rulerts.vue)
-
-Nuxt3 中使用例子 [点击这里](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/components/Nuxt3.vue)
+参考一个完整的例子，[点击这里](https://github.com/kakajun/vue3-sketch-ruler/blob/master/example/components/user-rulerts.vue)
 
 ## api
 
@@ -169,20 +143,16 @@ Nuxt3 中使用例子 [点击这里](https://github.com/kakajun/vue3-sketch-rule
 | height       | 放置标尺窗口的高度        | Number        | -           |
 | eyeIcon      | 睁眼图标                  | String        | -           |
 | closeEyeIcon | 闭眼图标                  | String        | -           |
-| startX       | x轴标尺开始的坐标数值     | Number        | 0           |
-| startY       | y轴标尺开始的坐标数值     | Number        | 0           |
 | startNumX    | x轴标尺刻度开始的坐标数值 | Number        | -Infinity   |
 | endNumX      | x轴标尺刻度结束的坐标数值 | Number        | Infinity    |
 | startNumY    | Y轴标尺刻度开始的坐标数值 | Number        | -Infinity   |
 | endNumY      | Y轴标尺刻度结束的坐标数值 | Number        | Infinity    |
-| shadow       | 阴影的参数                | Shadow        | 0           |
 | lines        | 初始化水平标尺上的参考线  | object<Array> | {h:[],v:[]} |
 | palette      | 标尺的样式配置参数        | Palette       | 如下        |
 
-palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',shortfgColor: '#C8CDD0',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',}
+palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',}
 
 ### 更新说明
-
 
 ### Event
 
@@ -190,8 +160,14 @@ palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',shortfgColor: '#
 | ------------- | -------------- | -------- |
 | onCornerClick | 左上角点击事件 |          |
 
+### 插槽提供方法
+
+| 事件名称     | 描述         | 回调参数 |
+| ------------ | ------------ | -------- |
+| resetMethod  | 画布重置位置 |          |
+| zoomInMethod | 画布放大     |          |
+| zoomInMethod | 画布缩小     |          |
+
 ## 引用
 
 vue标尺组件 [vue-sketch-ruler](https://github.com/chuxiaoguo/vue-sketch-ruler.git)
-
-一个来自墨刀的react标尺组件 [mb-sketch-ruler](https://github.com/mockingbot/mb-sketch-ruler) .

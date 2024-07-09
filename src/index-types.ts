@@ -2,7 +2,6 @@ import { PropType } from 'vue'
 export interface PaletteType {
   bgColor?: string
   longfgColor?: string
-  shortfgColor?: string
   fontColor?: string
   shadowColor?: string
   lineColor?: string

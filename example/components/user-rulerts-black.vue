@@ -16,12 +16,7 @@
       :lines="state.lines"
     >
     </SketchRule>
-    <div
-      id="screens2"
-      ref="screensRef"
-      @wheel="handleWheel"
-      @scroll="handleScroll"
-    >
+    <div id="screens2" ref="screensRef" @wheel="handleWheel" @scroll="handleScroll">
       <div ref="containerRef" class="screen-container">
         <div id="canvas2" :style="canvasStyle" />
       </div>
@@ -48,7 +43,6 @@ const state = reactive({
   palette: {
     bgColor: '#181b24', // ruler bg color
     longfgColor: '#BABBBC', // ruler longer mark color
-    shortfgColor: '#9C9C9C', // ruler shorter mark color
     fontColor: '#DEDEDE', // ruler font color
     shadowColor: '#525252', // ruler shadow color
     lineColor: '#EB5648',
@@ -76,24 +70,20 @@ const canvasStyle = computed(() => {
 })
 onMounted(() => {
   // 滚动居中
-  screensRef.value.scrollLeft =
-    containerRef.value.getBoundingClientRect().width / 2 - 400
+  screensRef.value.scrollLeft = containerRef.value.getBoundingClientRect().width / 2 - 400
 })
 
 const handleScroll = () => {
-  const screensRect = document
-    .querySelector('#screens2')
-    .getBoundingClientRect()
+  const screensRect = document.querySelector('#screens2').getBoundingClientRect()
   const canvasRect = document.querySelector('#canvas2').getBoundingClientRect()
 
   // 标尺开始的刻度
-  const startX =
-    (screensRect.left + state.thick - canvasRect.left) / state.scale
+  const startX = (screensRect.left + state.thick - canvasRect.left) / state.scale
   const startY = (screensRect.top + state.thick - canvasRect.top) / state.scale
   state.startX = startX
   state.startY = startY
 }
-const handleCornerClick = e => {
+const handleCornerClick = (e) => {
   console.log('handleCornerClick', e)
 }
 // 控制缩放值
@@ -105,9 +95,7 @@ const handleWheel = (e: {
 }) => {
   if (e.ctrlKey || e.metaKey) {
     e.preventDefault()
-    const nextScale = parseFloat(
-      Math.max(0.2, state.scale - e.deltaY / 500).toFixed(2)
-    )
+    const nextScale = parseFloat(Math.max(0.2, state.scale - e.deltaY / 500).toFixed(2))
     state.scale = nextScale
   }
   nextTick(() => {

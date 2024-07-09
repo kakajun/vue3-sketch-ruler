@@ -19,8 +19,7 @@ describe('drawCavaseRuler', () => {
         bgColor: 'red',
         fontColor: 'black',
         shadowColor: 'gray',
-        longfgColor: 'blue',
-        shortfgColor: 'green'
+        longfgColor: 'blue'
       },
       startNumX: 0,
       endNumX: 100,
