@@ -22,7 +22,7 @@
   "scripts": {
     "dev": "vite --config vite.demo.ts",
     "build": " vite build",
-    "build:demo": "vite build --config vite.demo.js",
+    "build:demo": "vite build --config ./vite.demo.ts",
     "precommit": "lint-staged",
     "clean": "npx rimraf node_modules",
     "clean:cache": "npx rimraf node_modules/.cache",
