@@ -40,7 +40,7 @@
 <script setup lang="ts">
 // import { SketchRule } from 'vue3-sketch-ruler'
 // import 'vue3-sketch-ruler/lib/style.css'
-// import { SketchRule } from '../../lib/index.es'
+// import { SketchRule } from '../../lib/index.mjs'
 // import '../../lib/style.css'
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive } from 'vue'
