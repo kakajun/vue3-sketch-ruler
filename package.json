@@ -6,9 +6,7 @@
   "private": false,
   "files": [
     "lib",
-    "types",
-    "bin",
-    "scripts"
+    "types"
   ],
   "repository": {
     "type": "git",

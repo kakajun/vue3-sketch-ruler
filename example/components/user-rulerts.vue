@@ -43,7 +43,7 @@
 // import { SketchRule } from '../../lib/index.es'
 // import '../../lib/style.css'
 import bgImg from '../assets/bg.png'
-import { computed, ref, reactive, onMounted, nextTick } from 'vue'
+import { computed, ref, reactive } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
 const rectWidth = 1200
 const rectHeight = 600
