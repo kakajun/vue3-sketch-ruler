@@ -2,21 +2,32 @@
   <div class="demo">
     <div class="top">
       <div class="scale"> 缩放比例:{{ cpuScale }} </div>
-      <button class="right" @click="showLineClick">辅助线开关</button>
+      <button class="mr10 right" @click="showLineClick">辅助线开关</button>
+      <button class="mr10" @click="resetMethod">还原</button>
+      <input
+        @change="scaleChange"
+        :value="state.scale"
+        className="range-input"
+        type="range"
+        min="0.1"
+        max="4"
+        step="0.1"
+        defaultValue="1"
+      />
     </div>
 
     <div class="wrapper" :style="rectStyle">
       <!--  这个可以传入图标 -->
       <SketchRule
-        :thick="state.thick"
         v-model:scale="state.scale"
+        :thick="state.thick"
         :width="rectWidth"
         :height="rectHeight"
         :startNumX="0"
         :endNumX="canvasWidth"
         :startNumY="0"
         :endNumY="canvasHeight"
-        ref="sketchrule"
+        ref="sketchruleRef"
         :isShowReferLine="state.isShowReferLine"
         @onCornerClick="handleCornerClick"
         :lines="state.lines"
@@ -26,11 +37,11 @@
             <img class="img-style" :src="bgImg" alt="" />>
           </div>
         </template>
-        <template #btn="{ resetMethod, zoomInMethod, zoomOutMethod }">
+        <template #btn="{ reset, zoomIn, zoomOut }">
           <div class="btns">
-            <button class="btn reset-btn" @click="resetMethod">还原</button>
-            <button class="btn zoomin-btn" @click="zoomInMethod">放大</button>
-            <button class="btn zoomout-btn" @click="zoomOutMethod">缩小</button>
+            <button class="btn reset-btn" @click="reset">还原</button>
+            <button class="btn zoomin-btn" @click="zoomIn">放大</button>
+            <button class="btn zoomout-btn" @click="zoomOut">缩小</button>
           </div>
         </template>
       </SketchRule>
@@ -50,14 +61,19 @@ const rectHeight = 600
 const canvasWidth = 800
 const canvasHeight = 400
 
-const sketchrule = ref()
+const sketchruleRef = ref()
 // 另外一个方法调用内部方法
-const zoomOutMethod2 = () => {
-  if (sketchrule.value && typeof sketchrule.value.zoomOutMethod === 'function') {
-    console.log(sketchrule.value)
-    sketchrule.value.zoomOutMethod()
+const zoomOutMethod = () => {
+  if (sketchruleRef.value) {
+    sketchruleRef.value.zoomOu()
   }
 }
+const resetMethod = () => {
+  if (sketchruleRef.value) {
+    sketchruleRef.value.reset()
+  }
+}
+
 const state = reactive({
   scale: 1,
   lines: {
@@ -86,7 +102,8 @@ const rectStyle = computed(() => {
 })
 
 const cpuScale = computed(() => {
-  return state.scale.toFixed(2)
+  const num = Number(state.scale)
+  return num.toFixed(2)
 })
 
 const canvasStyle = computed(() => {
@@ -95,6 +112,14 @@ const canvasStyle = computed(() => {
     height: `${canvasHeight}px`
   }
 })
+
+const scaleChange = (e) => {
+  state.scale = e.target.value
+  if (sketchruleRef.value) {
+    const panzoomInstance = sketchruleRef.value.panzoomInstance
+    panzoomInstance.zoom(state.scale)
+  }
+}
 
 const handleCornerClick = (e) => {
   console.log('handleCornerClick', e)
@@ -125,6 +150,9 @@ const showLineClick = () => {
 
 .right {
   font-size: 20px;
+}
+.mr10 {
+  margin-right: 10px;
 }
 body {
   padding: 0;

@@ -65,7 +65,6 @@ export const drawCavaseRuler = (
   // 绘制长间隔和文字
   for (let value = 0, count = 0; value < endValue; value += gridSize10, count++) {
     if (value >= startNum && value <= endNum) {
-      debugger
       const x = offsetX10 + count * gridPixel10 // prevent canvas 1px line blurry
       isHorizontal ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
       ctx.save()
@@ -77,7 +76,7 @@ export const drawCavaseRuler = (
       ctx.fillText(value.toString(), 4 * ratio, 7 * ratio)
       ctx.restore()
       isHorizontal ? ctx.lineTo(x, (height * 9) / 16) : ctx.lineTo((width * 9) / 16, x)
-      console.log(x, 'xBBBBBBBB')
+      // console.log(x, 'xBBBBBBBB')
     }
     ctx.stroke()
     ctx.closePath()

@@ -1,11 +1,6 @@
 <template>
   <div class="sketch-ruler">
-    <slot
-      name="btn"
-      :resetMethod="resetMethod"
-      :zoomInMethod="zoomInMethod"
-      :zoomOutMethod="zoomOutMethod"
-    ></slot>
+    <slot name="btn" :reset="reset" :zoomIn="zoomIn" :zoomOut="zoomOut"></slot>
     <div class="canvasedit-parent" :style="canvasStyle" @wheel.prevent="">
       <div class="canvasedit">
         <slot></slot>
@@ -202,15 +197,15 @@ const initStart = () => {
     zoomStartX.value = 0
   }
 }
-const resetMethod = () => {
+const reset = () => {
   panzoomInstance.value.reset()
 }
 
-const zoomInMethod = () => {
+const zoomIn = () => {
   panzoomInstance.value.zoomIn()
 }
 
-const zoomOutMethod = () => {
+const zoomOut = () => {
   panzoomInstance.value.zoomOut()
 }
 
@@ -224,9 +219,10 @@ watch([() => props.isShowReferLine], () => {
 
 // 使用defineExpose来暴露方法
 defineExpose({
-  resetMethod,
-  zoomInMethod,
-  zoomOutMethod
+  panzoomInstance,
+  reset,
+  zoomIn,
+  zoomOut
 })
 </script>
 
