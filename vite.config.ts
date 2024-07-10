@@ -37,14 +37,18 @@ export default defineConfig({
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'SketchRuler',
       fileName: 'index',
-      formats: ['es', 'cjs', 'umd']
+      formats: ['es', 'cjs']
     },
     rollupOptions: {
       // 确保外部化处理那些你不想打包进库的依赖
-      external: ['vue'],
+      external: ['vue','panzoom'],
       output: {
         banner,
-        exports: 'auto'
+        exports: 'auto',
+        globals: {
+          vue: 'Vue',
+          panzoom: 'simple-panzoom' // 这里假设 panzoom 暴露在全局变量 Panzoom 下
+        }
       }
     }
   }

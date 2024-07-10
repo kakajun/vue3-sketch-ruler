@@ -81,10 +81,11 @@
     "vue",
     "vue3",
     "ruler",
-    "javascript",
+    "sketch",
     "sketch-ruler",
     "vue-sketch-ruler",
-    "room"
+    "room",
+    "panzoom"
   ],
   "bugs": {
     "url": "https://github.com/kakajun/vue3-sketch-ruler/issues"
