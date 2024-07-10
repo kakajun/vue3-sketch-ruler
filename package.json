@@ -37,7 +37,7 @@
     "*.{vue,css,less}": "stylelint --fix"
   },
   "dependencies": {
-    "simple-panzoom": "^1.0.1"
+    "simple-panzoom": "^1.0.2"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.24.7",
