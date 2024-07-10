@@ -9,9 +9,10 @@
 - 💪 Vue 3 Composition API
 - 🔥 Written in TypeScript
 - 🔋 SSR Friendly
-- 💡 以鼠标为中心缩放页面
+- 💡 以鼠标为中心缩放页面, 可以使用pazoom的特性
 - 📦 减化配置
 - 💎 提供还原, 放大, 缩小的功能
+- 📦 平台与业务代码通过插槽的方式进行分离, 也就是你只需要专注你的业务代码, 其他交给平台
 
 # Vue 3 + Vite + ts 打包sketchRuler
 
@@ -25,7 +26,7 @@
 
 ## ✨ 升级改造
 
-1. 在原来1X版本中满足基本的缩放和标注辅助线的功能, 但是缩放时, 是固定以画面左上角位缩放点, 这样子在实际操作中会很不方便，所以这里对缩放功能进行了改进，以鼠标为中心缩放页面，这样在操作中会更方便。
+1. 在原来1X版本中满足基本的缩放和标注辅助线的功能, 但是缩放时, 是固定以画面左上角位缩放点, 这样子在实际操作中会很不方便，所以这里对缩放功能进行了改进，以鼠标为中心缩放页面，这样在操作中会更方便。缩放采用改造过的pazoom插件,加了些方法使得更适配我的插件, 详情见[pazoom](https://github.com/kakajun/simple-panzoom.git)
 2. 对辅助线做了调整, 减少了细刻度的绘制, 因为已经有刻度显示, 删除后画面更加简洁
 3. 辅助线位置显示跟随鼠标移动
 4. 删除辅助线是以拖拽线条到编辑框外即可
@@ -135,22 +136,25 @@ const canvasHeight = 400
 
 ### 属性
 
-| 属性名称     | 描述                      | 类型          | 默认值      |
-| ------------ | ------------------------- | ------------- | ----------- |
-| scale        | 初始化标尺的缩放          | Number        | 2           |
-| thick        | 标尺的厚度                | Number        | 16          |
-| width        | 放置标尺窗口的宽度        | Number        | -           |
-| height       | 放置标尺窗口的高度        | Number        | -           |
-| eyeIcon      | 睁眼图标                  | String        | -           |
-| closeEyeIcon | 闭眼图标                  | String        | -           |
-| startNumX    | x轴标尺刻度开始的坐标数值 | Number        | -Infinity   |
-| endNumX      | x轴标尺刻度结束的坐标数值 | Number        | Infinity    |
-| startNumY    | Y轴标尺刻度开始的坐标数值 | Number        | -Infinity   |
-| endNumY      | Y轴标尺刻度结束的坐标数值 | Number        | Infinity    |
-| lines        | 初始化水平标尺上的参考线  | object<Array> | {h:[],v:[]} |
-| palette      | 标尺的样式配置参数        | Palette       | 如下        |
+| 属性名称      | 描述                      | 类型          | 默认值      |
+| ------------- | ------------------------- | ------------- | ----------- |
+| scale         | 初始化标尺的缩放          | Number        | 2           |
+| thick         | 标尺的厚度                | Number        | 16          |
+| width         | 放置标尺窗口的宽度        | Number        | -           |
+| height        | 放置标尺窗口的高度        | Number        | -           |
+| eyeIcon       | 睁眼图标                  | String        | -           |
+| closeEyeIcon  | 闭眼图标                  | String        | -           |
+| startNumX     | x轴标尺刻度开始的坐标数值 | Number        | -Infinity   |
+| endNumX       | x轴标尺刻度结束的坐标数值 | Number        | Infinity    |
+| startNumY     | Y轴标尺刻度开始的坐标数值 | Number        | -Infinity   |
+| endNumY       | Y轴标尺刻度结束的坐标数值 | Number        | Infinity    |
+| lines         | 初始化水平标尺上的参考线  | object<Array> | {h:[],v:[]} |
+| panzoomOption | panzoom相关的扩展参数     | object        | -           |
+| palette       | 标尺的样式配置参数        | Palette       | 如下        |
 
 palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',}
+
+> 更多pazoom插件的配置的panzoomOption参数，可以参考[pazoom document](https://github.com/timmywil/panzoom)
 
 ### 更新说明
 
