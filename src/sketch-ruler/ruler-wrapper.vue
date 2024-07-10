@@ -7,7 +7,6 @@
       :height="height"
       :start="start"
       :ratio="ratio"
-      :startNumX="startNumX"
       :endNumX="endNumX"
       :startNumY="startNumY"
       :endNumY="endNumY"

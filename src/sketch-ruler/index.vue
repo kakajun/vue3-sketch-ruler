@@ -20,7 +20,6 @@
       :select-length="shadow.width"
       :scale="ownScale"
       :palette="paletteCpu"
-      :startNumX="startNumX"
       :endNumX="endNumX"
     />
     <!-- 竖直方向 -->
@@ -37,7 +36,6 @@
       :select-length="shadow.height"
       :scale="ownScale"
       :palette="paletteCpu"
-      :startNumY="startNumY"
       :endNumY="endNumY"
     />
     <a class="corner" :style="cornerStyle" @click="onCornerClick"></a>

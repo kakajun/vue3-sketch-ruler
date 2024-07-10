@@ -3,9 +3,7 @@ declare const _default: DefineComponent<{
     scale: NumberConstructor;
     ratio: NumberConstructor;
     thick: NumberConstructor;
-    startNumX: NumberConstructor;
     endNumX: NumberConstructor;
-    startNumY: NumberConstructor;
     endNumY: NumberConstructor;
     palette: ObjectConstructor;
     vertical: {
@@ -44,9 +42,7 @@ declare const _default: DefineComponent<{
     scale: NumberConstructor;
     ratio: NumberConstructor;
     thick: NumberConstructor;
-    startNumX: NumberConstructor;
     endNumX: NumberConstructor;
-    startNumY: NumberConstructor;
     endNumY: NumberConstructor;
     palette: ObjectConstructor;
     vertical: {

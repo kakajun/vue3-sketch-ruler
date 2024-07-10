@@ -11,9 +11,7 @@ interface Props {
     height: number;
     selectStart: number;
     selectLength: number;
-    startNumX: number;
     endNumX: number;
-    startNumY: number;
     endNumY: number;
 }
 declare const _default: DefineComponent<__VLS_TypePropsToRuntimeProps<Props>, {}, unknown, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {

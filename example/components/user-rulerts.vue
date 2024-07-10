@@ -23,9 +23,7 @@
         :thick="state.thick"
         :width="rectWidth"
         :height="rectHeight"
-        :startNumX="0"
         :endNumX="canvasWidth"
-        :startNumY="0"
         :endNumY="canvasHeight"
         ref="sketchruleRef"
         :isShowReferLine="state.isShowReferLine"
@@ -34,7 +32,7 @@
       >
         <template #default>
           <div data-type="page" :style="canvasStyle">
-            <img class="img-style" :src="bgImg" alt="" />>
+            <img class="img-style" :src="bgImg" alt="" />
           </div>
         </template>
         <template #btn="{ reset, zoomIn, zoomOut }">

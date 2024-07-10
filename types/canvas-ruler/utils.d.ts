@@ -4,7 +4,6 @@ export declare const drawCavaseRuler: (ctx: CanvasRenderingContext2D, start: num
     height: number;
     ratio: number;
     palette: any;
-    startNumX: number;
     endNumX: number;
     startNumY: number;
     endNumY: number;

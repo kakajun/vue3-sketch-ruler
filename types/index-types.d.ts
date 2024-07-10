@@ -85,15 +85,7 @@ export declare const sketchRulerProps: {
         type: BooleanConstructor;
         default: boolean;
     };
-    startNumX: {
-        type: NumberConstructor;
-        default: number;
-    };
     endNumX: {
-        type: NumberConstructor;
-        default: number;
-    };
-    startNumY: {
         type: NumberConstructor;
         default: number;
     };

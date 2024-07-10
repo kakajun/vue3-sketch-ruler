@@ -10,7 +10,7 @@
 </template>
 <script setup lang="ts">
 import { drawCavaseRuler } from './utils'
-import { reactive, ref, onMounted, watch } from 'vue'
+import { reactive, ref, onMounted, watch, onUnmounted } from 'vue'
 
 interface Props {
   showIndicator: boolean
@@ -24,9 +24,7 @@ interface Props {
   height: number
   selectStart: number
   selectLength: number
-  startNumX: number
   endNumX: number
-  startNumY: number
   endNumY: number
 }
 const props = defineProps<Props>()
@@ -38,13 +36,24 @@ const state = reactive({
 let ratioValue = 1
 const canvas = ref<HTMLCanvasElement | null>(null)
 onMounted(() => {
-  ratioValue = props.ratio || window.devicePixelRatio || 1
+  ratioValue = window.devicePixelRatio || 1
+  window.addEventListener('resize', handleResize)
   initCanvasRef()
   updateCanvasContext(ratioValue)
 })
+
+const handleResize = () => {
+  ratioValue = window.devicePixelRatio || 1
+  updateCanvasContext(ratioValue)
+  drawRuler(ratioValue)
+}
 const initCanvasRef = () => {
   state.canvasContext = canvas.value && canvas.value.getContext('2d')
 }
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
 const updateCanvasContext = (ratio: number) => {
   if (canvas.value) {
     // 比例宽高
@@ -68,9 +77,7 @@ const drawRuler = (ratio: number) => {
     width: props.width!,
     height: props.height!,
     palette: props.palette!,
-    startNumX: props.startNumX!,
     endNumX: props.endNumX!,
-    startNumY: props.startNumY!,
     endNumY: props.endNumY!,
     ratio: ratio
   }

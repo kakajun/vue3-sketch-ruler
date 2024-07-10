@@ -1,4 +1,4 @@
-import { DefineComponent, PropType, ComponentOptionsMixin, PublicProps, ExtractPropTypes } from 'vue';
+import { DefineComponent, PropType, Ref, ComponentOptionsMixin, PublicProps, ExtractPropTypes } from 'vue';
 import { PaletteType, ShadowType, lineType } from '../index-types';
 declare const _default: __VLS_WithTemplateSlots< DefineComponent<{
     eyeIcon: {
@@ -54,15 +54,7 @@ declare const _default: __VLS_WithTemplateSlots< DefineComponent<{
         type: BooleanConstructor;
         default: boolean;
     };
-    startNumX: {
-        type: NumberConstructor;
-        default: number;
-    };
     endNumX: {
-        type: NumberConstructor;
-        default: number;
-    };
-    startNumY: {
         type: NumberConstructor;
         default: number;
     };
@@ -72,9 +64,10 @@ declare const _default: __VLS_WithTemplateSlots< DefineComponent<{
     };
     panzoomOption: ObjectConstructor;
 }, {
-    resetMethod: () => void;
-    zoomInMethod: () => void;
-    zoomOutMethod: () => void;
+    panzoomInstance: Ref<any>;
+    reset: () => void;
+    zoomIn: () => void;
+    zoomOut: () => void;
 }, unknown, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
     onCornerClick: (...args: any[]) => void;
     "update:scale": (...args: any[]) => void;
@@ -132,15 +125,7 @@ declare const _default: __VLS_WithTemplateSlots< DefineComponent<{
         type: BooleanConstructor;
         default: boolean;
     };
-    startNumX: {
-        type: NumberConstructor;
-        default: number;
-    };
     endNumX: {
-        type: NumberConstructor;
-        default: number;
-    };
-    startNumY: {
         type: NumberConstructor;
         default: number;
     };
@@ -156,9 +141,7 @@ declare const _default: __VLS_WithTemplateSlots< DefineComponent<{
     scale: number;
     width: number;
     height: number;
-    startNumX: number;
     endNumX: number;
-    startNumY: number;
     endNumY: number;
     thick: number;
     isShowReferLine: boolean;
@@ -167,9 +150,9 @@ declare const _default: __VLS_WithTemplateSlots< DefineComponent<{
     shadow: ShadowType;
 }, {}>, {
     btn?(_: {
-        resetMethod: () => void;
-        zoomInMethod: () => void;
-        zoomOutMethod: () => void;
+        reset: () => void;
+        zoomIn: () => void;
+        zoomOut: () => void;
     }): any;
     default?(_: {}): any;
 }>;

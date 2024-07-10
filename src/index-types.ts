@@ -92,17 +92,9 @@ export const sketchRulerProps = {
     type: Boolean,
     default: true
   },
-  startNumX: {
-    type: Number,
-    default: -Infinity
-  },
   endNumX: {
     type: Number,
     default: Infinity
-  },
-  startNumY: {
-    type: Number,
-    default: -Infinity
   },
   endNumY: {
     type: Number,

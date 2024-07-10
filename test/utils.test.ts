@@ -21,9 +21,7 @@ describe('drawCavaseRuler', () => {
         shadowColor: 'gray',
         longfgColor: 'blue'
       },
-      startNumX: 0,
       endNumX: 100,
-      startNumY: 0,
       endNumY: 100
     }
 

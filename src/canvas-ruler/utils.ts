@@ -21,7 +21,6 @@ export const drawCavaseRuler = (
     height: number
     ratio: number
     palette: any
-    startNumX: number
     endNumX: number
     startNumY: number
     endNumY: number
@@ -30,8 +29,6 @@ export const drawCavaseRuler = (
 ) => {
   const { scale, width, height, ratio, palette } = options
   const { bgColor, fontColor, shadowColor, longfgColor } = palette
-  // console.log(start, 'startstart')
-  const startNum = isHorizontal ? options.startNumX : options.startNumY
   const endNum = isHorizontal ? options.endNumX : options.endNumY
   // 缩放ctx, 以简化计算
   ctx.scale(ratio, ratio)
@@ -50,7 +47,6 @@ export const drawCavaseRuler = (
       ? ctx.fillRect(shadowX, 0, shadowWidth, (height * 3) / 8)
       : ctx.fillRect(0, shadowX, (width * 3) / 8, shadowWidth)
   }
-
   const gridSize = getGridSize(scale) // 每小格表示的宽度
   const gridSize10 = gridSize * 10 // 每大格表示的宽度
   const gridPixel10 = gridSize10 * scale
@@ -58,13 +54,13 @@ export const drawCavaseRuler = (
   const endValue = start + Math.ceil((isHorizontal ? width : height) / scale) // 终点刻度
   // 3. 画刻度和文字(因为刻度遮住了阴影)
   ctx.beginPath()
-
   ctx.fillStyle = fontColor
   ctx.strokeStyle = longfgColor
 
   // 绘制长间隔和文字
   for (let value = 0, count = 0; value < endValue; value += gridSize10, count++) {
-    if (value >= startNum && value <= endNum) {
+    if (value <= endNum) {
+      debugger
       const x = offsetX10 + count * gridPixel10 // prevent canvas 1px line blurry
       isHorizontal ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
       ctx.save()
@@ -76,7 +72,7 @@ export const drawCavaseRuler = (
       ctx.fillText(value.toString(), 4 * ratio, 7 * ratio)
       ctx.restore()
       isHorizontal ? ctx.lineTo(x, (height * 9) / 16) : ctx.lineTo((width * 9) / 16, x)
-      // console.log(x, 'xBBBBBBBB')
+      console.log(x, 'xBBBBBBBB')
     }
     ctx.stroke()
     ctx.closePath()
