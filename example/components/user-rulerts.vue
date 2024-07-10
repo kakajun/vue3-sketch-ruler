@@ -2,11 +2,12 @@
   <div class="demo">
     <div class="top">
       <div class="scale"> 缩放比例:{{ cpuScale }} </div>
-      <button class="mr10 right" @click="showLineClick">辅助线开关</button>
-      <button class="mr10" @click="changeTheme">主题切换</button>
-      <button class="mr10" @click="resetMethod">还原</button>
-      <button class="mr10" @click="zoomOutMethod">缩小</button>
+      <button class="mr10 font18" @click="showLineClick">辅助线开关</button>
+      <button class="mr10 font18" @click="changeTheme">主题切换</button>
+      <button class="mr10 font18" @click="resetMethod">还原</button>
+      <button class="mr10 font18" @click="zoomOutMethod">缩小</button>
       <input
+        class="mr10 font18"
         @input="scaleChange"
         :value="state.scale"
         className="range-input"
@@ -16,6 +17,8 @@
         step="0.1"
         defaultValue="1"
       />
+      <!-- <span>限制框内</span>
+      <input class="mr10 font18" type="checkbox" @change="checkChange" name="myCheckbox" /> -->
     </div>
 
     <div class="wrapper" :style="rectStyle">
@@ -27,6 +30,7 @@
         :height="rectHeight"
         :endNumX="canvasWidth"
         :endNumY="canvasHeight"
+        :panzoomOption="panzoomOption"
         ref="sketchruleRef"
         :isShowReferLine="state.isShowReferLine"
         @onCornerClick="handleCornerClick"
@@ -62,6 +66,7 @@ const canvasWidth = 1000
 const canvasHeight = 500
 
 const sketchruleRef = ref()
+const panzoomOption = ref({})
 // 另外一个方法调用内部方法
 const zoomOutMethod = () => {
   if (sketchruleRef.value) {
@@ -87,14 +92,14 @@ const state = reactive({
   isShowReferLine: true // 显示参考线
 })
 
-// const shadow = computed(() => {
-//   return {
-//     x: 0,
-//     y: 0,
-//     width: rectWidth,
-//     height: rectHeight
-//   }
-// })
+const checkChange = (e) => {
+  if (e.target.checked) {
+    panzoomOption.value = { contain: 'inside' }
+  } else {
+    panzoomOption.value = {}
+  }
+  sketchruleRef.value.initPanzoom()
+}
 
 const rectStyle = computed(() => {
   return {
@@ -152,6 +157,9 @@ const showLineClick = () => {
 
 .right {
   font-size: 20px;
+}
+.font18 {
+  font-size: 18px;
 }
 .mr10 {
   margin-right: 10px;

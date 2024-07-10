@@ -128,12 +128,14 @@ const initPanzoom = () => {
   initStart()
   console.log(zoomStartX.value, 'zoomStartX.value')
   console.log(zoomStartY.value, 'zoomStartY.value')
+  console.log(props.panzoomOption, 'props.panzoomOption')
   panzoomInstance.value = Panzoom(elem.value, {
     noBind: true,
     startScale: props.scale,
     cursor: 'default',
     startX: zoomStartX.value,
     startY: zoomStartY.value,
+    // contain: 'inside',
     smoothScroll: true,
     ...props.panzoomOption
   })
@@ -212,6 +214,7 @@ watch([() => props.isShowReferLine], () => {
 })
 
 defineExpose({
+  initPanzoom,
   panzoomInstance,
   reset,
   zoomIn,
