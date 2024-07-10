@@ -52,7 +52,7 @@
 <script setup lang="ts">
 import RulerWrapper from './ruler-wrapper.vue'
 import { eye64, closeEye64 } from './cornerImg64'
-import { computed, ref, watch, onMounted, nextTick } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { sketchRulerProps } from '../index-types'
 import Panzoom from './panzoom'
 const props = defineProps(sketchRulerProps)

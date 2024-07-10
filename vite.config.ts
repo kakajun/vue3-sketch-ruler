@@ -31,7 +31,7 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: 'lib/v3',
+    outDir: 'lib',
     // minify: true, // 不压缩代码,方便开发调试
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),

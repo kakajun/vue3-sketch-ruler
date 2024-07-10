@@ -40,10 +40,10 @@
 <script setup lang="ts">
 // import { SketchRule } from 'vue3-sketch-ruler'
 // import 'vue3-sketch-ruler/lib/style.css'
-// import { SketchRule } from '../../lib/index.es'
+// import { SketchRule } from '../../lib/index.mjs'
 // import '../../lib/style.css'
 import bgImg from '../assets/bg.png'
-import { computed, ref, reactive, onMounted, nextTick } from 'vue'
+import { computed, ref, reactive } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
 const rectWidth = 1200
 const rectHeight = 600
