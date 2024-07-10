@@ -152,10 +152,8 @@ const initPanzoom = () => {
       startY.value = top
     }
   })
-  // This demo binds to ctrlKey + wheel
   parent.addEventListener('wheel', function (e) {
     if (e.ctrlKey || e.metaKey) {
-      // e.preventDefault()
       panzoomInstance.value.zoomWithWheel(e)
     }
   })
@@ -186,11 +184,9 @@ const initStart = () => {
     if (height > children.height) {
       zoomStartY.value = (height - props.thick - children.height) / 2
     } else {
-      // 子图太大, 那么00 开始
       zoomStartY.value = 0
     }
   } else {
-    // 子图太大, 那么00 开始
     zoomStartY.value = 0
     zoomStartX.value = 0
   }
@@ -215,7 +211,6 @@ watch([() => props.isShowReferLine], () => {
   showReferLine.value = props.isShowReferLine
 })
 
-// 使用defineExpose来暴露方法
 defineExpose({
   panzoomInstance,
   reset,
@@ -236,7 +231,6 @@ defineExpose({
   span {
     line-height: 1;
   }
-
   .corner {
     position: absolute;
     top: 0;

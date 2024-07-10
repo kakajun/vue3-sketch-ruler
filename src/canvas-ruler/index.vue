@@ -106,10 +106,8 @@ watch([() => props.width, () => props.height], () => {
   drawRuler(ratioValue)
 })
 const handle = (e: MouseEvent, key: string) => {
-  const getValueByOffset = (offset: number, start: number, scale: number) =>
-    Math.round(start + offset / scale)
   const offset = props.vertical ? e.offsetY : e.offsetX
-  const value = getValueByOffset(offset, props.start, props.scale!)
+  const value = Math.round(props.start + offset / props.scale!)
   switch (key) {
     case 'click':
       emit('onAddLine', value)

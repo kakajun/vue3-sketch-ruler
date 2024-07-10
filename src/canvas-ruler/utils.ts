@@ -9,7 +9,6 @@ const getGridSize = (scale: number) => {
 }
 
 const FONT_SCALE = 0.83 // 10 / 12
-
 export const drawCavaseRuler = (
   ctx: CanvasRenderingContext2D,
   start: number,
