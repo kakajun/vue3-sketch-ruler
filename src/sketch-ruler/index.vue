@@ -47,7 +47,7 @@ import RulerWrapper from './ruler-wrapper.vue'
 import { eye64, closeEye64 } from './cornerImg64'
 import { computed, ref, watch, onMounted } from 'vue'
 import { sketchRulerProps } from '../index-types'
-import Panzoom from './panzoom'
+import Panzoom from 'simple-panzoom'
 const props = defineProps(sketchRulerProps)
 const emit = defineEmits(['onCornerClick', 'update:scale'])
 const elem = ref(null)

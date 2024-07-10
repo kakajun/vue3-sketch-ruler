@@ -36,6 +36,9 @@
     "*.{ts,tsx,js,vue}": "eslint --fix",
     "*.{vue,css,less}": "stylelint --fix"
   },
+  "dependencies": {
+    "simple-panzoom": "^1.0.1"
+  },
   "devDependencies": {
     "@babel/preset-env": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
