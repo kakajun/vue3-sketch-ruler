@@ -24,6 +24,7 @@ import UserRuler from './components/user-rulerts.vue'
   margin-bottom: 10px;
 }
 .tittle {
+  font-size: 20px;
   padding-top: 10px;
   margin-bottom: 10px;
 }

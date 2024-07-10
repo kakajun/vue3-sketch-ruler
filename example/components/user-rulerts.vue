@@ -3,9 +3,11 @@
     <div class="top">
       <div class="scale"> 缩放比例:{{ cpuScale }} </div>
       <button class="mr10 right" @click="showLineClick">辅助线开关</button>
+      <button class="mr10" @click="changeTheme">主题切换</button>
       <button class="mr10" @click="resetMethod">还原</button>
+      <button class="mr10" @click="zoomOutMethod">缩小</button>
       <input
-        @change="scaleChange"
+        @input="scaleChange"
         :value="state.scale"
         className="range-input"
         type="range"
@@ -54,16 +56,16 @@
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
-const rectWidth = 1200
-const rectHeight = 600
-const canvasWidth = 800
-const canvasHeight = 400
+const rectWidth = 1600
+const rectHeight = 800
+const canvasWidth = 1000
+const canvasHeight = 500
 
 const sketchruleRef = ref()
 // 另外一个方法调用内部方法
 const zoomOutMethod = () => {
   if (sketchruleRef.value) {
-    sketchruleRef.value.zoomOu()
+    sketchruleRef.value.zoomOut()
   }
 }
 const resetMethod = () => {
@@ -71,6 +73,8 @@ const resetMethod = () => {
     sketchruleRef.value.reset()
   }
 }
+
+const changeTheme = () => {}
 
 const state = reactive({
   scale: 1,
@@ -83,14 +87,14 @@ const state = reactive({
   isShowReferLine: true // 显示参考线
 })
 
-const shadow = computed(() => {
-  return {
-    x: 0,
-    y: 0,
-    width: rectWidth,
-    height: rectHeight
-  }
-})
+// const shadow = computed(() => {
+//   return {
+//     x: 0,
+//     y: 0,
+//     width: rectWidth,
+//     height: rectHeight
+//   }
+// })
 
 const rectStyle = computed(() => {
   return {

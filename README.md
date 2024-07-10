@@ -121,10 +121,10 @@ import 'vue3-sketch-ruler/lib/style.css'
 import Vue from 'vue';
 import {SketchRule} from "vue-sketch-ruler";
 import 'vue3-sketch-ruler/lib/style.css'
-const rectWidth = 1200
-const rectHeight = 600
-const canvasWidth = 800
-const canvasHeight = 400
+const rectWidth = 1600
+const rectHeight = 800
+const canvasWidth = 1000
+const canvasHeight = 500
 
 ```
 
@@ -162,11 +162,11 @@ palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',fontColor: '#7D8
 
 ### 插槽提供方法
 
-| 事件名称     | 描述         | 回调参数 |
-| ------------ | ------------ | -------- |
-| resetMethod  | 画布重置位置 |          |
-| zoomInMethod | 画布放大     |          |
-| zoomInMethod | 画布缩小     |          |
+| 事件名称 | 描述         | 回调参数 |
+| -------- | ------------ | -------- |
+| reset    | 画布重置位置 |          |
+| zoomIn   | 画布放大     |          |
+| zoomIn   | 画布缩小     |          |
 
 ## 引用
 
