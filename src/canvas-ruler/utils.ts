@@ -61,16 +61,35 @@ export const drawCavaseRuler = (
     if (value <= endNum) {
       debugger
       const x = offsetX10 + count * gridPixel10 // prevent canvas 1px line blurry
-      isHorizontal ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
+      if (value == 0 || value == endNum) {
+        isHorizontal ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
+      } else {
+        isHorizontal ? ctx.moveTo(x, 20) : ctx.moveTo(20, x)
+      }
+
       ctx.save()
-      isHorizontal ? ctx.translate(x, height * 0.4) : ctx.translate(width * 0.4, x)
+      // 影响文字位置
+      if (value == 0) {
+        isHorizontal ? ctx.translate(x - 15, height * 0.3) : ctx.translate(width * 0.3, x - 5)
+      } else if (value == endNum) {
+        isHorizontal ? ctx.translate(x + 5, height * 0.05) : ctx.translate(width * 0.05, x + 32)
+      } else {
+        isHorizontal ? ctx.translate(x - 12, height * 0.05) : ctx.translate(width * 0.05, x + 12)
+      }
+
       if (!isHorizontal) {
         ctx.rotate(-Math.PI / 2) // 旋转 -90 度
       }
       ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
       ctx.fillText(value.toString(), 4 * ratio, 7 * ratio)
       ctx.restore()
-      isHorizontal ? ctx.lineTo(x, (height * 9) / 16) : ctx.lineTo((width * 9) / 16, x)
+      // 影响刻度位置
+      if (value == 0 || value == endNum) {
+        isHorizontal ? ctx.lineTo(x, height) : ctx.lineTo(width, x)
+      } else {
+        isHorizontal ? ctx.lineTo(x, (height * 7) / 16) : ctx.lineTo((width * 7) / 16, x)
+      }
+
       console.log(x, 'xBBBBBBBB')
     }
     ctx.stroke()
