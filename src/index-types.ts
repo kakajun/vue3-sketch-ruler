@@ -44,8 +44,8 @@ export const sketchRulerProps = {
     default: 1
   },
   ratio: {
-    type: Number
-    // default: window.devicePixelRatio || 1
+    type: Number,
+    default: 1
   },
   thick: {
     type: Number,
@@ -94,11 +94,15 @@ export const sketchRulerProps = {
   },
   endNumX: {
     type: Number,
-    default: Infinity
+    default: function () {
+      return Infinity
+    }
   },
   endNumY: {
     type: Number,
-    default: Infinity
+    default: function () {
+      return Infinity
+    }
   },
   panzoomOption: Object
 }

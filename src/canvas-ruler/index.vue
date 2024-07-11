@@ -65,8 +65,8 @@ onUnmounted(() => {
 const updateCanvasContext = (ratio: number) => {
   if (canvas.value) {
     // 比例宽高
-    canvas.value.width = props.width! * ratio!
-    canvas.value.height = props.height! * ratio!
+    canvas.value.width = props.width! * ratio
+    canvas.value.height = props.height! * ratio
     const ctx = state.canvasContext
     if (ctx) {
       ctx.font = `${12 * ratio!}px -apple-system,
@@ -85,8 +85,8 @@ const drawRuler = (ratio: number) => {
     width: props.width!,
     height: props.height!,
     palette: props.palette!,
-    endNumX: props.endNumX!,
-    endNumY: props.endNumY!,
+    endNumX: props.endNumX,
+    endNumY: props.endNumY,
     ratio: ratio
   }
 

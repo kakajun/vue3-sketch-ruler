@@ -121,9 +121,8 @@ const rectStyle = computed(() => {
 const cpuPalette = computed(() => {
   return state.isBlack
     ? {
-        bgColor: '#18181c',
-        backgroundImage:
-          'linear-gradient(#18181c 14px, transparent 0), linear-gradient(90deg, transparent 14px, #86909c 0)', // ruler bg color
+        bgColor: `linear-gradient(#18181c 14px, transparent 0),linear-gradient(90deg, transparent 14px, #86909c 0),#18181c;`,
+        backgroundSize: '15px 15px, 15px 15px',
         hoverBg: '#fff',
         hoverColor: '#000',
         longfgColor: '#BABBBC', // ruler longer mark color

@@ -8,7 +8,6 @@
       :start="start"
       :ratio="ratio"
       :endNumX="endNumX"
-      :startNumY="startNumY"
       :endNumY="endNumY"
       :select-start="selectStart"
       :select-length="selectLength"

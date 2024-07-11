@@ -24,6 +24,7 @@ module.exports = defineConfig({
     'plugin:prettier/recommended'
   ],
   rules: {
+    'vue/no-mutating-props': 'off',
     'vue/no-setup-props-destructure': 'off',
     'vue/script-setup-uses-vars': 'error',
     'vue/no-reserved-component-names': 'off',

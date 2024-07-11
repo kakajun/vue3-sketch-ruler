@@ -64,6 +64,7 @@ declare const _default: __VLS_WithTemplateSlots< DefineComponent<{
     };
     panzoomOption: ObjectConstructor;
 }, {
+    initPanzoom: () => void;
     panzoomInstance: Ref<any>;
     reset: () => void;
     zoomIn: () => void;

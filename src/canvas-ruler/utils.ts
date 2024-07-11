@@ -59,7 +59,6 @@ export const drawCavaseRuler = (
   // 绘制长间隔和文字
   for (let value = 0, count = 0; value < endValue; value += gridSize10, count++) {
     if (value <= endNum) {
-      debugger
       const x = offsetX10 + count * gridPixel10 // prevent canvas 1px line blurry
       if (value == 0 || value == endNum) {
         isHorizontal ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
