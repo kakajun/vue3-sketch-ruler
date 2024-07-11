@@ -2,6 +2,7 @@
   <canvas
     ref="canvas"
     class="ruler"
+    :style="rulerStyle"
     @click="handle($event, 'click')"
     @mouseenter="handle($event, 'enter')"
     @mousemove="handle($event, 'move')"
@@ -10,7 +11,7 @@
 </template>
 <script setup lang="ts">
 import { drawCavaseRuler } from './utils'
-import { reactive, ref, onMounted, watch, onUnmounted } from 'vue'
+import { reactive, ref, onMounted, watch, onUnmounted, computed } from 'vue'
 
 interface Props {
   showIndicator: boolean
@@ -50,6 +51,13 @@ const handleResize = () => {
 const initCanvasRef = () => {
   state.canvasContext = canvas.value && canvas.value.getContext('2d')
 }
+
+const rulerStyle = computed(() => {
+  return {
+    [props.vertical ? 'borderRight' : 'borderBottom']:
+      `1px solid ${props.palette.borderColor || '#eeeeef'} `
+  }
+})
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize)

@@ -26,6 +26,7 @@
   "files.eol": "\n",
   "search.exclude": {
     "**/docs": true,
+    "**/types": true,
     "**/node_modules": true,
     "**/*.log": true,
     "**/*.log*": true,

@@ -74,12 +74,17 @@ const paletteCpu = computed(() => {
   }
   const finalObj = merge(
     {
-      bgColor: 'rgba(225,225,225, 0)', // ruler bg color
+      bgColor: '#f6f7f9', // ruler bg color
+      // bgColor: '#18181c',
       longfgColor: '#BABBBC', // ruler longer mark color
       fontColor: '#7D8694', // ruler font color
       shadowColor: '#E8E8E8', // ruler shadow color
       lineColor: '#EB5648',
-      borderColor: '#DADADC',
+      hoverBg: '#000',
+      hoverColor: '#fff',
+      borderColor: '#eeeeef',
+      // backgroundImage:
+      //   'linear-gradient(#18181c 14px, transparent 0), linear-gradient(90deg, transparent 14px, #86909c 0)',
       cornerActiveColor: 'rgb(235, 86, 72, 0.6)',
       menu: {
         bgColor: '#fff',
@@ -111,11 +116,10 @@ const cornerStyle = computed(() => {
 })
 const canvasStyle = computed(() => {
   return {
-    background: '#ff9',
-    marginTop: props.thick + 'px',
-    marginLeft: props.thick + 'px',
-    width: props.width - props.thick + 'px',
-    height: props.height - props.thick + 'px'
+    backgroundColor: paletteCpu.value.bgColor,
+    backgroundImage: paletteCpu.value.backgroundImage,
+    width: props.width + 'px',
+    height: props.height + 'px'
   }
 })
 onMounted(() => {
@@ -126,9 +130,9 @@ const initPanzoom = () => {
   // document: https://github.com/timmywil/panzoom
   elem.value = document.querySelector('.canvasedit')
   initStart()
-  console.log(zoomStartX.value, 'zoomStartX.value')
-  console.log(zoomStartY.value, 'zoomStartY.value')
-  console.log(props.panzoomOption, 'props.panzoomOption')
+  // console.log(zoomStartX.value, 'zoomStartX.value')
+  // console.log(zoomStartY.value, 'zoomStartY.value')
+  // console.log(props.panzoomOption, 'props.panzoomOption')
   panzoomInstance.value = Panzoom(elem.value, {
     noBind: true,
     startScale: props.scale,

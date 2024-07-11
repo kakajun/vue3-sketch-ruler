@@ -49,7 +49,11 @@ const borderCursor = computed(() => {
 })
 
 const actionStyle = computed(() => ({
-  [props.vertical ? 'left' : 'top']: `${offsetLine.value}px`
+  backgroundColor: props.palette.hoverBg,
+  // padding: '5px',
+  color: props.palette.hoverColor,
+  [props.vertical ? 'top' : 'left']: `-8px`,
+  [props.vertical ? 'left' : 'top']: `${offsetLine.value + 10}px`
 }))
 
 onMounted(() => {
@@ -108,8 +112,6 @@ const labelContent = computed(() => {
 
 .value {
   transform: scale(0.83);
-  color: white;
-  background-color: black;
   padding: 5px;
   border-radius: 5px;
   font-size: 12px;

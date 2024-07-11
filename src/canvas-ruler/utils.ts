@@ -72,7 +72,7 @@ export const drawCavaseRuler = (
       if (value == 0) {
         isHorizontal ? ctx.translate(x - 15, height * 0.3) : ctx.translate(width * 0.3, x - 5)
       } else if (value == endNum) {
-        isHorizontal ? ctx.translate(x + 5, height * 0.05) : ctx.translate(width * 0.05, x + 32)
+        isHorizontal ? ctx.translate(x + 5, height * 0.1) : ctx.translate(width * 0.1, x + 32)
       } else {
         isHorizontal ? ctx.translate(x - 12, height * 0.05) : ctx.translate(width * 0.05, x + 12)
       }
@@ -87,7 +87,7 @@ export const drawCavaseRuler = (
       if (value == 0 || value == endNum) {
         isHorizontal ? ctx.lineTo(x, height) : ctx.lineTo(width, x)
       } else {
-        isHorizontal ? ctx.lineTo(x, (height * 7) / 16) : ctx.lineTo((width * 7) / 16, x)
+        isHorizontal ? ctx.lineTo(x, (height * 10) / 16) : ctx.lineTo((width * 10) / 16, x)
       }
 
       console.log(x, 'xBBBBBBBB')

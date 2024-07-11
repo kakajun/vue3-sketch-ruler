@@ -24,10 +24,12 @@
     <div class="wrapper" :style="rectStyle">
       <!--  这个可以传入图标 -->
       <SketchRule
+        :key="rendIndex"
         v-model:scale="state.scale"
         :thick="state.thick"
         :width="rectWidth"
         :height="rectHeight"
+        :palette="cpuPalette"
         :endNumX="canvasWidth"
         :endNumY="canvasHeight"
         :panzoomOption="panzoomOption"
@@ -60,11 +62,15 @@
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
-const rectWidth = 1600
-const rectHeight = 800
-const canvasWidth = 1000
-const canvasHeight = 500
-
+// const rectWidth = 1600
+// const rectHeight = 800
+// const canvasWidth = 1000
+// const canvasHeight = 500
+const rectWidth = 800
+const rectHeight = 400
+const canvasWidth = 500
+const canvasHeight = 250
+const rendIndex = ref(0)
 const sketchruleRef = ref()
 const panzoomOption = ref({})
 // 另外一个方法调用内部方法
@@ -79,10 +85,14 @@ const resetMethod = () => {
   }
 }
 
-const changeTheme = () => {}
+const changeTheme = () => {
+  state.isBlack = !state.isBlack
+  rendIndex.value++
+}
 
 const state = reactive({
   scale: 1,
+  isBlack: false,
   lines: {
     h: [0, 588],
     v: [0, 143]
@@ -106,6 +116,24 @@ const rectStyle = computed(() => {
     width: `${rectWidth}px`,
     height: `${rectHeight}px`
   }
+})
+// background-image: ;
+const cpuPalette = computed(() => {
+  return state.isBlack
+    ? {
+        bgColor: '#18181c',
+        backgroundImage:
+          'linear-gradient(#18181c 14px, transparent 0), linear-gradient(90deg, transparent 14px, #86909c 0)', // ruler bg color
+        hoverBg: '#fff',
+        hoverColor: '#000',
+        longfgColor: '#BABBBC', // ruler longer mark color
+        fontColor: '#DEDEDE', // ruler font color
+        shadowColor: '#525252', // ruler shadow color
+        lineColor: '#EB5648',
+        borderColor: '#B5B5B5',
+        cornerActiveColor: '#fff'
+      }
+    : {}
 })
 
 const cpuScale = computed(() => {
