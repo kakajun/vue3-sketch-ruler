@@ -73,7 +73,6 @@ const paletteCpu = computed(() => {
   const finalObj = merge(
     {
       bgColor: '#f6f7f9', // ruler bg color
-      // bgColor: '#18181c',
       longfgColor: '#BABBBC', // ruler longer mark color
       fontColor: '#7D8694', // ruler font color
       shadowColor: '#E8E8E8', // ruler shadow color
@@ -81,8 +80,6 @@ const paletteCpu = computed(() => {
       hoverBg: '#000',
       hoverColor: '#fff',
       borderColor: '#eeeeef',
-      // backgroundImage:
-      //   'linear-gradient(#18181c 14px, transparent 0), linear-gradient(90deg, transparent 14px, #86909c 0)',
       cornerActiveColor: 'rgb(235, 86, 72, 0.6)',
       menu: {
         bgColor: '#fff',
@@ -128,9 +125,6 @@ const initPanzoom = () => {
   // document: https://github.com/timmywil/panzoom
   elem.value = document.querySelector('.canvasedit')
   initStart()
-  // console.log(zoomStartX.value, 'zoomStartX.value')
-  // console.log(zoomStartY.value, 'zoomStartY.value')
-  // console.log(props.panzoomOption, 'props.panzoomOption')
   panzoomInstance.value = Panzoom(elem.value, {
     noBind: true,
     startScale: props.scale,
@@ -145,8 +139,6 @@ const initPanzoom = () => {
   elem.value.addEventListener('panzoomchange', (event) => {
     const { scale, dimsOut } = event.detail
     if (dimsOut) {
-      // console.log(event.detail, 'event.detail')
-      // console.log(scale, 'scalevvvvvvvvvvvvv')
       emit('update:scale', scale)
       ownScale.value = scale
       const left = (dimsOut.parent.left - dimsOut.elem.left + props.thick) / scale
@@ -177,7 +169,7 @@ const initPanzoom = () => {
 }
 
 /**
- * @desc: 处理初始化画布居中位置, TODO 要考虑外部浏览器的缩放
+ * @desc: 处理初始化画布居中位置
  */
 const initStart = () => {
   const parentEle = document.querySelector('.canvasedit-parent')

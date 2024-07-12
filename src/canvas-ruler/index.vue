@@ -53,9 +53,6 @@ const initCanvasRef = () => {
 
 const rulerStyle = computed(() => {
   return {
-    // width: '100%',
-    // [props.vertical ? 'height' : 'width']:
-    //   `${((props.vertical ? props.height : props.width) - props.thick) * ratioValue}px`,
     [props.vertical ? 'borderRight' : 'borderBottom']:
       `1px solid ${props.palette.borderColor || '#eeeeef'} `
   }

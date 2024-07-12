@@ -33,7 +33,7 @@ export const drawCavaseRuler = (
 
   // 缩放ctx, 以简化计算
   ctx.scale(ratio, ratio)
-  ctx.clearRect(0, 0, width, height)
+  ctx.clearRect(0, 0, width / ratio, height / ratio)
 
   // 1. 画标尺底色
   ctx.fillStyle = bgColor
@@ -58,12 +58,20 @@ export const drawCavaseRuler = (
   ctx.beginPath()
   ctx.fillStyle = fontColor
   ctx.strokeStyle = longfgColor
+  console.log(endValue, 'endValue')
 
   // 绘制长间隔和文字
   for (let value = startValue10, count = 0; value < endValue; value += gridSize10, count++) {
+    const x = offsetX10 + count * gridPixel10 + 0.5 // prevent canvas 1px line blurry
+    if ((value - gridSize10 < endNum && value > endNum) || value == endNum) {
+      // 如果尾数画最后一个刻度
+      const xl = offsetX10 + count * gridPixel10 + 0.5 + (endNum - value) * scale
+      setLast(xl, endNum)
+      return
+    }
+
     if (value >= 0 && value <= endNum) {
-      const x = offsetX10 + count * gridPixel10 + 0.5 // prevent canvas 1px line blurry
-      if (value == 0 || value == endNum) {
+      if (value == 0) {
         isHorizontal ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
       } else {
         isHorizontal ? ctx.moveTo(x, 20) : ctx.moveTo(20, x)
@@ -73,8 +81,6 @@ export const drawCavaseRuler = (
       // 影响文字位置
       if (value == 0) {
         isHorizontal ? ctx.translate(x - 15, height * 0.2) : ctx.translate(width * 0.3, x - 5)
-      } else if (value == endNum) {
-        isHorizontal ? ctx.translate(x + 5, height * 0.2) : ctx.translate(width * 0.1, x + 32)
       } else {
         isHorizontal ? ctx.translate(x - 12, height * 0.05) : ctx.translate(width * 0.05, x + 12)
       }
@@ -86,17 +92,33 @@ export const drawCavaseRuler = (
       ctx.fillText(value.toString(), 4 * ratio, 7 * ratio)
       ctx.restore()
       // 影响刻度位置
-      if (value == 0 || value == endNum) {
+      if (value == 0) {
         isHorizontal ? ctx.lineTo(x, height) : ctx.lineTo(width, x)
       } else {
         isHorizontal ? ctx.lineTo(x, (height * 10) / 16) : ctx.lineTo((width * 10) / 16, x)
       }
-
-      console.log(x, 'xBBBBBBBB')
     }
     ctx.stroke()
     ctx.closePath()
     // 恢复ctx matrix
+    ctx.setTransform(1, 0, 0, 1, 0, 0)
+  }
+
+  function setLast(x: number, value: number) {
+    debugger
+    isHorizontal ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
+    ctx.save()
+
+    isHorizontal ? ctx.translate(x + 5, height * 0.2) : ctx.translate(width * 0.1, x + 32)
+    if (!isHorizontal) {
+      ctx.rotate(-Math.PI / 2) // 旋转 -90 度
+    }
+    ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
+    ctx.fillText(value.toString(), 4 * ratio, 7 * ratio)
+    ctx.restore()
+    isHorizontal ? ctx.lineTo(x, height) : ctx.lineTo(width, x)
+    ctx.stroke()
+    ctx.closePath()
     ctx.setTransform(1, 0, 0, 1, 0, 0)
   }
 }
