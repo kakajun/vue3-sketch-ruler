@@ -29,6 +29,8 @@ export const drawCavaseRuler = (
   const { scale, width, height, ratio, palette } = options
   const { bgColor, fontColor, shadowColor, longfgColor } = palette
   const endNum = isHorizontal ? options.endNumX : options.endNumY
+  console.log(height, 'height')
+
   // 缩放ctx, 以简化计算
   ctx.scale(ratio, ratio)
   ctx.clearRect(0, 0, width, height)
@@ -49,7 +51,8 @@ export const drawCavaseRuler = (
   const gridSize = getGridSize(scale) // 每小格表示的宽度
   const gridSize10 = gridSize * 10 // 每大格表示的宽度
   const gridPixel10 = gridSize10 * scale
-  const offsetX10 = (-start / gridSize10) * gridPixel10 // 长间隔起点刻度距离ctx原点(start)的px距离
+  const startValue10 = Math.floor(start / gridSize10) * gridSize10
+  const offsetX10 = ((startValue10 - start) / gridSize10) * gridPixel10 // 长间隔起点刻度距离ctx原点(start)的px距离
   const endValue = start + Math.ceil((isHorizontal ? width : height) / scale) // 终点刻度
   // 3. 画刻度和文字(因为刻度遮住了阴影)
   ctx.beginPath()
@@ -57,9 +60,9 @@ export const drawCavaseRuler = (
   ctx.strokeStyle = longfgColor
 
   // 绘制长间隔和文字
-  for (let value = 0, count = 0; value < endValue; value += gridSize10, count++) {
-    if (value <= endNum) {
-      const x = offsetX10 + count * gridPixel10 // prevent canvas 1px line blurry
+  for (let value = startValue10, count = 0; value < endValue; value += gridSize10, count++) {
+    if (value >= 0 && value <= endNum) {
+      const x = offsetX10 + count * gridPixel10 + 0.5 // prevent canvas 1px line blurry
       if (value == 0 || value == endNum) {
         isHorizontal ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
       } else {
@@ -69,9 +72,9 @@ export const drawCavaseRuler = (
       ctx.save()
       // 影响文字位置
       if (value == 0) {
-        isHorizontal ? ctx.translate(x - 15, height * 0.3) : ctx.translate(width * 0.3, x - 5)
+        isHorizontal ? ctx.translate(x - 15, height * 0.2) : ctx.translate(width * 0.3, x - 5)
       } else if (value == endNum) {
-        isHorizontal ? ctx.translate(x + 5, height * 0.1) : ctx.translate(width * 0.1, x + 32)
+        isHorizontal ? ctx.translate(x + 5, height * 0.2) : ctx.translate(width * 0.1, x + 32)
       } else {
         isHorizontal ? ctx.translate(x - 12, height * 0.05) : ctx.translate(width * 0.05, x + 12)
       }

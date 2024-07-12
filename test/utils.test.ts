@@ -14,7 +14,6 @@ describe('drawCavaseRuler', () => {
       scale: 1,
       width: 100,
       height: 100,
-      ratio: 1,
       palette: {
         bgColor: 'red',
         fontColor: 'black',

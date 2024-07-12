@@ -43,10 +43,6 @@ export const sketchRulerProps = {
     type: Number,
     default: 1
   },
-  ratio: {
-    type: Number,
-    default: 1
-  },
   thick: {
     type: Number,
     default: 16

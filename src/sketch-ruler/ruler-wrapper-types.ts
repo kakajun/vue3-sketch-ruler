@@ -1,7 +1,6 @@
 import { PropType } from 'vue'
 export const wrapperProps = {
   scale: Number,
-  ratio: Number,
   thick: Number,
   endNumX: Number,
   endNumY: Number,

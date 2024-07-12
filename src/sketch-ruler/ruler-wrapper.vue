@@ -6,7 +6,6 @@
       :width="width"
       :height="height"
       :start="start"
-      :ratio="ratio"
       :endNumX="endNumX"
       :endNumY="endNumY"
       :select-start="selectStart"

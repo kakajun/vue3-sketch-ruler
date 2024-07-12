@@ -13,7 +13,6 @@
       :height="thick"
       :is-show-refer-line="showReferLine"
       :thick="thick"
-      :ratio="ratio"
       :start="startX"
       :lines="lines.h"
       :select-start="shadow.x"
@@ -29,7 +28,6 @@
       :height="height"
       :is-show-refer-line="showReferLine"
       :thick="thick"
-      :ratio="ratio"
       :start="startY"
       :lines="lines.v"
       :select-start="shadow.y"
@@ -147,11 +145,12 @@ const initPanzoom = () => {
   elem.value.addEventListener('panzoomchange', (event) => {
     const { scale, dimsOut } = event.detail
     if (dimsOut) {
-      console.log(event.detail, 'event.detail')
+      // console.log(event.detail, 'event.detail')
+      // console.log(scale, 'scalevvvvvvvvvvvvv')
       emit('update:scale', scale)
       ownScale.value = scale
-      const left = (dimsOut.parent.left - dimsOut.elem.left) / scale
-      const top = (dimsOut.parent.top - dimsOut.elem.top) / scale
+      const left = (dimsOut.parent.left - dimsOut.elem.left + props.thick) / scale
+      const top = (dimsOut.parent.top - dimsOut.elem.top + props.thick) / scale
       startX.value = left
       console.log(startX.value * scale, 'startX.value')
       console.log(scale, 'scale')
@@ -186,9 +185,9 @@ const initStart = () => {
   const children = elem.value.children[0].getBoundingClientRect()
   const { width, height } = parentRect
   if (width > children.width) {
-    zoomStartX.value = (width - props.thick - children.width) / 2
+    zoomStartX.value = (width - children.width) / 2
     if (height > children.height) {
-      zoomStartY.value = (height - props.thick - children.height) / 2
+      zoomStartY.value = (height - children.height) / 2
     } else {
       zoomStartY.value = 0
     }

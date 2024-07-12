@@ -1,6 +1,7 @@
 <template>
   <div class="demo">
     <div class="top">
+      <div class="scale"> 浏览器缩放:{{ windowScale }} </div>
       <div class="scale"> 缩放比例:{{ cpuScale }} </div>
       <button class="mr10 font18" @click="showLineClick">辅助线开关</button>
       <button class="mr10 font18" @click="changeTheme">主题切换</button>
@@ -8,7 +9,6 @@
       <button class="mr10 font18" @click="zoomOutMethod">缩小</button>
       <input
         class="mr10 font18"
-        @input="scaleChange"
         :value="state.scale"
         className="range-input"
         type="range"
@@ -17,8 +17,6 @@
         step="0.1"
         defaultValue="1"
       />
-      <!-- <span>限制框内</span>
-      <input class="mr10 font18" type="checkbox" @change="checkChange" name="myCheckbox" /> -->
     </div>
 
     <div class="wrapper" :style="rectStyle">
@@ -60,7 +58,7 @@
 // import { SketchRule } from '../../lib/index.mjs'
 // import '../../lib/style.css'
 import bgImg from '../assets/bg.png'
-import { computed, ref, reactive } from 'vue'
+import { computed, ref, reactive, onMounted } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
 // const rectWidth = 1600
 // const rectHeight = 800
@@ -71,6 +69,7 @@ const rectHeight = 400
 const canvasWidth = 500
 const canvasHeight = 250
 const rendIndex = ref(0)
+const windowScale = ref(1)
 const sketchruleRef = ref()
 const panzoomOption = ref({})
 // 另外一个方法调用内部方法
@@ -78,6 +77,22 @@ const zoomOutMethod = () => {
   if (sketchruleRef.value) {
     sketchruleRef.value.zoomOut()
   }
+}
+
+onMounted(() => {
+  changeWindowScale()
+  window.addEventListener('resize', handleResize)
+})
+
+const handleResize = () => {
+  if (sketchruleRef.value) {
+    changeWindowScale()
+    sketchruleRef.value.initPanzoom()
+  }
+}
+const changeWindowScale = () => {
+  const num = Number(window.devicePixelRatio || 1)
+  windowScale.value = num.toFixed(2) * 1
 }
 const resetMethod = () => {
   if (sketchruleRef.value) {
@@ -94,22 +109,13 @@ const state = reactive({
   scale: 1,
   isBlack: false,
   lines: {
-    h: [0, 588],
-    v: [0, 143]
+    h: [100, 500],
+    v: [0, 250]
   },
   thick: 20,
   isShowRuler: true, // 显示标尺
   isShowReferLine: true // 显示参考线
 })
-
-const checkChange = (e) => {
-  if (e.target.checked) {
-    panzoomOption.value = { contain: 'inside' }
-  } else {
-    panzoomOption.value = {}
-  }
-  sketchruleRef.value.initPanzoom()
-}
 
 const rectStyle = computed(() => {
   return {
@@ -121,7 +127,7 @@ const rectStyle = computed(() => {
 const cpuPalette = computed(() => {
   return state.isBlack
     ? {
-        bgColor: `linear-gradient(#18181c 14px, transparent 0),linear-gradient(90deg, transparent 14px, #86909c 0),#18181c;`,
+        bgColor: '#000',
         backgroundSize: '15px 15px, 15px 15px',
         hoverBg: '#fff',
         hoverColor: '#000',

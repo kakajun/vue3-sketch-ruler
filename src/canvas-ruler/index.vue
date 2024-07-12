@@ -17,7 +17,6 @@ interface Props {
   showIndicator: boolean
   valueNum: number
   scale: number
-  ratio: number
   palette: Object
   vertical: Boolean
   start: number
@@ -54,6 +53,9 @@ const initCanvasRef = () => {
 
 const rulerStyle = computed(() => {
   return {
+    // width: '100%',
+    // [props.vertical ? 'height' : 'width']:
+    //   `${((props.vertical ? props.height : props.width) - props.thick) * ratioValue}px`,
     [props.vertical ? 'borderRight' : 'borderBottom']:
       `1px solid ${props.palette.borderColor || '#eeeeef'} `
   }
@@ -65,8 +67,8 @@ onUnmounted(() => {
 const updateCanvasContext = (ratio: number) => {
   if (canvas.value) {
     // 比例宽高
-    canvas.value.width = props.width! * ratio
-    canvas.value.height = props.height! * ratio
+    canvas.value.width = props.width!
+    canvas.value.height = props.height!
     const ctx = state.canvasContext
     if (ctx) {
       ctx.font = `${12 * ratio!}px -apple-system,
@@ -79,7 +81,6 @@ const updateCanvasContext = (ratio: number) => {
   }
 }
 const drawRuler = (ratio: number) => {
-  console.log('drawRuler', props.scale)
   const options = {
     scale: props.scale!,
     width: props.width!,
