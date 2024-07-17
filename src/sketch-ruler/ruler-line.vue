@@ -29,7 +29,6 @@ interface Props {
 const offsetLine = ref(0)
 const props = defineProps<Props>()
 const emit = defineEmits(['onMouseDown', 'onRelease', 'onRemove'])
-
 const startValue = ref(props.value)
 const showLine = computed(() => startValue.value >= props.start)
 
@@ -50,7 +49,6 @@ const borderCursor = computed(() => {
 
 const actionStyle = computed(() => ({
   backgroundColor: props.palette.hoverBg,
-  // padding: '5px',
   color: props.palette.hoverColor,
   [props.vertical ? 'top' : 'left']: `-8px`,
   [props.vertical ? 'left' : 'top']: `${offsetLine.value + 10}px`

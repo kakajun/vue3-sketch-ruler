@@ -6,6 +6,8 @@ dist-ssr
 /dist*
 *-lock.*
 pnpm-debug
+types
 auto-*.d.ts
+lib
 .idea
 .history
