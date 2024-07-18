@@ -118,7 +118,22 @@ const handleLineRemove = (index: any) => {
   .line {
     top: 0;
     height: 100vh;
-    padding-left: 5px;
+    &:before,
+    &:after {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 100vh;
+      position: absolute;
+    }
+    &::before {
+      left: -4px;
+      top: 0px;
+    }
+    &::after {
+      right: -4px;
+      top: 0px;
+    }
   }
   .indicator {
     top: 0;
@@ -135,7 +150,23 @@ const handleLineRemove = (index: any) => {
 .v-container {
   .line {
     width: 100vw;
-    padding-top: 5px;
+    &:before,
+    &:after {
+      content: '';
+      display: inline-block;
+      height: 4px;
+      width: 100vw;
+      position: absolute;
+    }
+    &::before {
+      top: -4px;
+      left: 0px;
+    }
+
+    &::after {
+      bottom: -4px;
+      left: 0px;
+    }
   }
   .indicator {
     width: 100vw;

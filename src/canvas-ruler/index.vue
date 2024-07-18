@@ -31,6 +31,7 @@ const props = defineProps<Props>()
 const emit = defineEmits(['onAddLine', 'update:showIndicator', 'update:valueNum'])
 
 const state = reactive({
+  isDragging: false,
   canvasContext: null as CanvasRenderingContext2D | null
 })
 let ratioValue = 1
@@ -126,5 +127,13 @@ const handle = (e: MouseEvent, key: string) => {
       emit('update:valueNum', value)
       break
   }
+}
+
+const handleDragStart = (event: any) => {
+  console.log(1111111111111)
+  emit('update:showIndicator', true)
+}
+const handleDragEnd = (event: any) => {
+  // showIndicator.value = false
 }
 </script>
