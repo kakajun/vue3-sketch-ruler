@@ -105,7 +105,7 @@ const mousemove = (e: MouseEvent) => {
     const { left, top } = props.parentRect
     const offset = props.vertical ? e.clientX : e.clientY
     const gap = props.vertical ? left : top
-    valueNum.value = (offset - gap) / props.scale!
+    valueNum.value = offset - gap - props.thick
     console.log(offset, 'offsetoffset')
     console.log(valueNum.value, 'valueNum.value')
   }
@@ -117,16 +117,24 @@ const mouseup = (e: MouseEvent) => {
   handleLineRelease(linePosition)
 }
 
+/**
+ * @description:
+ * @param {*} value  距离边框的位置
+ * @param {*} index  选的哪条线
+ */
 const handleLineRelease = (value: number, index?: number) => {
   // 左右或上下超出时, 删除该条对齐线
-  const offset = value - props.start
-  const maxOffset = (props.vertical ? props.height : props.width) / props.scale!
-  if (offset < 0 || offset > maxOffset) {
+  console.log(value, 'gap')
+
+  debugger
+  const num = (props.startOther + value) / props.scale
+  const maxOffset = props.vertical ? props.endNumX : props.endNumY
+  if (num < 0 || num > maxOffset) {
+    // 新增如果超出范围那么什么也不做
     if (index) {
       handleLineRemove(index)
     }
   } else {
-    const num = props.startOther - props.thick + value
     props.vertical ? props.lines.v.push(num) : props.lines.h.push(num)
   }
 }

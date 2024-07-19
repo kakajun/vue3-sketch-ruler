@@ -22,6 +22,7 @@
       :parentRect="parentRect"
       :palette="paletteCpu"
       :endNumX="endNumX"
+      :endNumY="endNumY"
     />
     <!-- 竖直方向 -->
     <RulerWrapper
@@ -38,6 +39,7 @@
       :scale="ownScale"
       :parentRect="parentRect"
       :palette="paletteCpu"
+      :endNumX="endNumX"
       :endNumY="endNumY"
     />
     <a class="corner" :style="cornerStyle" @click="onCornerClick"></a>
