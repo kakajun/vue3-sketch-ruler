@@ -1,34 +1,63 @@
-import { createCanvas, CanvasRenderingContext2D } from 'canvas'
+import { vi } from 'vitest'
+import { createCanvas } from 'canvas'
 import { drawCavaseRuler } from '../src/canvas-ruler/utils'
-import { describe, expect, test, beforeEach, it } from 'vitest'
+
 describe('drawCavaseRuler', () => {
+  let canvas: HTMLCanvasElement
   let ctx: CanvasRenderingContext2D
+  let options: any
 
   beforeEach(() => {
-    const canvas = createCanvas(200, 200)
+    canvas = createCanvas(500, 300)
     ctx = canvas.getContext('2d')
-  })
-
-  it('should fill the canvas with the background color', () => {
-    const options = {
+    options = {
       scale: 1,
-      width: 100,
-      height: 100,
+      width: 500,
+      height: 300,
+      ratio: 1,
       palette: {
-        bgColor: 'red',
-        fontColor: 'black',
-        shadowColor: 'gray',
-        longfgColor: 'blue'
+        bgColor: '#fff',
+        fontColor: '#000',
+        shadowColor: '#ccc',
+        longfgColor: '#000'
       },
       endNumX: 100,
-      endNumY: 100
+      startNumY: 0,
+      endNumY: 300
     }
-
-    drawCavaseRuler(ctx, 0, 0, 0, options, true)
-    // 在这里，您可以添加一些断言来验证 canvas 的状态
-    // 例如，检查背景颜色是否已正确设置
-    // 这可能需要一些额外的工作，因为直接验证 canvas 的像素可能比较复杂
   })
 
-  // 添加更多的测试用例来验证其他行为，如刻度线绘制、文本位置等
+  it('should call clearRect and fillRect methods', () => {
+    const spyClearRect = vi.spyOn(ctx, 'clearRect')
+    const spyFillRect = vi.spyOn(ctx, 'fillRect')
+
+    drawCavaseRuler(ctx, 0, 0, 0, options)
+
+    expect(spyClearRect).toHaveBeenCalled()
+    expect(spyFillRect).toHaveBeenCalled()
+  })
+
+  it('should handle horizontal drawing', () => {
+    const spyFillRect = vi.spyOn(ctx, 'fillRect')
+
+    drawCavaseRuler(ctx, 0, 0, 0, options, true)
+
+    expect(spyFillRect).toHaveBeenCalled()
+  })
+
+  it('should handle vertical drawing', () => {
+    const spyFillRect = vi.spyOn(ctx, 'fillRect')
+
+    drawCavaseRuler(ctx, 0, 0, 0, options, false)
+
+    expect(spyFillRect).toHaveBeenCalled()
+  })
+
+  it('should handle selection drawing', () => {
+    const spyFillRect = vi.spyOn(ctx, 'fillRect')
+
+    drawCavaseRuler(ctx, 0, 50, 100, options)
+
+    expect(spyFillRect).toHaveBeenCalled()
+  })
 })

@@ -3,9 +3,7 @@
     ref="canvas"
     class="ruler"
     :style="rulerStyle"
-    @click="handle($event, 'click')"
-    @mouseenter="handle($event, 'enter')"
-    @mousemove="handle($event, 'move')"
+    @mousedown="handleDragStart"
     @mouseleave="$emit('update:showIndicator', false)"
   ></canvas>
 </template>
@@ -31,6 +29,7 @@ const props = defineProps<Props>()
 const emit = defineEmits(['onAddLine', 'update:showIndicator', 'update:valueNum'])
 
 const state = reactive({
+  isDragging: false,
   canvasContext: null as CanvasRenderingContext2D | null
 })
 let ratioValue = 1
@@ -102,8 +101,6 @@ const drawRuler = (ratio: number) => {
 watch(
   () => props.start,
   () => {
-    console.log('start', props.start)
-
     drawRuler(ratioValue)
   }
 )
@@ -111,20 +108,8 @@ watch([() => props.width, () => props.height], () => {
   updateCanvasContext(ratioValue)
   drawRuler(ratioValue)
 })
-const handle = (e: MouseEvent, key: string) => {
-  const offset = props.vertical ? e.offsetY : e.offsetX
-  const value = Math.round(props.start + offset / props.scale!)
-  switch (key) {
-    case 'click':
-      emit('onAddLine', value)
-      break
-    case 'enter':
-      emit('update:valueNum', value)
-      emit('update:showIndicator', true)
-      break
-    default:
-      emit('update:valueNum', value)
-      break
-  }
+
+const handleDragStart = (event: any) => {
+  emit('update:showIndicator', true)
 }
 </script>
