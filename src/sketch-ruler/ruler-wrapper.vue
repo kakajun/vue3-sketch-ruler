@@ -12,7 +12,7 @@
       :select-start="selectStart"
       :select-length="selectLength"
       :palette="palette"
-      v-model:showIndicator="showIndicator"
+      @handleDragStart="mousedown"
     />
     <div v-show="isShowReferLine" class="lines">
       <RulerLine
@@ -26,17 +26,15 @@
         :palette="palette"
         :vertical="vertical"
         :is-show-refer-line="isShowReferLine"
-        @on-remove="handleLineRemove"
         @on-release="handleLineRelease"
       />
     </div>
-    <!-- v-show="showIndicator" -->
+
     <div
       class="indicator"
-      @mousedown="mousedown"
+      v-show="isdragle"
       :style="[indicatorStyle, { cursor: vertical ? 'ew-resize' : 'ns-resize' }]"
     >
-      <!-- <div class="value">{{ valueNum }}</div> -->
     </div>
   </div>
 </template>
@@ -44,12 +42,12 @@
 <script setup lang="ts">
 import RulerLine from './ruler-line.vue'
 import CanvasRuler from '../canvas-ruler/index.vue'
-import { ref, computed, onUnmounted } from 'vue'
+import { ref, computed } from 'vue'
 import { wrapperProps } from './ruler-wrapper-types'
 
 const props = defineProps(wrapperProps)
 const emit = defineEmits(['update:lines', 'on-remove-line'])
-const showIndicator = ref(false)
+
 const valueNum = ref(props.thick / 2)
 const isdragle = ref(false)
 const rwClassName = computed(() => {
@@ -90,10 +88,10 @@ const indicatorStyle = computed(() => {
  * @description: 指示器按下时
  * @param {*} e
  */
-const mousedown = (e: MouseEvent) => {
+const mousedown = () => {
   isdragle.value = true
   document.addEventListener('mousemove', mousemove)
-  document.addEventListener('mouseup', mouseup)
+  document.addEventListener('mouseup', mouseup, { once: true })
 }
 
 /**
@@ -105,15 +103,16 @@ const mousemove = (e: MouseEvent) => {
     const { left, top } = props.parentRect
     const offset = props.vertical ? e.clientX : e.clientY
     const gap = props.vertical ? left : top
-    valueNum.value = offset - gap - props.thick
+    valueNum.value = offset - gap
     console.log(offset, 'offsetoffset')
     console.log(valueNum.value, 'valueNum.value')
   }
 }
-const mouseup = (e: MouseEvent) => {
+const mouseup = () => {
   const linePosition = valueNum.value
   valueNum.value = props.thick / 2
   isdragle.value = false
+  document.removeEventListener('mousemove', mousemove)
   handleLineRelease(linePosition)
 }
 
@@ -125,32 +124,36 @@ const mouseup = (e: MouseEvent) => {
 const handleLineRelease = (value: number, index?: number) => {
   // 左右或上下超出时, 删除该条对齐线
   console.log(value, 'gap')
-
-  debugger
-  const num = (props.startOther + value) / props.scale
+  console.log(index, 'indexindex')
+  const num = (props.startOther - props.thick + value) / props.scale
   const maxOffset = props.vertical ? props.endNumX : props.endNumY
   if (num < 0 || num > maxOffset) {
     // 新增如果超出范围那么什么也不做
     if (index) {
       handleLineRemove(index)
     }
-  } else {
+  }
+  if (isNaN(index)) {
     props.vertical ? props.lines.v.push(num) : props.lines.h.push(num)
   }
 }
 const handleLineRemove = (index: any) => {
-  props.lines.splice(index, 1)
+  cpuLines.value.splice(index, 1)
+  console.log(cpuLines.value, 'arrs')
 }
-
-onUnmounted(() => {
-  document.removeEventListener('mousemove', mousemove)
-})
 </script>
 
-<style lang="scss" scoped>
-.line {
-  position: absolute;
-}
+<style lang="scss">
+@import './_mixins';
+
+// .value {
+//   transform: scale(0.83);
+//   padding: 5px;
+//   border-radius: 5px;
+//   font-size: 12px;
+//   white-space: nowrap;
+// }
+
 .h-container,
 .v-container {
   position: absolute;
@@ -168,100 +171,20 @@ onUnmounted(() => {
 .h-container {
   top: 0;
   .line {
-    top: 0;
-    height: 100vh;
-    &:before,
-    &:after {
-      content: '';
-      display: inline-block;
-      width: 4px;
-      height: 100vh;
-      position: absolute;
-    }
-    &::before {
-      left: -4px;
-      top: 0px;
-    }
-    &::after {
-      right: -4px;
-      top: 0px;
-    }
+    @include vertical-border(100vh, 4px, -4px);
   }
   .indicator {
-    width: 100vw;
-    &:before,
-    &:after {
-      content: '';
-      left: 0;
-      display: inline-block;
-      height: 5px;
-      width: 100vw;
-      position: absolute;
-    }
-    &::before {
-      top: -5px;
-    }
-
-    &::after {
-      bottom: -5px;
-    }
-    .value {
-      width: auto;
-      padding: 0 2px;
-      margin-top: 4px;
-      margin-left: 4px;
-    }
+    @include extendable-border(4px, 100vw, -5px);
   }
 }
 
 .v-container {
   left: 0;
   .line {
-    left: 0;
-    width: 100vw;
-    &:before,
-    &:after {
-      content: '';
-      display: inline-block;
-      height: 4px;
-      width: 100vw;
-      position: absolute;
-    }
-    &::before {
-      top: -5px;
-      left: 0;
-    }
-
-    &::after {
-      bottom: -5px;
-      left: 0;
-    }
+    @include extendable-border(4px, 100vw, -5px);
   }
   .indicator {
-    height: 100vw;
-    &:before,
-    &:after {
-      content: '';
-      display: inline-block;
-      width: 4px;
-      height: 100vh;
-      position: absolute;
-    }
-    &::before {
-      left: -4px;
-    }
-    &::after {
-      right: -4px;
-    }
-    .value {
-      left: 0;
-      width: auto;
-      padding: 0 2px;
-      margin-top: -5px;
-      margin-left: 2px;
-      transform: rotate(-90deg);
-      transform-origin: 0 0;
-    }
+    @include vertical-border(100vh, 4px, -4px);
   }
 }
 </style>

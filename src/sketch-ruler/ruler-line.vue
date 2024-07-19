@@ -73,20 +73,11 @@ function handleMouseDown(e: MouseEvent) {
   document.addEventListener(
     'mouseup',
     () => {
-      if (!showLine.value) {
-        handleRemove()
-      }
-
       document.removeEventListener('mousemove', moveHandler)
       emit('onRelease', startValue.value, props.index)
     },
     { once: true }
   )
-}
-
-function handleRemove() {
-  console.log('删除', props.index)
-  emit('onRemove', props.index)
 }
 
 const showLabel = ref(false)

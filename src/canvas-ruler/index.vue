@@ -109,7 +109,7 @@ watch([() => props.width, () => props.height], () => {
   drawRuler(ratioValue)
 })
 
-const handleDragStart = (event: any) => {
-  emit('update:showIndicator', true)
+const handleDragStart = (e) => {
+  emit('handleDragStart', e)
 }
 </script>
