@@ -124,6 +124,7 @@ onMounted(() => {
 const initPanzoom = () => {
   // document: https://github.com/timmywil/panzoom
   elem.value = document.querySelector('.canvasedit')
+  // const parent = elem.value.parentElement
   initStart()
   panzoomInstance.value = Panzoom(elem.value, {
     noBind: true,
@@ -154,6 +155,7 @@ const initPanzoom = () => {
       panzoomInstance.value.zoomWithWheel(e)
     }
   })
+
   // 让按下空格键才能移动画布
   parent.addEventListener('keydown', function (e) {
     if (e.key === ' ') {
