@@ -21,6 +21,10 @@ export const wrapperProps = {
     type: Number,
     default: 0
   },
+  startOther: {
+    type: Number,
+    default: 0
+  },
   lines: {
     type: Array as PropType<Array<number>>,
     default: () => []
@@ -33,5 +37,6 @@ export const wrapperProps = {
   },
   isShowReferLine: {
     type: Boolean
-  }
+  },
+  parentRect: Object
 }

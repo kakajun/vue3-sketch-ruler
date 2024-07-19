@@ -2,6 +2,7 @@
   <div :class="rwClassName" :style="rwStyle">
     <CanvasRuler
       :vertical="vertical"
+      :style="{ cursor: vertical ? 'ew-resize' : 'ns-resize' }"
       :scale="scale"
       :width="width"
       :height="height"
@@ -11,13 +12,11 @@
       :select-start="selectStart"
       :select-length="selectLength"
       :palette="palette"
-      v-model:valueNum="valueNum"
       v-model:showIndicator="showIndicator"
-      @on-add-line="handleNewLine"
     />
     <div v-show="isShowReferLine" class="lines">
       <RulerLine
-        v-for="(v, i) in lines"
+        v-for="(v, i) in cpuLines"
         :key="v + i"
         :index="i"
         :value="v >> 0"
@@ -31,9 +30,13 @@
         @on-release="handleLineRelease"
       />
     </div>
-
-    <div v-show="showIndicator" class="indicator" :style="indicatorStyle">
-      <div class="value">{{ valueNum }}</div>
+    <!-- v-show="showIndicator" -->
+    <div
+      class="indicator"
+      @mousedown="mousedown"
+      :style="[indicatorStyle, { cursor: vertical ? 'ew-resize' : 'ns-resize' }]"
+    >
+      <!-- <div class="value">{{ valueNum }}</div> -->
     </div>
   </div>
 </template>
@@ -41,16 +44,21 @@
 <script setup lang="ts">
 import RulerLine from './ruler-line.vue'
 import CanvasRuler from '../canvas-ruler/index.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, onUnmounted } from 'vue'
 import { wrapperProps } from './ruler-wrapper-types'
 
 const props = defineProps(wrapperProps)
 const emit = defineEmits(['update:lines', 'on-remove-line'])
 const showIndicator = ref(false)
-const valueNum = ref(0)
+const valueNum = ref(props.thick / 2)
+const isdragle = ref(false)
 const rwClassName = computed(() => {
   const className = props.vertical ? 'v-container' : 'h-container'
   return className
+})
+
+const cpuLines = computed(() => {
+  return props.vertical ? props.lines.h : props.lines.v
 })
 const rwStyle = computed(() => {
   const hContainer = {
@@ -67,33 +75,68 @@ const rwStyle = computed(() => {
 })
 
 const indicatorStyle = computed(() => {
-  const indicatorOffset = (valueNum.value - props.start) * props.scale!
-  let positionKey = props.vertical ? 'top' : 'left'
-  let gepKey = props.vertical ? 'left' : 'top'
-  let boderKey = props.vertical ? 'borderBottom' : 'borderLeft'
+  let positionKey = props.vertical ? 'left' : 'top'
+  let gepKey = props.vertical ? 'top' : 'left'
+  let boderKey = props.vertical ? 'borderLeft' : 'borderBottom'
   return {
-    [positionKey]: indicatorOffset + 'px',
-    [gepKey]: props.thick + 'px',
+    [positionKey]: valueNum.value + 'px',
+    [gepKey]: -props.thick + 'px',
+    cursor: props.vertical ? 'ew-resize' : 'ns-resize',
     [boderKey]: `1px solid ${props.palette?.lineColor}`
   }
 })
 
-const handleNewLine = (value: number) => {
-  props.lines.push(value)
+/**
+ * @description: 指示器按下时
+ * @param {*} e
+ */
+const mousedown = (e: MouseEvent) => {
+  isdragle.value = true
+  document.addEventListener('mousemove', mousemove)
+  document.addEventListener('mouseup', mouseup)
 }
-const handleLineRelease = (value: number, index: number) => {
+
+/**
+ * @description: 移动时,计算新增线条的位置
+ * @param {*} e
+ */
+const mousemove = (e: MouseEvent) => {
+  if (isdragle.value) {
+    const { left, top } = props.parentRect
+    const offset = props.vertical ? e.clientX : e.clientY
+    const gap = props.vertical ? left : top
+    valueNum.value = (offset - gap) / props.scale!
+    console.log(offset, 'offsetoffset')
+    console.log(valueNum.value, 'valueNum.value')
+  }
+}
+const mouseup = (e: MouseEvent) => {
+  const linePosition = valueNum.value
+  valueNum.value = props.thick / 2
+  isdragle.value = false
+  handleLineRelease(linePosition)
+}
+
+const handleLineRelease = (value: number, index?: number) => {
   // 左右或上下超出时, 删除该条对齐线
   const offset = value - props.start
   const maxOffset = (props.vertical ? props.height : props.width) / props.scale!
   if (offset < 0 || offset > maxOffset) {
-    handleLineRemove(index)
+    if (index) {
+      handleLineRemove(index)
+    }
   } else {
-    props.lines[index] = value
+    const num = props.startOther - props.thick + value
+    props.vertical ? props.lines.v.push(num) : props.lines.h.push(num)
   }
 }
 const handleLineRemove = (index: any) => {
   props.lines.splice(index, 1)
 }
+
+onUnmounted(() => {
+  document.removeEventListener('mousemove', mousemove)
+})
 </script>
 
 <style lang="scss" scoped>
@@ -110,6 +153,7 @@ const handleLineRemove = (index: any) => {
     pointer-events: auto;
   }
   .indicator {
+    z-index: 4; // 比尺子高
     position: absolute;
   }
 }
@@ -136,8 +180,23 @@ const handleLineRemove = (index: any) => {
     }
   }
   .indicator {
-    top: 0;
-    height: 100vw;
+    width: 100vw;
+    &:before,
+    &:after {
+      content: '';
+      left: 0;
+      display: inline-block;
+      height: 5px;
+      width: 100vw;
+      position: absolute;
+    }
+    &::before {
+      top: -5px;
+    }
+
+    &::after {
+      bottom: -5px;
+    }
     .value {
       width: auto;
       padding: 0 2px;
@@ -148,7 +207,9 @@ const handleLineRemove = (index: any) => {
 }
 
 .v-container {
+  left: 0;
   .line {
+    left: 0;
     width: 100vw;
     &:before,
     &:after {
@@ -159,17 +220,31 @@ const handleLineRemove = (index: any) => {
       position: absolute;
     }
     &::before {
-      top: -4px;
-      left: 0px;
+      top: -5px;
+      left: 0;
     }
 
     &::after {
-      bottom: -4px;
-      left: 0px;
+      bottom: -5px;
+      left: 0;
     }
   }
   .indicator {
-    width: 100vw;
+    height: 100vw;
+    &:before,
+    &:after {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 100vh;
+      position: absolute;
+    }
+    &::before {
+      left: -4px;
+    }
+    &::after {
+      right: -4px;
+    }
     .value {
       left: 0;
       width: auto;

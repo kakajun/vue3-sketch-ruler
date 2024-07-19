@@ -14,10 +14,12 @@
       :is-show-refer-line="showReferLine"
       :thick="thick"
       :start="startX"
-      :lines="lines.h"
+      :startOther="startY"
+      :lines="lines"
       :select-start="shadow.x"
       :select-length="shadow.width"
       :scale="ownScale"
+      :parentRect="parentRect"
       :palette="paletteCpu"
       :endNumX="endNumX"
     />
@@ -29,10 +31,12 @@
       :is-show-refer-line="showReferLine"
       :thick="thick"
       :start="startY"
-      :lines="lines.v"
+      :startOther="startX"
+      :lines="lines"
       :select-start="shadow.y"
       :select-length="shadow.height"
       :scale="ownScale"
+      :parentRect="parentRect"
       :palette="paletteCpu"
       :endNumY="endNumY"
     />
@@ -48,6 +52,7 @@ import { sketchRulerProps } from '../index-types'
 import Panzoom from 'simple-panzoom'
 const props = defineProps(sketchRulerProps)
 const emit = defineEmits(['onCornerClick', 'update:scale'])
+const parentRect = ref(null)
 const elem = ref(null)
 const startX = ref(0)
 const startY = ref(0)
@@ -173,9 +178,9 @@ const initPanzoom = () => {
  */
 const initStart = () => {
   const parentEle = document.querySelector('.canvasedit-parent')
-  const parentRect = parentEle.getBoundingClientRect()
+  parentRect.value = parentEle.getBoundingClientRect()
   const children = elem.value.children[0].getBoundingClientRect()
-  const { width, height } = parentRect
+  const { width, height } = parentRect.value
   if (width > children.width) {
     zoomStartX.value = (width - children.width) / 2
     if (height > children.height) {

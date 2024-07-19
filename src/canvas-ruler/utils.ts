@@ -105,7 +105,6 @@ export const drawCavaseRuler = (
   }
 
   function setLast(x: number, value: number) {
-    debugger
     isHorizontal ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
     ctx.save()
 
