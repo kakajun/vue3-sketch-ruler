@@ -21,7 +21,6 @@ export const drawCavaseRuler = (
     ratio: number
     palette: any
     endNumX: number
-    startNumY: number
     endNumY: number
   },
   isHorizontal?: boolean //横向为true,纵向缺省

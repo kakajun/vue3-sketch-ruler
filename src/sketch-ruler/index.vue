@@ -62,7 +62,7 @@ const zoomStartX = ref(0)
 const zoomStartY = ref(0)
 const ownScale = ref(1)
 const showReferLine = ref(props.isShowReferLine)
-let panzoomInstance: PanzoomObject | null = null
+const panzoomInstance = ref<PanzoomObject | null>(null)
 // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
 const paletteCpu = computed(() => {
   function merge(obj: { [key: string]: any }, o: { [key: string]: any }) {
@@ -134,7 +134,7 @@ const initPanzoom = () => {
   // const parent = elem.value.parentElement
   if (elem.value) {
     initStart()
-    panzoomInstance = Panzoom(elem.value, {
+    panzoomInstance.value = Panzoom(elem.value, {
       noBind: true,
       startScale: props.scale,
       cursor: 'default',
@@ -160,22 +160,22 @@ const initPanzoom = () => {
       })
     }
 
-    parent.addEventListener('wheel', function (e) {
+    document.addEventListener('wheel', function (e) {
       if (e.ctrlKey || e.metaKey) {
-        panzoomInstance?.zoomWithWheel(e)
+        panzoomInstance.value?.zoomWithWheel(e)
       }
     })
 
     // 让按下空格键才能移动画布
-    parent.addEventListener('keydown', function (e) {
+    document.addEventListener('keydown', function (e) {
       if (e.key === ' ') {
-        panzoomInstance?.bind()
+        panzoomInstance.value?.bind()
       }
     })
 
-    parent.addEventListener('keyup', function (e) {
+    document.addEventListener('keyup', function (e) {
       if (e.key === ' ') {
-        panzoomInstance?.destroy()
+        panzoomInstance.value?.destroy()
       }
     })
   }
@@ -206,15 +206,15 @@ const initStart = () => {
   }
 }
 const reset = () => {
-  panzoomInstance?.reset()
+  panzoomInstance.value?.reset()
 }
 
 const zoomIn = () => {
-  panzoomInstance?.zoomIn()
+  panzoomInstance.value?.zoomIn()
 }
 
 const zoomOut = () => {
-  panzoomInstance?.zoomOut()
+  panzoomInstance.value?.zoomOut()
 }
 
 const onCornerClick = () => {

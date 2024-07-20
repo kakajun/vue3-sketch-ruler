@@ -1,23 +1,19 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { existsSync, readdirSync, lstatSync, rmdirSync, unlinkSync } from 'fs'
 import { resolve } from 'path'
 import dts from 'vite-plugin-dts'
 import pkg from './package.json';
 
-emptyDir(resolve(__dirname, 'types'))
 const banner = `/*!${pkg.name} v${pkg.version}${new Date().getFullYear()}年${
   new Date().getMonth() + 1
 }月${new Date()}制作*/`
-// https://vitejs.dev/config/
+
 export default defineConfig({
   plugins: [
     vue(),
     dts({
-      outDir: 'types',
-      staticImport: true,
-      insertTypesEntry: true
+   rollupTypes: true
     })
   ],
   test: {
@@ -44,7 +40,6 @@ export default defineConfig({
       external: ['vue','panzoom'],
       output: {
         banner,
-        exports: 'auto',
         globals: {
           vue: 'Vue',
           panzoom: 'simple-panzoom' // 这里假设 panzoom 暴露在全局变量 Panzoom 下
@@ -53,21 +48,3 @@ export default defineConfig({
     }
   }
 })
-
-function emptyDir(dir) {
-  if (!existsSync(dir)) {
-    return
-  }
-
-  for (const file of readdirSync(dir)) {
-    const abs = resolve(dir, file)
-
-    // baseline is Node 12 so can't use rmSync
-    if (lstatSync(abs).isDirectory()) {
-      emptyDir(abs)
-      rmdirSync(abs)
-    } else {
-      unlinkSync(abs)
-    }
-  }
-}

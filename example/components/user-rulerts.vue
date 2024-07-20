@@ -154,7 +154,7 @@ const canvasStyle = computed(() => {
   }
 })
 
-const scaleChange = (e) => {
+const scaleChange = (e: { target: { value: number } }) => {
   state.scale = e.target.value
   if (sketchruleRef.value) {
     const panzoomInstance = sketchruleRef.value.panzoomInstance
@@ -162,7 +162,7 @@ const scaleChange = (e) => {
   }
 }
 
-const handleCornerClick = (e) => {
+const handleCornerClick = (e: MouseEvent) => {
   console.log('handleCornerClick', e)
 }
 

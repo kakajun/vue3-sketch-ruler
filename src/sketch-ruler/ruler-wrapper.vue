@@ -114,7 +114,7 @@ const indicatorStyle = computed(() => {
  * @description: 指示器按下时
  * @param {*} e
  */
-const mousedown = (e) => {
+const mousedown = (e: MouseEvent) => {
   isdragle.value = true
   // 初始化线条就在尺中间
   startValue.value = Math.round(props.startOther - props.thick / 2)
@@ -123,7 +123,7 @@ const mousedown = (e) => {
 </script>
 
 <style lang="scss">
-@import './_mixins';
+@import './mixins';
 
 .h-container,
 .v-container {

@@ -30,6 +30,7 @@
 4. 删除辅助线是以拖拽线条到编辑框外即可
 5. 新增还原, 放大, 缩小的API
 6. 修改引用方式, 减少繁琐的配置
+7. 对标墨刀, 修改新增和删除参考线
 
 升级过程简单写了一篇掘金文章, 同行或感兴趣的可以留言交流
 
@@ -56,19 +57,10 @@ yarn add vue3-sketch-ruler  -S
 将打包后的dist包拷贝，用import导入，支持下面两种引用方式
 
 ```
-import { SketchRule } from 'vue3-sketch-ruler'
-import 'vue3-sketch-ruler/lib/style.css'
-
- components: { SketchRule }
-```
-
-也可以是这样子
-
-```
 import SketchRule from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
 
- components: SketchRule
+ components: { SketchRule }
 ```
 
 ## 支持的功能
