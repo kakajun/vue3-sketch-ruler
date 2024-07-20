@@ -1,5 +1,4 @@
 <template>
-  <!-- 线的显示 -->
   <div
     v-show="showLine"
     class="line"
@@ -16,6 +15,8 @@
 </template>
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import useLine from './useLine'
+
 interface Props {
   scale: number
   thick: number
@@ -26,10 +27,13 @@ interface Props {
   value: number
   isShowReferLine: boolean
 }
-const offsetLine = ref(0)
+const showLabel = ref(false)
 const props = defineProps<Props>()
-const emit = defineEmits(['onMouseDown', 'onRelease', 'onRemove'])
-const startValue = ref(props.value)
+
+const { actionStyle, handleMouseMove, handleMouseDown, labelContent, startValue } = useLine(
+  props,
+  props.vertical
+)
 const showLine = computed(() => startValue.value >= props.start)
 
 const offsetStyle = computed(() => {
@@ -47,63 +51,7 @@ const borderCursor = computed(() => {
   }
 })
 
-const actionStyle = computed(() => ({
-  backgroundColor: props.palette.hoverBg,
-  color: props.palette.hoverColor,
-  [props.vertical ? 'top' : 'left']: `-8px`,
-  [props.vertical ? 'left' : 'top']: `${offsetLine.value + 10}px`
-}))
-
 onMounted(() => {
   startValue.value = props.value ?? 0
 })
-
-function handleMouseDown(e: MouseEvent) {
-  const startPosition = props.vertical ? e.clientY : e.clientX
-  const initialValue = startValue.value
-
-  const moveHandler = (e: MouseEvent) => {
-    const currentPosition = props.vertical ? e.clientY : e.clientX
-    const delta = (currentPosition - startPosition) / props.scale
-    startValue.value = Math.round(initialValue + delta)
-    emit('onMouseDown')
-  }
-
-  document.addEventListener('mousemove', moveHandler)
-  document.addEventListener(
-    'mouseup',
-    () => {
-      document.removeEventListener('mousemove', moveHandler)
-      emit('onRelease', startValue.value, props.index)
-    },
-    { once: true }
-  )
-}
-
-const showLabel = ref(false)
-const handleMouseMove = (event) => {
-  offsetLine.value = props.vertical ? event.offsetX : event.offsetY
-}
-
-const labelContent = computed(() => {
-  return `${props.vertical ? 'Y' : 'X'}：${startValue.value}`
-})
 </script>
-
-<style lang="scss" scoped>
-.line {
-  pointer-events: auto;
-  position: absolute;
-  .action {
-    position: absolute;
-  }
-}
-
-.value {
-  transform: scale(0.83);
-  padding: 5px;
-  border-radius: 5px;
-  font-size: 12px;
-  white-space: nowrap;
-}
-</style>
