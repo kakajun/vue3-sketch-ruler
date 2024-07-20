@@ -29,8 +29,8 @@ export interface ShadowType {
   height: number
 }
 export interface lineType {
-  h?: Array<number>
-  v?: Array<number>
+  h: Array<number>
+  v: Array<number>
 }
 export const sketchRulerProps = {
   eyeIcon: {

@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 
-export default function useLine(props, vertical: boolean) {
+export default function useLine(props: any, vertical: boolean) {
   const offsetLine = ref(0)
   const startValue = ref(0)
 
@@ -18,8 +18,6 @@ export default function useLine(props, vertical: boolean) {
   function handleMouseDown(e: MouseEvent) {
     const startPosition = vertical ? e.clientY : e.clientX
     const initialValue = startValue.value
-    debugger
-
     const moveHandler = (e: MouseEvent) => {
       const currentPosition = vertical ? e.clientY : e.clientX
       const delta = (currentPosition - startPosition) / props.scale
@@ -43,19 +41,18 @@ export default function useLine(props, vertical: boolean) {
    * @param {*} index  选的哪条线
    */
   const handleLineRelease = (value: number, index?: number) => {
-    debugger
     // 左右或上下超出时, 删除该条对齐线
-    console.log(value, 'gap')
-    console.log(index, 'indexindex')
     const num = (props.startOther - props.thick + value) / props.scale
     const maxOffset = props.vertical ? props.endNumX : props.endNumY
     if (num < 0 || num > maxOffset) {
       // 新增如果超出范围那么什么也不做
-      if (index) {
-        handleLineRemove(index)
+      if (typeof index === 'number') {
+        debugger
+        const arrs = props.vertical ? props.lines.v : props.lines.h
+        arrs.splice(index, 1)
       }
     }
-    if (isNaN(index)) {
+    if (typeof index !== 'number') {
       props.vertical ? props.lines.v.push(value) : props.lines.h.push(value)
     }
   }

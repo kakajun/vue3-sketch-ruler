@@ -51,18 +51,18 @@ import RulerWrapper from './ruler-wrapper.vue'
 import { eye64, closeEye64 } from './cornerImg64'
 import { computed, ref, watch, onMounted } from 'vue'
 import { sketchRulerProps } from '../index-types'
-import Panzoom from 'simple-panzoom'
+import Panzoom, { PanzoomObject } from 'simple-panzoom'
 const props = defineProps(sketchRulerProps)
 const emit = defineEmits(['onCornerClick', 'update:scale'])
-const parentRect = ref(null)
-const elem = ref(null)
+const parentRect = ref<DOMRect | null>(null)
+const elem = ref<HTMLElement | null>(null)
 const startX = ref(0)
 const startY = ref(0)
 const zoomStartX = ref(0)
 const zoomStartY = ref(0)
 const ownScale = ref(1)
 const showReferLine = ref(props.isShowReferLine)
-const panzoomInstance = ref<Panzoom | null>(null)
+let panzoomInstance: PanzoomObject | null = null
 // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
 const paletteCpu = computed(() => {
   function merge(obj: { [key: string]: any }, o: { [key: string]: any }) {
@@ -132,49 +132,53 @@ const initPanzoom = () => {
   // document: https://github.com/timmywil/panzoom
   elem.value = document.querySelector('.canvasedit')
   // const parent = elem.value.parentElement
-  initStart()
-  panzoomInstance.value = Panzoom(elem.value, {
-    noBind: true,
-    startScale: props.scale,
-    cursor: 'default',
-    startX: zoomStartX.value,
-    startY: zoomStartY.value,
-    // contain: 'inside',
-    smoothScroll: true,
-    ...props.panzoomOption
-  })
+  if (elem.value) {
+    initStart()
+    panzoomInstance = Panzoom(elem.value, {
+      noBind: true,
+      startScale: props.scale,
+      cursor: 'default',
+      startX: zoomStartX.value,
+      startY: zoomStartY.value,
+      // contain: 'inside',
+      smoothScroll: true,
+      ...props.panzoomOption
+    })
+    if (elem.value) {
+      elem.value.addEventListener('panzoomchange', (e: any) => {
+        const { scale, dimsOut } = e.detail
+        if (dimsOut) {
+          emit('update:scale', scale)
+          ownScale.value = scale
+          const left = (dimsOut.parent.left - dimsOut.elem.left + props.thick) / scale
+          const top = (dimsOut.parent.top - dimsOut.elem.top + props.thick) / scale
+          startX.value = left
+          console.log(startX.value * scale, 'startX.value')
+          console.log(scale, 'scale')
+          startY.value = top
+        }
+      })
+    }
 
-  elem.value.addEventListener('panzoomchange', (event) => {
-    const { scale, dimsOut } = event.detail
-    if (dimsOut) {
-      emit('update:scale', scale)
-      ownScale.value = scale
-      const left = (dimsOut.parent.left - dimsOut.elem.left + props.thick) / scale
-      const top = (dimsOut.parent.top - dimsOut.elem.top + props.thick) / scale
-      startX.value = left
-      console.log(startX.value * scale, 'startX.value')
-      console.log(scale, 'scale')
-      startY.value = top
-    }
-  })
-  parent.addEventListener('wheel', function (e) {
-    if (e.ctrlKey || e.metaKey) {
-      panzoomInstance.value.zoomWithWheel(e)
-    }
-  })
+    parent.addEventListener('wheel', function (e) {
+      if (e.ctrlKey || e.metaKey) {
+        panzoomInstance?.zoomWithWheel(e)
+      }
+    })
 
-  // 让按下空格键才能移动画布
-  parent.addEventListener('keydown', function (e) {
-    if (e.key === ' ') {
-      panzoomInstance.value.bind()
-    }
-  })
+    // 让按下空格键才能移动画布
+    parent.addEventListener('keydown', function (e) {
+      if (e.key === ' ') {
+        panzoomInstance?.bind()
+      }
+    })
 
-  parent.addEventListener('keyup', function (e) {
-    if (e.key === ' ') {
-      panzoomInstance.value.destroy()
-    }
-  })
+    parent.addEventListener('keyup', function (e) {
+      if (e.key === ' ') {
+        panzoomInstance?.destroy()
+      }
+    })
+  }
 }
 
 /**
@@ -182,31 +186,35 @@ const initPanzoom = () => {
  */
 const initStart = () => {
   const parentEle = document.querySelector('.canvasedit-parent')
-  parentRect.value = parentEle.getBoundingClientRect()
-  const children = elem.value.children[0].getBoundingClientRect()
-  const { width, height } = parentRect.value
-  if (width > children.width) {
-    zoomStartX.value = (width - children.width) / 2
-    if (height > children.height) {
-      zoomStartY.value = (height - children.height) / 2
+  if (parentEle) {
+    parentRect.value = parentEle.getBoundingClientRect()
+  }
+  if (elem.value && parentRect.value) {
+    const children = elem.value.children[0].getBoundingClientRect()
+    const { width, height } = parentRect.value
+    if (width > children.width) {
+      zoomStartX.value = (width - children.width) / 2
+      if (height > children.height) {
+        zoomStartY.value = (height - children.height) / 2
+      } else {
+        zoomStartY.value = 0
+      }
     } else {
       zoomStartY.value = 0
+      zoomStartX.value = 0
     }
-  } else {
-    zoomStartY.value = 0
-    zoomStartX.value = 0
   }
 }
 const reset = () => {
-  panzoomInstance.value.reset()
+  panzoomInstance?.reset()
 }
 
 const zoomIn = () => {
-  panzoomInstance.value.zoomIn()
+  panzoomInstance?.zoomIn()
 }
 
 const zoomOut = () => {
-  panzoomInstance.value.zoomOut()
+  panzoomInstance?.zoomOut()
 }
 
 const onCornerClick = () => {

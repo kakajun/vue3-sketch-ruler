@@ -22,6 +22,7 @@
         :value="v >> 0"
         :scale="scale"
         :start="start"
+        :startOther="startOther"
         :thick="thick"
         :palette="palette"
         :vertical="vertical"
@@ -48,11 +49,25 @@
 import RulerLine from './ruler-line.vue'
 import CanvasRuler from '../canvas-ruler/index.vue'
 import { ref, computed } from 'vue'
-import { wrapperProps } from './ruler-wrapper-types'
 import useLine from './useLine' // 引入自定义hook
+const props = defineProps<{
+  scale: number
+  thick: number
+  endNumX: number
+  endNumY: number
+  palette: object
+  vertical: boolean
+  width: number
+  height: number
+  start: number
+  startOther: number
+  lines: object
+  selectStart: number
+  selectLength: number
+  isShowReferLine: boolean
+  parentRect: object | null
+}>()
 
-const props = defineProps(wrapperProps)
-const emit = defineEmits(['update:lines', 'on-remove-line'])
 const { actionStyle, handleMouseMove, handleMouseDown, labelContent, startValue } = useLine(
   props,
   !props.vertical

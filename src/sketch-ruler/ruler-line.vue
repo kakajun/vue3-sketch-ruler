@@ -25,6 +25,7 @@ interface Props {
   start: number
   vertical: boolean
   value: number
+  startOther: number
   isShowReferLine: boolean
 }
 const showLabel = ref(false)

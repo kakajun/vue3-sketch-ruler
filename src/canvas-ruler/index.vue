@@ -1,19 +1,11 @@
 <template>
-  <canvas
-    ref="canvas"
-    class="ruler"
-    :style="rulerStyle"
-    @mousedown="handleDragStart"
-    @mouseleave="$emit('update:showIndicator', false)"
-  ></canvas>
+  <canvas ref="canvas" class="ruler" :style="rulerStyle" @mousedown="handleDragStart"></canvas>
 </template>
 <script setup lang="ts">
 import { drawCavaseRuler } from './utils'
 import { reactive, ref, onMounted, watch, onUnmounted, computed } from 'vue'
 
 interface Props {
-  showIndicator: boolean
-  valueNum: number
   scale: number
   palette: Object
   vertical: Boolean
@@ -26,7 +18,7 @@ interface Props {
   endNumY: number
 }
 const props = defineProps<Props>()
-const emit = defineEmits(['onAddLine', 'update:showIndicator', 'update:valueNum'])
+const emit = defineEmits(['handleDragStart'])
 
 const state = reactive({
   isDragging: false,
@@ -109,7 +101,7 @@ watch([() => props.width, () => props.height], () => {
   drawRuler(ratioValue)
 })
 
-const handleDragStart = (e) => {
+const handleDragStart = (e: MouseEvent) => {
   emit('handleDragStart', e)
 }
 </script>
