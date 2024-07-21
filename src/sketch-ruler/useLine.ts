@@ -41,23 +41,25 @@ export default function useLine(props: any, vertical: boolean) {
    * @param {*} index  选的哪条线
    */
   const handleLineRelease = (value: number, index?: number) => {
-    // 左右或上下超出时, 删除该条对齐线
-    const num = (props.startOther - props.thick + value) / props.scale
-    const maxOffset = props.vertical ? props.endNumX : props.endNumY
-    if (num < 0 || num > maxOffset) {
-      // 新增如果超出范围那么什么也不做
-      if (typeof index === 'number') {
-        debugger
-        const arrs = props.vertical ? props.lines.v : props.lines.h
-        arrs.splice(index, 1)
-      }
-    }
+    const linesArrs = vertical ? props.lines.h : props.lines.v
+    const isOutOfRange = checkBoundary(value)
+    if (isOutOfRange && typeof index === 'number') linesArrs.splice(index, 1)
     if (typeof index !== 'number') {
-      props.vertical ? props.lines.v.push(value) : props.lines.h.push(value)
+      linesArrs.push(value)
     }
   }
 
+  /**
+   * @desc:检查越界
+   * @param {number} value
+   */
+  const checkBoundary = (value: number) => {
+    const maxOffset = vertical ? props.endNumX : props.endNumY
+    return value < 0 || value > maxOffset
+  }
+
   const labelContent = computed(() => {
+    if (checkBoundary(startValue.value)) return '放开删除'
     return `${vertical ? 'Y' : 'X'}：${startValue.value}`
   })
 
