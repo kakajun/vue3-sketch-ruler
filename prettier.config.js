@@ -9,9 +9,6 @@ module.exports = {
   bracketSpacing: true, // 对象字面量的大括号间使用空格（默认true）
   trailingComma: 'none', // 多行使用拖尾逗号（默认none）
   jsxSingleQuote: false,
-  // 箭头函数参数括号 默认avoid 可选 avoid| always
-  // avoid 能省略括号的时候就省略 例如x => x
-  // always 总是有括号
   arrowParens: 'always',
   insertPragma: false,
   requirePragma: false,

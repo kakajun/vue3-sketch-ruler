@@ -12,7 +12,7 @@
       :select-start="selectStart"
       :select-length="selectLength"
       :palette="palette"
-      @handleDragStart="mousedown"
+      @handle-drag-start="mousedown"
     />
     <div v-show="isShowReferLine" class="lines">
       <RulerLine
