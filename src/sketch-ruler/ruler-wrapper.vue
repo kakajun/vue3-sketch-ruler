@@ -116,11 +116,13 @@ const indicatorStyle = computed(() => {
  * @description: 指示器按下时
  * @param {*} e
  */
-const mousedown = (e: MouseEvent) => {
+const mousedown = async (e: MouseEvent) => {
   isdragle.value = true
   // 初始化线条就在尺中间
   startValue.value = Math.round(props.startOther - props.thick / 2)
-  handleMouseDown(e)
+  await handleMouseDown(e)
+  // 完了要重置一下
+  isdragle.value = false
 }
 </script>
 
