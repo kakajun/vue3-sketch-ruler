@@ -133,10 +133,10 @@ const initPanzoom = () => {
   elem.value = document.querySelector('.canvasedit')
   // const parent = elem.value.parentElement
   if (elem.value) {
-    initStart()
+    const scale = initStart()
     panzoomInstance.value = Panzoom(elem.value, {
       noBind: true,
-      startScale: props.scale,
+      startScale: scale,
       cursor: 'default',
       startX: zoomStartX.value,
       startY: zoomStartY.value,
@@ -185,25 +185,23 @@ const initPanzoom = () => {
  * @desc: 处理初始化画布居中位置
  */
 const initStart = () => {
-  const parentEle = document.querySelector('.canvasedit-parent')
-  if (parentEle) {
-    parentRect.value = parentEle.getBoundingClientRect()
+  let scale = 1
+
+  // 计算一个合理的缩放比例
+  if (props.endNumX > props.width || props.endNumY > props.height) {
+    // 可用宽度和高度，减去两边的内边距
+    const availableWidth = props.width - props.innerPadding * 2
+    const availableHeight = props.height - props.innerPadding * 2
+
+    // 根据宽度和高度计算缩放比例
+    const scaleWidth = availableWidth / props.endNumX
+    const scaleHeight = availableHeight / props.endNumY
+
+    // 选择较小的缩放比例，以确保图片完全适应相框
+    scale = Math.min(scaleWidth, scaleHeight)
   }
-  if (elem.value && parentRect.value) {
-    const children = elem.value.children[0].getBoundingClientRect()
-    const { width, height } = parentRect.value
-    if (width > children.width) {
-      zoomStartX.value = (width - children.width) / 2
-      if (height > children.height) {
-        zoomStartY.value = (height - children.height) / 2
-      } else {
-        zoomStartY.value = 0
-      }
-    } else {
-      zoomStartY.value = 0
-      zoomStartX.value = 0
-    }
-  }
+
+  return scale
 }
 const reset = () => {
   panzoomInstance.value?.reset()

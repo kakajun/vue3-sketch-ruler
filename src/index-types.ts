@@ -63,6 +63,10 @@ export const sketchRulerProps = {
     type: Number,
     default: 200
   },
+  innerPadding: {
+    type: Number,
+    default: 60
+  },
   shadow: {
     type: Object as PropType<ShadowType>,
     default: () => {
