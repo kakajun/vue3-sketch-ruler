@@ -21,9 +21,9 @@ describe('drawCavaseRuler', () => {
         shadowColor: '#ccc',
         longfgColor: '#000'
       },
-      endNumX: 100,
+      canvasWidth: 100,
       startNumY: 0,
-      endNumY: 300
+      canvasHeight: 300
     }
   })
 

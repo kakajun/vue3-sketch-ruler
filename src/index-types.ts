@@ -92,13 +92,13 @@ export const sketchRulerProps = {
     type: Boolean,
     default: true
   },
-  endNumX: {
+  canvasWidth: {
     type: Number,
     default: function () {
       return Infinity
     }
   },
-  endNumY: {
+  canvasHeight: {
     type: Number,
     default: function () {
       return Infinity

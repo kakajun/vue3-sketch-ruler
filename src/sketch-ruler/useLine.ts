@@ -62,7 +62,7 @@ export default function useLine(props: any, vertical: boolean) {
    * @param {number} value
    */
   const checkBoundary = (value: number) => {
-    const maxOffset = vertical ? props.endNumY : props.endNumX
+    const maxOffset = vertical ? props.canvasHeight : props.canvasWidth
     return value < 0 || value > maxOffset
   }
 

@@ -25,8 +25,8 @@ interface Props {
   start: number
   vertical: boolean
   value: number
-  endNumX: number
-  endNumY: number
+  canvasWidth: number
+  canvasHeight: number
   lines: object
   isShowReferLine: boolean
 }

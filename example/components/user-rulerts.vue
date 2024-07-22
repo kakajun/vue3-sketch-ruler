@@ -29,8 +29,8 @@
         :width="rectWidth"
         :height="rectHeight"
         :palette="cpuPalette"
-        :endNumX="canvasWidth"
-        :endNumY="canvasHeight"
+        :canvasWidth="canvasWidth"
+        :canvasHeight="canvasHeight"
         :panzoomOption="panzoomOption"
         ref="sketchruleRef"
         :isShowReferLine="state.isShowReferLine"
@@ -65,7 +65,7 @@ import SketchRule from '../../src/index' // 这里可以换成打包后的
 // const rectHeight = 800
 // const canvasWidth = 1000
 // const canvasHeight = 500
-const rectWidth = 1872
+const rectWidth = window.innerWidth - 300
 const rectHeight = 872
 const canvasWidth = 1920
 const canvasHeight = 1080

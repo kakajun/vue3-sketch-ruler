@@ -21,8 +21,8 @@
       :scale="ownScale"
       :parentRect="parentRect"
       :palette="paletteCpu"
-      :endNumX="endNumX"
-      :endNumY="endNumY"
+      :canvasWidth="canvasWidth"
+      :canvasHeight="canvasHeight"
     />
     <!-- 竖直方向 -->
     <RulerWrapper
@@ -39,8 +39,8 @@
       :scale="ownScale"
       :parentRect="parentRect"
       :palette="paletteCpu"
-      :endNumX="endNumX"
-      :endNumY="endNumY"
+      :canvasWidth="canvasWidth"
+      :canvasHeight="canvasHeight"
     />
     <a class="corner" :style="cornerStyle" @click="onCornerClick"></a>
   </div>
@@ -188,14 +188,14 @@ const initStart = () => {
   let scale = 1
 
   // 计算一个合理的缩放比例
-  if (props.endNumX > props.width || props.endNumY > props.height) {
+  if (props.canvasWidth > props.width || props.canvasHeight > props.height) {
     // 可用宽度和高度，减去两边的内边距
     const availableWidth = props.width - props.innerPadding * 2
     const availableHeight = props.height - props.innerPadding * 2
 
     // 根据宽度和高度计算缩放比例
-    const scaleWidth = availableWidth / props.endNumX
-    const scaleHeight = availableHeight / props.endNumY
+    const scaleWidth = availableWidth / props.canvasWidth
+    const scaleHeight = availableHeight / props.canvasHeight
 
     // 选择较小的缩放比例，以确保图片完全适应相框
     scale = Math.min(scaleWidth, scaleHeight)

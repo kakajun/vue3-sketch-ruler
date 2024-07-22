@@ -14,8 +14,8 @@ interface Props {
   height: number
   selectStart: number
   selectLength: number
-  endNumX: number
-  endNumY: number
+  canvasWidth: number
+  canvasHeight: number
 }
 const props = defineProps<Props>()
 const emit = defineEmits(['handleDragStart'])
@@ -74,8 +74,8 @@ const drawRuler = (ratio: number) => {
     width: props.width!,
     height: props.height!,
     palette: props.palette!,
-    endNumX: props.endNumX,
-    endNumY: props.endNumY,
+    canvasWidth: props.canvasWidth,
+    canvasHeight: props.canvasHeight,
     ratio: ratio
   }
 

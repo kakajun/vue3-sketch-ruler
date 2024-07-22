@@ -7,8 +7,8 @@
       :width="width"
       :height="height"
       :start="start"
-      :endNumX="endNumX"
-      :endNumY="endNumY"
+      :canvasWidth="canvasWidth"
+      :canvasHeight="canvasHeight"
       :select-start="selectStart"
       :select-length="selectLength"
       :palette="palette"
@@ -22,8 +22,8 @@
         :value="v >> 0"
         :scale="scale"
         :start="start"
-        :endNumX="endNumX"
-        :endNumY="endNumY"
+        :canvasWidth="canvasWidth"
+        :canvasHeight="canvasHeight"
         :lines="lines"
         :thick="thick"
         :palette="palette"
@@ -55,8 +55,8 @@ import useLine from './useLine' // 引入自定义hook
 const props = defineProps<{
   scale: number
   thick: number
-  endNumX: number
-  endNumY: number
+  canvasWidth: number
+  canvasHeight: number
   palette: object
   vertical: boolean
   width: number

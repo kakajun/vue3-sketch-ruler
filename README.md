@@ -91,8 +91,8 @@ import 'vue3-sketch-ruler/lib/style.css'
   v-model:scale="state.scale"
   :width="rectWidth"
   :height="rectHeight"
-  :endNumX="canvasWidth"
-  :endNumY="canvasHeight"
+  :canvasWidth="canvasWidth"
+  :canvasHeight="canvasHeight"
   ref="sketchrule"
   :isShowReferLine="state.isShowReferLine"
   @onCornerClick="handleCornerClick"
@@ -136,8 +136,8 @@ const canvasHeight = 500
 | height        | 放置标尺窗口的高度        | Number        | -           |
 | eyeIcon       | 睁眼图标                  | String        | -           |
 | closeEyeIcon  | 闭眼图标                  | String        | -           |
-| endNumX       | x轴标尺刻度结束的坐标数值 | Number        | Infinity    |
-| endNumY       | Y轴标尺刻度结束的坐标数值 | Number        | Infinity    |
+| canvasWidth   | x轴标尺刻度结束的坐标数值 | Number        | Infinity    |
+| canvasHeight  | Y轴标尺刻度结束的坐标数值 | Number        | Infinity    |
 | lines         | 初始化水平标尺上的参考线  | object<Array> | {h:[],v:[]} |
 | panzoomOption | panzoom相关的扩展参数     | object        | -           |
 | palette       | 标尺的样式配置参数        | Palette       | 如下        |
