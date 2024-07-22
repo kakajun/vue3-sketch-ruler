@@ -61,14 +61,18 @@
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive, onMounted } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
+const rectWidth = 800
+const rectHeight = 400
+const canvasWidth = 1000
+const canvasHeight = 650
 // const rectWidth = 1600
 // const rectHeight = 800
 // const canvasWidth = 1000
 // const canvasHeight = 500
-const rectWidth = window.innerWidth - 300
-const rectHeight = 872
-const canvasWidth = 1920
-const canvasHeight = 1080
+// const rectWidth = window.innerWidth - 300
+// const rectHeight = 872
+// const canvasWidth = 1920
+// const canvasHeight = 1080
 const rendIndex = ref(0)
 const windowScale = ref(1)
 const sketchruleRef = ref()

@@ -63,9 +63,9 @@ export const sketchRulerProps = {
     type: Number,
     default: 800
   },
-  innerPadding: {
+  paddingRatio: {
     type: Number,
-    default: 60
+    default: 0.2 // 外框的0.2的宽度
   },
   shadow: {
     type: Object as PropType<ShadowType>,

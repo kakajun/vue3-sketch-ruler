@@ -134,7 +134,7 @@ const canvasHeight = 500
 | thick         | 标尺的厚度               | Number        | 16          |
 | width         | 放置标尺窗口的宽度       | Number        | 1400        |
 | height        | 放置标尺窗口的高度       | Number        | 900         |
-| innerPadding  | 画布与外框间隔           | Number        | 60          |
+| paddingRatio  | 画布与外框间隔           | Number        | 60          |
 | eyeIcon       | 睁眼图标                 | String        | -           |
 | closeEyeIcon  | 闭眼图标                 | String        | -           |
 | canvasWidth   | 画布宽                   | Number        | 1000        |
