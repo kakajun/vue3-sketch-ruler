@@ -57,11 +57,11 @@ export const sketchRulerProps = {
   },
   width: {
     type: Number,
-    default: 200
+    default: 1400
   },
   height: {
     type: Number,
-    default: 200
+    default: 800
   },
   innerPadding: {
     type: Number,
@@ -94,15 +94,11 @@ export const sketchRulerProps = {
   },
   canvasWidth: {
     type: Number,
-    default: function () {
-      return Infinity
-    }
+    default: 1000
   },
   canvasHeight: {
     type: Number,
-    default: function () {
-      return Infinity
-    }
+    default: 700
   },
   panzoomOption: Object
 }

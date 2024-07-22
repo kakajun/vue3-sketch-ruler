@@ -128,19 +128,20 @@ const canvasHeight = 500
 
 ### 属性
 
-| 属性名称      | 描述                      | 类型          | 默认值      |
-| ------------- | ------------------------- | ------------- | ----------- |
-| scale         | 初始化标尺的缩放          | Number        | 2           |
-| thick         | 标尺的厚度                | Number        | 16          |
-| width         | 放置标尺窗口的宽度        | Number        | -           |
-| height        | 放置标尺窗口的高度        | Number        | -           |
-| eyeIcon       | 睁眼图标                  | String        | -           |
-| closeEyeIcon  | 闭眼图标                  | String        | -           |
-| canvasWidth   | x轴标尺刻度结束的坐标数值 | Number        | Infinity    |
-| canvasHeight  | Y轴标尺刻度结束的坐标数值 | Number        | Infinity    |
-| lines         | 初始化水平标尺上的参考线  | object<Array> | {h:[],v:[]} |
-| panzoomOption | panzoom相关的扩展参数     | object        | -           |
-| palette       | 标尺的样式配置参数        | Palette       | 如下        |
+| 属性名称      | 描述                     | 类型          | 默认值      |
+| ------------- | ------------------------ | ------------- | ----------- |
+| scale         | 初始化标尺的缩放         | Number        | 1           |
+| thick         | 标尺的厚度               | Number        | 16          |
+| width         | 放置标尺窗口的宽度       | Number        | 1400        |
+| height        | 放置标尺窗口的高度       | Number        | 900         |
+| innerPadding  | 画布与外框间隔           | Number        | 60          |
+| eyeIcon       | 睁眼图标                 | String        | -           |
+| closeEyeIcon  | 闭眼图标                 | String        | -           |
+| canvasWidth   | 画布宽                   | Number        | 1000        |
+| canvasHeight  | 画布高                   | Number        | 700         |
+| lines         | 初始化水平标尺上的参考线 | object<Array> | {h:[],v:[]} |
+| panzoomOption | panzoom相关的扩展参数    | object        | -           |
+| palette       | 标尺的样式配置参数       | Palette       | 如下        |
 
 palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',}
 
