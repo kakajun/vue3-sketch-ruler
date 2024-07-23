@@ -1,15 +1,14 @@
 <template>
-  <div class="tittle">按住Ctril+鼠标滚轮可以缩放页面, 按住空格键+鼠标拖动可以移动画布</div>
   <div class="demo">
-    <div class="sidebar">
+    <div class="top">
       <div class="scale"> 浏览器缩放:{{ windowScale }} </div>
       <div class="scale"> 缩放比例:{{ cpuScale }} </div>
-      <button class="mr10 btn-block" @click="showLineClick">辅助线开关</button>
-      <button class="mr10 btn-block" @click="changeTheme">主题切换</button>
-      <button class="mr10 btn-block" @click="resetMethod">还原</button>
-      <button class="mr10 btn-block" @click="zoomOutMethod">缩小</button>
+      <button class="mr10 font18" @click="showLineClick">辅助线开关</button>
+      <button class="mr10 font18" @click="changeTheme">主题切换</button>
+      <button class="mr10 font18" @click="resetMethod">还原</button>
+      <button class="mr10 font18" @click="zoomOutMethod">缩小</button>
       <input
-        class="mr10 btn-block"
+        class="mr10 font18"
         :value="state.scale"
         @input="scaleChange"
         className="range-input"
@@ -20,6 +19,7 @@
         defaultValue="1"
       />
     </div>
+
     <div class="wrapper" :style="rectStyle">
       <!--  这个可以传入图标 -->
       <SketchRule
@@ -61,18 +61,14 @@
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive, onMounted } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
-const rectWidth = 800
-const rectHeight = 400
+const rectWidth = 1600
+const rectHeight = 800
 const canvasWidth = 1000
-const canvasHeight = 650
-// const rectWidth = 1600
-// const rectHeight = 800
-// const canvasWidth = 1000
-// const canvasHeight = 500
-// const rectWidth = window.innerWidth - 300
-// const rectHeight = 872
-// const canvasWidth = 1920
-// const canvasHeight = 1080
+const canvasHeight = 500
+// const rectWidth = 800
+// const rectHeight = 400
+// const canvasWidth = 530
+// const canvasHeight = 250
 const rendIndex = ref(0)
 const windowScale = ref(1)
 const sketchruleRef = ref()
@@ -176,24 +172,19 @@ const showLineClick = () => {
 }
 </script>
 <style lang="scss">
-.tittle {
-  font-size: 20px;
-  padding-top: 10px;
-  /* margin-bottom: 10px; */
-}
 .demo {
   width: 100%;
+  padding-top: 10px;
   display: flex;
+  flex-direction: column;
   justify-content: center; /* 水平居中 */
 }
-
-/* 侧边栏样式 */
-.sidebar {
-  width: 140px;
-  text-align: center;
-  height: 100%;
-  line-height: 50px;
-  overflow: auto;
+.top {
+  display: flex;
+  margin-bottom: 10px;
+  justify-content: center;
+  width: 100%;
+  font-size: 20px;
   .scale {
     margin-right: 10px;
   }
@@ -202,9 +193,8 @@ const showLineClick = () => {
 .right {
   font-size: 20px;
 }
-.btn-block {
+.font18 {
   font-size: 18px;
-  display: block;
 }
 .mr10 {
   margin-right: 10px;
