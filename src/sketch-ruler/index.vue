@@ -133,10 +133,10 @@ const initPanzoom = () => {
   elem.value = document.querySelector('.canvasedit')
   // const parent = elem.value.parentElement
   if (elem.value) {
-    initStart()
+    const scale = initStart()
     panzoomInstance.value = Panzoom(elem.value, {
       noBind: true,
-      startScale: props.scale,
+      startScale: scale,
       cursor: 'default',
       startX: zoomStartX.value,
       startY: zoomStartY.value,
@@ -153,8 +153,8 @@ const initPanzoom = () => {
           const left = (dimsOut.parent.left - dimsOut.elem.left + props.thick) / scale
           const top = (dimsOut.parent.top - dimsOut.elem.top + props.thick) / scale
           startX.value = left
-          console.log(startX.value * scale, 'startX.value')
-          console.log(scale, 'scale')
+          // console.log(startX.value * scale, 'startX.value')
+          // console.log(scale, 'scale')
           startY.value = top
         }
       })
@@ -189,13 +189,17 @@ const initStart = () => {
   if (parentEle) {
     parentRect.value = parentEle.getBoundingClientRect()
   }
+  const scale = getReasonableScale()
   if (elem.value && parentRect.value) {
     const children = elem.value.children[0].getBoundingClientRect()
+
+    console.log(scale, 'scale')
+
     const { width, height } = parentRect.value
-    if (width > children.width) {
-      zoomStartX.value = (width - children.width) / 2
+    if (width > children.width * scale) {
+      zoomStartX.value = (width - children.width * scale) / 2
       if (height > children.height) {
-        zoomStartY.value = (height - children.height) / 2
+        zoomStartY.value = (height - children.height * scale) / 2
       } else {
         zoomStartY.value = 0
       }
@@ -204,6 +208,23 @@ const initStart = () => {
       zoomStartX.value = 0
     }
   }
+  return scale
+}
+
+const getReasonableScale = () => {
+  let scale = 1
+  // 计算一个合理的缩放比例
+  if (props.canvasWidth > props.width || props.canvasHeight > props.height) {
+    // 可用宽度和高度，减去两边的内边距
+    const availableWidth = props.width * (1 - props.paddingRatio)
+    const availableHeight = props.height * (1 - props.paddingRatio)
+    // 根据宽度和高度计算缩放比例
+    const scaleWidth = availableWidth / props.canvasWidth
+    const scaleHeight = availableHeight / props.canvasHeight
+    // 选择较小的缩放比例，以确保图片完全适应相框
+    scale = Math.min(scaleWidth, scaleHeight)
+  }
+  return scale
 }
 const reset = () => {
   panzoomInstance.value?.reset()

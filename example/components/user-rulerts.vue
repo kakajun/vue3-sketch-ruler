@@ -63,6 +63,8 @@ import { computed, ref, reactive, onMounted } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
 const rectWidth = 1600
 const rectHeight = 800
+// const canvasWidth = 2800
+// const canvasHeight = 1800
 const canvasWidth = 1000
 const canvasHeight = 500
 // const rectWidth = 800
