@@ -24,7 +24,6 @@
       <!--  这个可以传入图标 -->
       <SketchRule
         :key="rendIndex"
-        :autoCenter="false"
         v-model:scale="state.scale"
         :thick="state.thick"
         :width="rectWidth"
