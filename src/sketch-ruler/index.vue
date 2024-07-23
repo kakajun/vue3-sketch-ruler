@@ -133,7 +133,14 @@ const initPanzoom = () => {
   elem.value = document.querySelector('.canvasedit')
   // const parent = elem.value.parentElement
   if (elem.value) {
-    const scale = initStart()
+    let scale = props.scale
+    if (props.autoCenter) {
+      scale = initStart()
+    } else {
+      zoomStartX.value = props.zoomStartX
+      zoomStartY.value = props.zoomStartY
+    }
+
     panzoomInstance.value = Panzoom(elem.value, {
       noBind: true,
       startScale: scale,

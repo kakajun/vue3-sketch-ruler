@@ -48,10 +48,11 @@ export const sketchRulerProps = {
     default: 16
   },
   palette: Object as PropType<PaletteType>,
-  startX: {
-    type: Number
+  zoomStartX: {
+    type: Number,
+    default: 0
   },
-  startY: {
+  zoomStartY: {
     type: Number,
     default: 0
   },
@@ -67,6 +68,11 @@ export const sketchRulerProps = {
     type: Number,
     default: 0.2 // 外框的0.2的宽度
   },
+  autoCenter: {
+    type: Boolean,
+    default: true
+  },
+
   shadow: {
     type: Object as PropType<ShadowType>,
     default: () => {

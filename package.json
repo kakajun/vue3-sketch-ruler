@@ -1,6 +1,6 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "2.0.1-beta.5",
+  "version": "2.0.1-beta.6",
   "author": "kakajun <253495832@qq.com>",
   "license": "MIT",
   "private": false,
@@ -15,9 +15,10 @@
   "main": "lib/index.js",
   "module": "lib/index.mjs",
   "style": "lib/style.css",
-    "types": "lib/index.d.ts",
+  "types": "lib/index.d.ts",
   "scripts": {
     "dev": "vite --config vite.demo.ts",
+    "d": "nvm use 20.10.0 && npm run dev",
     "build": " vite build",
     "build:demo": "vite build --config ./vite.demo.ts",
     "precommit": "lint-staged",
@@ -66,7 +67,6 @@
     "stylelint-config-recommended": "^14.0.1",
     "stylelint-config-standard": "^36.0.1",
     "stylelint-order": "^6.0.4",
-
     "typescript": "5.5.3",
     "vite": "5.3.4",
     "vite-plugin-dts": "3.9.1",
