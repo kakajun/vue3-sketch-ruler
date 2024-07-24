@@ -33,6 +33,10 @@ export interface lineType {
   v: Array<number>
 }
 export const sketchRulerProps = {
+  showRuler: {
+    type: Boolean,
+    default: true
+  },
   eyeIcon: {
     type: String
   },

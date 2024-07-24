@@ -30,7 +30,7 @@ export default function useLine(props: any, vertical: boolean) {
           guidePos = guideSnaps[0]
           nextPos = guidePos
         }
-        startValue.value = nextPos
+        startValue.value = Math.round(nextPos)
       }
 
       document.addEventListener('mousemove', moveHandler)
