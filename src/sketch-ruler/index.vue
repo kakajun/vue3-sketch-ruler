@@ -23,6 +23,7 @@
       :palette="paletteCpu"
       :canvasWidth="canvasWidth"
       :canvasHeight="canvasHeight"
+      :rate="rate"
     />
     <!-- 竖直方向 -->
     <RulerWrapper
@@ -41,6 +42,7 @@
       :palette="paletteCpu"
       :canvasWidth="canvasWidth"
       :canvasHeight="canvasHeight"
+      :rate="rate"
     />
     <a class="corner" :style="cornerStyle" @click="onCornerClick"></a>
   </div>
@@ -191,7 +193,6 @@ const calculateTransform = () => {
   const scaleX = (props.width * (1 - props.paddingRatio)) / props.canvasWidth
   const scaleY = (props.height * (1 - props.paddingRatio)) / props.canvasHeight
   const scale = Math.min(scaleX, scaleY)
-  console.log(scaleX, scaleY, 'scale')
 
   if (scale == scaleX) {
     zoomStartX.value =

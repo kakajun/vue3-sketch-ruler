@@ -29,6 +29,7 @@ interface Props {
   canvasHeight: number
   lines: object
   isShowReferLine: boolean
+  rate: number
 }
 const showLabel = ref(false)
 const props = defineProps<Props>()

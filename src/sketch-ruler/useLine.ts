@@ -68,7 +68,7 @@ export default function useLine(props: any, vertical: boolean) {
 
   const labelContent = computed(() => {
     if (checkBoundary(startValue.value)) return '放开删除'
-    return `${vertical ? 'Y' : 'X'}：${startValue.value}`
+    return `${vertical ? 'Y' : 'X'}：${startValue.value * props.rate}`
   })
 
   return {

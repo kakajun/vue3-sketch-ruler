@@ -28,8 +28,6 @@ export const drawCavaseRuler = (
   const { scale, width, height, ratio, palette } = options
   const { bgColor, fontColor, shadowColor, longfgColor } = palette
   const endNum = isHorizontal ? options.canvasWidth : options.canvasHeight
-  console.log(height, 'height')
-
   // 缩放ctx, 以简化计算
   ctx.scale(ratio, ratio)
   ctx.clearRect(0, 0, width / ratio, height / ratio)
@@ -53,11 +51,11 @@ export const drawCavaseRuler = (
   const startValue10 = Math.floor(start / gridSize10) * gridSize10
   const offsetX10 = ((startValue10 - start) / gridSize10) * gridPixel10 // 长间隔起点刻度距离ctx原点(start)的px距离
   const endValue = start + Math.ceil((isHorizontal ? width : height) / scale) // 终点刻度
+
   // 3. 画刻度和文字(因为刻度遮住了阴影)
   ctx.beginPath()
   ctx.fillStyle = fontColor
   ctx.strokeStyle = longfgColor
-  console.log(endValue, 'endValue')
 
   // 绘制长间隔和文字
   for (let value = startValue10, count = 0; value < endValue; value += gridSize10, count++) {

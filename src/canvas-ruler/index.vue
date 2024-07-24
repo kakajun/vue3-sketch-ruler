@@ -16,6 +16,7 @@ interface Props {
   selectLength: number
   canvasWidth: number
   canvasHeight: number
+  rate: number
 }
 const props = defineProps<Props>()
 const emit = defineEmits(['handleDragStart'])
@@ -58,6 +59,7 @@ const updateCanvasContext = (ratio: number) => {
     canvas.value.width = props.width!
     canvas.value.height = props.height!
     const ctx = state.canvasContext
+
     if (ctx) {
       ctx.font = `${12 * ratio!}px -apple-system,
                 "Helvetica Neue", ".SFNSText-Regular",
@@ -76,13 +78,16 @@ const drawRuler = (ratio: number) => {
     palette: props.palette!,
     canvasWidth: props.canvasWidth,
     canvasHeight: props.canvasHeight,
-    ratio: ratio
+    ratio: ratio,
+    rate: props.rate
   }
-
+  options.scale = props.scale / props.rate
+  options.canvasWidth = props.canvasWidth * props.rate
+  options.canvasHeight = props.canvasHeight * props.rate
   if (state.canvasContext) {
     drawCavaseRuler(
       state.canvasContext,
-      props.start!,
+      props.start * props.rate!,
       props.selectStart!,
       props.selectLength!,
       options,
