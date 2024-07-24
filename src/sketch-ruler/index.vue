@@ -8,6 +8,7 @@
     </div>
     <!-- 水平方向 -->
     <RulerWrapper
+      v-if="showRuler"
       :vertical="false"
       :width="width"
       :height="thick"
@@ -29,6 +30,7 @@
     />
     <!-- 竖直方向 -->
     <RulerWrapper
+      v-if="showRuler"
       :vertical="true"
       :width="thick"
       :height="height"
