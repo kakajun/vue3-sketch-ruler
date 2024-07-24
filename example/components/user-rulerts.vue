@@ -76,7 +76,7 @@ const rendIndex = ref(0)
 const windowScale = ref(1)
 const sketchruleRef = ref()
 const panzoomOption = ref({})
-const snapsObj = ref({ h: [0, 100, 200] })
+const snapsObj = ref({ h: [0, 100, 200], v: [130] })
 // 另外一个方法调用内部方法
 const zoomOutMethod = () => {
   if (sketchruleRef.value) {

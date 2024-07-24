@@ -20,19 +20,17 @@ export default function useLine(props: any, vertical: boolean) {
       const moveHandler = (e: MouseEvent) => {
         const currentPosition = vertical ? e.clientY : e.clientX
         const delta = (currentPosition - startPosition) / props.scale
-
-        // let nextPos = Math.round(vertical ? offsetX : offsetY)
-        //   let guidePos = parseFloat((nextPos / zoom!).toFixed(digit || 0))
-        //   const guideSnaps = snaps!.slice().sort((a, b) => {
-        //     return Math.abs(guidePos - a) - Math.abs(guidePos - b)
-        //   })
-
-        //   if (guideSnaps.length && Math.abs(guideSnaps[0] * zoom! - nextPos) < snapThreshold!) {
-        //     guidePos = guideSnaps[0]
-        //     nextPos = guidePos * zoom!
-        //   }
-
-        startValue.value = Math.round(initialValue + delta)
+        let nextPos = delta + initialValue
+        let guidePos = nextPos
+        const snaps = vertical ? props.snapsObj.h : props.snapsObj.v
+        const guideSnaps = snaps!.slice().sort((a, b) => {
+          return Math.abs(guidePos - a) - Math.abs(guidePos - b)
+        })
+        if (guideSnaps.length && Math.abs(guideSnaps[0] - nextPos) < props.snapThreshold!) {
+          guidePos = guideSnaps[0]
+          nextPos = guidePos
+        }
+        startValue.value = nextPos
       }
 
       document.addEventListener('mousemove', moveHandler)
