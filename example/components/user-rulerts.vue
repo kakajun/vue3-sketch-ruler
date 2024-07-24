@@ -29,6 +29,7 @@
         :width="rectWidth"
         :height="rectHeight"
         :palette="cpuPalette"
+        :snapsObj="snapsObj"
         :canvasWidth="canvasWidth"
         :canvasHeight="canvasHeight"
         :panzoomOption="panzoomOption"
@@ -61,20 +62,21 @@
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive, onMounted } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
-const rectWidth = 1600
-const rectHeight = 800
-// const canvasWidth = 2800
-// const canvasHeight = 1800
-const canvasWidth = 1000
-const canvasHeight = 500
-// const rectWidth = 800
-// const rectHeight = 400
-// const canvasWidth = 530
-// const canvasHeight = 250
+// const rectWidth = 1600
+// const rectHeight = 800
+// // const canvasWidth = 2800
+// // const canvasHeight = 1800
+// const canvasWidth = 1000
+// const canvasHeight = 500
+const rectWidth = 800
+const rectHeight = 400
+const canvasWidth = 530
+const canvasHeight = 250
 const rendIndex = ref(0)
 const windowScale = ref(1)
 const sketchruleRef = ref()
 const panzoomOption = ref({})
+const snapsObj = ref({ h: [0, 100, 200] })
 // 另外一个方法调用内部方法
 const zoomOutMethod = () => {
   if (sketchruleRef.value) {

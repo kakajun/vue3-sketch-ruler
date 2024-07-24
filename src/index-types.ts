@@ -110,5 +110,18 @@ export const sketchRulerProps = {
     type: Number,
     default: 700
   },
+  snapsObj: {
+    type: Object as PropType<lineType>,
+    default: () => {
+      return {
+        h: [],
+        v: []
+      }
+    }
+  },
+  snapThreshold: {
+    type: Number,
+    default: 5
+  },
   panzoomOption: Object
 }

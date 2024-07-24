@@ -1,9 +1,7 @@
 import { computed, ref } from 'vue'
-
 export default function useLine(props: any, vertical: boolean) {
   const offsetLine = ref(0)
   const startValue = ref(0)
-
   const actionStyle = computed(() => ({
     backgroundColor: props.palette.hoverBg,
     color: props.palette.hoverColor,
@@ -11,9 +9,10 @@ export default function useLine(props: any, vertical: boolean) {
     [vertical ? 'left' : 'top']: `${offsetLine.value + 10}px`
   }))
 
-  const handleMouseMove = (event: { offsetX: number; offsetY: number }) => {
-    offsetLine.value = vertical ? event.offsetX : event.offsetY
+  const handleMouseMove = ({ offsetX, offsetY }: { offsetX: number; offsetY: number }) => {
+    offsetLine.value = vertical ? offsetX : offsetY
   }
+
   const handleMouseDown = (e: MouseEvent) => {
     return new Promise<void>((resolve) => {
       const startPosition = vertical ? e.clientY : e.clientX
@@ -21,6 +20,18 @@ export default function useLine(props: any, vertical: boolean) {
       const moveHandler = (e: MouseEvent) => {
         const currentPosition = vertical ? e.clientY : e.clientX
         const delta = (currentPosition - startPosition) / props.scale
+
+        // let nextPos = Math.round(vertical ? offsetX : offsetY)
+        //   let guidePos = parseFloat((nextPos / zoom!).toFixed(digit || 0))
+        //   const guideSnaps = snaps!.slice().sort((a, b) => {
+        //     return Math.abs(guidePos - a) - Math.abs(guidePos - b)
+        //   })
+
+        //   if (guideSnaps.length && Math.abs(guideSnaps[0] * zoom! - nextPos) < snapThreshold!) {
+        //     guidePos = guideSnaps[0]
+        //     nextPos = guidePos * zoom!
+        //   }
+
         startValue.value = Math.round(initialValue + delta)
       }
 

@@ -24,6 +24,8 @@
         :scale="scale"
         :start="start"
         :canvasWidth="canvasWidth"
+        :snapThreshold="snapThreshold"
+        :snapsObj="snapsObj"
         :canvasHeight="canvasHeight"
         :lines="lines"
         :thick="thick"
@@ -71,6 +73,8 @@ const props = defineProps<{
   isShowReferLine: boolean
   parentRect: object | null
   rate: number
+  snapThreshold: number
+  snapsObj: object
 }>()
 
 const { actionStyle, handleMouseMove, handleMouseDown, labelContent, startValue } = useLine(

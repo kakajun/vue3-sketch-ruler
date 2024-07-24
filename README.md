@@ -140,6 +140,8 @@ const canvasHeight = 500
 | canvasWidth   | 画布宽                   | Number        | 1000        |
 | canvasHeight  | 画布高                   | Number        | 700         |
 | lines         | 初始化水平标尺上的参考线 | object<Array> | {h:[],v:[]} |
+| snapsObj      | 吸附刻度集合             | object<Array> | {h:[],v:[]} |
+| snapThreshold | 吸附距离                 | Number        | 5           |
 | panzoomOption | panzoom相关的扩展参数    | object        | -           |
 | palette       | 标尺的样式配置参数       | Palette       | 如下        |
 

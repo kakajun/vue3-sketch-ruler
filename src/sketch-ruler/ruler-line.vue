@@ -30,6 +30,8 @@ interface Props {
   lines: object
   isShowReferLine: boolean
   rate: number
+  snapThreshold: number
+  snapsObj: object
 }
 const showLabel = ref(false)
 const props = defineProps<Props>()
