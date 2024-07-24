@@ -13,8 +13,8 @@
         @input="scaleChange"
         className="range-input"
         type="range"
-        min="0.1"
-        max="4"
+        min="0.3"
+        max="3"
         step="0.1"
         defaultValue="1"
       />
@@ -35,7 +35,7 @@
         :panzoomOption="panzoomOption"
         ref="sketchruleRef"
         :isShowReferLine="state.isShowReferLine"
-        @onCornerClick="handleCornerClick"
+        @on-corner-click="handleCornerClick"
         :lines="state.lines"
       >
         <template #default>
