@@ -12,6 +12,7 @@
       :select-start="selectStart"
       :select-length="selectLength"
       :palette="palette"
+      :rate="rate"
       @handle-drag-start="mousedown"
     />
     <div v-show="isShowReferLine" class="lines">
@@ -68,6 +69,7 @@ const props = defineProps<{
   selectLength: number
   isShowReferLine: boolean
   parentRect: object | null
+  rate: number
 }>()
 
 const { actionStyle, handleMouseMove, handleMouseDown, labelContent, startValue } = useLine(

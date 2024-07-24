@@ -43,6 +43,10 @@ export const sketchRulerProps = {
     type: Number,
     default: 1
   },
+  rate: {
+    type: Number,
+    default: 1
+  },
   thick: {
     type: Number,
     default: 16
