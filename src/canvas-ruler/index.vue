@@ -78,7 +78,7 @@ const drawRuler = (ratio: number) => {
     palette: props.palette!,
     canvasWidth: props.canvasWidth,
     canvasHeight: props.canvasHeight,
-    ratio: 1,
+    ratio: ratio,
     rate: props.rate
   }
   options.scale = props.scale / props.rate

@@ -30,6 +30,7 @@
         :palette="palette"
         :vertical="vertical"
         :is-show-refer-line="isShowReferLine"
+        :rate="rate"
       />
     </div>
 

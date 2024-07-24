@@ -22,11 +22,10 @@ export const drawCavaseRuler = (
     palette: any
     canvasWidth: number
     canvasHeight: number
-    rate: number
   },
   isHorizontal?: boolean //横向为true,纵向缺省
 ) => {
-  const { scale, width, height, ratio, palette, rate } = options
+  const { scale, width, height, ratio, palette } = options
   const { bgColor, fontColor, shadowColor, longfgColor } = palette
   const endNum = isHorizontal ? options.canvasWidth : options.canvasHeight
   // 缩放ctx, 以简化计算
