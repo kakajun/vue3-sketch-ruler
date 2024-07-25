@@ -6,6 +6,7 @@
       <button class="mr10 font18" v-if="showRuler" @click="showRuler = false">隐藏规尺</button>
       <button class="mr10 font18" v-else @click="handleShow">显示规尺</button>
       <button class="mr10 font18" @click="showLineClick">辅助线开关</button>
+      <button class="mr10 font18" @click="lockLine = false">锁定参考线</button>
       <button class="mr10 font18" @click="changeTheme">主题切换</button>
       <button class="mr10 font18" @click="resetMethod">还原</button>
       <button class="mr10 font18" @click="zoomOutMethod">缩小</button>

@@ -20,7 +20,7 @@
       <RulerLine
         v-for="(v, i) in cpuLines"
         :key="v + i"
-        :lockLine="lockLine"
+        :lockLine="isLockLine"
         :index="i"
         :value="v >> 0"
         :scale="scale"

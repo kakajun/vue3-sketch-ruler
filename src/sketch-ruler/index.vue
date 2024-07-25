@@ -101,6 +101,7 @@ const paletteCpu = computed(() => {
       fontColor: '#7D8694', // ruler font color
       shadowColor: '#E8E8E8', // ruler shadow color
       lineColor: '#EB5648',
+      lockLineColor: '#d4d7dc',
       hoverBg: '#000',
       hoverColor: '#fff',
       borderColor: '#eeeeef',

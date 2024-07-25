@@ -3,7 +3,7 @@
     v-show="showLine"
     class="line"
     :style="{ ...offsetStyle, ...borderCursor }"
-    @mouseenter="showLabel = true"
+    @mouseenter="handleMouseenter"
     @mousemove="handleMouseMove"
     @mouseleave="showLabel = false"
     @mousedown="handleMouseDown"
@@ -49,9 +49,16 @@ const offsetStyle = computed(() => {
 })
 
 const borderCursor = computed(() => {
-  const borderColor = props.palette?.lineColor ?? 'black'
+  const borderColor = props.lockLine
+    ? props.palette?.lockLineColor
+    : props.palette?.lineColor ?? 'black'
   return {
-    cursor: props.isShowReferLine ? (props.vertical ? 'ns-resize' : 'ew-resize') : 'default',
+    cursor:
+      props.isShowReferLine && props.lockLine
+        ? props.vertical
+          ? 'ns-resize'
+          : 'ew-resize'
+        : 'default',
     ...(props.vertical
       ? { borderTop: `1px solid ${borderColor}` }
       : { borderLeft: `1px solid ${borderColor}` })
@@ -61,4 +68,10 @@ const borderCursor = computed(() => {
 onMounted(() => {
   startValue.value = props.value ?? 0
 })
+
+const handleMouseenter = () => {
+  if (!props.lockLine) {
+    showLabel.value = true
+  }
+}
 </script>
