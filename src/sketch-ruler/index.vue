@@ -27,6 +27,7 @@
       :canvasWidth="canvasWidth"
       :canvasHeight="canvasHeight"
       :rate="rate"
+      :gridRatio="gridRatio"
     />
     <!-- 竖直方向 -->
     <RulerWrapper

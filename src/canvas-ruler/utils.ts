@@ -19,13 +19,14 @@ export const drawCavaseRuler = (
     width: number
     height: number
     ratio: number
+    gridRatio: number
     palette: any
     canvasWidth: number
     canvasHeight: number
   },
   isHorizontal?: boolean //横向为true,纵向缺省
 ) => {
-  const { scale, width, height, ratio, palette } = options
+  const { scale, width, height, ratio, palette, gridRatio } = options
   const { bgColor, fontColor, shadowColor, longfgColor } = palette
   const endNum = isHorizontal ? options.canvasWidth : options.canvasHeight
   // 缩放ctx, 以简化计算
@@ -45,7 +46,7 @@ export const drawCavaseRuler = (
       ? ctx.fillRect(shadowX, 0, shadowWidth, (height * 3) / 8)
       : ctx.fillRect(0, shadowX, (width * 3) / 8, shadowWidth)
   }
-  const gridSize = getGridSize(scale) // 每小格表示的宽度
+  const gridSize = getGridSize(scale) * gridRatio // 每小格表示的宽度
   const gridSize10 = gridSize * 10 // 每大格表示的宽度
   const gridPixel10 = gridSize10 * scale
   const startValue10 = Math.floor(start / gridSize10) * gridSize10

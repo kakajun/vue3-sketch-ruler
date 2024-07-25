@@ -13,6 +13,7 @@
       :select-length="selectLength"
       :palette="palette"
       :rate="rate"
+      :gridRatio="gridRatio"
       @handle-drag-start="mousedown"
     />
     <div v-show="isShowReferLine" class="lines">
@@ -75,6 +76,7 @@ const props = defineProps<{
   rate: number
   snapThreshold: number
   snapsObj: object
+  gridRatio: number
 }>()
 
 const { actionStyle, handleMouseMove, handleMouseDown, labelContent, startValue } = useLine(

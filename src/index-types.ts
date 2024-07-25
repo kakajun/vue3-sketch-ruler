@@ -80,7 +80,6 @@ export const sketchRulerProps = {
     type: Boolean,
     default: true
   },
-
   shadow: {
     type: Object as PropType<ShadowType>,
     default: () => {
