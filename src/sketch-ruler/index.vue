@@ -8,7 +8,7 @@
     </div>
     <!-- 水平方向 -->
     <RulerWrapper
-      v-if="showRuler"
+      v-show="showRuler"
       :vertical="false"
       :width="width"
       :height="thick"
@@ -30,7 +30,7 @@
     />
     <!-- 竖直方向 -->
     <RulerWrapper
-      v-if="showRuler"
+      v-show="showRuler"
       :vertical="true"
       :width="thick"
       :height="height"
@@ -50,7 +50,7 @@
       :canvasHeight="canvasHeight"
       :rate="rate"
     />
-    <a class="corner" :style="cornerStyle" @click="onCornerClick"></a>
+    <a v-show="showRuler" class="corner" :style="cornerStyle" @click="onCornerClick"></a>
   </div>
 </template>
 
@@ -60,8 +60,9 @@ import { eye64, closeEye64 } from './cornerImg64'
 import { computed, ref, watch, onMounted } from 'vue'
 import { sketchRulerProps } from '../index-types'
 import Panzoom, { PanzoomObject } from 'simple-panzoom'
+
 const props = defineProps(sketchRulerProps)
-const emit = defineEmits(['onCornerClick', 'update:scale'])
+const emit = defineEmits(['onCornerClick', 'update:scale', 'zoomchange'])
 const parentRect = ref<DOMRect | null>(null)
 const elem = ref<HTMLElement | null>(null)
 const startX = ref(0)
@@ -71,6 +72,7 @@ const zoomStartY = ref(0)
 const ownScale = ref(1)
 const showReferLine = ref(props.isShowReferLine)
 const panzoomInstance = ref<PanzoomObject | null>(null)
+
 // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
 const paletteCpu = computed(() => {
   function merge(obj: { [key: string]: any }, o: { [key: string]: any }) {
@@ -167,8 +169,7 @@ const initPanzoom = () => {
           const left = (dimsOut.parent.left - dimsOut.elem.left + props.thick) / scale
           const top = (dimsOut.parent.top - dimsOut.elem.top + props.thick) / scale
           startX.value = left
-          // console.log(startX.value * scale, 'startX.value')
-          // console.log(scale, 'scale')
+          emit('zoomchange', e.detail)
           startY.value = top
         }
       })
@@ -196,21 +197,20 @@ const initPanzoom = () => {
 }
 
 const calculateTransform = () => {
-  const scaleX = (props.width * (1 - props.paddingRatio)) / props.canvasWidth
-  const scaleY = (props.height * (1 - props.paddingRatio)) / props.canvasHeight
+  const paading = Math.min(props.width, props.height) * props.paddingRatio
+  const scaleX = (props.width - paading) / props.canvasWidth
+  const scaleY = (props.height - paading) / props.canvasHeight
   const scale = Math.min(scaleX, scaleY)
 
   if (scale == scaleX) {
-    zoomStartX.value =
-      (props.canvasWidth / 2) * (scale - 1) + (props.width * props.paddingRatio) / 2
+    zoomStartX.value = (props.canvasWidth / 2) * (scale - 1) + paading / 2
     // 多向右偏移一半
     zoomStartY.value =
       (props.canvasHeight / 2) * (scale - 1) + (props.height - props.canvasHeight * scale) / 2
   } else {
     zoomStartX.value =
       (props.canvasWidth / 2) * (scale - 1) + (props.width - props.canvasWidth * scale) / 2
-    zoomStartY.value =
-      (props.canvasHeight / 2) * (scale - 1) + (props.height * props.paddingRatio) / 2
+    zoomStartY.value = (props.canvasHeight / 2) * (scale - 1) + paading / 2
   }
   return scale
 }

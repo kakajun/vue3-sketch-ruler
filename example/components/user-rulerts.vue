@@ -15,11 +15,15 @@
         @input="scaleChange"
         className="range-input"
         type="range"
-        min="0.1"
-        max="4"
+        min="0.3"
+        max="3"
         step="0.1"
         defaultValue="1"
       />
+      <div class="mr10"> 吸附横线: </div>
+      <input class="mr10" :value="snapsObj.h" @blur="snapsChange" />
+      <div class="mr10"> 吸附纵线: </div>
+      <input class="mr10" :value="snapsObj.v" @blur="snapsChangeV" />
     </div>
 
     <div class="wrapper" :style="rectStyle">
@@ -38,7 +42,7 @@
         :panzoomOption="panzoomOption"
         ref="sketchruleRef"
         :isShowReferLine="state.isShowReferLine"
-        @onCornerClick="handleCornerClick"
+        @on-corner-click="handleCornerClick"
         :lines="state.lines"
       >
         <template #default>
@@ -95,7 +99,6 @@ onMounted(() => {
 
 const handleShow = () => {
   showRuler.value = !showRuler.value
-  rendIndex.value++
 }
 
 const handleResize = () => {
@@ -137,7 +140,6 @@ const rectStyle = computed(() => {
     height: `${rectHeight}px`
   }
 })
-// background-image: ;
 const cpuPalette = computed(() => {
   return state.isBlack
     ? {
@@ -183,7 +185,16 @@ const showLineClick = () => {
   state.isShowReferLine = !state.isShowReferLine
   console.log(state.isShowReferLine, 'state.isShowReferLine')
 }
+const snapsChange = (e: { target: { value: string } }) => {
+  const arr = e.target.value.split(',')
+  snapsObj.value.h = arr.map((item) => Number(item))
+}
+const snapsChangeV = (e: { target: { value: string } }) => {
+  const arr = e.target.value.split(',')
+  snapsObj.value.v = arr.map((item) => Number(item))
+}
 </script>
+
 <style lang="scss">
 .demo {
   width: 100%;

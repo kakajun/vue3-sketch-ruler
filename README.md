@@ -129,24 +129,24 @@ const canvasHeight = 500
 
 ### 属性
 
-| 属性名称        | 描述                     | 类型          | 默认值      |
-| --------------- | ------------------------ | ------------- | ----------- |
-| scale           | 初始化标尺的缩放         | Number        | 1           |
-| thick           | 标尺的厚度               | Number        | 16          |
-| width           | 放置标尺窗口的宽度       | Number        | 1400        |
-| height          | 放置标尺窗口的高度       | Number        | 900         |
-| paddingRatio    | 画布与外框间隔           | Number        | 60          |
-| eyeIcon         | 睁眼图标                 | String        | -           |
-| closeEyeIcon    | 闭眼图标                 | String        | -           |
-| canvasWidth     | 画布宽                   | Number        | 1000        |
-| canvasHeight    | 画布高                   | Number        | 700         |
-| isShowReferLine | 是否显示标线             | Boolean       | true        |
-| showRuler       | 是否显示尺规             | Boolean       | true        |
-| lines           | 初始化水平标尺上的参考线 | object<Array> | {h:[],v:[]} |
-| snapsObj        | 吸附刻度集合             | object<Array> | {h:[],v:[]} |
-| snapThreshold   | 吸附距离                 | Number        | 5           |
-| panzoomOption   | panzoom相关的扩展参数    | object        | -           |
-| palette         | 标尺的样式配置参数       | Palette       | 如下        |
+| 属性名称        | 描述                     | 类型          | 默认值                     |
+| --------------- | ------------------------ | ------------- | -------------------------- |
+| scale           | 初始化标尺的缩放         | Number        | 1                          |
+| thick           | 标尺的厚度               | Number        | 16                         |
+| width           | 放置标尺窗口的宽度       | Number        | 1400                       |
+| height          | 放置标尺窗口的高度       | Number        | 900                        |
+| paddingRatio    | 画布与外框间隔           | Number        | 20% (基于外框宽高最小长度) |
+| eyeIcon         | 睁眼图标                 | String        | -                          |
+| closeEyeIcon    | 闭眼图标                 | String        | -                          |
+| canvasWidth     | 画布宽                   | Number        | 1000                       |
+| canvasHeight    | 画布高                   | Number        | 700                        |
+| isShowReferLine | 是否显示标线             | Boolean       | true                       |
+| showRuler       | 是否显示尺规             | Boolean       | true                       |
+| lines           | 初始化水平标尺上的参考线 | object<Array> | {h:[],v:[]}                |
+| snapsObj        | 吸附刻度集合             | object<Array> | {h:[],v:[]}                |
+| snapThreshold   | 吸附距离                 | Number        | 5                          |
+| panzoomOption   | panzoom相关的扩展参数    | object        | -                          |
+| palette         | 标尺的样式配置参数       | Palette       | 如下                       |
 
 palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',}
 
@@ -156,9 +156,10 @@ palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',fontColor: '#7D8
 
 ### Event
 
-| 事件名称      | 描述           | 回调参数 |
-| ------------- | -------------- | -------- |
-| onCornerClick | 左上角点击事件 |          |
+| 事件名称      | 描述              | 回调参数                                                    |
+| ------------- | ----------------- | ----------------------------------------------------------- |
+| onCornerClick | 左上角点击事件    |                                                             |
+| zoomchange    | 画布移动,缩放事件 | {dimsOut:{elem: {}, parent: {}},originalEvent:{},scale,x,y} |
 
 ### 插槽提供方法
 
