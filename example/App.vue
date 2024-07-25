@@ -10,7 +10,6 @@ import UserRuler from './components/user-rulerts.vue'
 
 <style>
 #app {
-  /* margin-top: 20px; */
   text-align: center;
 }
 </style>
