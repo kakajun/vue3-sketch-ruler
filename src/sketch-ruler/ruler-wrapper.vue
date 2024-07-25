@@ -20,6 +20,7 @@
       <RulerLine
         v-for="(v, i) in cpuLines"
         :key="v + i"
+        :lockLine="lockLine"
         :index="i"
         :value="v >> 0"
         :scale="scale"
@@ -55,8 +56,9 @@
 <script setup lang="ts">
 import RulerLine from './ruler-line.vue'
 import CanvasRuler from '../canvas-ruler/index.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import useLine from './useLine' // 引入自定义hook
+
 const props = defineProps<{
   scale: number
   thick: number
@@ -77,19 +79,21 @@ const props = defineProps<{
   snapThreshold: number
   snapsObj: object
   gridRatio: number
+  lockLine: boolean
 }>()
 
 const { actionStyle, handleMouseMove, handleMouseDown, labelContent, startValue } = useLine(
   props,
   !props.vertical
 )
-
+const isLockLine = ref(false)
 const isdragle = ref(false)
 const showLabel = ref(false)
 const rwClassName = computed(() => {
   const className = props.vertical ? 'v-container' : 'h-container'
   return className
 })
+const emit = defineEmits(['changeLineState'])
 
 const cpuLines = computed(() => {
   return props.vertical ? props.lines.h : props.lines.v
@@ -127,12 +131,18 @@ const indicatorStyle = computed(() => {
  */
 const mousedown = async (e: MouseEvent) => {
   isdragle.value = true
+  isLockLine.value = false
+  emit('changeLineState', false)
   // 初始化线条就在尺中间
   startValue.value = Math.round(props.startOther - props.thick / 2)
   await handleMouseDown(e)
   // 完了要重置一下
   isdragle.value = false
 }
+
+watch([() => props.lockLine], () => {
+  isLockLine.value = props.lockLine
+})
 </script>
 
 <style lang="scss">

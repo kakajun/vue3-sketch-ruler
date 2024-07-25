@@ -126,5 +126,13 @@ export const sketchRulerProps = {
     type: Number,
     default: 5
   },
+  gridRatio: {
+    type: Number,
+    default: 1
+  },
+  lockLine: {
+    type: Boolean,
+    default: false
+  },
   panzoomOption: Object
 }

@@ -28,6 +28,8 @@
       :canvasHeight="canvasHeight"
       :rate="rate"
       :gridRatio="gridRatio"
+      :lockLine="lockLine"
+      @change-line-state="changeLineState"
     />
     <!-- 竖直方向 -->
     <RulerWrapper
@@ -50,6 +52,9 @@
       :canvasWidth="canvasWidth"
       :canvasHeight="canvasHeight"
       :rate="rate"
+      :gridRatio="gridRatio"
+      :lockLine="lockLine"
+      @change-line-state="changeLineState"
     />
     <a v-show="showRuler" class="corner" :style="cornerStyle" @click="onCornerClick"></a>
   </div>
@@ -63,7 +68,8 @@ import { sketchRulerProps } from '../index-types'
 import Panzoom, { PanzoomObject } from 'simple-panzoom'
 
 const props = defineProps(sketchRulerProps)
-const emit = defineEmits(['onCornerClick', 'update:scale', 'zoomchange'])
+
+const emit = defineEmits(['onCornerClick', 'update:scale', 'zoomchange', 'update:lockLine'])
 const parentRect = ref<DOMRect | null>(null)
 const elem = ref<HTMLElement | null>(null)
 const startX = ref(0)
@@ -231,6 +237,9 @@ const zoomOut = () => {
 const onCornerClick = () => {
   showReferLine.value = !showReferLine.value
   emit('onCornerClick', showReferLine.value)
+}
+const changeLineState = (val: boolean) => {
+  emit('update:lockLine', val)
 }
 watch([() => props.isShowReferLine], () => {
   showReferLine.value = props.isShowReferLine

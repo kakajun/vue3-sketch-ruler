@@ -32,6 +32,7 @@ interface Props {
   rate: number
   snapThreshold: number
   snapsObj: object
+  lockLine: boolean
 }
 const showLabel = ref(false)
 const props = defineProps<Props>()
