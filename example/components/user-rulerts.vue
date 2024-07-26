@@ -86,7 +86,11 @@ const rendIndex = ref(0)
 const windowScale = ref(1)
 const sketchruleRef = ref()
 const showRuler = ref(true)
-const panzoomOption = ref({})
+// 更多配置,参见 https://github.com/timmywil/panzoom
+const panzoomOption = ref({
+  maxScale: 2,
+  minScale: 0.5
+})
 const lockLine = ref(false)
 const snapsObj = ref({ h: [0, 100, 200], v: [130] })
 // 另外一个方法调用内部方法

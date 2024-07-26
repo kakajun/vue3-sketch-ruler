@@ -119,3 +119,13 @@ export const drawCavaseRuler = (
     ctx.setTransform(1, 0, 0, 1, 0, 0)
   }
 }
+
+export function debounce(func: () => void, wait: number) {
+  let timeout: ReturnType<typeof setTimeout>
+  return function () {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      func()
+    }, wait)
+  }
+}

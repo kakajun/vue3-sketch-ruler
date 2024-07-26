@@ -14,9 +14,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import useLine from './useLine'
-
+import { debounce } from '../canvas-ruler/utils'
 interface Props {
   scale: number
   thick: number
@@ -36,6 +36,7 @@ interface Props {
 }
 const showLabel = ref(false)
 const props = defineProps<Props>()
+const isInscale = ref(false)
 
 const { actionStyle, handleMouseMove, handleMouseDown, labelContent, startValue } = useLine(
   props,
@@ -51,9 +52,9 @@ const offsetStyle = computed(() => {
 const borderCursor = computed(() => {
   const borderColor = props.lockLine
     ? props.palette?.lockLineColor
-    : props.palette?.lineColor ?? 'black'
+    : (props.palette?.lineColor ?? 'black')
   return {
-    pointerEvents: props.lockLine ? 'none' : 'auto',
+    pointerEvents: props.lockLine || isInscale.value ? 'none' : 'auto',
     cursor:
       props.isShowReferLine && !props.lockLine
         ? props.vertical
@@ -70,6 +71,14 @@ onMounted(() => {
   startValue.value = props.value ?? 0
 })
 
+// 使用防抖函数
+const deactivateAfterDelay = debounce(() => {
+  isInscale.value = false
+}, 2000)
+watch([() => props.scale], () => {
+  isInscale.value = true
+  deactivateAfterDelay()
+})
 const handleMouseenter = () => {
   if (!props.lockLine) {
     showLabel.value = true
