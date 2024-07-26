@@ -91,7 +91,6 @@ export const sketchRulerProps = {
       }
     }
   },
-
   lines: {
     type: Object as PropType<lineType>,
     default: () => {

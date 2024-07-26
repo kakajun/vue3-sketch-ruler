@@ -111,7 +111,7 @@ export const drawCavaseRuler = (
       ctx.rotate(-Math.PI / 2) // 旋转 -90 度
     }
     ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
-    ctx.fillText(value.toString(), 4 * ratio, 7 * ratio)
+    ctx.fillText(Math.round(value).toString(), 4 * ratio, 7 * ratio)
     ctx.restore()
     isHorizontal ? ctx.lineTo(x, height) : ctx.lineTo(width, x)
     ctx.stroke()
