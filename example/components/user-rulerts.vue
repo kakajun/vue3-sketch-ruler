@@ -1,11 +1,12 @@
 <template>
   <div class="demo">
     <div class="top">
-      <div class="scale"> 浏览器缩放:{{ windowScale }} </div>
+      <!-- <div class="scale"> 浏览器缩放:{{ windowScale }} </div> -->
       <div class="scale"> 缩放比例:{{ cpuScale }} </div>
       <button class="mr10 font18" v-if="showRuler" @click="showRuler = false">隐藏规尺</button>
       <button class="mr10 font18" v-else @click="handleShow">显示规尺</button>
       <button class="mr10 font18" @click="showLineClick">辅助线开关</button>
+      <button class="mr10 font18" @click="lockLine = true">锁定参考线</button>
       <button class="mr10 font18" @click="changeTheme">主题切换</button>
       <button class="mr10 font18" @click="resetMethod">还原</button>
       <button class="mr10 font18" @click="zoomOutMethod">缩小</button>
@@ -31,8 +32,10 @@
       <SketchRule
         :key="rendIndex"
         v-model:scale="state.scale"
+        v-model:lockLine="lockLine"
         :thick="state.thick"
         :width="rectWidth"
+        :gridRatio="0.5"
         :showRuler="showRuler"
         :height="rectHeight"
         :palette="cpuPalette"
@@ -84,6 +87,7 @@ const windowScale = ref(1)
 const sketchruleRef = ref()
 const showRuler = ref(true)
 const panzoomOption = ref({})
+const lockLine = ref(false)
 const snapsObj = ref({ h: [0, 100, 200], v: [130] })
 // 另外一个方法调用内部方法
 const zoomOutMethod = () => {

@@ -80,7 +80,6 @@ export const sketchRulerProps = {
     type: Boolean,
     default: true
   },
-
   shadow: {
     type: Object as PropType<ShadowType>,
     default: () => {
@@ -126,6 +125,14 @@ export const sketchRulerProps = {
   snapThreshold: {
     type: Number,
     default: 5
+  },
+  gridRatio: {
+    type: Number,
+    default: 1
+  },
+  lockLine: {
+    type: Boolean,
+    default: false
   },
   panzoomOption: Object
 }

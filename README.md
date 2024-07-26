@@ -150,8 +150,9 @@ const canvasHeight = 500
 | snapsObj        | 吸附刻度集合             | object<Array> | {h:[],v:[]}                |
 | snapThreshold   | 吸附距离                 | Number        | 5                          |
 | shadow          | 阴影配置                 | object<Number>  | {x: 0,y: 0, width: 0, height: 0}|
-| panzoomOption   | panzoom相关的扩展参数    | object        | -                          |
-| palette         | 标尺的样式配置参数       | Palette       | 如下                       |
+| gridRatio       | 刻度分散比例             | Number        | 1                          |
+| panzoomOption    | panzoom相关的扩展参数    | object         | - |
+| palette         | 标尺的样式配置参数         | Palette        | 如下 |
 
 palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',}
 

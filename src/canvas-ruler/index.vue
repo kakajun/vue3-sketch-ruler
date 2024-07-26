@@ -17,6 +17,7 @@ interface Props {
   canvasWidth: number
   canvasHeight: number
   rate: number
+  gridRatio: number
 }
 const props = defineProps<Props>()
 const emit = defineEmits(['handleDragStart'])
@@ -79,7 +80,8 @@ const drawRuler = (ratio: number) => {
     canvasWidth: props.canvasWidth,
     canvasHeight: props.canvasHeight,
     ratio: ratio,
-    rate: props.rate
+    rate: props.rate,
+    gridRatio: props.gridRatio
   }
   options.scale = props.scale / props.rate
   options.canvasWidth = props.canvasWidth * props.rate

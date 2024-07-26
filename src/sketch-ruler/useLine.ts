@@ -15,6 +15,7 @@ export default function useLine(props: any, vertical: boolean) {
 
   const handleMouseDown = (e: MouseEvent) => {
     return new Promise<void>((resolve) => {
+      if (props.lockLine) return
       const startPosition = vertical ? e.clientY : e.clientX
       const initialValue = startValue.value
       const moveHandler = (e: MouseEvent) => {
