@@ -53,8 +53,9 @@ const borderCursor = computed(() => {
     ? props.palette?.lockLineColor
     : props.palette?.lineColor ?? 'black'
   return {
+    pointerEvents: props.lockLine ? 'none' : 'auto',
     cursor:
-      props.isShowReferLine && props.lockLine
+      props.isShowReferLine && !props.lockLine
         ? props.vertical
           ? 'ns-resize'
           : 'ew-resize'

@@ -1,12 +1,12 @@
 <template>
   <div class="demo">
     <div class="top">
-      <div class="scale"> 浏览器缩放:{{ windowScale }} </div>
+      <!-- <div class="scale"> 浏览器缩放:{{ windowScale }} </div> -->
       <div class="scale"> 缩放比例:{{ cpuScale }} </div>
       <button class="mr10 font18" v-if="showRuler" @click="showRuler = false">隐藏规尺</button>
       <button class="mr10 font18" v-else @click="handleShow">显示规尺</button>
       <button class="mr10 font18" @click="showLineClick">辅助线开关</button>
-      <button class="mr10 font18" @click="lockLine = false">锁定参考线</button>
+      <button class="mr10 font18" @click="lockLine = true">锁定参考线</button>
       <button class="mr10 font18" @click="changeTheme">主题切换</button>
       <button class="mr10 font18" @click="resetMethod">还原</button>
       <button class="mr10 font18" @click="zoomOutMethod">缩小</button>
@@ -72,16 +72,16 @@
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive, onMounted } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
-// const rectWidth = 1600
-// const rectHeight = 800
-// // const canvasWidth = 2800
-// // const canvasHeight = 1800
-// const canvasWidth = 1000
-// const canvasHeight = 500
-const rectWidth = 800
-const rectHeight = 400
-const canvasWidth = 530
-const canvasHeight = 250
+const rectWidth = 1600
+const rectHeight = 800
+// const canvasWidth = 2800
+// const canvasHeight = 1800
+const canvasWidth = 1000
+const canvasHeight = 500
+// const rectWidth = 800
+// const rectHeight = 400
+// const canvasWidth = 530
+// const canvasHeight = 250
 const rendIndex = ref(0)
 const windowScale = ref(1)
 const sketchruleRef = ref()

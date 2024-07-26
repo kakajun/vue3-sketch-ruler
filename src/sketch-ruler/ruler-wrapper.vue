@@ -151,19 +151,19 @@ watch([() => props.lockLine], () => {
 .h-container,
 .v-container {
   position: absolute;
-  .lines {
-    pointer-events: none;
-  }
-  &:hover .lines {
-    pointer-events: auto;
-  }
+  // .lines {
+  //   pointer-events: none;
+  // }
+  // &:hover .lines {
+  //   pointer-events: auto;
+  // }
   .indicator {
     z-index: 4; // 比尺子高
     position: absolute;
   }
 
   .line {
-    pointer-events: auto;
+    // pointer-events: auto;
     position: absolute;
   }
 
