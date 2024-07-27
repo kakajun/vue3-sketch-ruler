@@ -246,6 +246,13 @@ watch([() => props.isShowReferLine], () => {
   showReferLine.value = props.isShowReferLine
 })
 
+watch(
+  [() => props.canvasWidth, () => props.canvasHeight, () => props.width, () => props.height],
+  () => {
+    initPanzoom()
+  }
+)
+
 defineExpose({
   initPanzoom,
   panzoomInstance,

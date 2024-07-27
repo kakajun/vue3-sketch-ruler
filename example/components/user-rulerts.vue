@@ -72,16 +72,18 @@
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive, onMounted } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
-const rectWidth = 1600
-const rectHeight = 800
-// const canvasWidth = 2800
-// const canvasHeight = 1800
-const canvasWidth = 1000
-const canvasHeight = 500
-// const rectWidth = 800
-// const rectHeight = 400
-// const canvasWidth = 530
-// const canvasHeight = 250
+const rectWidth = ref(1600)
+const rectHeight = ref(800)
+// const canvasWidth = ref(2800)
+// const canvasHeight = ref(1800)
+const canvasWidth = ref(1000)
+const canvasHeight = ref(500)
+// const canvasWidth = ref(1000)
+// const canvasHeight =ref( 500)
+// const rectWidth =ref( 800)
+// const rectHeight =ref( 400)
+// const canvasWidth =ref( 530)
+// const canvasHeight =ref( 250)
 const rendIndex = ref(0)
 const windowScale = ref(1)
 const sketchruleRef = ref()
@@ -91,6 +93,11 @@ const panzoomOption = ref({
   maxScale: 2,
   minScale: 0.5
 })
+
+// setTimeout(() => {
+//   canvasWidth.value = 530
+//   canvasHeight.value = 250
+// }, 5000)
 const lockLine = ref(false)
 const snapsObj = ref({ h: [0, 100, 200], v: [130] })
 // 另外一个方法调用内部方法
@@ -172,8 +179,8 @@ const cpuScale = computed(() => {
 
 const canvasStyle = computed(() => {
   return {
-    width: `${canvasWidth}px`,
-    height: `${canvasHeight}px`
+    width: `${canvasWidth.value}px`,
+    height: `${canvasHeight.value}px`
   }
 })
 
