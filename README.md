@@ -19,7 +19,11 @@
 
 插件应用范围: 适合作为低代码平台操作页面缩放工具,比如做图工具如, 大屏可视化, 做图工具图怪兽等,类似ps的缩放效果.
 
-<!-- 应用案例: [avue大屏可视化工具](https://data.avuejs.com/build/1) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v2/assets/dp.png) -->
+## 🌈 应用案例:
+
+<!-- [avue大屏可视化工具](https://data.avuejs.com/build/1) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v2/assets/dp.png) -->
+
+[GoView 高效拖拽式低代码数据可视化开发平台](https://vue.mtruning.club/#/project/items)
 
 ## ✨ 升级改造
 
@@ -37,9 +41,9 @@
 
 [掘金:2X `vue3-sketch-ruler`插件的蜕变与升级](https://juejin.cn/post/7390134326871228428)
 
-## demo
+## 🦄  demo
 
-案例浏览: [https://kakajun.github.io/vue3-sketch-ruler](https://kakajun.github.io/vue3-sketch-ruler) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/master/example/assets/newDemo.png)
+案例浏览: [https://kakajun.github.io/vue3-sketch-ruler](https://kakajun.github.io/vue3-sketch-ruler) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/master/example/assets/1.png)
 
 ## 安装
 
@@ -129,31 +133,31 @@ const canvasHeight = 500
 
 ### 属性
 
-| 属性名称        | 描述                     | 类型          | 默认值                     |
-| --------------- | ------------------------ | ------------- | -------------------------- |
-| scale           | 初始化标尺的缩放及画布      | Number        | 1(仅autoCenter=false时生效)  |
-| rate            | 初始化标尺的缩放         | Number        | 1                            |
-| thick           | 标尺的厚度               | Number        | 16                         |
-| width           | 放置标尺窗口的宽度       | Number        | 1400                       |
-| height          | 放置标尺窗口的高度       | Number        | 900                        |
-| paddingRatio    | 画布与外框间隔           | Number        | 20% (基于外框宽高最小长度) |
-| autoCenter      | 自动居中对齐             | Boolean       | true (为false则需要传入scale,zoomStartX,zoomStartY) |
-| zoomStartX      | 画布距离左边框距离    | Number        | 0  (仅autoCenter=false时生效)  |
-| zoomStartY      | 画布距离顶边框距离    | Number        | 0  (仅autoCenter=false时生效)   |
-| eyeIcon         | 睁眼图标                 | String        | -                          |
-| closeEyeIcon    | 闭眼图标                 | String        | -                          |
-| canvasWidth     | 画布宽                   | Number        | 1000                       |
-| canvasHeight    | 画布高                   | Number        | 700                        |
-| isShowReferLine | 是否显示标线             | Boolean       | true                       |
-| showRuler       | 是否显示尺规             | Boolean       | true                       |
-| lines           | 初始化水平标尺上的参考线 | object<Array> | {h:[],v:[]}                |
-| snapsObj        | 吸附刻度集合             | object<Array> | {h:[],v:[]}                |
-| snapThreshold   | 吸附距离                 | Number        | 5                          |
-| shadow          | 阴影配置                 | object<Number>  | {x: 0,y: 0, width: 0, height: 0}|
-| gridRatio       | 刻度分散比例             | Number        | 1                          |
-| selfHandle       | 自己处理监听移动和缩放   | Boolean        | false                         |
-| panzoomOption    | panzoom相关的扩展参数    | object         | - |
-| palette         | 标尺的样式配置参数         | Palette        | 如下 |
+| 属性名称 | 描述 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| scale | 初始化标尺的缩放及画布 | Number | 1(仅autoCenter=false时生效) |
+| rate | 初始化标尺的缩放 | Number | 1 |
+| thick | 标尺的厚度 | Number | 16 |
+| width | 放置标尺窗口的宽度 | Number | 1400 |
+| height | 放置标尺窗口的高度 | Number | 900 |
+| paddingRatio | 画布与外框间隔 | Number | 20% (基于外框宽高最小长度) |
+| autoCenter | 自动居中对齐 | Boolean | true (为false则需要传入scale,zoomStartX,zoomStartY) |
+| zoomStartX | 画布距离左边框距离 | Number | 0 (仅autoCenter=false时生效) |
+| zoomStartY | 画布距离顶边框距离 | Number | 0 (仅autoCenter=false时生效) |
+| eyeIcon | 睁眼图标 | String | - |
+| closeEyeIcon | 闭眼图标 | String | - |
+| canvasWidth | 画布宽 | Number | 1000 |
+| canvasHeight | 画布高 | Number | 700 |
+| isShowReferLine | 是否显示标线 | Boolean | true |
+| showRuler | 是否显示尺规 | Boolean | true |
+| lines | 初始化水平标尺上的参考线 | object<Array> | {h:[],v:[]} |
+| snapsObj | 吸附刻度集合 | object<Array> | {h:[],v:[]} |
+| snapThreshold | 吸附距离 | Number | 5 |
+| shadow | 阴影配置 | object<Number> | {x: 0,y: 0, width: 0, height: 0} |
+| gridRatio | 刻度分散比例 | Number | 1 |
+| selfHandle | 自己处理监听移动和缩放 | Boolean | false |
+| panzoomOption | panzoom相关的扩展参数 | object | - |
+| palette | 标尺的样式配置参数 | Palette | 如下 |
 
 palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',}
 
@@ -173,34 +177,30 @@ palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',fontColor: '#7D8
 有些需要自己定义监听移动和缩放，不想按空格移动, 或者不想Ctrl+weel 移动, 那么可以设置selfHandle为true，然后通过ref获取到组件实例，然后通过实例调用组件的方法, 自定义监听按键
 
 具体操作参见我插件里面的监听移动和缩放方法
+
 ```js
+const panzoomInstance = sketchruleRef.value.panzoomInstance
 
- const panzoomInstance = sketchruleRef.value.panzoomInstance
+document.addEventListener('wheel', function (e) {
+  if (e.ctrlKey || e.metaKey) {
+    panzoomInstance.value?.zoomWithWheel(e)
+  }
+})
 
- document.addEventListener('wheel', function (e) {
-    if (e.ctrlKey || e.metaKey) {
-      panzoomInstance.value?.zoomWithWheel(e)
-    }
-  })
+// 让按下空格键才能移动画布
+document.addEventListener('keydown', function (e) {
+  if (e.key === ' ') {
+    panzoomInstance.value?.bind()
+    e.preventDefault()
+  }
+})
 
-  // 让按下空格键才能移动画布
-  document.addEventListener('keydown', function (e) {
-    if (e.key === ' ') {
-      panzoomInstance.value?.bind()
-      e.preventDefault()
-    }
-  })
-
-  document.addEventListener('keyup', function (e) {
-    if (e.key === ' ') {
-      panzoomInstance.value?.destroy()
-    }
-  })
-
+document.addEventListener('keyup', function (e) {
+  if (e.key === ' ') {
+    panzoomInstance.value?.destroy()
+  }
+})
 ```
-
-
-
 
 ### 插槽提供方法
 

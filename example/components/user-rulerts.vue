@@ -10,6 +10,7 @@
       <button class="mr10 font18" @click="changeTheme">主题切换</button>
       <button class="mr10 font18" @click.stop="resetMethod">还原</button>
       <button class="mr10 font18" @click.stop="zoomOutMethod">缩小</button>
+
       <input
         class="mr10 font18"
         :value="state.scale"
@@ -25,6 +26,14 @@
       <input class="mr10" :value="snapsObj.h" @blur="snapsChange" />
       <div class="mr10"> 吸附纵线: </div>
       <input class="mr10" :value="snapsObj.v" @blur="snapsChangeV" />
+
+      <a
+        href="https://github.com/kakajun/vue3-sketch-ruler"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <i class="fas fa-external-link-alt"></i> git源码
+      </a>
     </div>
 
     <div class="wrapper" :style="rectStyle">
