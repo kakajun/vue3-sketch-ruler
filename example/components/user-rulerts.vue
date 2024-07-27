@@ -8,8 +8,8 @@
       <button class="mr10 font18" @click="showLineClick">辅助线开关</button>
       <button class="mr10 font18" @click="lockLine = true">锁定参考线</button>
       <button class="mr10 font18" @click="changeTheme">主题切换</button>
-      <button class="mr10 font18" @click="resetMethod">还原</button>
-      <button class="mr10 font18" @click="zoomOutMethod">缩小</button>
+      <button class="mr10 font18" @click.stop="resetMethod">还原</button>
+      <button class="mr10 font18" @click.stop="zoomOutMethod">缩小</button>
       <input
         class="mr10 font18"
         :value="state.scale"
@@ -55,9 +55,9 @@
         </template>
         <template #btn="{ reset, zoomIn, zoomOut }">
           <div class="btns">
-            <button class="btn reset-btn" @click="reset">还原</button>
-            <button class="btn zoomin-btn" @click="zoomIn">放大</button>
-            <button class="btn zoomout-btn" @click="zoomOut">缩小</button>
+            <button class="btn reset-btn" @click.stop="reset">还原</button>
+            <button class="btn zoomin-btn" @click.stop="zoomIn">放大</button>
+            <button class="btn zoomout-btn" @click.stop="zoomOut">缩小</button>
           </div>
         </template>
       </SketchRule>
@@ -151,25 +151,29 @@ const state = reactive({
 
 const rectStyle = computed(() => {
   return {
-    width: `${rectWidth}px`,
-    height: `${rectHeight}px`
+    width: `${rectWidth.value}px`,
+    height: `${rectHeight.value}px`
   }
 })
 const cpuPalette = computed(() => {
   return state.isBlack
     ? {
-        bgColor: '#000',
+        bgColor: 'transparent',
         backgroundSize: '15px 15px, 15px 15px',
         hoverBg: '#fff',
         hoverColor: '#000',
         longfgColor: '#BABBBC', // ruler longer mark color
         fontColor: '#DEDEDE', // ruler font color
         shadowColor: '#525252', // ruler shadow color
-        lineColor: '#EB5648',
+        lineColor: '#51d6a9',
         borderColor: '#B5B5B5',
         cornerActiveColor: '#fff'
       }
-    : {}
+    : {
+        bgColor: 'transparent',
+        lineColor: '#51d6a9',
+        lineType: 'dashed'
+      }
 })
 
 const cpuScale = computed(() => {
@@ -252,7 +256,12 @@ body * {
 
 .wrapper {
   margin: 0 auto;
-  background-color: #f5f5f5;
+  background-color: #fafafc;
+  background-image: linear-gradient(#fafafc 20px, transparent 0),
+    linear-gradient(90deg, transparent 20px, #373739 0);
+  background-size:
+    21px 21px,
+    21px 21px;
   border: 1px solid #dadadc;
 }
 

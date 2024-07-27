@@ -101,6 +101,7 @@ const paletteCpu = computed(() => {
       fontColor: '#7D8694', // ruler font color
       shadowColor: '#E8E8E8', // ruler shadow color
       lineColor: '#EB5648',
+      lineType: 'solid',
       lockLineColor: '#d4d7dc',
       hoverBg: '#000',
       hoverColor: '#fff',
@@ -193,6 +194,7 @@ const initPanzoom = () => {
     document.addEventListener('keydown', function (e) {
       if (e.key === ' ') {
         panzoomInstance.value?.bind()
+        e.preventDefault()
       }
     })
 

@@ -50,6 +50,7 @@ const offsetStyle = computed(() => {
 })
 
 const borderCursor = computed(() => {
+  const lineType = props.palette?.lineType
   const borderColor = props.lockLine
     ? props.palette?.lockLineColor
     : (props.palette?.lineColor ?? 'black')
@@ -62,8 +63,8 @@ const borderCursor = computed(() => {
           : 'ew-resize'
         : 'default',
     ...(props.vertical
-      ? { borderTop: `1px solid ${borderColor}` }
-      : { borderLeft: `1px solid ${borderColor}` })
+      ? { borderTop: `1px ${lineType} ${borderColor}` }
+      : { borderLeft: `1px ${lineType} ${borderColor}` })
   }
 })
 
