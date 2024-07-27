@@ -133,5 +133,9 @@ export const sketchRulerProps = {
     type: Boolean,
     default: false
   },
+  selfHandle: {
+    type: Boolean,
+    default: false
+  },
   panzoomOption: Object
 }

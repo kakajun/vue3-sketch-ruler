@@ -75,7 +75,7 @@ onMounted(() => {
 // 使用防抖函数
 const deactivateAfterDelay = debounce(() => {
   isInscale.value = false
-}, 2000)
+}, 1000)
 watch([() => props.scale], () => {
   isInscale.value = true
   deactivateAfterDelay()

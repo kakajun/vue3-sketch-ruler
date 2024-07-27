@@ -28,14 +28,13 @@
     </div>
 
     <div class="wrapper" :style="rectStyle">
-      <!--  这个可以传入图标 -->
+      <!--  这个可以传入图标  :gridRatio="0.5" -->
       <SketchRule
         :key="rendIndex"
         v-model:scale="state.scale"
         v-model:lockLine="lockLine"
         :thick="state.thick"
         :width="rectWidth"
-        :gridRatio="0.5"
         :showRuler="showRuler"
         :height="rectHeight"
         :palette="cpuPalette"

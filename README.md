@@ -151,6 +151,7 @@ const canvasHeight = 500
 | snapThreshold   | 吸附距离                 | Number        | 5                          |
 | shadow          | 阴影配置                 | object<Number>  | {x: 0,y: 0, width: 0, height: 0}|
 | gridRatio       | 刻度分散比例             | Number        | 1                          |
+| selfHandle       | 自己处理监听移动和缩放   | Boolean        | false                         |
 | panzoomOption    | panzoom相关的扩展参数    | object         | - |
 | palette         | 标尺的样式配置参数         | Palette        | 如下 |
 
@@ -166,6 +167,40 @@ palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',fontColor: '#7D8
 | ------------- | ----------------- | ----------------------------------------------------------- |
 | onCornerClick | 左上角点击事件    |                                                             |
 | zoomchange    | 画布移动,缩放事件 | {dimsOut:{elem: {}, parent: {}},originalEvent:{},scale,x,y} |
+
+### 使用说明
+
+有些需要自己定义监听移动和缩放，不想按空格移动, 或者不想Ctrl+weel 移动, 那么可以设置selfHandle为true，然后通过ref获取到组件实例，然后通过实例调用组件的方法, 自定义监听按键
+
+具体操作参见我插件里面的监听移动和缩放方法
+```js
+
+ const panzoomInstance = sketchruleRef.value.panzoomInstance
+
+ document.addEventListener('wheel', function (e) {
+    if (e.ctrlKey || e.metaKey) {
+      panzoomInstance.value?.zoomWithWheel(e)
+    }
+  })
+
+  // 让按下空格键才能移动画布
+  document.addEventListener('keydown', function (e) {
+    if (e.key === ' ') {
+      panzoomInstance.value?.bind()
+      e.preventDefault()
+    }
+  })
+
+  document.addEventListener('keyup', function (e) {
+    if (e.key === ' ') {
+      panzoomInstance.value?.destroy()
+    }
+  })
+
+```
+
+
+
 
 ### 插槽提供方法
 

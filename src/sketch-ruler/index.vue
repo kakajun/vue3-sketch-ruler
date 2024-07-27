@@ -144,25 +144,27 @@ const canvasStyle = computed(() => {
 })
 onMounted(() => {
   initPanzoom()
-  document.addEventListener('wheel', function (e) {
-    if (e.ctrlKey || e.metaKey) {
-      panzoomInstance.value?.zoomWithWheel(e)
-    }
-  })
+  if (!props.selfHandle) {
+    document.addEventListener('wheel', function (e) {
+      if (e.ctrlKey || e.metaKey) {
+        panzoomInstance.value?.zoomWithWheel(e)
+      }
+    })
 
-  // 让按下空格键才能移动画布
-  document.addEventListener('keydown', function (e) {
-    if (e.key === ' ') {
-      panzoomInstance.value?.bind()
-      e.preventDefault()
-    }
-  })
+    // 让按下空格键才能移动画布
+    document.addEventListener('keydown', function (e) {
+      if (e.key === ' ') {
+        panzoomInstance.value?.bind()
+        e.preventDefault()
+      }
+    })
 
-  document.addEventListener('keyup', function (e) {
-    if (e.key === ' ') {
-      panzoomInstance.value?.destroy()
-    }
-  })
+    document.addEventListener('keyup', function (e) {
+      if (e.key === ' ') {
+        panzoomInstance.value?.destroy()
+      }
+    })
+  }
 })
 
 const getPanOptions = (scale: number) => {
