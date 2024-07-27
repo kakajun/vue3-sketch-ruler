@@ -189,10 +189,10 @@ const canvasStyle = computed(() => {
 
 const scaleChange = (e: { target: { value: number } }) => {
   state.scale = e.target.value
-  if (sketchruleRef.value) {
-    const panzoomInstance = sketchruleRef.value.panzoomInstance
-    panzoomInstance.zoom(state.scale)
-  }
+  // if (sketchruleRef.value) {
+  //   const panzoomInstance = sketchruleRef.value.panzoomInstance
+  //   panzoomInstance.zoom(state.scale)
+  // }
 }
 
 const handleCornerClick = (e: MouseEvent) => {

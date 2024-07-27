@@ -144,7 +144,41 @@ const canvasStyle = computed(() => {
 })
 onMounted(() => {
   initPanzoom()
+  document.addEventListener('wheel', function (e) {
+    if (e.ctrlKey || e.metaKey) {
+      panzoomInstance.value?.zoomWithWheel(e)
+    }
+  })
+
+  // 让按下空格键才能移动画布
+  document.addEventListener('keydown', function (e) {
+    if (e.key === ' ') {
+      panzoomInstance.value?.bind()
+      e.preventDefault()
+    }
+  })
+
+  document.addEventListener('keyup', function (e) {
+    if (e.key === ' ') {
+      panzoomInstance.value?.destroy()
+    }
+  })
 })
+
+const getPanOptions = (scale: number) => {
+  return {
+    noBind: true,
+    //disablePan: true,
+    //disableZoom: true,
+    startScale: scale,
+    cursor: 'default',
+    startX: zoomStartX.value,
+    startY: zoomStartY.value,
+    // contain: 'inside',
+    smoothScroll: true,
+    ...props.panzoomOption
+  }
+}
 
 const initPanzoom = () => {
   // document: https://github.com/timmywil/panzoom
@@ -158,16 +192,7 @@ const initPanzoom = () => {
       zoomStartY.value = props.zoomStartY
     }
 
-    panzoomInstance.value = Panzoom(elem.value, {
-      noBind: true,
-      startScale: scale,
-      cursor: 'default',
-      startX: zoomStartX.value,
-      startY: zoomStartY.value,
-      // contain: 'inside',
-      smoothScroll: true,
-      ...props.panzoomOption
-    })
+    panzoomInstance.value = Panzoom(elem.value, getPanOptions(scale))
     if (elem.value) {
       elem.value.addEventListener('panzoomchange', (e: any) => {
         const { scale, dimsOut } = e.detail
@@ -182,26 +207,6 @@ const initPanzoom = () => {
         }
       })
     }
-
-    document.addEventListener('wheel', function (e) {
-      if (e.ctrlKey || e.metaKey) {
-        panzoomInstance.value?.zoomWithWheel(e)
-      }
-    })
-
-    // 让按下空格键才能移动画布
-    document.addEventListener('keydown', function (e) {
-      if (e.key === ' ') {
-        panzoomInstance.value?.bind()
-        e.preventDefault()
-      }
-    })
-
-    document.addEventListener('keyup', function (e) {
-      if (e.key === ' ') {
-        panzoomInstance.value?.destroy()
-      }
-    })
   }
 }
 
@@ -236,6 +241,14 @@ const zoomOut = () => {
   panzoomInstance.value?.zoomOut()
 }
 
+/**
+ * @desc: 更新panzoom的配置
+ * @param {*}
+ */
+const setOtions = (obj?: any) => {
+  panzoomInstance.value?.setOptions(obj || getPanOptions(props.scale))
+}
+
 const onCornerClick = () => {
   showReferLine.value = !showReferLine.value
   emit('onCornerClick', showReferLine.value)
@@ -250,9 +263,18 @@ watch([() => props.isShowReferLine], () => {
 watch(
   [() => props.canvasWidth, () => props.canvasHeight, () => props.width, () => props.height],
   () => {
+    // 画框大小改变时，重新初始化panzoom以及scale
     initPanzoom()
   }
 )
+
+watch([() => props.scale], () => {
+  panzoomInstance.value?.zoom(props.scale)
+})
+
+watch([() => props.panzoomOption], () => {
+  setOtions()
+})
 
 defineExpose({
   initPanzoom,
