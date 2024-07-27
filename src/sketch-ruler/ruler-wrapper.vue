@@ -40,6 +40,7 @@
 
     <div
       class="indicator"
+      v-if="isShowReferLine"
       @mouseenter="showLabel = true"
       @mousemove="handleMouseMove"
       @mouseleave="showLabel = false"
@@ -113,6 +114,7 @@ const rwStyle = computed(() => {
 })
 
 const indicatorStyle = computed(() => {
+  const lineType = props.palette?.lineType
   let positionKey = props.vertical ? 'left' : 'top'
   let gepKey = props.vertical ? 'top' : 'left'
   let boderKey = props.vertical ? 'borderLeft' : 'borderBottom'
@@ -121,7 +123,7 @@ const indicatorStyle = computed(() => {
     [positionKey]: offsetPx + 'px',
     [gepKey]: -props.thick + 'px',
     cursor: props.vertical ? 'ew-resize' : 'ns-resize',
-    [boderKey]: `1px solid ${props.palette?.lineColor}`
+    [boderKey]: `1px ${lineType} ${props.palette?.lineColor}`
   }
 })
 
@@ -133,10 +135,8 @@ const mousedown = async (e: MouseEvent) => {
   isdragle.value = true
   isLockLine.value = false
   emit('changeLineState', false)
-  // 初始化线条就在尺中间
   startValue.value = Math.round(props.startOther - props.thick / 2)
   await handleMouseDown(e)
-  // 完了要重置一下
   isdragle.value = false
 }
 
@@ -151,12 +151,6 @@ watch([() => props.lockLine], () => {
 .h-container,
 .v-container {
   position: absolute;
-  // .lines {
-  //   pointer-events: none;
-  // }
-  // &:hover .lines {
-  //   pointer-events: auto;
-  // }
   .indicator {
     z-index: 4; // 比尺子高
     position: absolute;

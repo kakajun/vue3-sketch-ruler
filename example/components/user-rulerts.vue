@@ -72,12 +72,12 @@
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive, onMounted } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
-const rectWidth = ref(1600)
-const rectHeight = ref(800)
+const rectWidth = ref(1470)
+const rectHeight = ref(872)
 // const canvasWidth = ref(2800)
 // const canvasHeight = ref(1800)
-const canvasWidth = ref(1000)
-const canvasHeight = ref(500)
+const canvasWidth = ref(1920)
+const canvasHeight = ref(1080)
 // const canvasWidth = ref(1000)
 // const canvasHeight =ref( 500)
 // const rectWidth =ref( 800)
@@ -159,7 +159,6 @@ const cpuPalette = computed(() => {
   return state.isBlack
     ? {
         bgColor: 'transparent',
-        backgroundSize: '15px 15px, 15px 15px',
         hoverBg: '#fff',
         hoverColor: '#000',
         longfgColor: '#BABBBC', // ruler longer mark color

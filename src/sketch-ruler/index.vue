@@ -138,7 +138,6 @@ const cornerStyle = computed(() => {
 const canvasStyle = computed(() => {
   return {
     background: paletteCpu.value.bgColor,
-    backgroundSize: paletteCpu.value.backgroundSize,
     width: props.width + 'px',
     height: props.height + 'px'
   }
