@@ -7,21 +7,7 @@ export interface PaletteType {
   lineColor?: string
   borderColor?: string
   cornerActiveColor?: string
-  menu?: MenuType
 }
-
-export interface MenuType {
-  bgColor?: string
-  dividerColor?: string
-  listItem?: {
-    textColor?: string
-    hoverTextColor?: string
-    disabledTextColor?: string
-    bgColor?: string
-    hoverBgColor?: string
-  }
-}
-
 export interface ShadowType {
   x: number
   y: number

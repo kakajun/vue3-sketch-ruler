@@ -10,7 +10,10 @@
       <button class="mr10 font18" @click="changeTheme">主题切换</button>
       <button class="mr10 font18" @click.stop="resetMethod">还原</button>
       <button class="mr10 font18" @click.stop="zoomOutMethod">缩小</button>
-
+      <span>禁止缩放</span>
+      <input type="checkbox" class="switch" @change="changeScale" />
+      <span>禁止移动</span>
+      <input type="checkbox" class="switch" @change="changeMove" />
       <input
         class="mr10 font18"
         :value="state.scale"
@@ -84,10 +87,10 @@ const rectWidth = ref(1470)
 const rectHeight = ref(872)
 // const canvasWidth = ref(2800)
 // const canvasHeight = ref(1800)
-const canvasWidth = ref(1920)
-const canvasHeight = ref(1080)
-// const canvasWidth = ref(1000)
-// const canvasHeight =ref( 500)
+// const canvasWidth = ref(1920)
+// const canvasHeight = ref(1080)
+const canvasWidth = ref(1000)
+const canvasHeight = ref(500)
 // const rectWidth =ref( 800)
 // const rectHeight =ref( 400)
 // const canvasWidth =ref( 530)
@@ -97,9 +100,18 @@ const windowScale = ref(1)
 const sketchruleRef = ref()
 const showRuler = ref(true)
 // 更多配置,参见 https://github.com/timmywil/panzoom
-const panzoomOption = ref({
+const panzoomOption = reactive({
   maxScale: 2,
-  minScale: 0.5
+  minScale: 0.5,
+  // startX: 0,
+  // startY: 0,
+  disablePan: false,
+  disableZoom: false,
+  // contain: 'inside',
+  handleStartEvent: (event) => {
+    event.preventDefault()
+    console.log('handleStartEvent', event)
+  }
 })
 
 // setTimeout(() => {
@@ -149,8 +161,8 @@ const state = reactive({
   scale: 1,
   isBlack: false,
   lines: {
-    h: [0, 200],
-    v: [0, 250]
+    h: [0, 250],
+    v: [0, 500]
   },
   thick: 20,
   isShowRuler: true, // 显示标尺
@@ -197,10 +209,6 @@ const canvasStyle = computed(() => {
 
 const scaleChange = (e: { target: { value: number } }) => {
   state.scale = e.target.value
-  // if (sketchruleRef.value) {
-  //   const panzoomInstance = sketchruleRef.value.panzoomInstance
-  //   panzoomInstance.zoom(state.scale)
-  // }
 }
 
 const handleCornerClick = (e: MouseEvent) => {
@@ -218,6 +226,13 @@ const snapsChange = (e: { target: { value: string } }) => {
 const snapsChangeV = (e: { target: { value: string } }) => {
   const arr = e.target.value.split(',')
   snapsObj.value.v = arr.map((item) => Number(item))
+}
+
+const changeScale = (e: { target: { checked: boolean } }) => {
+  panzoomOption.disableZoom = e.target.checked
+}
+const changeMove = (e: { target: { checked: boolean } }) => {
+  panzoomOption.disablePan = e.target.checked
 }
 </script>
 
@@ -286,5 +301,47 @@ body * {
   bottom: 20px;
   right: 40px;
   z-index: 999;
+}
+
+/* Switch开关样式 */
+/* 必须是input为 checkbox class 添加 switch 才能实现以下效果 */
+input[type='checkbox'].switch {
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+  width: 40px;
+  height: 20px;
+  background: #ccc;
+  border-radius: 10px;
+  transition:
+    border-color 0.3s,
+    background-color 0.3s;
+}
+
+input[type='checkbox'].switch::after {
+  content: '';
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0, 0, 2px, #999;
+  transition: 0.4s;
+  top: 2px;
+  position: absolute;
+  left: 2px;
+}
+
+input[type='checkbox'].switch:checked {
+  background: rgb(19, 206, 102);
+}
+/* 当input[type=checkbox]被选中时：伪元素显示下面样式 位置发生变化 */
+input[type='checkbox'].switch:checked::after {
+  content: '';
+  position: absolute;
+  left: 55%;
+  top: 2px;
 }
 </style>

@@ -1,13 +1,15 @@
 <template>
   <div class="sketch-ruler">
     <slot name="btn" :reset="reset" :zoomIn="zoomIn" :zoomOut="zoomOut"></slot>
-    <div class="canvasedit-parent" :style="canvasStyle" @wheel.prevent="">
+    <div class="canvasedit-parent" :style="rectStyle" @wheel.prevent="">
+      <!-- :style="canvasStyle" -->
       <div class="canvasedit">
         <slot></slot>
       </div>
     </div>
     <!-- 水平方向 -->
     <RulerWrapper
+      :style="{ marginLeft: thick + 'px', width: rectWidth + 'px' }"
       v-show="showRuler"
       :vertical="false"
       :width="width"
@@ -33,6 +35,7 @@
     />
     <!-- 竖直方向 -->
     <RulerWrapper
+      :style="{ marginTop: thick + 'px', top: 0, height: rectHeight + 'px' }"
       v-show="showRuler"
       :vertical="true"
       :width="thick"
@@ -66,7 +69,7 @@ import { eye64, closeEye64 } from './cornerImg64'
 import { computed, ref, watch, onMounted } from 'vue'
 import { sketchRulerProps } from '../index-types'
 import Panzoom, { PanzoomObject } from 'simple-panzoom'
-
+import { merge } from '../canvas-ruler/utils'
 const props = defineProps(sketchRulerProps)
 
 const emit = defineEmits(['onCornerClick', 'update:scale', 'zoomchange', 'update:lockLine'])
@@ -82,18 +85,6 @@ const panzoomInstance = ref<PanzoomObject | null>(null)
 
 // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
 const paletteCpu = computed(() => {
-  function merge(obj: { [key: string]: any }, o: { [key: string]: any }) {
-    Object.keys(obj).forEach((key) => {
-      if (key && obj.hasOwnProperty(key)) {
-        if (typeof o[key] === 'object') {
-          obj[key] = merge(obj[key], o[key])
-        } else if (o.hasOwnProperty(key)) {
-          obj[key] = o[key]
-        }
-      }
-    })
-    return obj
-  }
   const finalObj = merge(
     {
       bgColor: '#f6f7f9', // ruler bg color
@@ -106,18 +97,7 @@ const paletteCpu = computed(() => {
       hoverBg: '#000',
       hoverColor: '#fff',
       borderColor: '#eeeeef',
-      cornerActiveColor: 'rgb(235, 86, 72, 0.6)',
-      menu: {
-        bgColor: '#fff',
-        dividerColor: '#DBDBDB',
-        listItem: {
-          textColor: '#415058',
-          hoverTextColor: '#298DF8',
-          disabledTextColor: 'rgba(65, 80, 88, 0.4)',
-          bgColor: '#fff',
-          hoverBgColor: '#F2F2F2'
-        }
-      }
+      cornerActiveColor: 'rgb(235, 86, 72, 0.6)'
     },
     props.palette || {}
   )
@@ -135,13 +115,28 @@ const cornerStyle = computed(() => {
     borderBottom: `1px solid ${paletteCpu.value.borderColor}`
   }
 })
-const canvasStyle = computed(() => {
+const rectStyle = computed(() => {
   return {
     background: paletteCpu.value.bgColor,
-    width: props.width + 'px',
-    height: props.height + 'px'
+    width: rectWidth.value + 'px',
+    height: rectHeight.value + 'px'
   }
 })
+// const canvasStyle = computed(() => {
+//   return {
+//     width: props.canvasWidth + 'px',
+//     height: props.canvasHeight + 'px'
+//   }
+// })
+
+const rectWidth = computed(() => {
+  return props.width - props.thick
+})
+
+const rectHeight = computed(() => {
+  return props.height - props.thick
+})
+
 onMounted(() => {
   initPanzoom()
   if (!props.selfHandle) {
@@ -170,20 +165,16 @@ onMounted(() => {
 const getPanOptions = (scale: number) => {
   return {
     noBind: true,
-    //disablePan: true,
-    //disableZoom: true,
-    startScale: scale,
+    // startScale: scale,
     cursor: 'default',
     startX: zoomStartX.value,
     startY: zoomStartY.value,
-    // contain: 'inside',
     smoothScroll: true,
     ...props.panzoomOption
   }
 }
 
 const initPanzoom = () => {
-  // document: https://github.com/timmywil/panzoom
   elem.value = document.querySelector('.canvasedit')
   if (elem.value) {
     let scale = props.scale
@@ -201,8 +192,8 @@ const initPanzoom = () => {
         if (dimsOut) {
           emit('update:scale', scale)
           ownScale.value = scale
-          const left = (dimsOut.parent.left - dimsOut.elem.left + props.thick) / scale
-          const top = (dimsOut.parent.top - dimsOut.elem.top + props.thick) / scale
+          const left = (dimsOut.parent.left - dimsOut.elem.left) / scale
+          const top = (dimsOut.parent.top - dimsOut.elem.top) / scale
           startX.value = left
           emit('zoomchange', e.detail)
           startY.value = top
@@ -212,12 +203,17 @@ const initPanzoom = () => {
   }
 }
 
+/**
+ * @desc: 居中算法
+ */
 const calculateTransform = () => {
-  const paading = Math.min(props.width, props.height) * props.paddingRatio
-  const scaleX = (props.width - paading) / props.canvasWidth
-  const scaleY = (props.height - paading) / props.canvasHeight
+  const rateX = rectWidth.value / props.canvasWidth
+  const rateY = rectHeight.value / props.canvasHeight
+  const len = Math.min(rateX, rateY) == rateX ? rectWidth.value : rectHeight.value
+  const paading = len * props.paddingRatio
+  const scaleX = (rectWidth.value - paading) / props.canvasWidth
+  const scaleY = (rectHeight.value - paading) / props.canvasHeight
   const scale = Math.min(scaleX, scaleY)
-
   if (scale == scaleX) {
     zoomStartX.value = (props.canvasWidth / 2) * (scale - 1) + paading / 2
     // 多向右偏移一半
@@ -228,6 +224,10 @@ const calculateTransform = () => {
       (props.canvasWidth / 2) * (scale - 1) + (props.width - props.canvasWidth * scale) / 2
     zoomStartY.value = (props.canvasHeight / 2) * (scale - 1) + paading / 2
   }
+  return scale
+  // zoomStartX.value = rectWidth.value / 2 - props.canvasWidth / 2
+  // zoomStartY.value = rectHeight.value / 2 - props.canvasHeight / 2
+  // }
   return scale
 }
 
@@ -258,6 +258,9 @@ const onCornerClick = () => {
 const changeLineState = (val: boolean) => {
   emit('update:lockLine', val)
 }
+const thickness = computed(() => {
+  return props.thick + 'px'
+})
 watch([() => props.isShowReferLine], () => {
   showReferLine.value = props.isShowReferLine
 })
@@ -274,9 +277,13 @@ watch([() => props.scale], () => {
   panzoomInstance.value?.zoom(props.scale)
 })
 
-watch([() => props.panzoomOption], () => {
-  setOtions()
-})
+watch(
+  () => props.panzoomOption,
+  (newVal) => {
+    setOtions()
+  },
+  { deep: true }
+)
 
 defineExpose({
   initPanzoom,
@@ -298,6 +305,11 @@ defineExpose({
   font-size: 12px;
   span {
     line-height: 1;
+  }
+  .canvasedit-parent {
+    position: absolute;
+    left: v-bind(thickness);
+    top: v-bind(thickness);
   }
   .corner {
     position: absolute;

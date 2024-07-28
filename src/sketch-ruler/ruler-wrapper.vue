@@ -1,5 +1,5 @@
 <template>
-  <div :class="rwClassName" :style="rwStyle">
+  <div :class="rwClassName">
     <CanvasRuler
       :vertical="vertical"
       :style="{ cursor: vertical ? 'ew-resize' : 'ns-resize' }"
@@ -98,19 +98,6 @@ const emit = defineEmits(['changeLineState'])
 
 const cpuLines = computed(() => {
   return props.vertical ? props.lines.h : props.lines.v
-})
-const rwStyle = computed(() => {
-  const hContainer = {
-    width: `calc(100% - ${props.thick}px)`,
-    height: `${props.thick! + 1}px`,
-    left: `${props.thick}` + 'px'
-  }
-  const vContainer = {
-    width: `${props.thick && props.thick + 1}px`,
-    height: `calc(100% - ${props.thick}px)`,
-    top: `${props.thick}` + 'px'
-  }
-  return props.vertical ? vContainer : hContainer
 })
 
 const indicatorStyle = computed(() => {
