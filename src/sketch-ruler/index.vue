@@ -248,18 +248,12 @@ watch([() => props.isShowReferLine], () => {
 watch(
   [() => props.canvasWidth, () => props.canvasHeight, () => props.width, () => props.height],
   () => {
-    // 画框大小改变时，重新初始化panzoom以及scale
     initPanzoom()
   }
 )
-// 监听容易造成死循环
-// watch([() => props.scale], () => {
-//   // panzoomInstance.value?.zoom(props.scale)
-// })
-
 watch(
   () => props.panzoomOption,
-  (newVal) => {
+  () => {
     setOtions()
   },
   { deep: true }
