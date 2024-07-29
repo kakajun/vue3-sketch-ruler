@@ -101,8 +101,8 @@ const sketchruleRef = ref()
 const showRuler = ref(true)
 // 更多配置,参见 https://github.com/timmywil/panzoom
 const panzoomOption = reactive({
-  maxScale: 2,
-  minScale: 0.5,
+  maxScale: 3,
+  minScale: 0.3,
   // startX: 0,
   // startY: 0,
   disablePan: false,
@@ -208,7 +208,11 @@ const canvasStyle = computed(() => {
 })
 
 const scaleChange = (e: { target: { value: number } }) => {
-  state.scale = e.target.value
+  state.scale = e.target.value * 1
+  if (sketchruleRef.value) {
+    const panzoomInstance = sketchruleRef.value.panzoomInstance
+    panzoomInstance.zoom(state.scale)
+  }
 }
 
 const handleCornerClick = (e: MouseEvent) => {

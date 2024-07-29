@@ -272,10 +272,10 @@ watch(
     initPanzoom()
   }
 )
-
-watch([() => props.scale], () => {
-  panzoomInstance.value?.zoom(props.scale)
-})
+// 监听容易造成死循环
+// watch([() => props.scale], () => {
+//   // panzoomInstance.value?.zoom(props.scale)
+// })
 
 watch(
   () => props.panzoomOption,
