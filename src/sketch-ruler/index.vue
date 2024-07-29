@@ -180,11 +180,7 @@ const initPanzoom = () => {
     let scale = props.scale
     if (props.autoCenter) {
       scale = calculateTransform()
-    } else {
-      zoomStartX.value = props.zoomStartX
-      zoomStartY.value = props.zoomStartY
     }
-
     panzoomInstance.value = Panzoom(elem.value, getPanOptions(scale))
     if (elem.value) {
       elem.value.addEventListener('panzoomchange', (e: any) => {

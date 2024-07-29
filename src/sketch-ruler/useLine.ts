@@ -24,7 +24,7 @@ export default function useLine(props: any, vertical: boolean) {
         let nextPos = delta + initialValue
         let guidePos = nextPos
         const snaps = vertical ? props.snapsObj.h : props.snapsObj.v
-        const guideSnaps = snaps!.slice().sort((a, b) => {
+        const guideSnaps = snaps!.slice().sort((a: number, b: number) => {
           return Math.abs(guidePos - a) - Math.abs(guidePos - b)
         })
         if (guideSnaps.length && Math.abs(guideSnaps[0] - nextPos) < props.snapThreshold!) {
@@ -53,7 +53,7 @@ export default function useLine(props: any, vertical: boolean) {
    * @param {*} index  选的哪条线
    */
   const handleLineRelease = (value: number, index?: number) => {
-    const linesArrs = vertical ? props.lines.h : props.lines.v
+    const linesArrs = vertical ? props.lines?.h : props.lines?.v
     const isOutOfRange = checkBoundary(value)
     if (isOutOfRange) {
       if (typeof index === 'number') {

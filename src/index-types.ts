@@ -42,14 +42,6 @@ export const sketchRulerProps = {
     default: 16
   },
   palette: Object as PropType<PaletteType>,
-  zoomStartX: {
-    type: Number,
-    default: 0
-  },
-  zoomStartY: {
-    type: Number,
-    default: 0
-  },
   width: {
     type: Number,
     default: 1400

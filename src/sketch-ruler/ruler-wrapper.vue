@@ -97,7 +97,7 @@ const rwClassName = computed(() => {
 const emit = defineEmits(['changeLineState'])
 
 const cpuLines = computed(() => {
-  return props.vertical ? props.lines.h : props.lines.v
+  return props.vertical ? props.lines?.h : props.lines?.v
 })
 
 const indicatorStyle = computed(() => {
@@ -118,13 +118,15 @@ const indicatorStyle = computed(() => {
  * @description: 指示器按下时
  * @param {*} e
  */
-const mousedown = async (e: MouseEvent) => {
+const mousedown = (e: MouseEvent) => {
   isdragle.value = true
   isLockLine.value = false
   emit('changeLineState', false)
   startValue.value = Math.round(props.startOther - props.thick / 2)
-  await handleMouseDown(e)
-  isdragle.value = false
+  setTimeout(async () => {
+    await handleMouseDown(e)
+    isdragle.value = false
+  })
 }
 
 watch([() => props.lockLine], () => {

@@ -103,8 +103,8 @@ const showRuler = ref(true)
 const panzoomOption = reactive({
   maxScale: 3,
   minScale: 0.3,
-  // startX: 0,
-  // startY: 0,
+  // startX: 0,   // 画布距离左边框距离, 如果想自动,那么不要传
+  // startY: 0,   // 画布距离顶边框距离, 如果想自动,那么不要传
   disablePan: false,
   disableZoom: false,
   // contain: 'inside',
