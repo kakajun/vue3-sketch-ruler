@@ -203,27 +203,11 @@ const initPanzoom = () => {
  * @desc: 居中算法
  */
 const calculateTransform = () => {
-  const rateX = rectWidth.value / props.canvasWidth
-  const rateY = rectHeight.value / props.canvasHeight
-  const len = Math.min(rateX, rateY) == rateX ? rectWidth.value : rectHeight.value
-  const paading = len * props.paddingRatio
-  const scaleX = (rectWidth.value - paading) / props.canvasWidth
-  const scaleY = (rectHeight.value - paading) / props.canvasHeight
+  const scaleX = (rectWidth.value * (1 - props.paddingRatio)) / props.canvasWidth
+  const scaleY = (rectHeight.value * (1 - props.paddingRatio)) / props.canvasHeight
   const scale = Math.min(scaleX, scaleY)
-  if (scale == scaleX) {
-    zoomStartX.value = (props.canvasWidth / 2) * (scale - 1) + paading / 2
-    // 多向右偏移一半
-    zoomStartY.value =
-      (props.canvasHeight / 2) * (scale - 1) + (props.height - props.canvasHeight * scale) / 2
-  } else {
-    zoomStartX.value =
-      (props.canvasWidth / 2) * (scale - 1) + (props.width - props.canvasWidth * scale) / 2
-    zoomStartY.value = (props.canvasHeight / 2) * (scale - 1) + paading / 2
-  }
-  return scale
-  // zoomStartX.value = rectWidth.value / 2 - props.canvasWidth / 2
-  // zoomStartY.value = rectHeight.value / 2 - props.canvasHeight / 2
-  // }
+  zoomStartX.value = rectWidth.value / 2 - props.canvasWidth / 2
+  zoomStartY.value = rectHeight.value / 2 - props.canvasHeight / 2
   return scale
 }
 
