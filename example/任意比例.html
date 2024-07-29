@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas Scaling Example</title>
+    <style>
+      #canvas-container {
+        top: 100px;
+        left: 100px;
+        position: relative;
+        border: 1px solid #000;
+        overflow: hidden;
+      }
+
+      #myCanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: red;
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <button class="mr10 font18" onclick="resetMethod()">还原</button>
+    <button class="mr10 font18" onclick="zoomInMethod()">放大</button>
+    <button class="mr10 font18" onclick="zoomOutMethod()">缩小</button>
+    <div id="scale-text"></div>
+    <div id="canvas-container">
+      <div id="myCanvas"></div>
+    </div>
+
+    <script>
+      const props = {
+        canvasWidth: 200, // 画布宽度
+        canvasHeight: 10, // 画布高度
+        width: 800, // 容器宽度
+        height: 300, // 容器高度
+        paddingRatio: 0.2 // 内边距比例
+      }
+      const zoomStartX = { value: 0 }
+      const zoomStartY = { value: 0 }
+      const container = document.getElementById('canvas-container')
+      container.style.width = props.width + 'px'
+      container.style.height = props.height + 'px'
+
+      let scale = 1
+      const calculateTransform = () => {
+        const scaleX = (props.width * (1 - props.paddingRatio)) / props.canvasWidth
+        const scaleY = (props.height * (1 - props.paddingRatio)) / props.canvasHeight
+        const scale = Math.min(scaleX, scaleY)
+        zoomStartX.value = props.width / 2 - props.canvasWidth / 2
+        zoomStartY.value = props.height / 2 - props.canvasHeight / 2
+        return scale
+      }
+      scale = calculateTransform()
+      const canvas = document.getElementById('myCanvas')
+      setScale(scale)
+      canvas.style.width = props.canvasWidth + 'px'
+      canvas.style.height = props.canvasHeight + 'px'
+      canvas.style.transformOrigin = '50% 50%'
+
+      function setScale(scale) {
+        canvas.style.transform = `translate(${zoomStartX.value}px, ${zoomStartY.value}px) scale(${scale})`
+        document.getElementById('scale-text').innerText = `当前缩放比例: ${scale}`
+      }
+
+      function resetMethod() {
+        scale = calculateTransform()
+        setScale(scale.toFixed(2))
+      }
+      function zoomInMethod() {
+        scale = scale + 0.2
+        setScale(scale.toFixed(2))
+      }
+      function zoomOutMethod() {
+        scale = scale - 0.2
+        setScale(scale.toFixed(2))
+      }
+    </script>
+  </body>
+</html>
