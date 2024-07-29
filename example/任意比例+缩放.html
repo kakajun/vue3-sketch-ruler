@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas Scaling Example</title>
+    <style>
+      #canvas-container {
+        top: 100px;
+        left: 100px;
+        position: relative;
+        border: 1px solid #000;
+        overflow: hidden;
+      }
+
+      #myCanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: red;
+        display: block;
+        overflow: hidden;
+        cursor: move; /* 添加鼠标指针样式 */
+      }
+      img {
+        touch-action: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <button class="mr10 font18" onclick="resetMethod()">还原</button>
+    <button class="mr10 font18" onclick="zoomInMethod()">放大</button>
+    <button class="mr10 font18" onclick="zoomOutMethod()">缩小</button>
+    <div id="scale-text"></div>
+    <div id="canvas-container">
+      <div id="myCanvas">
+        <!-- <img
+          width="100%"
+          src="https://t7.baidu.com/it/u=1653814446,2847580380&fm=193&f=GIF"
+          alt=""
+        /> -->
+      </div>
+    </div>
+    <script>
+      const useZoom = (el, translateData = { x: 0, y: 0 }, scale, callback = () => {}) => {
+        el.style.transformOrigin = '0 0'
+        const { width, height } = el.getBoundingClientRect()
+        /** 重置数据, 并触发回调更新元素 */
+        const reset = () => {
+          scale = 1
+          translateData = { x: 0, y: 0 }
+          callback(translateData, scale)
+        }
+        const wheelZoom = (event) => {
+          let _scale = scale
+          _scale += event.deltaY > 0 ? -0.09 : 0.1
+          if (_scale < 0.3) return
+          let _translateData = distanceMovedZoom(event, scale, _scale)
+          scale = _scale
+
+          // 需要移动的距离 = 已经移动的距离 + 需要再次移动的距离
+          translateData.x += _translateData.x
+          translateData.y += _translateData.y
+
+          callback(translateData, scale)
+        }
+
+        /** 计算每次需要移动的距离 */
+        const distanceMovedZoom = ({ offsetX, offsetY }, oldScale, newScale) => {
+          const newWidth = width * newScale
+          const newHeight = height * newScale
+          const diffWidth = width * oldScale - newWidth
+          const diffHeight = height * oldScale - newHeight
+          // 鼠标在图片上坐标比例, offsetX 是取原始大小的值, 所用要除 widht
+          const xRatio = offsetX / width
+          const yRatio = offsetY / height
+
+          // 需要再次移动的距离 x = (新的宽度 - 旧的宽度) * 鼠标在旧的宽度的比例
+          return { x: diffWidth * xRatio, y: diffHeight * yRatio }
+        }
+
+        return {
+          wheelZoom,
+          reset
+        }
+      }
+    </script>
+    <script>
+      const props = {
+        canvasWidth: 1000, // 画布宽度
+        canvasHeight: 300, // 画布高度
+        width: 800, // 容器宽度
+        height: 400, // 容器高度
+        paddingRatio: 0.2 // 内边距比例
+      }
+      const zoomStartX = { value: 0 }
+      const zoomStartY = { value: 0 }
+      const container = document.getElementById('canvas-container')
+      container.style.width = props.width + 'px'
+      container.style.height = props.height + 'px'
+
+      let scale = 1
+      const calculateTransform = () => {
+        const scaleX = (props.width * (1 - props.paddingRatio)) / props.canvasWidth
+        const scaleY = (props.height * (1 - props.paddingRatio)) / props.canvasHeight
+        const scale = Math.min(scaleX, scaleY)
+        zoomStartX.value = props.width / 2 - props.canvasWidth / 2
+        zoomStartY.value = props.height / 2 - props.canvasHeight / 2
+        return scale
+      }
+
+      scale = calculateTransform()
+
+      const canvas = document.getElementById('myCanvas')
+      setScale(scale)
+      canvas.style.width = props.canvasWidth + 'px'
+      canvas.style.height = props.canvasHeight + 'px'
+
+      function setScale(scale) {
+        canvas.style.transform = `translate(${zoomStartX.value}px, ${zoomStartY.value}px) scale(${scale})`
+        document.getElementById('scale-text').innerText = `当前缩放比例: ${scale}`
+      }
+
+      function resetMethod() {
+        scale = calculateTransform()
+        setScale(scale.toFixed(2))
+      }
+      function zoomInMethod() {
+        scale = scale + 0.2
+        setScale(scale.toFixed(2))
+      }
+      function zoomOutMethod() {
+        scale = scale - 0.2
+        setScale(scale.toFixed(2))
+      }
+
+      // 添加拖拽功能
+      let isDragging = false
+      let startX, startY, currentX, currentY
+
+      canvas.addEventListener('mousedown', (e) => {
+        isDragging = true
+        // 记录鼠标按下时的初始位置
+        startX = e.clientX - parseInt(canvas.style.left || '0', 10)
+        startY = e.clientY - parseInt(canvas.style.top || '0', 10)
+
+        document.addEventListener('mousemove', onMouseMove)
+        document.addEventListener('mouseup', onMouseUp)
+      })
+
+      function onMouseMove(e) {
+        // 阻止默认
+        e.preventDefault()
+        if (!isDragging) return
+        // 使用初始位置和当前鼠标位置来更新div的位置
+        canvas.style.left = `${e.clientX - startX}px`
+        canvas.style.top = `${e.clientY - startY}px`
+      }
+
+      function onMouseUp() {
+        isDragging = false
+        document.removeEventListener('mousemove', onMouseMove)
+        document.removeEventListener('mouseup', onMouseUp)
+      }
+
+      const { wheelZoom } = useZoom(
+        canvas,
+        { x: zoomStartX.value, y: zoomStartY.value },
+        scale,
+        (transform, scale) => {
+          zoomStartX.value = transform.x
+          zoomStartY.value = transform.y
+          setScale(scale)
+        }
+      )
+
+      canvas.addEventListener('wheel', wheelZoom)
+    </script>
+  </body>
+</html>
