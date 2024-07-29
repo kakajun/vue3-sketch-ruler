@@ -97,12 +97,9 @@ const drawRuler = (ratio: number) => {
     )
   }
 }
-watch(
-  () => props.start,
-  () => {
-    drawRuler(ratioValue)
-  }
-)
+watch([() => props.start, () => props.selectStart, () => props.selectLength], () => {
+  drawRuler(ratioValue)
+})
 watch([() => props.width, () => props.height], () => {
   updateCanvasContext(ratioValue)
   drawRuler(ratioValue)

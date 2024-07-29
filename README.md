@@ -79,11 +79,11 @@ import 'vue3-sketch-ruler/lib/style.css'
 - [x] 初始化自动居中
 - [x] 提供右下角按钮缩放,还原所需API
 - [x] 刻度吸附效果
+- [x] 选中阴影阴影响应
 
 ## 未来支持功能
 
 - [] 缩放导航功能
-- [] 阴影响应功能
 - [] 加入单元测试功能
 
 这是个开源业余做的功能，有兴趣加强该插件的小伙伴欢迎加入，也欢迎大家提pr或者issue
@@ -133,29 +133,29 @@ const canvasHeight = 500
 
 ### 属性
 
-| 属性名称        | 描述                     | 类型           | 默认值                           |
-| --------------- | ------------------------ | -------------- | -------------------------------- |
-| scale           | 初始化标尺的缩放及画布   | Number         | 1                                |
-| rate            | 初始化标尺的缩放         | Number         | 1                                |
-| thick           | 标尺的厚度               | Number         | 16                               |
-| width           | 放置标尺窗口的宽度       | Number         | 1400                             |
-| height          | 放置标尺窗口的高度       | Number         | 900                              |
-| paddingRatio    | 画布与外框间隔           | Number         | 20% (基于外框宽高最小长度)       |
-| autoCenter      | 自动居中对齐             | Boolean        | true (设为false,那么需要在panzoomOption中传入startX,startY)|
-| eyeIcon         | 睁眼图标                 | String         | -                                |
-| closeEyeIcon    | 闭眼图标                 | String         | -                                |
-| canvasWidth     | 画布宽                   | Number         | 1000                             |
-| canvasHeight    | 画布高                   | Number         | 700                              |
-| isShowReferLine | 是否显示标线             | Boolean        | true                             |
-| showRuler       | 是否显示尺规             | Boolean        | true                             |
-| lines           | 初始化水平标尺上的参考线 | object<Array>  | {h:[],v:[]}                      |
-| snapsObj        | 吸附刻度集合             | object<Array>  | {h:[],v:[]}                      |
-| snapThreshold   | 吸附距离                 | Number         | 5                                |
-| shadow          | 阴影配置                 | object<Number> | {x: 0,y: 0, width: 0, height: 0} |
-| gridRatio       | 刻度分散比例             | Number         | 1                                |
-| selfHandle      | 自己处理监听移动和缩放   | Boolean        | false                            |
-| panzoomOption   | panzoom相关的扩展参数    | object         | -                                |
-| palette         | 标尺的样式配置参数       | Palette        | 如下                             |
+| 属性名称 | 描述 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| scale | 初始化标尺的缩放及画布 | Number | 1 |
+| rate | 初始化标尺的缩放 | Number | 1 |
+| thick | 标尺的厚度 | Number | 16 |
+| width | 放置标尺窗口的宽度 | Number | 1400 |
+| height | 放置标尺窗口的高度 | Number | 900 |
+| paddingRatio | 画布与外框间隔 | Number | 20% (基于外框宽高最小长度) |
+| autoCenter | 自动居中对齐 | Boolean | true (设为false,那么需要在panzoomOption中传入startX,startY) |
+| eyeIcon | 睁眼图标 | String | - |
+| closeEyeIcon | 闭眼图标 | String | - |
+| canvasWidth | 画布宽 | Number | 1000 |
+| canvasHeight | 画布高 | Number | 700 |
+| isShowReferLine | 是否显示标线 | Boolean | true |
+| showRuler | 是否显示尺规 | Boolean | true |
+| lines | 初始化水平标尺上的参考线 | object<Array> | {h:[],v:[]} |
+| snapsObj | 吸附刻度集合 | object<Array> | {h:[],v:[]} |
+| snapThreshold | 吸附距离 | Number | 5 |
+| shadow | 阴影配置 | object<Number> | {x: 0,y: 0, width: 0, height: 0} |
+| gridRatio | 刻度分散比例 | Number | 1 |
+| selfHandle | 自己处理监听移动和缩放 | Boolean | false |
+| panzoomOption | panzoom相关的扩展参数 | object | - |
+| palette | 标尺的样式配置参数 | Palette | 如下 |
 
 palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',}
 

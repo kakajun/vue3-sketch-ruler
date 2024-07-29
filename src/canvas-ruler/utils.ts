@@ -37,22 +37,22 @@ export const drawCavaseRuler = (
   ctx.fillStyle = bgColor
   ctx.fillRect(0, 0, width, height)
 
-  // 2. 画阴影
-  if (selectLength) {
-    const shadowX = (selectStart - start) * scale // 阴影起点坐标
-    const shadowWidth = selectLength * scale // 阴影宽度
-    ctx.fillStyle = shadowColor
-    isHorizontal
-      ? ctx.fillRect(shadowX, 0, shadowWidth, (height * 3) / 8)
-      : ctx.fillRect(0, shadowX, (width * 3) / 8, shadowWidth)
-  }
   const gridSize = getGridSize(scale) * gridRatio // 每小格表示的宽度
   const gridSize10 = gridSize * 10 // 每大格表示的宽度
   const gridPixel10 = gridSize10 * scale
   const startValue10 = Math.floor(start / gridSize10) * gridSize10
   const offsetX10 = ((startValue10 - start) / gridSize10) * gridPixel10 // 长间隔起点刻度距离ctx原点(start)的px距离
   const endValue = start + Math.ceil((isHorizontal ? width : height) / scale) // 终点刻度
+  // 2. 画阴影
+  if (selectLength) {
+    const shadowX = (selectStart - start) * scale // 阴影起点坐标
+    const shadowWidth = selectLength * scale // 阴影宽度
+    ctx.fillStyle = shadowColor
 
+    isHorizontal
+      ? ctx.fillRect(shadowX, 0, shadowWidth, height)
+      : ctx.fillRect(0, shadowX, width, shadowWidth)
+  }
   // 3. 画刻度和文字(因为刻度遮住了阴影)
   ctx.beginPath()
   ctx.fillStyle = fontColor

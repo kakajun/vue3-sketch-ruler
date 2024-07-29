@@ -90,7 +90,7 @@ const paletteCpu = computed(() => {
       bgColor: '#f6f7f9', // ruler bg color
       longfgColor: '#BABBBC', // ruler longer mark color
       fontColor: '#7D8694', // ruler font color
-      shadowColor: '#E8E8E8', // ruler shadow color
+      shadowColor: '#e9f7fe', // ruler shadow color
       lineColor: '#EB5648',
       lineType: 'solid',
       lockLineColor: '#d4d7dc',
@@ -165,7 +165,7 @@ onMounted(() => {
 const getPanOptions = (scale: number) => {
   return {
     noBind: true,
-    // startScale: scale,
+    startScale: scale,
     cursor: 'default',
     startX: zoomStartX.value,
     startY: zoomStartY.value,

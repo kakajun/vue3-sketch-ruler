@@ -7,6 +7,7 @@
       <button class="mr10 font18" v-else @click="handleShow">显示规尺</button>
       <button class="mr10 font18" @click="showLineClick">辅助线开关</button>
       <button class="mr10 font18" @click="lockLine = true">锁定参考线</button>
+      <button class="mr10 font18" @click="changeShadow">模拟阴影切换</button>
       <button class="mr10 font18" @click="changeTheme">主题切换</button>
       <button class="mr10 font18" @click.stop="resetMethod">还原</button>
       <button class="mr10 font18" @click.stop="zoomOutMethod">缩小</button>
@@ -51,6 +52,7 @@
         :height="rectHeight"
         :palette="cpuPalette"
         :snapsObj="snapsObj"
+        :shadow="state.shadow"
         :canvasWidth="canvasWidth"
         :canvasHeight="canvasHeight"
         :panzoomOption="panzoomOption"
@@ -87,10 +89,10 @@ const rectWidth = ref(1470)
 const rectHeight = ref(872)
 // const canvasWidth = ref(2800)
 // const canvasHeight = ref(1800)
-// const canvasWidth = ref(1920)
-// const canvasHeight = ref(1080)
-const canvasWidth = ref(1000)
-const canvasHeight = ref(500)
+const canvasWidth = ref(1920)
+const canvasHeight = ref(1080)
+// const canvasWidth = ref(1000)
+// const canvasHeight = ref(500)
 // const rectWidth =ref( 800)
 // const rectHeight =ref( 400)
 // const canvasWidth =ref( 530)
@@ -165,6 +167,12 @@ const state = reactive({
     v: [0, 500]
   },
   thick: 20,
+  shadow: {
+    x: 0,
+    y: 0,
+    width: 300,
+    height: 300
+  },
   isShowRuler: true, // 显示标尺
   isShowReferLine: true // 显示参考线
 })
@@ -237,6 +245,11 @@ const changeScale = (e: { target: { checked: boolean } }) => {
 }
 const changeMove = (e: { target: { checked: boolean } }) => {
   panzoomOption.disablePan = e.target.checked
+}
+const changeShadow = () => {
+  // 模拟 x canvasWidth.value   y canvasHeight.value  范围内随机数据
+  state.shadow.x = Math.random() * canvasWidth.value
+  state.shadow.y = Math.random() * canvasHeight.value
 }
 </script>
 
