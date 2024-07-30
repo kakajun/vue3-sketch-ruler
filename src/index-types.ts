@@ -5,6 +5,8 @@ export interface PaletteType {
   fontColor?: string
   shadowColor?: string
   lineColor?: string
+  lineType?: string
+  lockLineColor?: string
   borderColor?: string
   cornerActiveColor?: string
 }

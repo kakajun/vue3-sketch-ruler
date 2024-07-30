@@ -20,7 +20,7 @@ import { debounce } from '../canvas-ruler/utils'
 interface Props {
   scale: number
   thick: number
-  palette: { lineColor?: string }
+  palette: object
   index: number
   start: number
   vertical: boolean
@@ -50,10 +50,10 @@ const offsetStyle = computed(() => {
 })
 
 const borderCursor = computed(() => {
-  const lineType = props.palette?.lineType
+  const lineType = props.palette.lineType
   const borderColor = props.lockLine
     ? props.palette?.lockLineColor
-    : props.palette?.lineColor ?? 'black'
+    : (props.palette?.lineColor ?? 'black')
   return {
     pointerEvents: props.lockLine || isInscale.value ? 'none' : 'auto',
     cursor:

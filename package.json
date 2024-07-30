@@ -36,6 +36,11 @@
     "*.{ts,tsx,js,vue}": "eslint --fix",
     "*.{vue,css,less}": "stylelint --fix"
   },
+  "husky": {
+    "hooks": {
+      "postcommit": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
+    }
+  },
   "dependencies": {
     "simple-panzoom": "^1.0.4"
   },
@@ -48,6 +53,10 @@
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/babel-plugin-jsx": "^1.2.2",
     "@vue/test-utils": "^2.4.6",
+    "canvas": "^2.11.2",
+    "compare-func": "^2.0.0",
+    "conventional-changelog": "^6.0.0",
+    "conventional-changelog-cli": "^5.0.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-define-config": "^2.1.0",
@@ -71,8 +80,8 @@
     "vite": "5.3.4",
     "vite-plugin-dts": "3.9.1",
     "vitest": "^2.0.3",
-    "vue-tsc": "^2.0.26",
-    "vue": "^3.4.33"
+    "vue": "^3.4.33",
+    "vue-tsc": "^2.0.26"
   },
   "keywords": [
     "vue",
