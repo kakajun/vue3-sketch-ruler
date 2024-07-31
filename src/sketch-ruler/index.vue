@@ -139,12 +139,14 @@ const rectHeight = computed(() => {
 
 onMounted(() => {
   initPanzoom()
-  if (!props.selfHandle) {
-    document.addEventListener('wheel', function (e) {
-      if (e.ctrlKey || e.metaKey) {
-        panzoomInstance.value?.zoomWithWheel(e)
-      }
-    })
+  if (!props.selfHandle && elem.value) {
+    const parent = elem.value.parentElement
+    parent &&
+      parent.addEventListener('wheel', function (e) {
+        if (e.ctrlKey || e.metaKey) {
+          panzoomInstance.value?.zoomWithWheel(e)
+        }
+      })
 
     // 让按下空格键才能移动画布
     document.addEventListener('keydown', function (e) {
