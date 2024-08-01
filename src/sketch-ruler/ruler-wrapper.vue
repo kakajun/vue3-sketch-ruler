@@ -135,7 +135,6 @@ watch([() => props.lockLine], () => {
 
 <style lang="scss">
 @import './mixins';
-
 .h-container,
 .v-container {
   position: absolute;
@@ -145,7 +144,6 @@ watch([() => props.lockLine], () => {
   }
 
   .line {
-    // pointer-events: auto;
     position: absolute;
   }
 

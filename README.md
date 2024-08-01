@@ -21,6 +21,7 @@
 
 插件应用范围: 适合作为低代码平台操作页面缩放工具,比如做图工具如, 大屏可视化, 做图工具图怪兽等,类似ps的缩放效果.
 
+
 ## 🌈 应用案例:
 
 <!-- [avue大屏可视化工具](https://data.avuejs.com/build/1) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v2/assets/dp.png) -->
@@ -185,6 +186,8 @@ const canvasHeight = 500
 | zoomchange    | 画布移动,缩放事件 | {dimsOut:{elem: {}, parent: {}},originalEvent:{},scale,x,y} |
 
 ### 使用说明
+1. 同时按Ctrl+鼠标滚轮缩放, 根据鼠标位置发生页面缩放
+2. 同时按空格+鼠标左键, 拖动画布
 
 有些需要自己定义监听移动和缩放，不想按空格移动, 或者不想Ctrl+weel 移动, 那么可以设置selfHandle为true，然后通过ref获取到组件实例，然后通过实例调用组件的方法, 自定义监听按键
 
