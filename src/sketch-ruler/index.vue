@@ -135,7 +135,7 @@ onMounted(() => {
   if (!props.selfHandle && elem.value) {
     const parent = elem.value.parentElement
     parent &&
-      parent.addEventListener('wheel', function (e) {
+      parent.addEventListener('wheel', function (e: WheelEvent) {
         if (e.ctrlKey || e.metaKey) {
           panzoomInstance.value?.zoomWithWheel(e)
         }
@@ -149,10 +149,8 @@ onMounted(() => {
       }
     })
 
-    document.addEventListener('keyup', function (e) {
-      if (e.key === ' ') {
-        panzoomInstance.value?.destroy()
-      }
+    document.addEventListener('keyup', function () {
+      panzoomInstance.value?.destroy()
     })
   }
 })
