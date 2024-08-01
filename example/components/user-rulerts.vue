@@ -19,7 +19,6 @@
         class="mr10 font18"
         :value="state.scale"
         @input="scaleChange"
-        className="range-input"
         type="range"
         min="0.3"
         max="3"
@@ -68,9 +67,9 @@
         </template>
         <template #btn="{ reset, zoomIn, zoomOut }">
           <div class="btns">
-            <button class="btn reset-btn" @click.stop="reset">还原</button>
-            <button class="btn zoomin-btn" @click.stop="zoomIn">放大</button>
-            <button class="btn zoomout-btn" @click.stop="zoomOut">缩小</button>
+            <button @click.stop="reset">还原</button>
+            <button @click.stop="zoomIn">放大</button>
+            <button @click.stop="zoomOut">缩小</button>
           </div>
         </template>
       </SketchRule>
@@ -193,8 +192,7 @@ const cpuPalette = computed(() => {
         fontColor: '#DEDEDE', // ruler font color
         shadowColor: '#525252', // ruler shadow color
         lineColor: '#51d6a9',
-        borderColor: '#B5B5B5',
-        cornerActiveColor: '#fff'
+        borderColor: '#B5B5B5'
       }
     : {
         bgColor: 'transparent',
@@ -267,30 +265,13 @@ const changeShadow = () => {
   justify-content: center;
   width: 100%;
   font-size: 20px;
-  .scale {
-    margin-right: 10px;
-  }
 }
 
-.right {
-  font-size: 20px;
-}
 .font18 {
   font-size: 18px;
 }
 .mr10 {
   margin-right: 10px;
-}
-body {
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-  font-family: sans-serif;
-}
-
-body * {
-  box-sizing: border-box;
-  user-select: none;
 }
 
 .wrapper {

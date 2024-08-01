@@ -7,9 +7,24 @@ export interface PaletteType {
   lineColor?: string
   lineType?: string
   lockLineColor?: string
+  hoverColor?: string
+  hoverBg?: string
   borderColor?: string
-  cornerActiveColor?: string
 }
+
+export interface FinalPaletteType {
+  bgColor: string
+  longfgColor: string
+  fontColor: string
+  shadowColor: string
+  lineColor: string
+  lineType: string
+  lockLineColor: string
+  hoverColor: string
+  hoverBg: string
+  borderColor: string
+}
+
 export interface ShadowType {
   x: number
   y: number
@@ -117,5 +132,8 @@ export const sketchRulerProps = {
     type: Boolean,
     default: false
   },
-  panzoomOption: Object
+  panzoomOption: {
+    type: Object,
+    default: () => {}
+  }
 }

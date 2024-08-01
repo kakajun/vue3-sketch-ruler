@@ -24,7 +24,6 @@
       :snapsObj="snapsObj"
       :select-length="shadow.width"
       :scale="ownScale"
-      :parentRect="parentRect"
       :palette="paletteCpu"
       :canvasWidth="canvasWidth"
       :canvasHeight="canvasHeight"
@@ -50,7 +49,6 @@
       :snapThreshold="snapThreshold"
       :snapsObj="snapsObj"
       :scale="ownScale"
-      :parentRect="parentRect"
       :palette="paletteCpu"
       :canvasWidth="canvasWidth"
       :canvasHeight="canvasHeight"
@@ -69,11 +67,10 @@ import { eye64, closeEye64 } from './cornerImg64'
 import { computed, ref, watch, onMounted } from 'vue'
 import { sketchRulerProps } from '../index-types'
 import Panzoom, { PanzoomObject } from 'simple-panzoom'
-import { merge } from '../canvas-ruler/utils'
+
 const props = defineProps(sketchRulerProps)
 
 const emit = defineEmits(['onCornerClick', 'update:scale', 'zoomchange', 'update:lockLine'])
-const parentRect = ref<DOMRect | null>(null)
 const elem = ref<HTMLElement | null>(null)
 const startX = ref(0)
 const startY = ref(0)
@@ -85,23 +82,19 @@ const panzoomInstance = ref<PanzoomObject | null>(null)
 
 // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
 const paletteCpu = computed(() => {
-  const finalObj = merge(
-    {
-      bgColor: '#f6f7f9', // ruler bg color
-      longfgColor: '#BABBBC', // ruler longer mark color
-      fontColor: '#7D8694', // ruler font color
-      shadowColor: '#e9f7fe', // ruler shadow color
-      lineColor: '#EB5648',
-      lineType: 'solid',
-      lockLineColor: '#d4d7dc',
-      hoverBg: '#000',
-      hoverColor: '#fff',
-      borderColor: '#eeeeef',
-      cornerActiveColor: 'rgb(235, 86, 72, 0.6)'
-    },
-    props.palette || {}
-  )
-  return finalObj
+  return {
+    bgColor: '#f6f7f9', // ruler bg color
+    longfgColor: '#BABBBC', // ruler longer mark color
+    fontColor: '#7D8694', // ruler font color
+    shadowColor: '#e9f7fe', // ruler shadow color
+    lineColor: '#51d6a9',
+    lineType: 'solid',
+    lockLineColor: '#d4d7dc',
+    hoverBg: '#000',
+    hoverColor: '#fff',
+    borderColor: '#eeeeef',
+    ...props.palette
+  }
 })
 
 const cornerStyle = computed(() => {

@@ -59,23 +59,22 @@ import RulerLine from './ruler-line.vue'
 import CanvasRuler from '../canvas-ruler/index.vue'
 import { ref, computed, watch } from 'vue'
 import useLine from './useLine' // 引入自定义hook
-
+import type { FinalPaletteType, lineType } from '../index-types'
 const props = defineProps<{
   scale: number
   thick: number
   canvasWidth: number
   canvasHeight: number
-  palette: object
+  palette: FinalPaletteType
   vertical: boolean
   width: number
   height: number
   start: number
   startOther: number
-  lines: object
+  lines: lineType
   selectStart: number
   selectLength: number
   isShowReferLine: boolean
-  parentRect: object | null
   rate: number
   snapThreshold: number
   snapsObj: object
@@ -101,7 +100,7 @@ const cpuLines = computed(() => {
 })
 
 const indicatorStyle = computed(() => {
-  const lineType = props.palette?.lineType
+  const lineType = props.palette.lineType
   let positionKey = props.vertical ? 'left' : 'top'
   let gepKey = props.vertical ? 'top' : 'left'
   let boderKey = props.vertical ? 'borderLeft' : 'borderBottom'
@@ -110,7 +109,7 @@ const indicatorStyle = computed(() => {
     [positionKey]: offsetPx + 'px',
     [gepKey]: -props.thick + 'px',
     cursor: props.vertical ? 'ew-resize' : 'ns-resize',
-    [boderKey]: `1px ${lineType} ${props.palette?.lineColor}`
+    [boderKey]: `1px ${lineType} ${props.palette.lineColor}`
   }
 })
 

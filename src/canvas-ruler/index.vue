@@ -4,10 +4,10 @@
 <script setup lang="ts">
 import { drawCavaseRuler } from './utils'
 import { reactive, ref, onMounted, watch, onUnmounted, computed } from 'vue'
-
+import type { FinalPaletteType } from '../index-types'
 interface Props {
   scale: number
-  palette: Object
+  palette: FinalPaletteType
   vertical: Boolean
   start: number
   width: number

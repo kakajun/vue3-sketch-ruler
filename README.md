@@ -1,5 +1,7 @@
 # vue3-sketch-ruler
 
+> In using vue3, the zoom operation used for page presentation
+
 > 此master最新2X版本只在vue3中使用, 用于页面展示的缩放操作, 如果需要学习vue-demi关于vue2/vue3通用组件的,或者希望用到原来风格的, 请切换到1x分支, 使用1X版本。 同时注意2X版本作为加强版，重构了内核与1X版本使用方法有较大的变革，不兼容，请谨慎升级！
 
 [![](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667) [![build status](https://github.com/kakajun/vue3-sketch-ruler/actions/workflows/gh-pages.yml/badge.svg?branch=master)](https://github.com/kakajun/vue3-sketch-ruler/actions/workflows/gh-pages.yml)
@@ -24,6 +26,8 @@
 <!-- [avue大屏可视化工具](https://data.avuejs.com/build/1) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v2/assets/dp.png) -->
 
 [GoView 高效拖拽式低代码数据可视化开发平台](https://vue.mtruning.club/#/project/items)
+
+[GoView 2X 应用源码地址](https://gitee.com/majun2232/go-view)
 
 ## ✨ 升级改造
 
@@ -81,12 +85,11 @@ import 'vue3-sketch-ruler/lib/style.css'
 - [x] 刻度吸附效果
 - [x] 选中阴影阴影响应
 
-## 未来支持功能
+## 未来计划
 
-- [] 缩放导航功能
 - [] 加入单元测试功能
 
-这是个开源业余做的功能，有兴趣加强该插件的小伙伴欢迎加入，也欢迎大家提pr或者issue
+这是个开源业余做的功能，有兴趣加强该插件的小伙伴欢迎加入
 
 ## 使用
 
@@ -155,9 +158,20 @@ const canvasHeight = 500
 | gridRatio | 刻度分散比例 | Number | 1 |
 | selfHandle | 自己处理监听移动和缩放 | Boolean | false |
 | panzoomOption | panzoom相关的扩展参数 | object | - |
-| palette | 标尺的样式配置参数 | Palette | 如下 |
+| palette | 标尺的样式配置参数 | Object | 如下表 |
 
-palette:{bgColor: 'rgba(225,225,225, 0)',longfgColor: '#BABBBC',fontColor: '#7D8694', shadowColor: '#E8E8E8',lineColor: '#EB5648', borderColor: '#DADADC',cornerActiveColor: 'rgb(235, 86, 72, 0.6)',}
+| 属性名称      | 描述           | 默认值                         |
+| ------------- | -------------- | ------------------------------ |
+| bgColor       | 画布背景       | #f6f7f9                        |
+| longfgColor   | 刻度背景       | #BABBBC                        |
+| fontColor     | 刻度字体颜色   | #7D8694                        |
+| shadowColor   | 激活阴影背景   | #E8E8E8                        |
+| lineColor     | 对准线颜色     | #51d6a9                        |
+| lineType      | 对准线类型     | solid (solid \dashed \ dotted) |
+| lockLineColor | 锁定对准线颜色 | #d4d7dc                        |
+| hoverColor    | 标签颜色字体   | #fff                           |
+| hoverBg       | 标签颜色背景   | #000                           |
+| borderColor   | 尺子外边框颜色 | #eeeeef                        |
 
 > 更多pazoom插件的配置的panzoomOption参数，可以参考[pazoom document](https://github.com/timmywil/panzoom)
 

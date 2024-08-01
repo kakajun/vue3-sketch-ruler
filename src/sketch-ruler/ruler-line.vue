@@ -2,7 +2,7 @@
   <div
     v-show="showLine"
     class="line"
-    :style="{ ...offsetStyle, ...borderCursor }"
+    :style="combinedStyle"
     @mouseenter="handleMouseenter"
     @mousemove="handleMouseMove"
     @mouseleave="showLabel = false"
@@ -17,17 +17,18 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import useLine from './useLine'
 import { debounce } from '../canvas-ruler/utils'
+import type { FinalPaletteType, lineType } from '../index-types'
 interface Props {
   scale: number
   thick: number
-  palette: object
+  palette: FinalPaletteType
   index: number
   start: number
   vertical: boolean
   value: number
   canvasWidth: number
   canvasHeight: number
-  lines: object
+  lines: lineType
   isShowReferLine: boolean
   rate: number
   snapThreshold: number
@@ -44,27 +45,23 @@ const { actionStyle, handleMouseMove, handleMouseDown, labelContent, startValue 
 )
 const showLine = computed(() => startValue.value >= props.start)
 
-const offsetStyle = computed(() => {
+const combinedStyle = computed(() => {
+  const { lineType, lockLineColor, lineColor } = props.palette
+  const borderColor = props.lockLine ? lockLineColor : (lineColor ?? 'black')
+  const pointerEvents = props.lockLine || isInscale.value ? 'none' : 'auto'
+  const cursor =
+    props.isShowReferLine && !props.lockLine
+      ? props.vertical
+        ? 'ns-resize'
+        : 'ew-resize'
+      : 'default'
+  const borderProperty = props.vertical ? 'borderTop' : 'borderLeft'
   const offsetPx = (startValue.value - props.start) * props.scale
-  return props.vertical ? { top: `${offsetPx}px` } : { left: `${offsetPx}px` }
-})
-
-const borderCursor = computed(() => {
-  const lineType = props.palette.lineType
-  const borderColor = props.lockLine
-    ? props.palette?.lockLineColor
-    : (props.palette?.lineColor ?? 'black')
   return {
-    pointerEvents: props.lockLine || isInscale.value ? 'none' : 'auto',
-    cursor:
-      props.isShowReferLine && !props.lockLine
-        ? props.vertical
-          ? 'ns-resize'
-          : 'ew-resize'
-        : 'default',
-    ...(props.vertical
-      ? { borderTop: `1px ${lineType} ${borderColor}` }
-      : { borderLeft: `1px ${lineType} ${borderColor}` })
+    [borderProperty]: `${1}px ${lineType} ${borderColor}`,
+    'pointer-events': pointerEvents,
+    cursor,
+    [props.vertical ? 'top' : 'left']: `${offsetPx}px`
   }
 })
 
