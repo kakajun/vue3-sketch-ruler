@@ -45,8 +45,8 @@ export const drawCavaseRuler = (
   const endValue = start + Math.ceil((isHorizontal ? width : height) / scale) // 终点刻度
   // 2. 画阴影
   if (selectLength) {
-    const shadowX = (selectStart - start) * scale // 阴影起点坐标
-    const shadowWidth = selectLength * scale // 阴影宽度
+    const shadowX = ((selectStart - start) * scale) / ratio // 阴影起点坐标
+    const shadowWidth = (selectLength * scale) / ratio // 阴影宽度
     ctx.fillStyle = shadowColor
 
     isHorizontal

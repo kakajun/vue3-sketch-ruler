@@ -201,14 +201,16 @@ const calculateTransform = () => {
   const scale = Math.min(scaleX, scaleY)
   zoomStartX.value = rectWidth.value / 2 - props.canvasWidth / 2
   // zoomStartY.value = rectHeight.value / 2 - props.canvasHeight / 2
-  if (scale <= 1) {
+  if (scale < 1) {
     zoomStartY.value =
-      ((props.canvasHeight * scale) / 2 - props.canvasHeight / 2) / scale +
-      (props.canvasHeight * scale - rectHeight.value) / 2
-  } else {
+      ((props.canvasHeight * scale) / 2 - props.canvasHeight / 2) / scale -
+      (props.canvasHeight * scale - rectHeight.value) / scale / 2
+  } else if (scale > 1) {
     zoomStartY.value =
       (props.canvasHeight * scale - props.canvasHeight) / 2 / scale +
       (rectHeight.value - props.canvasHeight * scale) / scale / 2
+  } else {
+    zoomStartY.value = 0
   }
 
   return scale
