@@ -58,6 +58,7 @@
         ref="sketchruleRef"
         :isShowReferLine="state.isShowReferLine"
         @on-corner-click="handleCornerClick"
+        @zoomchange="zoomchange"
         :lines="state.lines"
       >
         <template #default>
@@ -84,6 +85,7 @@
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive, onMounted } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
+import type { PanzoomEventDetail } from 'simple-panzoom'
 const rectWidth = ref(1470)
 const rectHeight = ref(872)
 // const canvasWidth = ref(2800)
@@ -223,6 +225,10 @@ const scaleChange = (e: { target: { value: number } }) => {
 
 const handleCornerClick = (e: MouseEvent) => {
   console.log('handleCornerClick', e)
+}
+
+const zoomchange = (detail: PanzoomEventDetail) => {
+  console.log('zoomchange', detail)
 }
 
 const showLineClick = () => {
