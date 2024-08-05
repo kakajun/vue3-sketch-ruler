@@ -43,7 +43,7 @@
     }
   },
   "dependencies": {
-    "simple-panzoom": "^1.0.4"
+    "simple-panzoom": "^1.0.6"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.24.8",
