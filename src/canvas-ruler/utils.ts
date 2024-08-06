@@ -9,7 +9,7 @@ const getGridSize = (scale: number) => {
 }
 
 const FONT_SCALE = 0.83 // 10 / 12
-export const drawCavaseRuler = (
+export const drawCanvasRuler = (
   ctx: CanvasRenderingContext2D,
   start: number,
   selectStart: number,
@@ -43,6 +43,7 @@ export const drawCavaseRuler = (
   const startValue10 = Math.floor(start / gridSize10) * gridSize10
   const offsetX10 = ((startValue10 - start) / gridSize10) * gridPixel10 // 长间隔起点刻度距离ctx原点(start)的px距离
   const endValue = start + Math.ceil((isHorizontal ? width : height) / scale) // 终点刻度
+
   // 2. 画阴影
   if (selectLength) {
     const shadowX = ((selectStart - start) * scale) / ratio // 阴影起点坐标
@@ -53,6 +54,7 @@ export const drawCavaseRuler = (
       ? ctx.fillRect(shadowX, 0, shadowWidth, height)
       : ctx.fillRect(0, shadowX, width, shadowWidth)
   }
+
   // 3. 画刻度和文字(因为刻度遮住了阴影)
   ctx.beginPath()
   ctx.fillStyle = fontColor

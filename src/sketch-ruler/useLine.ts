@@ -27,7 +27,11 @@ export default function useLine(props: any, vertical: boolean) {
         const guideSnaps = snaps!.slice().sort((a: number, b: number) => {
           return Math.abs(guidePos - a) - Math.abs(guidePos - b)
         })
-        if (guideSnaps.length && Math.abs(guideSnaps[0] - nextPos) < props.snapThreshold!) {
+        // 吸附效果跟scale有关, 缩放后吸附效果会变差,所以要除props.scale
+        if (
+          guideSnaps.length &&
+          Math.abs(guideSnaps[0] - nextPos) < props.snapThreshold / props.scale
+        ) {
           guidePos = guideSnaps[0]
           nextPos = guidePos
         }

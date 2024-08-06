@@ -2,7 +2,7 @@
   <canvas ref="canvas" class="ruler" :style="rulerStyle" @mousedown="handleDragStart"></canvas>
 </template>
 <script setup lang="ts">
-import { drawCavaseRuler } from './utils'
+import { drawCanvasRuler } from './utils'
 import { reactive, ref, onMounted, watch, onUnmounted, computed } from 'vue'
 import type { FinalPaletteType } from '../index-types'
 interface Props {
@@ -87,7 +87,7 @@ const drawRuler = (ratio: number) => {
   options.canvasWidth = props.canvasWidth * props.rate
   options.canvasHeight = props.canvasHeight * props.rate
   if (state.canvasContext) {
-    drawCavaseRuler(
+    drawCanvasRuler(
       state.canvasContext,
       props.start * props.rate!,
       props.selectStart!,

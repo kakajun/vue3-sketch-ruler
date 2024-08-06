@@ -1,8 +1,8 @@
 import { vi } from 'vitest'
 import { createCanvas } from 'canvas'
-import { drawCavaseRuler } from '../src/canvas-ruler/utils'
+import { drawCanvasRuler } from '../src/canvas-ruler/utils'
 
-describe('drawCavaseRuler', () => {
+describe('drawCanvasRuler', () => {
   let canvas: HTMLCanvasElement
   let ctx: CanvasRenderingContext2D
   let options: any
@@ -31,7 +31,7 @@ describe('drawCavaseRuler', () => {
     const spyClearRect = vi.spyOn(ctx, 'clearRect')
     const spyFillRect = vi.spyOn(ctx, 'fillRect')
 
-    drawCavaseRuler(ctx, 0, 0, 0, options)
+    drawCanvasRuler(ctx, 0, 0, 0, options)
 
     expect(spyClearRect).toHaveBeenCalled()
     expect(spyFillRect).toHaveBeenCalled()
@@ -40,7 +40,7 @@ describe('drawCavaseRuler', () => {
   it('should handle horizontal drawing', () => {
     const spyFillRect = vi.spyOn(ctx, 'fillRect')
 
-    drawCavaseRuler(ctx, 0, 0, 0, options, true)
+    drawCanvasRuler(ctx, 0, 0, 0, options, true)
 
     expect(spyFillRect).toHaveBeenCalled()
   })
@@ -48,7 +48,7 @@ describe('drawCavaseRuler', () => {
   it('should handle vertical drawing', () => {
     const spyFillRect = vi.spyOn(ctx, 'fillRect')
 
-    drawCavaseRuler(ctx, 0, 0, 0, options, false)
+    drawCanvasRuler(ctx, 0, 0, 0, options, false)
 
     expect(spyFillRect).toHaveBeenCalled()
   })
@@ -56,7 +56,7 @@ describe('drawCavaseRuler', () => {
   it('should handle selection drawing', () => {
     const spyFillRect = vi.spyOn(ctx, 'fillRect')
 
-    drawCavaseRuler(ctx, 0, 50, 100, options)
+    drawCanvasRuler(ctx, 0, 50, 100, options)
 
     expect(spyFillRect).toHaveBeenCalled()
   })

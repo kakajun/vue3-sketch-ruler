@@ -35,8 +35,9 @@ interface Props {
   snapsObj: object
   lockLine: boolean
 }
-const showLabel = ref(false)
+
 const props = defineProps<Props>()
+const showLabel = ref(false)
 const isInscale = ref(false)
 
 const { actionStyle, handleMouseMove, handleMouseDown, labelContent, startValue } = useLine(
@@ -58,7 +59,7 @@ const combinedStyle = computed(() => {
   const borderProperty = props.vertical ? 'borderTop' : 'borderLeft'
   const offsetPx = (startValue.value - props.start) * props.scale
   return {
-    [borderProperty]: `${1}px ${lineType} ${borderColor}`,
+    [borderProperty]: `1px ${lineType} ${borderColor}`,
     'pointer-events': pointerEvents,
     cursor,
     [props.vertical ? 'top' : 'left']: `${offsetPx}px`
