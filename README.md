@@ -2,8 +2,6 @@
 
 > In using vue3, the zoom operation used for page presentation
 
-> 此master最新2X版本只在vue3中使用, 用于页面展示的缩放操作, 如果需要学习vue-demi关于vue2/vue3通用组件的,或者希望用到原来风格的, 请切换到1x分支, 使用1X版本。 同时注意2X版本作为加强版，重构了内核与1X版本使用方法有较大的变革，不兼容，请谨慎升级！
-
 [![](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667) [![build status](https://github.com/kakajun/vue3-sketch-ruler/actions/workflows/gh-pages.yml/badge.svg?branch=master)](https://github.com/kakajun/vue3-sketch-ruler/actions/workflows/gh-pages.yml)
 
 ## 🚀 Features
@@ -15,13 +13,6 @@
 - 💎 提供还原, 放大, 缩小的功能
 - 📦 平台与业务代码通过插槽的方式进行分离, 也就是你只需要专注你的业务代码, 其他交给平台
 
-## 🔑 说明
-
----
-
-插件应用范围: 适合作为低代码平台操作页面缩放工具,比如做图工具如, 大屏可视化, 做图工具图怪兽等,类似ps的缩放效果.
-
-
 ## 🌈 应用案例:
 
 <!-- [avue大屏可视化工具](https://data.avuejs.com/build/1) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v2/assets/dp.png) -->
@@ -30,7 +21,7 @@
 
 [GoView 2X 应用源码地址](https://gitee.com/majun2232/go-view)
 
-## ✨ 升级改造
+## ✨ 升级特性(同1X比较)
 
 1. 在原来1X版本中满足基本的缩放和标注辅助线的功能, 但是缩放时, 是固定以画面左上角位缩放点, 这样子在实际操作中会很不方便，所以这里对缩放功能进行了改进，以鼠标为中心缩放页面，这样在操作中会更方便。缩放采用改造过的pazoom插件,加了些方法使得更适配我的插件, 详情见[pazoom](https://github.com/kakajun/simple-panzoom.git)
 2. 对辅助线做了调整, 减少了细刻度的绘制, 因为已经有刻度显示, 删除后画面更加简洁
@@ -39,12 +30,21 @@
 5. 新增还原, 放大, 缩小的API，自动居中对齐
 6. 修改引用方式, 减少繁琐的配置
 7. 对标墨刀, 修改新增和删除参考线
+8. 初始化自动居中对齐
+9. 新增辅助线对刻度有吸附效果
 
 升级过程简单写了一篇掘金文章, 同行或感兴趣的可以留言交流
 
 [掘金:1X 大屏页面缩放插件---升级改造](https://juejin.cn/post/7025195450080690212)
 
 [掘金:2X `vue3-sketch-ruler`插件的蜕变与升级](https://juejin.cn/post/7390134326871228428)
+
+## 🔑 说明
+
+1. 插件应用范围: 适合作为低代码平台操作页面缩放工具,比如做图工具如, 大屏可视化, 做图工具图怪兽等,类似ps的缩放效果.
+2. 由1X 版本升级2X可以参考[GoView 2X 应用源码地址](https://gitee.com/majun2232/go-view) 的提交修改记录进行
+3. 此master最新2X版本只在vue3中使用, 如果需要学习vue-demi关于vue2/vue3通用组件的,或者希望用到原来风格的, 请切换到1x分支, 使用1X版本。
+4. 注意2X版本作为加强版，重构了内核与1X版本使用方法有较大的变革，不兼容，请谨慎升级！继续使用1X版本的同学，请切换到1x分支阅读使用文档[1x](https://github.com/kakajun/vue3-sketch-ruler/tree/1x)
 
 ## 🦄 demo
 
@@ -67,8 +67,6 @@ yarn add vue3-sketch-ruler  -S
 ```
 import SketchRule from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
-
- components: { SketchRule }
 ```
 
 ## 支持的功能
@@ -186,12 +184,11 @@ const canvasHeight = 500
 | zoomchange    | 画布移动,缩放事件 | {dimsOut:{elem: {}, parent: {}},originalEvent:{},scale,x,y} |
 
 ### 使用说明
+
 1. 同时按Ctrl+鼠标滚轮缩放, 根据鼠标位置发生页面缩放
 2. 同时按空格+鼠标左键, 拖动画布
-
-有些需要自己定义监听移动和缩放，不想按空格移动, 或者不想Ctrl+weel 移动, 那么可以设置selfHandle为true，然后通过ref获取到组件实例，然后通过实例调用组件的方法, 自定义监听按键
-
-具体操作参见我插件里面的监听移动和缩放方法
+3. 有些需要自己定义监听移动和缩放，不想按空格移动, 或者不想Ctrl+weel 移动, 那么可以设置selfHandle为true，然后通过ref获取到组件实例，然后通过实例调用组件的方法, 自定义监听按键
+4. 具体操作参见我插件里面的监听移动和缩放方法
 
 ```js
 const panzoomInstance = sketchruleRef.value.panzoomInstance

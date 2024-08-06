@@ -1,40 +1,17 @@
 <template>
   <div :class="rwClassName">
     <CanvasRuler
-      :vertical="vertical"
       :style="{ cursor: vertical ? 'ew-resize' : 'ns-resize' }"
-      :scale="scale"
-      :width="width"
-      :height="height"
-      :start="start"
-      :canvasWidth="canvasWidth"
-      :canvasHeight="canvasHeight"
-      :select-start="selectStart"
-      :select-length="selectLength"
-      :palette="palette"
-      :rate="rate"
-      :gridRatio="gridRatio"
+      v-bind="$props"
       @handle-drag-start="mousedown"
     />
     <div v-show="isShowReferLine" class="lines">
       <RulerLine
         v-for="(v, i) in cpuLines"
         :key="v + i"
-        :lockLine="isLockLine"
         :index="i"
         :value="v >> 0"
-        :scale="scale"
-        :start="start"
-        :canvasWidth="canvasWidth"
-        :snapThreshold="snapThreshold"
-        :snapsObj="snapsObj"
-        :canvasHeight="canvasHeight"
-        :lines="lines"
-        :thick="thick"
-        :palette="palette"
-        :vertical="vertical"
-        :is-show-refer-line="isShowReferLine"
-        :rate="rate"
+        v-bind="$props"
       />
     </div>
 

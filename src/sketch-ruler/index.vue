@@ -10,25 +10,16 @@
     <RulerWrapper
       :style="{ marginLeft: thick + 'px', width: rectWidth + 'px' }"
       v-show="showRuler"
+      v-bind="$props"
       :vertical="false"
-      :width="width"
       :height="thick"
       :is-show-refer-line="showReferLine"
-      :thick="thick"
       :start="startX"
       :startOther="startY"
-      :lines="lines"
       :select-start="shadow.x"
-      :snapThreshold="snapThreshold"
-      :snapsObj="snapsObj"
       :select-length="shadow.width"
       :scale="ownScale"
       :palette="paletteCpu"
-      :canvasWidth="canvasWidth"
-      :canvasHeight="canvasHeight"
-      :rate="rate"
-      :gridRatio="gridRatio"
-      :lockLine="lockLine"
       @change-line-state="changeLineState"
     />
     <!-- 竖直方向 -->
@@ -36,24 +27,15 @@
       :style="{ marginTop: thick + 'px', top: 0, height: rectHeight + 'px' }"
       v-show="showRuler"
       :vertical="true"
+      v-bind="$props"
       :width="thick"
-      :height="height"
       :is-show-refer-line="showReferLine"
-      :thick="thick"
       :start="startY"
       :startOther="startX"
-      :lines="lines"
       :select-start="shadow.y"
       :select-length="shadow.height"
-      :snapThreshold="snapThreshold"
-      :snapsObj="snapsObj"
       :scale="ownScale"
       :palette="paletteCpu"
-      :canvasWidth="canvasWidth"
-      :canvasHeight="canvasHeight"
-      :rate="rate"
-      :gridRatio="gridRatio"
-      :lockLine="lockLine"
       @change-line-state="changeLineState"
     />
     <a v-show="showRuler" class="corner" :style="cornerStyle" @click="onCornerClick"></a>
@@ -68,7 +50,6 @@ import { sketchRulerProps } from '../index-types'
 import Panzoom, { PanzoomObject } from 'simple-panzoom'
 
 const props = defineProps(sketchRulerProps)
-
 const emit = defineEmits(['onCornerClick', 'update:scale', 'zoomchange', 'update:lockLine'])
 const elem = ref<HTMLElement | null>(null)
 const startX = ref(0)
