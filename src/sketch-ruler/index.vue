@@ -260,10 +260,11 @@ defineExpose({
   span {
     line-height: 1;
   }
-  .canvasedit {
-    width: v-bind("props.canvasWidth + 'px'");
-    height: v-bind("props.canvasHeight + 'px'");
-  }
+  // TODO  这个加了影响居中
+  // .canvasedit {
+  //   width: v-bind("props.canvasWidth + 'px'");
+  //   height: v-bind("props.canvasHeight + 'px'");
+  // }
   .canvasedit-parent {
     position: absolute;
     left: v-bind(thickness);
