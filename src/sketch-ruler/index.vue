@@ -2,8 +2,7 @@
   <div class="sketch-ruler">
     <slot name="btn" :reset="reset" :zoomIn="zoomIn" :zoomOut="zoomOut"></slot>
     <div class="canvasedit-parent" :style="rectStyle" @wheel.prevent="">
-      <!-- :style="canvasStyle" -->
-      <div class="canvasedit">
+      <div class="canvasedit" :class="cursorClass">
         <slot></slot>
       </div>
     </div>
@@ -74,12 +73,12 @@ const emit = defineEmits(['onCornerClick', 'update:scale', 'zoomchange', 'update
 const elem = ref<HTMLElement | null>(null)
 const startX = ref(0)
 const startY = ref(0)
-const zoomStartX = ref(0)
-const zoomStartY = ref(0)
+let zoomStartX = 0
+let zoomStartY = 0
 const ownScale = ref(1)
 const showReferLine = ref(props.isShowReferLine)
 const panzoomInstance = ref<PanzoomObject | null>(null)
-
+const cursorClass = ref('defaultCursor')
 // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
 const paletteCpu = computed(() => {
   return {
@@ -115,12 +114,6 @@ const rectStyle = computed(() => {
     height: rectHeight.value + 'px'
   }
 })
-// const canvasStyle = computed(() => {
-//   return {
-//     width: props.canvasWidth + 'px',
-//     height: props.canvasHeight + 'px'
-//   }
-// })
 
 const rectWidth = computed(() => {
   return props.width - props.thick
@@ -144,6 +137,7 @@ onMounted(() => {
     // 让按下空格键才能移动画布
     document.addEventListener('keydown', function (e) {
       if (e.key === ' ') {
+        cursorClass.value = 'grabCursor'
         panzoomInstance.value?.bind()
         e.preventDefault()
       }
@@ -151,6 +145,7 @@ onMounted(() => {
 
     document.addEventListener('keyup', function () {
       panzoomInstance.value?.destroy()
+      cursorClass.value = 'defaultCursor'
     })
   }
 })
@@ -159,9 +154,9 @@ const getPanOptions = (scale: number) => {
   return {
     noBind: true,
     startScale: scale,
-    cursor: 'default',
-    startX: zoomStartX.value,
-    startY: zoomStartY.value,
+    // cursor: 'default',
+    startX: zoomStartX,
+    startY: zoomStartY,
     smoothScroll: true,
     ...props.panzoomOption
   }
@@ -199,18 +194,17 @@ const calculateTransform = () => {
   const scaleX = (rectWidth.value * (1 - props.paddingRatio)) / props.canvasWidth
   const scaleY = (rectHeight.value * (1 - props.paddingRatio)) / props.canvasHeight
   const scale = Math.min(scaleX, scaleY)
-  zoomStartX.value = rectWidth.value / 2 - props.canvasWidth / 2
-  // zoomStartY.value = rectHeight.value / 2 - props.canvasHeight / 2
+  zoomStartX = rectWidth.value / 2 - props.canvasWidth / 2
   if (scale < 1) {
-    zoomStartY.value =
+    zoomStartY =
       ((props.canvasHeight * scale) / 2 - props.canvasHeight / 2) / scale -
       (props.canvasHeight * scale - rectHeight.value) / scale / 2
   } else if (scale > 1) {
-    zoomStartY.value =
+    zoomStartY =
       (props.canvasHeight * scale - props.canvasHeight) / 2 / scale +
       (rectHeight.value - props.canvasHeight * scale) / scale / 2
   } else {
-    zoomStartY.value = 0
+    zoomStartY = 0
   }
 
   return scale
@@ -285,6 +279,10 @@ defineExpose({
   span {
     line-height: 1;
   }
+  .canvasedit {
+    width: v-bind("props.canvasWidth + 'px'");
+    height: v-bind("props.canvasHeight + 'px'");
+  }
   .canvasedit-parent {
     position: absolute;
     left: v-bind(thickness);
@@ -298,6 +296,14 @@ defineExpose({
     cursor: pointer;
     box-sizing: content-box;
     transition: all 0.2s ease-in-out;
+  }
+
+  .defaultCursor {
+    cursor: default !important;
+  }
+
+  .grabCursor {
+    cursor: grab !important;
   }
 }
 </style>

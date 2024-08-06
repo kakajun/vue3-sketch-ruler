@@ -1,22 +1,23 @@
 <template>
   <div class="demo">
-    <div class="top">
-      <!-- <div class="scale"> 浏览器缩放:{{ windowScale }} </div> -->
-      <div class="scale"> 缩放比例:{{ cpuScale }} </div>
-      <button class="mr10 font18" v-if="showRuler" @click="showRuler = false">隐藏规尺</button>
-      <button class="mr10 font18" v-else @click="handleShow">显示规尺</button>
-      <button class="mr10 font18" @click="showLineClick">辅助线开关</button>
-      <button class="mr10 font18" @click="lockLine = true">锁定参考线</button>
-      <button class="mr10 font18" @click="changeShadow">模拟阴影切换</button>
-      <button class="mr10 font18" @click="changeTheme">主题切换</button>
-      <button class="mr10 font18" @click.stop="resetMethod">还原</button>
-      <button class="mr10 font18" @click.stop="zoomOutMethod">缩小</button>
+    <div class="top font16">
+      <div class="scale mr10"> 缩放比:{{ cpuScale }} </div>
+      <button class="mr10 font16" v-if="showRuler" @click="showRuler = false">隐藏规尺</button>
+      <button class="mr10 font16" v-else @click="handleShow">显示规尺</button>
+      <button class="mr10 font16" @click="showLineClick">辅助线开关</button>
+      <button class="mr10 font16" @click="lockLine = true">锁定参考线</button>
+      <button class="mr10 font16" @click="changeShadow">模拟阴影切换</button>
+      <button class="mr10 font16" @click="changeTheme">主题切换</button>
+      <button class="mr10 font16" @click.stop="resetMethod">还原</button>
+      <button class="mr10 font16" @click.stop="zoomOutMethod">缩小</button>
       <span>禁止缩放</span>
       <input type="checkbox" class="switch" @change="changeScale" />
       <span>禁止移动</span>
-      <input type="checkbox" class="switch" @change="changeMove" />
+      <input type="checkbox" class="switch mr10" @change="changeMove" />
+      <span>框内移动</span>
+      <input type="checkbox" class="switch mr10" @change="changeInsideMove" />
       <input
-        class="mr10 font18"
+        class="mr10 font16"
         :value="state.scale"
         @input="scaleChange"
         type="range"
@@ -26,9 +27,9 @@
         defaultValue="1"
       />
       <div class="mr10"> 吸附横线: </div>
-      <input class="mr10" :value="snapsObj.h" @blur="snapsChange" />
+      <input class="mr10" style="width: 90px" :value="snapsObj.h" @blur="snapsChange" />
       <div class="mr10"> 吸附纵线: </div>
-      <input class="mr10" :value="snapsObj.v" @blur="snapsChangeV" />
+      <input class="mr10" style="width: 90px" :value="snapsObj.v" @blur="snapsChangeV" />
 
       <a
         href="https://github.com/kakajun/vue3-sketch-ruler"
@@ -39,7 +40,11 @@
       </a>
     </div>
 
-    <div class="wrapper" :style="rectStyle">
+    <div
+      class="wrapper"
+      :class="[state.isBlack ? 'balckwrapper' : 'whitewrapper']"
+      :style="rectStyle"
+    >
       <!--  这个可以传入图标  :gridRatio="0.5" -->
       <SketchRule
         :key="rendIndex"
@@ -85,7 +90,7 @@
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive, onMounted } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
-import type { PanzoomEventDetail } from 'simple-panzoom'
+import type { PanzoomEventDetail, PanzoomEvent } from 'simple-panzoom'
 const rectWidth = ref(1470)
 const rectHeight = ref(872)
 // const canvasWidth = ref(2800)
@@ -110,17 +115,13 @@ const panzoomOption = reactive({
   // startY: 0,   // 画布距离顶边框距离, 如果想自动,那么不要传
   disablePan: false,
   disableZoom: false,
-  // contain: 'inside',
-  handleStartEvent: (event) => {
+  contain: 'none', // 'inside' | 'outside' | 'none'
+  handleStartEvent: (event: PanzoomEvent['panzoomstart']) => {
     event.preventDefault()
     console.log('handleStartEvent', event)
   }
 })
 
-// setTimeout(() => {
-//   canvasWidth.value = 530
-//   canvasHeight.value = 250
-// }, 5000)
 const lockLine = ref(false)
 const snapsObj = ref({ h: [0, 100, 200], v: [130] })
 // 另外一个方法调用内部方法
@@ -131,7 +132,6 @@ const zoomOutMethod = () => {
 }
 
 onMounted(() => {
-  changeWindowScale()
   window.addEventListener('resize', handleResize)
 })
 
@@ -141,13 +141,8 @@ const handleShow = () => {
 
 const handleResize = () => {
   if (sketchruleRef.value) {
-    changeWindowScale()
     sketchruleRef.value.initPanzoom()
   }
-}
-const changeWindowScale = () => {
-  const num = Number(window.devicePixelRatio || 1)
-  windowScale.value = num.toFixed(2) * 1
 }
 const resetMethod = () => {
   if (sketchruleRef.value) {
@@ -205,7 +200,7 @@ const cpuPalette = computed(() => {
 
 const cpuScale = computed(() => {
   const num = Number(state.scale)
-  return num.toFixed(2)
+  return num.toFixed(1)
 })
 
 const canvasStyle = computed(() => {
@@ -250,6 +245,11 @@ const changeScale = (e: { target: { checked: boolean } }) => {
 const changeMove = (e: { target: { checked: boolean } }) => {
   panzoomOption.disablePan = e.target.checked
 }
+
+const changeInsideMove = (e: { target: { checked: boolean } }) => {
+  panzoomOption.contain = e.target.checked ? 'inside' : 'none'
+}
+
 const changeShadow = () => {
   // 模拟 x canvasWidth.value   y canvasHeight.value  范围内随机数据
   state.shadow.x = Math.random() * canvasWidth.value
@@ -270,11 +270,10 @@ const changeShadow = () => {
   margin-bottom: 10px;
   justify-content: center;
   width: 100%;
-  font-size: 20px;
 }
 
-.font18 {
-  font-size: 18px;
+.font16 {
+  font-size: 16px;
 }
 .mr10 {
   margin-right: 10px;
@@ -282,13 +281,20 @@ const changeShadow = () => {
 
 .wrapper {
   margin: 0 auto;
-  background-color: #fafafc;
-  background-image: linear-gradient(#fafafc 20px, transparent 0),
-    linear-gradient(90deg, transparent 20px, #373739 0);
   background-size:
     21px 21px,
     21px 21px;
   border: 1px solid #dadadc;
+}
+.whitewrapper {
+  background-color: #fafafc;
+  background-image: linear-gradient(#fafafc 20px, transparent 0),
+    linear-gradient(90deg, transparent 20px, #373739 0);
+}
+.balckwrapper {
+  background-color: #18181c;
+  background-image: linear-gradient(#18181c 20px, transparent 0),
+    linear-gradient(90deg, transparent 20px, #86909c 0);
 }
 
 .button {
