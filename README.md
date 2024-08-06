@@ -21,6 +21,10 @@
 
 [GoView 2X 应用源码地址](https://gitee.com/majun2232/go-view)
 
+## issues
+1. 1X版本的问题, 已经不会再修改, 除非自己提pr我来合或者升级更强大的2X版本
+2. 2X正常修改, 欢迎提pr
+
 ## ✨ 升级特性(同1X比较)
 
 1. 在原来1X版本中满足基本的缩放和标注辅助线的功能, 但是缩放时, 是固定以画面左上角位缩放点, 这样子在实际操作中会很不方便，所以这里对缩放功能进行了改进，以鼠标为中心缩放页面，这样在操作中会更方便。缩放采用改造过的pazoom插件,加了些方法使得更适配我的插件, 详情见[pazoom](https://github.com/kakajun/simple-panzoom.git)
@@ -173,8 +177,6 @@ const canvasHeight = 500
 | borderColor   | 尺子外边框颜色 | #eeeeef                        |
 
 > 更多pazoom插件的配置的panzoomOption参数，可以参考[pazoom document](https://github.com/timmywil/panzoom)
-
-### 更新说明
 
 ### Event
 
