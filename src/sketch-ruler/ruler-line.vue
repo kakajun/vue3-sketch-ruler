@@ -32,7 +32,7 @@ interface Props {
   isShowReferLine: boolean
   rate: number
   snapThreshold: number
-  snapsObj: object
+  snapsObj: lineType
   lockLine: boolean
 }
 

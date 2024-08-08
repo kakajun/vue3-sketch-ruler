@@ -54,7 +54,7 @@ const props = defineProps<{
   isShowReferLine: boolean
   rate: number
   snapThreshold: number
-  snapsObj: object
+  snapsObj: lineType
   gridRatio: number
   lockLine: boolean
 }>()

@@ -1,5 +1,27 @@
 import { computed, ref } from 'vue'
-export default function useLine(props: any, vertical: boolean) {
+
+interface Props {
+  palette: {
+    hoverBg: string
+    hoverColor: string
+  }
+  lockLine: boolean
+  scale: number
+  snapThreshold: number
+  snapsObj: {
+    h: number[]
+    v: number[]
+  }
+  lines: {
+    h: number[]
+    v: number[]
+  }
+  canvasHeight: number
+  canvasWidth: number
+  rate: number
+  index?: number // 如果index不是所有情况都需要，可以设置为可选
+}
+export default function useLine(props: Props, vertical: boolean) {
   const offsetLine = ref(0)
   const startValue = ref(0)
   const actionStyle = computed(() => ({
@@ -59,6 +81,9 @@ export default function useLine(props: any, vertical: boolean) {
   const handleLineRelease = (value: number, index?: number) => {
     const linesArrs = vertical ? props.lines?.h : props.lines?.v
     const isOutOfRange = checkBoundary(value)
+    if (!linesArrs) {
+      return
+    }
     if (isOutOfRange) {
       if (typeof index === 'number') {
         linesArrs.splice(index, 1)
