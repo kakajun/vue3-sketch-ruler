@@ -1,11 +1,12 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "author": "kakajun <253495832@qq.com>",
   "license": "MIT",
   "private": false,
   "files": [
-    "lib"
+    "lib",
+    "src"
   ],
   "repository": {
     "type": "git",
