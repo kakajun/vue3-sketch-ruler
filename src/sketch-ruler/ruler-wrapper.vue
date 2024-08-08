@@ -36,7 +36,7 @@ import RulerLine from './ruler-line.vue'
 import CanvasRuler from '../canvas-ruler/index.vue'
 import { ref, computed, watch } from 'vue'
 import useLine from './useLine' // 引入自定义hook
-import type { FinalPaletteType, lineType } from '../index-types'
+import type { FinalPaletteType, LineType } from '../index-types'
 const props = defineProps<{
   scale: number
   thick: number
@@ -48,13 +48,13 @@ const props = defineProps<{
   height: number
   start: number
   startOther: number
-  lines: lineType
+  lines: LineType
   selectStart: number
   selectLength: number
   isShowReferLine: boolean
   rate: number
   snapThreshold: number
-  snapsObj: lineType
+  snapsObj: LineType
   gridRatio: number
   lockLine: boolean
 }>()

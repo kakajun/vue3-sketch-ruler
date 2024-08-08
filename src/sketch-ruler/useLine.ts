@@ -1,25 +1,16 @@
 import { computed, ref } from 'vue'
-
+import type { PaletteType, LineType } from '../index-types'
 interface Props {
-  palette: {
-    hoverBg: string
-    hoverColor: string
-  }
+  palette: PaletteType
   lockLine: boolean
   scale: number
   snapThreshold: number
-  snapsObj: {
-    h: number[]
-    v: number[]
-  }
-  lines: {
-    h: number[]
-    v: number[]
-  }
+  snapsObj: LineType
+  lines: LineType
   canvasHeight: number
   canvasWidth: number
   rate: number
-  index?: number // 如果index不是所有情况都需要，可以设置为可选
+  index?: number
 }
 export default function useLine(props: Props, vertical: boolean) {
   const offsetLine = ref(0)

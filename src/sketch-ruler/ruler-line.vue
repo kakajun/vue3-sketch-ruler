@@ -17,10 +17,9 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import useLine from './useLine'
 import { debounce } from '../canvas-ruler/utils'
-import type { FinalPaletteType, lineType } from '../index-types'
+import type { FinalPaletteType, LineType } from '../index-types'
 interface Props {
   scale: number
-  thick: number
   palette: FinalPaletteType
   index: number
   start: number
@@ -28,11 +27,11 @@ interface Props {
   value: number
   canvasWidth: number
   canvasHeight: number
-  lines: lineType
+  lines: LineType
   isShowReferLine: boolean
   rate: number
   snapThreshold: number
-  snapsObj: lineType
+  snapsObj: LineType
   lockLine: boolean
 }
 
