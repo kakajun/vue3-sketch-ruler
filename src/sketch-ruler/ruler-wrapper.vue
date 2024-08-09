@@ -1,10 +1,6 @@
 <template>
   <div :class="rwClassName">
-    <CanvasRuler
-      :style="{ cursor: vertical ? 'ew-resize' : 'ns-resize' }"
-      v-bind="$props"
-      @handle-drag-start="mousedown"
-    />
+    <CanvasRuler v-bind="$props" @handle-drag-start="mousedown" />
     <div v-show="isShowReferLine" class="lines">
       <RulerLine
         v-for="(v, i) in cpuLines"

@@ -26,17 +26,16 @@ const state = reactive({
   isDragging: false,
   canvasContext: null as CanvasRenderingContext2D | null
 })
-let ratioValue = 1
+let ratioValue = window.devicePixelRatio
 const canvas = ref<HTMLCanvasElement | null>(null)
 onMounted(() => {
-  ratioValue = window.devicePixelRatio || 1
   window.addEventListener('resize', handleResize)
   initCanvasRef()
   updateCanvasContext(ratioValue)
 })
 
 const handleResize = () => {
-  ratioValue = window.devicePixelRatio || 1
+  ratioValue = window.devicePixelRatio
   updateCanvasContext(ratioValue)
   drawRuler(ratioValue)
 }
@@ -46,6 +45,7 @@ const initCanvasRef = () => {
 
 const rulerStyle = computed(() => {
   return {
+    cursor: props.vertical ? 'ew-resize' : 'ns-resize',
     [props.vertical ? 'borderRight' : 'borderBottom']:
       `1px solid ${props.palette.borderColor || '#eeeeef'} `
   }
@@ -97,12 +97,20 @@ const drawRuler = (ratio: number) => {
     )
   }
 }
-watch([() => props.start, () => props.selectStart, () => props.selectLength], () => {
-  drawRuler(ratioValue)
-})
+watch(
+  [
+    () => props.width,
+    () => props.height,
+    () => props.start,
+    () => props.selectStart,
+    () => props.selectLength
+  ],
+  () => {
+    drawRuler(ratioValue)
+  }
+)
 watch([() => props.width, () => props.height], () => {
   updateCanvasContext(ratioValue)
-  drawRuler(ratioValue)
 })
 
 const handleDragStart = (e: MouseEvent) => {
