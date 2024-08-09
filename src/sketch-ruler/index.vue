@@ -105,8 +105,6 @@ const props = withDefaults(defineProps<SketchRulerProps>(), {
   selfHandle: false
 })
 
-console.log(props.width, '55555555')
-
 const emit = defineEmits(['onCornerClick', 'update:scale', 'zoomchange', 'update:lockLine'])
 const elem = ref<HTMLElement | null>(null)
 const startX = ref(0)
