@@ -22,7 +22,7 @@
       @mousemove="handleMouseMove"
       @mouseleave="showLabel = false"
       v-show="isdragle"
-      :style="[indicatorStyle, { cursor: vertical ? 'ew-resize' : 'ns-resize' }]"
+      :style="indicatorStyle"
     >
       <div class="action" :style="actionStyle">
         <span v-if="showLabel" class="value">{{ labelContent }}</span>

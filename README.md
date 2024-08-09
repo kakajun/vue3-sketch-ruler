@@ -22,6 +22,7 @@
 [GoView 2X 应用源码地址](https://gitee.com/majun2232/go-view)
 
 ## issues
+
 1. 1X版本的问题, 已经不会再修改, 除非自己提pr我来合或者升级更强大的2X版本
 2. 2X正常修改, 欢迎提pr
 
@@ -71,6 +72,8 @@ yarn add vue3-sketch-ruler  -S
 ```
 import SketchRule from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
+// ts需要时引入类型
+import type { SketchRulerProps } from 'vue3-sketch-ruler'
 ```
 
 ## 支持的功能

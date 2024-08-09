@@ -34,6 +34,7 @@ interface Props {
   snapsObj: LineType
   lockLine: boolean
 }
+type PointerEvents = 'auto' | 'none'
 
 const props = defineProps<Props>()
 const showLabel = ref(false)
@@ -48,7 +49,7 @@ const showLine = computed(() => startValue.value >= props.start)
 const combinedStyle = computed(() => {
   const { lineType, lockLineColor, lineColor } = props.palette
   const borderColor = props.lockLine ? lockLineColor : (lineColor ?? 'black')
-  const pointerEvents = props.lockLine || isInscale.value ? 'none' : 'auto'
+  const pointerEvents: PointerEvents = props.lockLine || isInscale.value ? 'none' : 'auto'
   const cursor =
     props.isShowReferLine && !props.lockLine
       ? props.vertical
