@@ -97,5 +97,8 @@
   ],
   "bugs": {
     "url": "https://github.com/kakajun/vue3-sketch-ruler/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   }
 }
