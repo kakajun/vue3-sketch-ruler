@@ -124,7 +124,7 @@ onMounted(() => {
         }
       })
 
-    // 让按下空格键才能移动画布,千万不用用mousedown, 否则会出现缩放bug, 因为panzoom内部对pointerId有判断,而mousedown里面并没有pointerId
+    // 让按下空格键才能移动画布,千万不能用mousedown, 否则会出现缩放bug, 因为panzoom内部对pointerId有判断,而mousedown里面并没有pointerId
     document.addEventListener('pointerdown', function (e) {
       if (e.button === 1) {
         sketchruleRef.value.cursorClass = 'grabCursor'
