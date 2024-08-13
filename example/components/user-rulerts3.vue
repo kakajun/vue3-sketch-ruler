@@ -114,7 +114,6 @@ const zoomOutMethod = () => {
 onMounted(() => {
   window.addEventListener('resize', handleResize)
   const panzoomInstance = sketchruleRef.value.panzoomInstance
-  const cursorClass = sketchruleRef.value.panzoomInstance
   const parentDom = document.getElementsByClassName('canvasedit-parent')
   if (parentDom[0]) {
     const parent = parentDom[0]
@@ -125,22 +124,21 @@ onMounted(() => {
         }
       })
 
-    // 让按下空格键才能移动画布
-    document.addEventListener('mousedown', function (e) {
+    // 让按下空格键才能移动画布,千万不用用mousedown, 否则会出现缩放bug, 因为panzoom内部对pointerId有判断,而mousedown里面并没有pointerId
+    document.addEventListener('pointerdown', function (e) {
       if (e.button === 1) {
-        console.log('按下了鼠标中键')
-
-        cursorClass.value = 'grabCursor'
+        sketchruleRef.value.cursorClass = 'grabCursor'
         panzoomInstance.bind()
-        e.preventDefault()
         panzoomInstance.handleDown(e)
+        e.preventDefault()
       }
     })
 
-    document.addEventListener('mouseup', function (e) {
+    document.addEventListener('pointerup', function (e) {
       if (e.button === 1) {
         panzoomInstance.destroy()
-        cursorClass.value = 'defaultCursor'
+        console.log('放开了')
+        sketchruleRef.value.cursorClass = 'defaultCursor'
       }
     })
   }
@@ -190,6 +188,8 @@ const post = reactive({
   thick: 20,
   width: 1470,
   height: 800,
+  // width: 770,
+  // height: 400,
   // canvasWidth: 1920,
   // canvasHeight: 1080,
   canvasWidth: 1000,
@@ -243,7 +243,7 @@ const handleCornerClick = (e: MouseEvent) => {
 }
 
 const zoomchange = (detail: PanzoomEventDetail) => {
-  console.log('zoomchange', detail)
+  // console.log('zoomchange', detail)
 }
 
 const snapsChange = (e: { target: { value: string } }) => {

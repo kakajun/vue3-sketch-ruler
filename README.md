@@ -198,23 +198,20 @@ const canvasHeight = 500
 ```js
 const panzoomInstance = sketchruleRef.value.panzoomInstance
 
-document.addEventListener('wheel', function (e) {
-  if (e.ctrlKey || e.metaKey) {
-    panzoomInstance.value?.zoomWithWheel(e)
-  }
-})
-
-// 让按下空格键才能移动画布
-document.addEventListener('keydown', function (e) {
-  if (e.key === ' ') {
-    panzoomInstance.value?.bind()
+// 让按下中键才能移动画布, mousedown
+document.addEventListener('pointerdown', function (e) {
+  if (e.button === 1) {
+    sketchruleRef.value.cursorClass = 'grabCursor'
+    panzoomInstance.bind()
+    panzoomInstance.handleDown(e)
     e.preventDefault()
   }
 })
 
-document.addEventListener('keyup', function (e) {
-  if (e.key === ' ') {
-    panzoomInstance.value?.destroy()
+document.addEventListener('pointerup', function (e) {
+  if (e.button === 1) {
+    panzoomInstance.destroy()
+    sketchruleRef.value.cursorClass = 'defaultCursor'
   }
 })
 ```

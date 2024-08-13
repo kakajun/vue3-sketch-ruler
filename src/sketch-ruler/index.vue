@@ -63,7 +63,7 @@
 <script setup lang="ts">
 import RulerWrapper from './ruler-wrapper.vue'
 import { eye64, closeEye64 } from './cornerImg64'
-import { computed, ref, watch, onMounted, withDefaults } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { SketchRulerProps } from '../index-types'
 import Panzoom, { PanzoomObject } from 'simple-panzoom'
 
@@ -210,8 +210,9 @@ const initPanzoom = () => {
       elem.value.addEventListener('panzoomchange', (e: any) => {
         const { scale, dimsOut } = e.detail
         if (dimsOut) {
-          emit('update:scale', scale)
-          ownScale.value = scale
+          const tempScale = scale.toFixed(2)
+          emit('update:scale', tempScale)
+          ownScale.value = tempScale
           const left = (dimsOut.parent.left - dimsOut.elem.left) / scale
           const top = (dimsOut.parent.top - dimsOut.elem.top) / scale
           startX.value = left
