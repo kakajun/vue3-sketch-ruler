@@ -299,7 +299,8 @@ defineExpose({
   panzoomInstance,
   reset,
   zoomIn,
-  zoomOut
+  zoomOut,
+  cursorClass
 })
 </script>
 

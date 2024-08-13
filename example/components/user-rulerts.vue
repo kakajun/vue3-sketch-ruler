@@ -157,7 +157,7 @@ const cpuPalette = computed(() => {
 const post = reactive({
   thick: 20,
   width: 1470,
-  height: 872,
+  height: 800,
   // canvasWidth: 1920,
   // canvasHeight: 1080,
   canvasWidth: 1000,
@@ -243,7 +243,7 @@ const changeShadow = () => {
 <style lang="scss">
 .demo {
   width: 100%;
-  padding-top: 10px;
+ // padding-top: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center; /* 水平居中 */
