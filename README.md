@@ -5,7 +5,7 @@
 [![](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)](https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667) [![build status](https://github.com/kakajun/vue3-sketch-ruler/actions/workflows/gh-pages.yml/badge.svg?branch=master)](https://github.com/kakajun/vue3-sketch-ruler/actions/workflows/gh-pages.yml)
 
 <div align=center>
-<img src="https://github.com/kakajun/vue3-sketch-ruler/blob/master/public/logo.png" width="392" height="300"> width="392" height="300"/>
+<img src="https://github.com/kakajun/vue3-sketch-ruler/blob/master/public/logo.png" width="392" height="300">
 </div>
 
 ## 🚀 Features
@@ -239,7 +239,7 @@ document.addEventListener('pointerup', function (e) {
 QQ 技术交流群：[640166628](https://s.xaoyo.top/gOLUDl)
 
 <div align=center>
-<img src="https://github.com/kakajun/vue3-sketch-ruler/blob/master/public/qq.png" width="486" height="574"> width="243" height="287"/>
+<img src="https://github.com/kakajun/vue3-sketch-ruler/blob/master/public/qq.png" width="243" height="287">
 </div>
 
 ## 引用
