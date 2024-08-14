@@ -238,8 +238,7 @@ document.addEventListener('pointerup', function (e) {
 
 ### QQ 技术交流群：
 
-<a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=oqnBX-qn7gkWsdfYQdvNCzYbkeNknuOc&jump_from=webapi&authKey=4YXd2jvmWYU0cN8zUky5DoCD6kz+fjUyWv782GLUjDEIHctXYviSXD/pbqxm/ZDD"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="vue3-sketch-ruler" title="点击这里加入QQ群640166628"></a>
-
+<a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=oqnBX-qn7gkWsdfYQdvNCzYbkeNknuOc&jump_from=webapi&authKey=4YXd2jvmWYU0cN8zUky5DoCD6kz+fjUyWv782GLUjDEIHctXYviSXD/pbqxm/ZDD"><img border="0" src="https://github.com/kakajun/vue3-sketch-ruler/blob/master/public/group.png" alt="vue3-sketch-ruler" title="点击这里加入QQ群640166628"></a>
 
 <div align=center>
 <img src="https://github.com/kakajun/vue3-sketch-ruler/blob/master/public/qq.png" width="243" height="287">
