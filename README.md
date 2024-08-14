@@ -13,14 +13,6 @@
 - 💎 提供还原, 放大, 缩小的功能
 - 📦 平台与业务代码通过插槽的方式进行分离, 也就是你只需要专注你的业务代码, 其他交给平台
 
-## 🌈 应用案例:
-
-<!-- [avue大屏可视化工具](https://data.avuejs.com/build/1) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v2/assets/dp.png) -->
-
-[GoView 高效拖拽式低代码数据可视化开发平台](https://vue.mtruning.club/#/project/items)
-
-[GoView 2X 应用源码地址](https://gitee.com/majun2232/go-view)
-
 ## issues
 
 1. 1X版本的问题, 已经不会再修改, 除非自己提pr我来合或者升级更强大的2X版本
@@ -223,6 +215,22 @@ document.addEventListener('pointerup', function (e) {
 | reset    | 画布重置位置 |          |
 | zoomIn   | 画布放大     |          |
 | zoomIn   | 画布缩小     |          |
+
+## 🌈 Who is using this?
+
+[avue大屏可视化工具](https://data.avuejs.com/build/1) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/1x/example/v2/assets/dp.png)
+
+[GoView 高效拖拽式低代码数据可视化开发平台](https://vue.mtruning.club/#/project/items)
+
+[GoView 2X 应用源码地址](https://gitee.com/majun2232/go-view)
+
+> open a PR to add your library ;)
+
+## 贡献者
+
+<a href="https://github.com/kakajun/vue3-sketch-ruler/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=kakajun/vue3-sketch-ruler" />
+</a>
 
 ## 引用
 
