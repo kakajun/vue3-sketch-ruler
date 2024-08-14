@@ -200,6 +200,7 @@ const canvasStyle = computed(() => {
 
 const scaleChange = (e: { target: { value: number } }) => {
   state.scale = e.target.value * 1
+  // 注意插件内部并没有监听scale的变化,所以需要手动调用zoom来改变scale
   if (sketchruleRef.value) {
     const panzoomInstance = sketchruleRef.value.panzoomInstance
     panzoomInstance.zoom(state.scale)
@@ -243,7 +244,7 @@ const changeShadow = () => {
 <style lang="scss">
 .demo {
   width: 100%;
- // padding-top: 10px;
+  // padding-top: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center; /* 水平居中 */

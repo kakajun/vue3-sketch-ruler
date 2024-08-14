@@ -1,6 +1,7 @@
 <template>
   <div class="demo">
     <div class="top font16">
+      <div class="mr10">鼠标中键移动画布 </div>
       <div class="scale mr10"> 缩放比:{{ cpuScale }} </div>
       <button class="mr10 font16" @click="post.showRuler = !post.showRuler">{{
         (post.showRuler ? '隐藏' : '显示') + '规尺'
@@ -124,7 +125,7 @@ onMounted(() => {
         }
       })
 
-    // 让按下空格键才能移动画布,千万不能用mousedown, 否则会出现缩放bug, 因为panzoom内部对pointerId有判断,而mousedown里面并没有pointerId
+    // 让按下鼠标中键才能移动画布,千万不能用mousedown, 否则会出现缩放bug, 因为panzoom内部对pointerId有判断,而mousedown里面并没有pointerId
     document.addEventListener('pointerdown', function (e) {
       if (e.button === 1) {
         sketchruleRef.value.cursorClass = 'grabCursor'
