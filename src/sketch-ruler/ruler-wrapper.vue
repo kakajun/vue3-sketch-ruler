@@ -90,15 +90,18 @@ const indicatorStyle = computed(() => {
  * @description: 指示器按下时
  * @param {*} e
  */
-const mousedown = (e: MouseEvent) => {
+const mousedown = async (e: MouseEvent) => {
+  const { offsetX, offsetY } = e
+  const { scale, vertical, thick, startOther } = props
   isdragle.value = true
   isLockLine.value = false
   emit('changeLineState', false)
-  startValue.value = Math.round(props.startOther - props.thick / 2)
-  setTimeout(async () => {
-    await handleMouseDown(e)
-    isdragle.value = false
-  })
+  let tempStartValue = Math.round(
+    startOther - thick / scale + (vertical ? offsetX : offsetY) / scale
+  )
+  startValue.value = tempStartValue
+  await handleMouseDown(e, tempStartValue)
+  isdragle.value = false
 }
 
 watch([() => props.lockLine], () => {

@@ -158,6 +158,8 @@ const post = reactive({
   thick: 20,
   width: 1470,
   height: 800,
+  // width: 770,
+  // height: 472,
   // canvasWidth: 1920,
   // canvasHeight: 1080,
   canvasWidth: 1000,
