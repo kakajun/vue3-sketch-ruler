@@ -24,7 +24,7 @@ import UserRuler from './components/user-rulerts.vue'
 import UserRuler2 from './components/user-rulerts2.vue'
 import UserRuler3 from './components/user-rulerts3.vue'
 import { ref } from 'vue'
-import TabItem from './TabItem.vue'
+import TabItem from './tab-item.vue'
 
 const tabs = [
   { label: '写法1', index: 0 },

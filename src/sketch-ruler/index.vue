@@ -65,7 +65,7 @@ import RulerWrapper from './ruler-wrapper.vue'
 import { eye64, closeEye64 } from './cornerImg64'
 import { computed, ref, watch, onMounted } from 'vue'
 import { SketchRulerProps } from '../index-types'
-import Panzoom, { PanzoomObject } from 'simple-panzoom'
+import Panzoom, { PanzoomObject, PanzoomEventDetail } from 'simple-panzoom'
 
 const props = withDefaults(defineProps<SketchRulerProps>(), {
   showRuler: true,
@@ -159,30 +159,34 @@ const rectHeight = computed(() => {
   return props.height - props.thick
 })
 
+const handleWheel = (e: WheelEvent) => {
+  if (e.ctrlKey || e.metaKey) {
+    panzoomInstance.value?.zoomWithWheel(e)
+  }
+}
+const handleSpaceKeyDown = (e: KeyboardEvent) => {
+  if (e.key === ' ') {
+    cursorClass.value = 'grabCursor'
+    panzoomInstance.value?.bind()
+    e.preventDefault()
+  }
+}
+
+const handleSpaceKeyUp = (e: KeyboardEvent) => {
+  if (e.key === ' ') {
+    panzoomInstance.value?.destroy()
+    cursorClass.value = 'defaultCursor'
+  }
+}
+
 onMounted(() => {
   initPanzoom()
   if (!props.selfHandle && elem.value) {
     const parent = elem.value.parentElement
-    parent &&
-      parent.addEventListener('wheel', function (e: WheelEvent) {
-        if (e.ctrlKey || e.metaKey) {
-          panzoomInstance.value?.zoomWithWheel(e)
-        }
-      })
-
-    // 让按下空格键才能移动画布
-    document.addEventListener('keydown', function (e) {
-      if (e.key === ' ') {
-        cursorClass.value = 'grabCursor'
-        panzoomInstance.value?.bind()
-        e.preventDefault()
-      }
-    })
-
-    document.addEventListener('keyup', function () {
-      panzoomInstance.value?.destroy()
-      cursorClass.value = 'defaultCursor'
-    })
+    if (!parent) return
+    parent.addEventListener('wheel', handleWheel)
+    document.addEventListener('keydown', handleSpaceKeyDown)
+    document.addEventListener('keyup', handleSpaceKeyUp)
   }
 })
 
@@ -198,6 +202,20 @@ const getPanOptions = (scale: number) => {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const handlePanzoomChange = (e: any) => {
+  const { scale, dimsOut } = e.detail as PanzoomEventDetail
+  if (dimsOut) {
+    const tempScale = scale.toFixed(2)
+    emit('update:scale', tempScale)
+    ownScale.value = tempScale
+    const left = (dimsOut.parent.left - dimsOut.elem.left) / scale
+    const top = (dimsOut.parent.top - dimsOut.elem.top) / scale
+    startX.value = left
+    emit('zoomchange', e.detail)
+    startY.value = top
+  }
+}
 const initPanzoom = () => {
   elem.value = document.querySelector('.canvasedit')
   if (elem.value) {
@@ -207,19 +225,7 @@ const initPanzoom = () => {
     }
     panzoomInstance.value = Panzoom(elem.value, getPanOptions(scale))
     if (elem.value) {
-      elem.value.addEventListener('panzoomchange', (e: any) => {
-        const { scale, dimsOut } = e.detail
-        if (dimsOut) {
-          const tempScale = scale.toFixed(2)
-          emit('update:scale', tempScale)
-          ownScale.value = tempScale
-          const left = (dimsOut.parent.left - dimsOut.elem.left) / scale
-          const top = (dimsOut.parent.top - dimsOut.elem.top) / scale
-          startX.value = left
-          emit('zoomchange', e.detail)
-          startY.value = top
-        }
-      })
+      elem.value.addEventListener('panzoomchange', handlePanzoomChange)
     }
   }
 }
@@ -246,18 +252,9 @@ const calculateTransform = () => {
 
   return scale
 }
-
-const reset = () => {
-  panzoomInstance.value?.reset()
-}
-
-const zoomIn = () => {
-  panzoomInstance.value?.zoomIn()
-}
-
-const zoomOut = () => {
-  panzoomInstance.value?.zoomOut()
-}
+const reset = () => panzoomInstance.value?.reset()
+const zoomIn = () => panzoomInstance.value?.zoomIn()
+const zoomOut = () => panzoomInstance.value?.zoomOut()
 
 /**
  * @desc: 更新panzoom的配置
@@ -274,9 +271,8 @@ const onCornerClick = () => {
 const changeLineState = (val: boolean) => {
   emit('update:lockLine', val)
 }
-const thickness = computed(() => {
-  return props.thick + 'px'
-})
+const thickness = computed(() => props.thick + 'px')
+
 watch([() => props.isShowReferLine], () => {
   showReferLine.value = props.isShowReferLine
 })

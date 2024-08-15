@@ -60,7 +60,7 @@ const combinedStyle = computed(() => {
   const offsetPx = (startValue.value - props.start) * props.scale
   return {
     [borderProperty]: `1px ${lineType} ${borderColor}`,
-    'pointer-events': pointerEvents,
+    pointerEvents: pointerEvents,
     cursor,
     [props.vertical ? 'top' : 'left']: `${offsetPx}px`
   }
