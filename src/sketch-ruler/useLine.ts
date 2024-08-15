@@ -50,17 +50,13 @@ export default function useLine(props: Props, vertical: boolean) {
         }
         startValue.value = Math.round(nextPos)
       }
-
+      const mouseUpHandler = () => {
+        document.removeEventListener('mousemove', moveHandler)
+        handleLineRelease(startValue.value, props.index)
+        resolve()
+      }
       document.addEventListener('mousemove', moveHandler)
-      document.addEventListener(
-        'mouseup',
-        () => {
-          document.removeEventListener('mousemove', moveHandler)
-          handleLineRelease(startValue.value, props.index)
-          resolve()
-        },
-        { once: true }
-      )
+      document.addEventListener('mouseup', mouseUpHandler, { once: true })
     })
   }
 
