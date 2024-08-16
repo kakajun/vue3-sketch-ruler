@@ -3,10 +3,10 @@
     v-show="showLine"
     class="line"
     :style="combinedStyle"
-    @mouseenter="handleMouseenter"
-    @mousemove="handleMouseMove"
-    @mouseleave="showLabel = false"
-    @mousedown="handleMouseDown"
+    @mouseenter.stop="handleMouseenter"
+    @mousemove.stop="handleMouseMove"
+    @mouseleave.stop="showLabel = false"
+    @mousedown.stop="handleMouseDown"
   >
     <div class="action" :style="actionStyle">
       <span v-if="showLabel" class="value">{{ labelContent }}</span>

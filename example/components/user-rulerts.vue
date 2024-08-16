@@ -59,7 +59,7 @@
         @zoomchange="zoomchange"
       >
         <template #default>
-          <div data-type="page" :style="canvasStyle">
+          <div data-type="page" @mousedown="handleMouseDown" :style="canvasStyle">
             <img class="img-style" :src="bgImg" alt="" />
           </div>
         </template>
@@ -240,6 +240,10 @@ const changeInsideMove = (e: { target: { checked: boolean } }) => {
 const changeShadow = () => {
   post.shadow.x = Math.random() * post.canvasWidth
   post.shadow.y = Math.random() * post.canvasHeight
+}
+
+const handleMouseDown = (e: MouseEvent) => {
+  console.log('handleMouseDown', e)
 }
 </script>
 

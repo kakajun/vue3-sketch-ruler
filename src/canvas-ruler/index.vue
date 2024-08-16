@@ -1,5 +1,5 @@
 <template>
-  <canvas ref="canvas" class="ruler" :style="rulerStyle" @mousedown="handleDragStart"></canvas>
+  <canvas ref="canvas" class="ruler" :style="rulerStyle" @mousedown.stop="handleDragStart"></canvas>
 </template>
 <script setup lang="ts">
 import { drawCanvasRuler } from './utils'
