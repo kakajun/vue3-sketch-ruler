@@ -30,7 +30,8 @@
     "lint:style": "stylelint --fix \"./src/**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
     "lint:lint-staged": "lint-staged -c ",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "test": "vitest"
+    "test": "vitest",
+    "release": "release-it"
   },
   "lint-staged": {
     "*.{ts,tsx,js,vue,less}": "prettier --write",
@@ -48,6 +49,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.24.8",
     "@babel/preset-typescript": "^7.24.7",
+    "@release-it/conventional-changelog": "^8.0.1",
     "@types/node": "^20.14.11",
     "@typescript-eslint/eslint-plugin": "^7.16.1",
     "@typescript-eslint/parser": "^7.16.1",
@@ -70,6 +72,7 @@
     "postcss-html": "^1.7.0",
     "prettier": "^3.3.3",
     "pretty-quick": "^4.0.0",
+    "release-it": "^17.6.0",
     "rollup-plugin-banner": "^0.2.1",
     "sass": "^1.77.8",
     "stylelint": "^16.7.0",
