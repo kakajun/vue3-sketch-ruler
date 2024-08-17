@@ -1,3 +1,7 @@
+### Bug Fixes 2.0.10
+
+* 修复[#45](https://github.com/kakajun/vue3-sketch-ruler/issues/45) ([20e0e11](https://github.com/kakajun/vue3-sketch-ruler/commit/20e0e11cba638359f931b628b319bff14a50e886))
+
 ## 2.0.4 (2024-07-30)
 
 
