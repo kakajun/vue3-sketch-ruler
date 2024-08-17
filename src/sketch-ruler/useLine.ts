@@ -1,5 +1,7 @@
 import { computed, ref } from 'vue'
 import type { PaletteType, LineType } from '../index-types'
+import { debounce } from '../canvas-ruler/utils'
+
 interface Props {
   palette: PaletteType
   lockLine: boolean
@@ -15,6 +17,8 @@ interface Props {
 export default function useLine(props: Props, vertical: boolean) {
   const offsetLine = ref(0)
   const startValue = ref(0)
+  const showLabel = ref(false)
+
   const actionStyle = computed(() => ({
     backgroundColor: props.palette.hoverBg,
     color: props.palette.hoverColor,
@@ -30,6 +34,7 @@ export default function useLine(props: Props, vertical: boolean) {
     return new Promise<void>((resolve) => {
       if (props.lockLine) return
       const startPosition = vertical ? e.clientY : e.clientX
+      handleMouseMove(e)
       const initialValue = propValue || startValue.value
       let tempStartValue = initialValue
       const moveHandler = (e: MouseEvent) => {
@@ -99,11 +104,33 @@ export default function useLine(props: Props, vertical: boolean) {
     return `${vertical ? 'Y' : 'X'}：${startValue.value * props.rate}`
   })
 
+  const debouncedHandleMouseLeave = debounce(() => {
+    showLabel.value = false
+  }, 200)
+
+  const debouncedHandleMouseEnter = debounce(() => {
+    showLabel.value = true
+  }, 200)
+
+  const handleMouseenter = (e: MouseEvent) => {
+    if (!props.lockLine) {
+      handleMouseMove(e)
+      debouncedHandleMouseEnter()
+      debouncedHandleMouseLeave.cancel()
+    }
+  }
+
+  const handleMouseLeave = () => {
+    debouncedHandleMouseLeave()
+  }
+
   return {
+    showLabel,
     startValue,
     actionStyle,
     labelContent,
-    handleMouseMove,
-    handleMouseDown
+    handleMouseDown,
+    handleMouseenter,
+    handleMouseLeave
   }
 }

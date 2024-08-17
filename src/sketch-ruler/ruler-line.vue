@@ -4,8 +4,7 @@
     class="line"
     :style="combinedStyle"
     @mouseenter.stop="handleMouseenter"
-    @mousemove.stop="handleMouseMove"
-    @mouseleave.stop="showLabel = false"
+    @mouseleave.stop="handleMouseLeave"
     @mousedown.stop="handleMouseDown"
   >
     <div class="action" :style="actionStyle">
@@ -37,13 +36,17 @@ interface Props {
 type PointerEvents = 'auto' | 'none'
 
 const props = defineProps<Props>()
-const showLabel = ref(false)
 const isInscale = ref(false)
 
-const { actionStyle, handleMouseMove, handleMouseDown, labelContent, startValue } = useLine(
-  props,
-  props.vertical
-)
+const {
+  actionStyle,
+  handleMouseDown,
+  labelContent,
+  startValue,
+  showLabel,
+  handleMouseenter,
+  handleMouseLeave
+} = useLine(props, props.vertical)
 const showLine = computed(() => startValue.value >= props.start)
 
 const combinedStyle = computed(() => {
@@ -78,9 +81,4 @@ watch([() => props.scale], () => {
   isInscale.value = true
   deactivateAfterDelay()
 })
-const handleMouseenter = () => {
-  if (!props.lockLine) {
-    showLabel.value = true
-  }
-}
 </script>

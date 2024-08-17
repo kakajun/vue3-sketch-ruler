@@ -14,9 +14,8 @@
     <div
       class="indicator"
       v-if="isShowReferLine"
-      @mouseenter="showLabel = true"
-      @mousemove="handleMouseMove"
-      @mouseleave="showLabel = false"
+      @mouseenter="handleMouseenter"
+      @mouseleave="handleMouseLeave"
       v-show="isdragle"
       :style="indicatorStyle"
     >
@@ -55,13 +54,18 @@ const props = defineProps<{
   lockLine: boolean
 }>()
 
-const { actionStyle, handleMouseMove, handleMouseDown, labelContent, startValue } = useLine(
-  props,
-  !props.vertical
-)
+const {
+  showLabel,
+  actionStyle,
+  handleMouseenter,
+  handleMouseLeave,
+  handleMouseDown,
+  labelContent,
+  startValue
+} = useLine(props, !props.vertical)
 const isLockLine = ref(false)
 const isdragle = ref(false)
-const showLabel = ref(false)
+
 const rwClassName = computed(() => {
   const className = props.vertical ? 'v-container' : 'h-container'
   return className
