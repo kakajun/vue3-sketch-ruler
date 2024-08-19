@@ -122,12 +122,30 @@ export const drawCanvasRuler = (
   }
 }
 
-export function debounce(func: () => void, wait: number) {
-  let timeout: ReturnType<typeof setTimeout>
-  return function () {
-    clearTimeout(timeout)
+
+interface IDebounce {
+  (): void
+  cancel(): void
+}
+
+export function debounce<T extends Function>(func: T, wait: number = 100): IDebounce {
+  let timeout: ReturnType<typeof setTimeout> | null = null
+
+  const debounced: IDebounce = function () {
+    if (timeout !== null) {
+      clearTimeout(timeout)
+    }
     timeout = setTimeout(() => {
       func()
     }, wait)
   }
+
+  debounced.cancel = function () {
+    if (timeout !== null) {
+      clearTimeout(timeout)
+      timeout = null
+    }
+  }
+
+  return debounced as IDebounce
 }
