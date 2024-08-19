@@ -244,6 +244,9 @@ document.addEventListener('pointerup', function (e) {
   <img src="https://contrib.rocks/image?repo=kakajun/vue3-sketch-ruler" />
 </a>
 
+## 最后
+如果插件`vue3-sketch-ruler`对您有帮助，请给个star，您的鼓励是我最大的动力。
+
 ## 引用
 
 vue标尺组件 [vue-sketch-ruler](https://github.com/chuxiaoguo/vue-sketch-ruler.git)
