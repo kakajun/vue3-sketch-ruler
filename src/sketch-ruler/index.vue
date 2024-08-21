@@ -208,7 +208,7 @@ const handlePanzoomChange = (e: any) => {
   if (dimsOut) {
     const tempScale = scale.toFixed(2)
     emit('update:scale', tempScale)
-    ownScale.value =Number(tempScale)
+    ownScale.value = Number(tempScale)
     const left = (dimsOut.parent.left - dimsOut.elem.left) / scale
     const top = (dimsOut.parent.top - dimsOut.elem.top) / scale
     startX.value = left
@@ -260,8 +260,8 @@ const zoomOut = () => panzoomInstance.value?.zoomOut()
  * @desc: 更新panzoom的配置
  * @param {*}
  */
-const setOtions = (obj?: any) => {
-  panzoomInstance.value?.setOptions(obj || getPanOptions(props.scale))
+const setOtions = () => {
+  panzoomInstance.value?.setOptions(getPanOptions(props.scale))
 }
 
 const onCornerClick = () => {
