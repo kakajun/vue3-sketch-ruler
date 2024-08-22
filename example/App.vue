@@ -34,7 +34,7 @@ const tabs = [
   { label: '阴影测试', index: 3 }
 ]
 const currentIndex = ref(3)
-const currentComponent = ref(UserRuler)
+const currentComponent = ref()
 onMounted(() => {
   switchTab(currentIndex.value)
 })

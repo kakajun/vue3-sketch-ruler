@@ -207,7 +207,7 @@ const handlePanzoomChange = (e: any) => {
   const { scale, dimsOut } = e.detail as PanzoomEventDetail
   if (dimsOut) {
     const tempScale = scale.toFixed(2)
-    emit('update:scale', tempScale)
+    emit('update:scale', Number(tempScale))
     ownScale.value = Number(tempScale)
     const left = (dimsOut.parent.left - dimsOut.elem.left) / scale
     const top = (dimsOut.parent.top - dimsOut.elem.top) / scale

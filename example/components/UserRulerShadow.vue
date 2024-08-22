@@ -19,7 +19,6 @@
         v-model:lockLine="lockLine"
         v-bind="post"
         :selfHandle="true"
-        @zoomchange="zoomchange"
       >
         <template #default>
           <div data-type="page" :style="canvasStyle">

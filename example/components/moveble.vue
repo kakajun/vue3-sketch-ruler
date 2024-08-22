@@ -91,15 +91,32 @@ const updateLayout = (items: any) => {
  */
 const onRender = (e: any) => {
   const { style } = e.target
+  const width = Number(style.width.replace('px', ''))
+  const height = Number(style.height.replace('px', ''))
+  // transform:"translate(15px, 22px)"
+  const regex = /translate\((\d+)px,\s*(\d+)px\)/
+  const match = e.transform.match(regex)
+  if (!match) return
   // console.log(e, 'style')
-  // console.log(style.width, 'style.width')
+  const dx = parseInt(match[1], 10)
+  const dy = parseInt(match[2], 10)
   emit('update:shadow', {
-    x: e.clientX,
-    y: e.clientY,
-    width: Number(style.width.replace('px', '')),
-    height: Number(style.height.replace('px', ''))
+    x: style.baseStartLeft + dx,
+    y: style.baseStartTop + dy,
+    width,
+    height
   })
   e.target.style.cssText += e.cssText
+}
+
+const onDragStart = (e) => {
+  // console.log(e, 'onDragStart')
+  const { target } = e
+  if (target) {
+    const { style } = target
+    style.baseStartLeft = parseFloat(style.left.replace('px', ''))
+    style.baseStartTop = parseFloat(style.top.replace('px', ''))
+  }
 }
 
 /**
@@ -159,6 +176,7 @@ const onDragEnd = (e: { lastEvent: any; target: any }) => {
     :edgeDraggable="edgeDraggable"
     :startDragRotate="startDragRotate"
     :throttleDragRotate="throttleDragRotate"
+    @drag-start="onDragStart"
     @drag-end="onDragEnd"
     @render="onRender"
   />
