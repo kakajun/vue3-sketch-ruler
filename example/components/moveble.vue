@@ -2,6 +2,7 @@
 import Moveable from 'vue3-moveable'
 import { ref, nextTick } from 'vue'
 import { isEqual } from 'lodash'
+import { debounce } from '../../src/canvas-ruler/utils'
 const emit = defineEmits(['update:shadow', 'update:snapsObj'])
 const props = defineProps<{
   scale: number
@@ -75,9 +76,10 @@ const updateLayout = (items: any) => {
   for (const item of items) {
     const oldItem = targetList.value.find((o: { id: string }) => o.id == item.id)
     if (!isEqual(oldItem, item)) {
-      targetList.value.forEach((element: { id: string }) => {
+      targetList.value.forEach((element: any) => {
         if (element.id == item.id) {
-          element = item
+          element.left = item.left
+          element.top = item.top
         }
       })
     }
@@ -90,22 +92,25 @@ const updateLayout = (items: any) => {
  * @author: majun
  */
 const onRender = (e: any) => {
-  const { style } = e.target
-  const width = Number(style.width.replace('px', ''))
-  const height = Number(style.height.replace('px', ''))
-  // transform:"translate(15px, 22px)"
-  const regex = /translate\((\d+)px,\s*(\d+)px\)/
-  const match = e.transform.match(regex)
-  if (!match) return
-  // console.log(e, 'style')
-  const dx = parseInt(match[1], 10)
-  const dy = parseInt(match[2], 10)
-  emit('update:shadow', {
-    x: style.baseStartLeft + dx,
-    y: style.baseStartTop + dy,
-    width,
-    height
-  })
+  // setTimeout(() => {
+  //   const { style } = e.target
+  //   const width = Number(style.width.replace('px', ''))
+  //   const height = Number(style.height.replace('px', ''))
+  //   // transform:"translate(15px, 22px)"
+  //   const regex = /translate\((\d+)px,\s*(\d+)px\)/
+  //   const match = e.transform.match(regex)
+  //   if (!match) return
+  //   // console.log(e, 'style')
+  //   const dx = parseInt(match[1], 10)
+  //   const dy = parseInt(match[2], 10)
+  //   emit('update:shadow', {
+  //     x: style.baseStartLeft + dx,
+  //     y: style.baseStartTop + dy,
+  //     width,
+  //     height
+  //   })
+  // }, 0)
+
   e.target.style.cssText += e.cssText
 }
 
@@ -119,25 +124,72 @@ const onDragStart = (e) => {
   }
 }
 
+// 使用防抖函数
+const deactivateAfterDelay = debounce((e: any) => {
+  const { style } = e.target
+  const width = Number(style.width.replace('px', ''))
+  const height = Number(style.height.replace('px', ''))
+  const regex = /translate\((\d+)px,\s*(\d+)px\)/
+  const match = e.transform.match(regex)
+  if (!match) return
+  const dx = parseInt(match[1], 10)
+  const dy = parseInt(match[2], 10)
+  emit('update:shadow', {
+    x: 0 + dx,
+    y: 0 + dy,
+    width,
+    height
+  })
+}, 100)
+const onDrag = (e: any) => {
+  // deactivateAfterDelay(e)
+  // setTimeout(() => {
+  const { style } = e.target
+  const width = Number(style.width.replace('px', ''))
+  const height = Number(style.height.replace('px', ''))
+  const regex = /translate\((\d+)px,\s*(\d+)px\)/
+  const match = e.transform.match(regex)
+  if (!match) return
+  const dx = parseInt(match[1], 10)
+  const dy = parseInt(match[2], 10)
+  emit('update:shadow', {
+    x: 0 + dx,
+    y: 0 + dy,
+    width,
+    height
+  })
+  // }, 0)
+  e.target.style.transform = e.transform
+}
+
+const rendIndex = ref(0)
+
+const getStyle = (item: any) => {
+  return {
+    left: item.left + 'px',
+    top: item.top + 'px',
+    lineHeight: item.height + 'px',
+    width: item.width + 'px',
+    height: item.height + 'px',
+    transform: 'rotate(0deg)', // 覆盖原来的,否则会有偏移
+    background: item.background
+  }
+}
 /**
  * @description: 单个元素拖拽结束
  * @param {*} e
  * @author: majun
  */
 const onDragEnd = (e: { lastEvent: any; target: any }) => {
-  console.log(e, 'onDragEnd')
   const { lastEvent, target } = e
   if (lastEvent) {
     const { left, top } = lastEvent
+    console.log('lastEvent', lastEvent)
     const data = [
       {
         id: target.id,
-        style: {
-          width: target.offsetWidth,
-          height: target.offsetHeight,
-          left,
-          top
-        }
+        left,
+        top
       }
     ]
     //更新组件位置信息
@@ -146,23 +198,19 @@ const onDragEnd = (e: { lastEvent: any; target: any }) => {
 }
 </script>
 <template>
-  <div
-    v-for="item in targetList"
-    class="target"
-    :class="item.className"
-    :id="item.id"
-    :style="{
-      left: item.left + 'px',
-      top: item.top + 'px',
-      lineHeight: item.height + 'px',
-      width: item.width + 'px',
-      height: item.height + 'px',
-      background: item.background
-    }"
-    :key="item.id"
-    @mousedown="handleClick($event, item.id)"
-    >{{ item.className }}</div
-  >
+  <div :key="rendIndex">
+    <div
+      v-for="item in targetList"
+      class="target"
+      :class="item.className"
+      :id="item.id"
+      :style="getStyle(item)"
+      :key="item.id"
+      @mousedown="handleClick($event, item.id)"
+      >{{ item.className }}</div
+    >
+  </div>
+
   <Moveable
     ref="moveableRef"
     :snappable="true"

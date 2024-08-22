@@ -78,11 +78,15 @@ onMounted(() => {
   if (parentDom[0]) {
     const parent = parentDom[0]
     parent &&
-      parent.addEventListener('wheel', function (e: WheelEvent) {
-        if (e.ctrlKey || e.metaKey) {
-          panzoomInstance.zoomWithWheel(e)
-        }
-      })
+      parent.addEventListener(
+        'wheel',
+        function (e: WheelEvent) {
+          if (e.ctrlKey || e.metaKey) {
+            panzoomInstance.zoomWithWheel(e)
+          }
+        },
+        { passive: true }
+      )
 
     // 让按下鼠标中键才能移动画布,千万不能用mousedown, 否则会出现缩放bug, 因为panzoom内部对pointerId有判断,而mousedown里面并没有pointerId
     document.addEventListener('pointerdown', function (e) {

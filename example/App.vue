@@ -24,7 +24,7 @@ import UserRuler from './components/user-rulerts.vue'
 import UserRuler2 from './components/user-rulerts2.vue'
 import UserRuler3 from './components/user-rulerts3.vue'
 import UserRulerShadow from './components/UserRulerShadow.vue'
-import { ref, onMounted } from 'vue'
+import { ref, shallowRef, onMounted } from 'vue'
 import TabItem from './tab-item.vue'
 
 const tabs = [
@@ -33,8 +33,8 @@ const tabs = [
   { label: '自定义按键', index: 2 },
   { label: '阴影测试', index: 3 }
 ]
-const currentIndex = ref(3)
-const currentComponent = ref()
+const currentIndex = ref(0)
+const currentComponent = shallowRef()
 onMounted(() => {
   switchTab(currentIndex.value)
 })
