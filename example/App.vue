@@ -23,16 +23,22 @@
 import UserRuler from './components/user-rulerts.vue'
 import UserRuler2 from './components/user-rulerts2.vue'
 import UserRuler3 from './components/user-rulerts3.vue'
-import { ref } from 'vue'
+import UserRulerShadow from './components/UserRulerShadow.vue'
+import { ref, onMounted } from 'vue'
 import TabItem from './tab-item.vue'
 
 const tabs = [
   { label: '写法1', index: 0 },
   { label: '写法2', index: 1 },
-  { label: '自定义按键', index: 2 }
+  { label: '自定义按键', index: 2 },
+  { label: '阴影测试', index: 3 }
 ]
-const currentIndex = ref(0)
+const currentIndex = ref(3)
 const currentComponent = ref(UserRuler)
+onMounted(() => {
+  switchTab(currentIndex.value)
+})
+
 function switchTab(index) {
   currentIndex.value = index
   switch (index) {
@@ -44,6 +50,9 @@ function switchTab(index) {
       break
     case 2:
       currentComponent.value = UserRuler3
+      break
+    case 3:
+      currentComponent.value = UserRulerShadow
       break
     default:
       currentComponent.value = UserRuler

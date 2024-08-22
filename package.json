@@ -69,6 +69,7 @@
     "husky": "^9.1.1",
     "jsdom": "^24.1.0",
     "lint-staged": "^15.2.7",
+    "lodash": "^4.17.21",
     "postcss-html": "^1.7.0",
     "prettier": "^3.3.3",
     "pretty-quick": "^4.0.0",
@@ -85,7 +86,8 @@
     "vite-plugin-dts": "3.9.1",
     "vitest": "^2.0.3",
     "vue": "^3.4.33",
-    "vue-tsc": "^2.0.26"
+    "vue-tsc": "^2.0.26",
+    "vue3-moveable": "^0.28.0"
   },
   "keywords": [
     "vue",
