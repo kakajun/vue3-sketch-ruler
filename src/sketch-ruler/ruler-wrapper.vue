@@ -52,6 +52,7 @@ const props = defineProps<{
   snapsObj: LineType
   gridRatio: number
   lockLine: boolean
+  showShadowText: boolean
 }>()
 
 const {

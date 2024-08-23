@@ -4,6 +4,7 @@ export interface PaletteType {
   bgColor?: string
   longfgColor?: string
   fontColor?: string
+  fontShadowColor?: string
   shadowColor?: string
   lineColor?: string
   lineType?: string
@@ -18,6 +19,7 @@ export interface FinalPaletteType {
   bgColor: string
   longfgColor: string
   fontColor: string
+  fontShadowColor: string
   shadowColor: string
   lineColor: string
   lineType: string
@@ -59,5 +61,6 @@ export interface SketchRulerProps {
   gridRatio?: number
   lockLine?: boolean
   selfHandle?: boolean
+  showShadowText?: boolean
   panzoomOption?: PanzoomOptions
 }

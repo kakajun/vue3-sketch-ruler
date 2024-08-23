@@ -9,6 +9,7 @@ interface Props {
   scale: number
   palette: FinalPaletteType
   vertical: Boolean
+  showShadowText: Boolean
   start: number
   width: number
   height: number
@@ -81,7 +82,8 @@ const drawRuler = (ratio: number) => {
     canvasHeight: props.canvasHeight,
     ratio: ratio,
     rate: props.rate,
-    gridRatio: props.gridRatio
+    gridRatio: props.gridRatio,
+    showShadowText: props.showShadowText
   }
   options.scale = props.scale / props.rate
   options.canvasWidth = props.canvasWidth * props.rate

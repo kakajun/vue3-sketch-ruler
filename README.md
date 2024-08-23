@@ -153,6 +153,7 @@ const canvasHeight = 500
 | canvasHeight | 画布高 | Number | 700 |
 | isShowReferLine | 是否显示标线 | Boolean | true |
 | showRuler | 是否显示尺规 | Boolean | true |
+| showShadowText | 是否显示阴影文字 | Boolean | true |
 | lines | 初始化水平标尺上的参考线 | object<Array> | {h:[],v:[]} |
 | snapsObj | 吸附刻度集合 | object<Array> | {h:[],v:[]} |
 | snapThreshold | 吸附距离 | Number | 5 |
@@ -162,18 +163,19 @@ const canvasHeight = 500
 | panzoomOption | panzoom相关的扩展参数 | object | - |
 | palette | 标尺的样式配置参数 | Object | 如下表 |
 
-| 属性名称      | 描述           | 默认值                         |
-| ------------- | -------------- | ------------------------------ |
-| bgColor       | 画布背景       | #f6f7f9                        |
-| longfgColor   | 刻度背景       | #BABBBC                        |
-| fontColor     | 刻度字体颜色   | #7D8694                        |
-| shadowColor   | 激活阴影背景   | #E8E8E8                        |
-| lineColor     | 对准线颜色     | #51d6a9                        |
-| lineType      | 对准线类型     | solid (solid \dashed \ dotted) |
-| lockLineColor | 锁定对准线颜色 | #d4d7dc                        |
-| hoverColor    | 标签颜色字体   | #fff                           |
-| hoverBg       | 标签颜色背景   | #000                           |
-| borderColor   | 尺子外边框颜色 | #eeeeef                        |
+| 属性名称        | 描述             | 默认值                         |
+| --------------- | ---------------- | ------------------------------ |
+| bgColor         | 画布背景         | #f6f7f9                        |
+| longfgColor     | 刻度背景         | #BABBBC                        |
+| fontColor       | 刻度字体颜色     | #7D8694                        |
+| fontShadowColor | 刻度阴影字体颜色 | #106ebe                        |
+| shadowColor     | 激活阴影背景     | #E8E8E8                        |
+| lineColor       | 对准线颜色       | #51d6a9                        |
+| lineType        | 对准线类型       | solid (solid \dashed \ dotted) |
+| lockLineColor   | 锁定对准线颜色   | #d4d7dc                        |
+| hoverColor      | 标签颜色字体     | #fff                           |
+| hoverBg         | 标签颜色背景     | #000                           |
+| borderColor     | 尺子外边框颜色   | #eeeeef                        |
 
 > 更多pazoom插件的配置的panzoomOption参数，可以参考[pazoom document](https://github.com/timmywil/panzoom)
 
@@ -245,6 +247,7 @@ document.addEventListener('pointerup', function (e) {
 </a>
 
 ## 最后
+
 如果插件`vue3-sketch-ruler`对您有帮助，请给个star，您的鼓励是我最大的动力。
 
 ## 引用

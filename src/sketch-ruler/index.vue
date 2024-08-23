@@ -25,6 +25,7 @@
       :scale="ownScale"
       :palette="paletteCpu"
       :canvasWidth="canvasWidth"
+      :showShadowText="showShadowText"
       :canvasHeight="canvasHeight"
       :rate="rate"
       :gridRatio="gridRatio"
@@ -51,6 +52,7 @@
       :palette="paletteCpu"
       :canvasWidth="canvasWidth"
       :canvasHeight="canvasHeight"
+      :showShadowText="showShadowText"
       :rate="rate"
       :gridRatio="gridRatio"
       :lockLine="lockLine"
@@ -91,6 +93,7 @@ const props = withDefaults(defineProps<SketchRulerProps>(), {
     }
   },
   isShowReferLine: true,
+  showShadowText: true,
   canvasWidth: 700,
   canvasHeight: 700,
   snapsObj: () => {
@@ -121,6 +124,7 @@ const paletteCpu = computed(() => {
     bgColor: '#f6f7f9', // ruler bg color
     longfgColor: '#BABBBC', // ruler longer mark color
     fontColor: '#7D8694', // ruler font color
+    fontShadowColor: '#106ebe',
     shadowColor: '#e9f7fe', // ruler shadow color
     lineColor: '#51d6a9',
     lineType: 'solid',

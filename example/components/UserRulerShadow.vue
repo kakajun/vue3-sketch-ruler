@@ -146,7 +146,7 @@ const post = reactive({
   height: 400,
   // canvasWidth: 1920,
   // canvasHeight: 1080,
-  canvasWidth: 1000,
+  canvasWidth: 1030,
   canvasHeight: 500,
   showRuler: true,
   palette: cpuPalette.value,

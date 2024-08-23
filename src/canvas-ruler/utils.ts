@@ -23,11 +23,12 @@ export const drawCanvasRuler = (
     palette: any
     canvasWidth: number
     canvasHeight: number
+    showShadowText: boolean
   },
   isHorizontal?: boolean //横向为true,纵向缺省
 ) => {
-  const { scale, width, height, ratio, palette, gridRatio } = options
-  const { bgColor, fontColor, shadowColor, longfgColor } = palette
+  const { scale, width, height, ratio, palette, gridRatio, showShadowText } = options
+  const { bgColor, fontColor, fontShadowColor, shadowColor, longfgColor } = palette
   const endNum = isHorizontal ? options.canvasWidth : options.canvasHeight
   // 缩放ctx, 以简化计算
   ctx.scale(ratio, ratio)
@@ -53,9 +54,28 @@ export const drawCanvasRuler = (
     isHorizontal
       ? ctx.fillRect(shadowX, 0, shadowWidth, height)
       : ctx.fillRect(0, shadowX, width, shadowWidth)
+
+    // 画阴影文字起始刻度
+    if (showShadowText) {
+      ctx.fillStyle = fontShadowColor
+      ctx.strokeStyle = longfgColor
+      // 开始
+      isHorizontal ? ctx.translate(shadowX, height * 0.2) : ctx.translate(width * 0.1, shadowX + 32)
+      if (!isHorizontal) {
+        ctx.rotate(-Math.PI / 2) // 旋转 -90 度
+      }
+      ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
+      ctx.fillText(Math.round(selectStart).toString(), -10 * ratio, 4 * ratio)
+      const moveEndX = (selectLength * scale) / ratio
+      // 结束
+      isHorizontal
+        ? ctx.translate(moveEndX, height * 0.2)
+        : ctx.translate(width * 0.1, moveEndX + 32)
+      ctx.fillText(Math.round(selectStart + selectLength).toString(), 10 * ratio, 0)
+    }
   }
 
-  // 3. 画刻度和文字(因为刻度遮住了阴影)
+  // 3. 画刻度和文字
   ctx.beginPath()
   ctx.fillStyle = fontColor
   ctx.strokeStyle = longfgColor
@@ -89,7 +109,19 @@ export const drawCanvasRuler = (
         ctx.rotate(-Math.PI / 2) // 旋转 -90 度
       }
       ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
-      ctx.fillText(value.toString(), 4 * ratio, 7 * ratio)
+      // 如果最后一个大刻度挨着最后一个刻度, 不画文字
+      if (endNum - value > gridSize10 / 2) {
+        // 如果value值跟selectStart很近的, 不画文字, 包括最后的selectStart+selectLength, 如果selectLength都没有,那么直接显示文字
+        if (
+          !showShadowText ||
+          selectLength == 0 ||
+          (Math.abs(value - selectStart) > gridSize10 / 2 &&
+            Math.abs(value - (selectStart + selectLength)) > gridSize10 / 2)
+        ) {
+          ctx.fillText(value.toString(), 4 * ratio, 7 * ratio)
+        }
+      }
+
       ctx.restore()
       // 影响刻度位置
       if (value == 0) {
@@ -126,8 +158,9 @@ interface IDebounce {
   (): void
   cancel(): void
 }
-
-export function debounce<T extends Function>(func: T, wait: number = 100): IDebounce {
+// 定义一个泛型类型，确保T是一个函数类型
+type FunctionType<T = any, R = any> = (this: T, ...args: any[]) => R
+export function debounce<T extends FunctionType>(func: T, wait: number = 100): IDebounce {
   let timeout: ReturnType<typeof setTimeout> | null = null
 
   const debounced: IDebounce = function (...args: Parameters<T>) {
