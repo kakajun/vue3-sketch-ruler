@@ -34,6 +34,8 @@ const elementSnapDirections = {
   middle: true
 }
 
+const copyTargetList = ref()
+
 const targetList = ref([
   {
     id: 'target0',
@@ -71,95 +73,23 @@ const handleClick = (event: MouseEvent, id: string) => {
     moveableRef.value.dragStart(event)
   })
 }
-
-const updateLayout = (items: any) => {
-  for (const item of items) {
-    const oldItem = targetList.value.find((o: { id: string }) => o.id == item.id)
-    if (!isEqual(oldItem, item)) {
-      targetList.value.forEach((element: any) => {
-        if (element.id == item.id) {
-          element.left = item.left
-          element.top = item.top
-        }
-      })
-    }
-  }
+const onDragStart = (e: Record<string, any>) => {
+  copyTargetList.value = JSON.parse(JSON.stringify(targetList.value))
 }
-
-/**
- * @description: 单个元素渲染走这里
- * @param {*} e
- * @author: majun
- */
-const onRender = (e: any) => {
-  // setTimeout(() => {
-  //   const { style } = e.target
-  //   const width = Number(style.width.replace('px', ''))
-  //   const height = Number(style.height.replace('px', ''))
-  //   // transform:"translate(15px, 22px)"
-  //   const regex = /translate\((\d+)px,\s*(\d+)px\)/
-  //   const match = e.transform.match(regex)
-  //   if (!match) return
-  //   // console.log(e, 'style')
-  //   const dx = parseInt(match[1], 10)
-  //   const dy = parseInt(match[2], 10)
-  //   emit('update:shadow', {
-  //     x: style.baseStartLeft + dx,
-  //     y: style.baseStartTop + dy,
-  //     width,
-  //     height
-  //   })
-  // }, 0)
-
-  e.target.style.cssText += e.cssText
-}
-
-const onDragStart = (e) => {
-  // console.log(e, 'onDragStart')
-  const { target } = e
-  if (target) {
-    const { style } = target
-    style.baseStartLeft = parseFloat(style.left.replace('px', ''))
-    style.baseStartTop = parseFloat(style.top.replace('px', ''))
-  }
-}
-
-// 使用防抖函数
-const deactivateAfterDelay = debounce((e: any) => {
-  const { style } = e.target
-  const width = Number(style.width.replace('px', ''))
-  const height = Number(style.height.replace('px', ''))
-  const regex = /translate\((\d+)px,\s*(\d+)px\)/
-  const match = e.transform.match(regex)
-  if (!match) return
-  const dx = parseInt(match[1], 10)
-  const dy = parseInt(match[2], 10)
+const onDrag = (params: Record<string, any>) => {
+  let { target, translate } = params
+  const { id } = target.dataset
+  const { left, top, width, height } = copyTargetList.value.find((o: { id: string }) => o.id == id)
+  const [x, y] = translate
+  const obj = targetList.value.find((o: { id: string }) => o.id == id)
+  obj.left = left + x
+  obj.top = top + y
   emit('update:shadow', {
-    x: 0 + dx,
-    y: 0 + dy,
+    x: obj.left,
+    y: obj.top,
     width,
     height
   })
-}, 100)
-const onDrag = (e: any) => {
-  // deactivateAfterDelay(e)
-  // setTimeout(() => {
-  const { style } = e.target
-  const width = Number(style.width.replace('px', ''))
-  const height = Number(style.height.replace('px', ''))
-  const regex = /translate\((\d+)px,\s*(\d+)px\)/
-  const match = e.transform.match(regex)
-  if (!match) return
-  const dx = parseInt(match[1], 10)
-  const dy = parseInt(match[2], 10)
-  emit('update:shadow', {
-    x: 0 + dx,
-    y: 0 + dy,
-    width,
-    height
-  })
-  // }, 0)
-  e.target.style.transform = e.transform
 }
 
 const rendIndex = ref(0)
@@ -175,26 +105,9 @@ const getStyle = (item: any) => {
     background: item.background
   }
 }
-/**
- * @description: 单个元素拖拽结束
- * @param {*} e
- * @author: majun
- */
+
 const onDragEnd = (e: { lastEvent: any; target: any }) => {
-  const { lastEvent, target } = e
-  if (lastEvent) {
-    const { left, top } = lastEvent
-    console.log('lastEvent', lastEvent)
-    const data = [
-      {
-        id: target.id,
-        left,
-        top
-      }
-    ]
-    //更新组件位置信息
-    updateLayout(data)
-  }
+  moveableRef.value.updateRect()
 }
 </script>
 <template>
@@ -203,6 +116,9 @@ const onDragEnd = (e: { lastEvent: any; target: any }) => {
       v-for="item in targetList"
       class="target"
       :class="item.className"
+      :data-id="item.id"
+      :data-left="item.left"
+      :data-top="item.top"
       :id="item.id"
       :style="getStyle(item)"
       :key="item.id"
@@ -224,9 +140,9 @@ const onDragEnd = (e: { lastEvent: any; target: any }) => {
     :edgeDraggable="edgeDraggable"
     :startDragRotate="startDragRotate"
     :throttleDragRotate="throttleDragRotate"
+    @drag="onDrag"
     @drag-start="onDragStart"
     @drag-end="onDragEnd"
-    @render="onRender"
   />
 </template>
 
