@@ -41,7 +41,7 @@
 import { computed, ref, reactive, onMounted } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
 import type { PanzoomEvent } from 'simple-panzoom'
-import movebleCom from './moveble.vue'
+import movebleCom from './edit/moveble.vue'
 
 const sketchruleRef = ref()
 
@@ -132,10 +132,10 @@ const post = reactive({
   height: 800,
   // width: 770,
   // height: 400,
-  canvasWidth: 1920,
-  canvasHeight: 1080,
-  // canvasWidth: 1030,
-  // canvasHeight: 500,
+  // canvasWidth: 1920,
+  // canvasHeight: 1080,
+  canvasWidth: 1242,
+  canvasHeight: 1660,
   showRuler: true,
   palette: cpuPalette.value,
   snapsObj: { h: [0, 100, 200], v: [130] },

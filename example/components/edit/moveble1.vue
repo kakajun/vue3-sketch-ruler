@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import Moveable from 'vue3-moveable'
 import { ref, nextTick } from 'vue'
+import mock from '../../assets/json/旅行路线.json'
+import content from './content.vue'
 
 const emit = defineEmits(['update:shadow', 'update:snapsObj'])
 const props = defineProps<{
@@ -35,38 +37,7 @@ const elementSnapDirections = {
 
 const copyTargetList = ref()
 
-const targetList = ref([
-  {
-    id: 'target0',
-    className: 'element0',
-    left: 200,
-    top: 150,
-    background: '#ee8',
-    width: 600,
-    zIndex: 1,
-    height: 600
-  },
-  {
-    id: 'target1',
-    className: 'element1',
-    left: 600,
-    top: 150,
-    zIndex: 1,
-    background: 'rgb(52, 55, 221)',
-    width: 400,
-    height: 300
-  },
-  {
-    id: 'target2',
-    className: 'element2',
-    left: 100,
-    top: 600,
-    zIndex: 1,
-    background: 'rgb(212, 67, 152)',
-    width: 400,
-    height: 400
-  }
-])
+const targetList = ref(mock.objects)
 
 // 点击事件，设置当前选中元素的id
 const handleClick = (event: MouseEvent, item: object) => {
@@ -127,8 +98,9 @@ const onDragEnd = (e: { lastEvent: any; target: any }) => {
       :style="getStyle(item)"
       :key="item.id"
       @mousedown="handleClick($event, item)"
-      >{{ item.className }}</div
     >
+      <content :item="item"></content>
+    </div>
   </div>
 
   <Moveable
@@ -155,6 +127,7 @@ const onDragEnd = (e: { lastEvent: any; target: any }) => {
   position: absolute;
   text-align: center;
   color: #333;
+  font-size: 26px;
   font-weight: bold;
   border: 1px solid #333;
   box-sizing: border-box;

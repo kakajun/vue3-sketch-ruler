@@ -55,29 +55,17 @@ export const drawCanvasRuler = (
       ? ctx.fillRect(shadowX, 0, shadowWidth, height)
       : ctx.fillRect(0, shadowX, width, shadowWidth)
 
-    // 画阴影文字起始刻度
+    // 画阴影文字起始
     if (showShadowText) {
-      ctx.fillStyle = fontShadowColor
-      ctx.strokeStyle = longfgColor
-      ctx.save()
-      // 开始
-      isHorizontal ? ctx.translate(shadowX, height * 0.2) : ctx.translate(width * 0.2, shadowX - 5)
-      if (!isHorizontal) {
-        ctx.rotate(-Math.PI / 2) // 旋转 -90 度
+      if (isHorizontal) {
+        drawShadowText(shadowX, height * 0.3, String(selectStart))
+        const shadowEnd = ((selectStart + selectLength - start) * scale) / ratio
+        drawShadowText(shadowEnd, height * 0.3, String(selectStart + selectLength))
+      } else {
+        drawShadowText(width * 0.3, shadowX, String(selectStart))
+        const shadowEnd = ((selectStart + selectLength - start) * scale) / ratio
+        drawShadowText(width * 0.3, shadowEnd, String(selectStart + selectLength))
       }
-      ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
-      ctx.fillText(Math.round(selectStart).toString(), 0, 4)
-      ctx.restore()
-      // 结束
-      const shadowEnd = ((selectStart + selectLength - start) * scale) / ratio // 阴影起点坐标
-      isHorizontal
-        ? ctx.translate(shadowEnd, height * 0.2)
-        : ctx.translate(width * 0.2, shadowEnd - 5)
-      if (!isHorizontal) {
-        ctx.rotate(-Math.PI / 2) // 旋转 -90 度
-      }
-      ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
-      ctx.fillText(Math.round(selectStart + selectLength).toString(), 0, 4)
     }
   }
 
@@ -117,7 +105,6 @@ export const drawCanvasRuler = (
       ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
       // 如果最后一个大刻度挨着最后一个刻度, 不画文字
       if (endNum - value > gridSize10 / 2) {
-        // 如果value值跟selectStart很近的, 不画文字, 包括最后的selectStart+selectLength, 如果selectLength都没有,那么直接显示文字
         if (
           !showShadowText ||
           selectLength == 0 ||
@@ -141,11 +128,9 @@ export const drawCanvasRuler = (
     // 恢复ctx matrix
     ctx.setTransform(1, 0, 0, 1, 0, 0)
   }
-
   function setLast(x: number, value: number) {
     isHorizontal ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
     ctx.save()
-
     isHorizontal ? ctx.translate(x + 5, height * 0.2) : ctx.translate(width * 0.1, x + 32)
     if (!isHorizontal) {
       ctx.rotate(-Math.PI / 2) // 旋转 -90 度
@@ -157,6 +142,18 @@ export const drawCanvasRuler = (
     ctx.stroke()
     ctx.closePath()
     ctx.setTransform(1, 0, 0, 1, 0, 0)
+  }
+
+  function drawShadowText(x: number, y: number, text: string) {
+    ctx.fillStyle = fontShadowColor
+    ctx.strokeStyle = longfgColor
+    ctx.save()
+    ctx.translate(x, y)
+    if (!isHorizontal) ctx.rotate(-Math.PI / 2)
+    ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
+    ctx.strokeText(text, 0, 0)
+    ctx.fillText(text, 0, 0)
+    ctx.restore()
   }
 }
 
