@@ -59,19 +59,25 @@ export const drawCanvasRuler = (
     if (showShadowText) {
       ctx.fillStyle = fontShadowColor
       ctx.strokeStyle = longfgColor
+      ctx.save()
       // 开始
-      isHorizontal ? ctx.translate(shadowX, height * 0.2) : ctx.translate(width * 0.1, shadowX + 32)
+      isHorizontal ? ctx.translate(shadowX, height * 0.2) : ctx.translate(width * 0.2, shadowX - 5)
       if (!isHorizontal) {
         ctx.rotate(-Math.PI / 2) // 旋转 -90 度
       }
       ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
-      ctx.fillText(Math.round(selectStart).toString(), -10 * ratio, 4 * ratio)
-      const moveEndX = (selectLength * scale) / ratio
+      ctx.fillText(Math.round(selectStart).toString(), 0, 4)
+      ctx.restore()
       // 结束
+      const shadowEnd = ((selectStart + selectLength - start) * scale) / ratio // 阴影起点坐标
       isHorizontal
-        ? ctx.translate(moveEndX, height * 0.2)
-        : ctx.translate(width * 0.1, moveEndX + 32)
-      ctx.fillText(Math.round(selectStart + selectLength).toString(), 10 * ratio, 0)
+        ? ctx.translate(shadowEnd, height * 0.2)
+        : ctx.translate(width * 0.2, shadowEnd - 5)
+      if (!isHorizontal) {
+        ctx.rotate(-Math.PI / 2) // 旋转 -90 度
+      }
+      ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
+      ctx.fillText(Math.round(selectStart + selectLength).toString(), 0, 4)
     }
   }
 
@@ -100,7 +106,7 @@ export const drawCanvasRuler = (
       ctx.save()
       // 影响文字位置
       if (value == 0) {
-        isHorizontal ? ctx.translate(x - 15, height * 0.2) : ctx.translate(width * 0.3, x - 5)
+        isHorizontal ? ctx.translate(x - 15, height * 0.01) : ctx.translate(width * 0.3, x - 5)
       } else {
         isHorizontal ? ctx.translate(x - 12, height * 0.05) : ctx.translate(width * 0.05, x + 12)
       }
@@ -118,7 +124,7 @@ export const drawCanvasRuler = (
           (Math.abs(value - selectStart) > gridSize10 / 2 &&
             Math.abs(value - (selectStart + selectLength)) > gridSize10 / 2)
         ) {
-          ctx.fillText(value.toString(), 4 * ratio, 7 * ratio)
+          ctx.fillText(value.toString(), 4 * ratio, 9 * ratio)
         }
       }
 
@@ -127,7 +133,7 @@ export const drawCanvasRuler = (
       if (value == 0) {
         isHorizontal ? ctx.lineTo(x, height) : ctx.lineTo(width, x)
       } else {
-        isHorizontal ? ctx.lineTo(x, (height * 10) / 16) : ctx.lineTo((width * 10) / 16, x)
+        isHorizontal ? ctx.lineTo(x, height / 1.3) : ctx.lineTo(width / 1.3, x)
       }
     }
     ctx.stroke()

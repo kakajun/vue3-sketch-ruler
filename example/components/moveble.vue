@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import Moveable from 'vue3-moveable'
 import { ref, nextTick } from 'vue'
-import { isEqual } from 'lodash'
-import { debounce } from '../../src/canvas-ruler/utils'
+
 const emit = defineEmits(['update:shadow', 'update:snapsObj'])
 const props = defineProps<{
   scale: number
@@ -40,34 +39,40 @@ const targetList = ref([
   {
     id: 'target0',
     className: 'element0',
-    left: 100,
+    left: 200,
     top: 150,
     background: '#ee8',
-    width: 100,
-    height: 100
+    width: 600,
+    zIndex: 1,
+    height: 600
   },
   {
     id: 'target1',
     className: 'element1',
-    left: 300,
+    left: 600,
     top: 150,
+    zIndex: 1,
     background: 'rgb(52, 55, 221)',
-    width: 200,
-    height: 100
+    width: 400,
+    height: 300
   },
   {
     id: 'target2',
     className: 'element2',
     left: 100,
-    top: 300,
+    top: 600,
+    zIndex: 1,
     background: 'rgb(212, 67, 152)',
-    width: 200,
-    height: 200
+    width: 400,
+    height: 400
   }
 ])
 
 // 点击事件，设置当前选中元素的id
-const handleClick = (event: MouseEvent, id: string) => {
+const handleClick = (event: MouseEvent, item: object) => {
+  const id = item.id
+  targetList.value.forEach((o) => (o.zIndex = 1))
+  item.zIndex = 2
   targetId.value = id
   nextTick(() => {
     moveableRef.value.dragStart(event)
@@ -92,8 +97,6 @@ const onDrag = (params: Record<string, any>) => {
   })
 }
 
-const rendIndex = ref(0)
-
 const getStyle = (item: any) => {
   return {
     left: item.left + 'px',
@@ -101,6 +104,7 @@ const getStyle = (item: any) => {
     lineHeight: item.height + 'px',
     width: item.width + 'px',
     height: item.height + 'px',
+    zIndex: item.zIndex,
     transform: 'rotate(0deg)', // 覆盖原来的,否则会有偏移
     background: item.background
   }
@@ -111,7 +115,7 @@ const onDragEnd = (e: { lastEvent: any; target: any }) => {
 }
 </script>
 <template>
-  <div :key="rendIndex">
+  <div class="container">
     <div
       v-for="item in targetList"
       class="target"
@@ -122,7 +126,7 @@ const onDragEnd = (e: { lastEvent: any; target: any }) => {
       :id="item.id"
       :style="getStyle(item)"
       :key="item.id"
-      @mousedown="handleClick($event, item.id)"
+      @mousedown="handleClick($event, item)"
       >{{ item.className }}</div
     >
   </div>

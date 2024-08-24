@@ -3,7 +3,6 @@
     <div class="top font16">
       <div class="mr10">鼠标中键移动画布 </div>
       <div class="scale mr10"> 缩放比:{{ cpuScale }} </div>
-      <button class="mr10 font16" @click="changeShadow">模拟阴影切换</button>
     </div>
 
     <div
@@ -11,17 +10,15 @@
       :class="[state.isBlack ? 'balckwrapper' : 'whitewrapper']"
       :style="rectStyle"
     >
-      <!--  :gridRatio="0.5" -->
       <SketchRule
         ref="sketchruleRef"
-        :key="rendIndex"
         v-model:scale="state.scale"
         v-model:lockLine="lockLine"
         v-bind="post"
         :selfHandle="true"
       >
         <template #default>
-          <div data-type="page" :style="canvasStyle">
+          <div class="container" :style="canvasStyle">
             <movebleCom
               :scale="state.scale"
               v-model:shadow="post.shadow"
@@ -41,13 +38,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import bgImg from '../assets/bg.png'
 import { computed, ref, reactive, onMounted } from 'vue'
 import SketchRule from '../../src/index' // 这里可以换成打包后的
 import type { PanzoomEvent } from 'simple-panzoom'
 import movebleCom from './moveble.vue'
 
-const rendIndex = ref(3)
 const sketchruleRef = ref()
 
 // 更多配置,参见 https://github.com/timmywil/panzoom
@@ -63,13 +58,6 @@ const panzoomOption = reactive({
   }
 })
 const lockLine = ref(false)
-
-// 另外一个方法调用内部方法
-const zoomOutMethod = () => {
-  if (sketchruleRef.value) {
-    sketchruleRef.value.zoomOut()
-  }
-}
 
 onMounted(() => {
   window.addEventListener('resize', handleResize)
@@ -140,14 +128,14 @@ const cpuPalette = computed(() => {
 
 const post = reactive({
   thick: 20,
-  // width: 1470,
-  // height: 800,
-  width: 770,
-  height: 400,
-  // canvasWidth: 1920,
-  // canvasHeight: 1080,
-  canvasWidth: 1030,
-  canvasHeight: 500,
+  width: 1470,
+  height: 800,
+  // width: 770,
+  // height: 400,
+  canvasWidth: 1920,
+  canvasHeight: 1080,
+  // canvasWidth: 1030,
+  // canvasHeight: 500,
   showRuler: true,
   palette: cpuPalette.value,
   snapsObj: { h: [0, 100, 200], v: [130] },
@@ -224,7 +212,9 @@ const canvasStyle = computed(() => {
   background-image: linear-gradient(#18181c 20px, transparent 0),
     linear-gradient(90deg, transparent 20px, #86909c 0);
 }
-
+.container {
+  background: rgb(236, 236, 234);
+}
 .button {
   bottom: 100%;
 }

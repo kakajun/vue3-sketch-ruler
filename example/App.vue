@@ -33,7 +33,7 @@ const tabs = [
   { label: '自定义按键', index: 2 },
   { label: '阴影测试', index: 3 }
 ]
-const currentIndex = ref(0)
+const currentIndex = ref(3)
 const currentComponent = shallowRef()
 onMounted(() => {
   switchTab(currentIndex.value)
