@@ -8,8 +8,8 @@ import type { FinalPaletteType } from '../index-types'
 interface Props {
   scale: number
   palette: FinalPaletteType
-  vertical: Boolean
-  showShadowText: Boolean
+  vertical: boolean
+  showShadowText: boolean
   start: number
   width: number
   height: number
