@@ -128,7 +128,6 @@ const onDragEnd = (e: { lastEvent: any; target: any }) => {
       :key="item.id"
       @mousedown="handleClick($event, item)"
       >{{ item.className }}
-     
     </div>
   </div>
 
@@ -156,6 +155,7 @@ const onDragEnd = (e: { lastEvent: any; target: any }) => {
   position: absolute;
   text-align: center;
   color: #333;
+  font-size: 30px;
   font-weight: bold;
   border: 1px solid #333;
   box-sizing: border-box;
