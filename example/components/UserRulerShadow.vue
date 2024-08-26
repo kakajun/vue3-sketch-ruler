@@ -22,7 +22,7 @@
             <movebleCom
               :scale="state.scale"
               v-model:shadow="post.shadow"
-              :snapsObj="post.snapsObj"
+              v-model:snapsObj="post.snapsObj"
             />
           </div>
         </template>
@@ -126,15 +126,16 @@ const post = reactive({
   thick: 20,
   width: 1470,
   height: 800,
-  // width: 770,
-  // height: 400,
-  // canvasWidth: 1920,
-  // canvasHeight: 1080,
   canvasWidth: 1242,
   canvasHeight: 1660,
+  // width: 770,
+  // height: 400,
+  // canvasWidth: 600,
+  // canvasHeight: 400,
+
   showRuler: true,
   palette: cpuPalette.value,
-  snapsObj: { h: [0, 100, 200], v: [130] },
+  snapsObj: { h: [], v: [] },
   shadow: {
     x: 0,
     y: 0,

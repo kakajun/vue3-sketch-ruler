@@ -1,6 +1,17 @@
 <script setup lang="ts">
 import Moveable from 'vue3-moveable'
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, watch } from 'vue'
+
+type TargetItem = {
+  id: string
+  className: string
+  left: number
+  top: number
+  background: string
+  width: number
+  height: number
+  zIndex?: number // 可选字段
+}
 
 const emit = defineEmits(['update:shadow', 'update:snapsObj'])
 const props = defineProps<{
@@ -9,10 +20,6 @@ const props = defineProps<{
   shadow: object
 }>()
 const draggable = true
-const throttleDrag = 1
-const edgeDraggable = false
-const startDragRotate = 0
-const throttleDragRotate = 0
 const targetId = ref(null)
 const moveableRef = ref(null)
 const snapDirections = {
@@ -69,9 +76,9 @@ const targetList = ref([
 ])
 
 // 点击事件，设置当前选中元素的id
-const handleClick = (event: MouseEvent, item: object) => {
+const handleClick = (event: MouseEvent, item: TargetItem) => {
   const id = item.id
-  targetList.value.forEach((o) => (o.zIndex = 1))
+  targetList.value.forEach((o: TargetItem) => (o.zIndex = 1))
   item.zIndex = 2
   targetId.value = id
   nextTick(() => {
@@ -96,6 +103,19 @@ const onDrag = (params: Record<string, any>) => {
     height
   })
 }
+
+watch(
+  () => targetList,
+  () => {
+    const h = targetList.value.map((item: TargetItem) => item.top)
+    const v = targetList.value.map((item: TargetItem) => item.left)
+    emit('update:snapsObj', {
+      h,
+      v
+    })
+  },
+  { deep: true } // 确保深度监听
+)
 
 const getStyle = (item: any) => {
   return {
@@ -140,10 +160,7 @@ const onDragEnd = (e: { lastEvent: any; target: any }) => {
     :snapThreshold="5 / scale"
     :target="`#${targetId}`"
     :draggable="draggable"
-    :throttleDrag="throttleDrag"
-    :edgeDraggable="edgeDraggable"
-    :startDragRotate="startDragRotate"
-    :throttleDragRotate="throttleDragRotate"
+    :elementGuidelines="['.container', '.element0', '.element1', '.element2']"
     @drag="onDrag"
     @drag-start="onDragStart"
     @drag-end="onDragEnd"

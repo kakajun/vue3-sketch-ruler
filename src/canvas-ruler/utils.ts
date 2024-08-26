@@ -58,13 +58,13 @@ export const drawCanvasRuler = (
     // 画阴影文字起始
     if (showShadowText) {
       if (isHorizontal) {
-        drawShadowText(shadowX, height * 0.3, String(selectStart))
+        drawShadowText(shadowX, height * 0.3, Math.round(selectStart))
         const shadowEnd = ((selectStart + selectLength - start) * scale) / ratio
-        drawShadowText(shadowEnd, height * 0.3, String(selectStart + selectLength))
+        drawShadowText(shadowEnd, height * 0.3, Math.round(selectStart + selectLength))
       } else {
-        drawShadowText(width * 0.3, shadowX, String(selectStart))
+        drawShadowText(width * 0.3, shadowX, Math.round(selectStart))
         const shadowEnd = ((selectStart + selectLength - start) * scale) / ratio
-        drawShadowText(width * 0.3, shadowEnd, String(selectStart + selectLength))
+        drawShadowText(width * 0.3, shadowEnd, Math.round(selectStart + selectLength))
       }
     }
   }
@@ -144,15 +144,15 @@ export const drawCanvasRuler = (
     ctx.setTransform(1, 0, 0, 1, 0, 0)
   }
 
-  function drawShadowText(x: number, y: number, text: string) {
+  function drawShadowText(x: number, y: number, num: number) {
     ctx.fillStyle = fontShadowColor
     ctx.strokeStyle = longfgColor
     ctx.save()
     ctx.translate(x, y)
     if (!isHorizontal) ctx.rotate(-Math.PI / 2)
     ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
-    ctx.strokeText(text, 0, 0)
-    ctx.fillText(text, 0, 0)
+    ctx.strokeText(String(num), 0, 0)
+    ctx.fillText(String(num), 0, 0)
     ctx.restore()
   }
 }
