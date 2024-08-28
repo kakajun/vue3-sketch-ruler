@@ -33,6 +33,7 @@ onMounted(() => {
   window.addEventListener('resize', handleResize)
   initCanvasRef()
   updateCanvasContext(ratioValue)
+  drawRuler(ratioValue)
 })
 
 const handleResize = () => {
