@@ -250,6 +250,8 @@ document.addEventListener('pointerup', function (e) {
 
 这是个开源业余做的功能，欢迎加强该插件的小伙伴加入, 如果插件`vue3-sketch-ruler`对您有帮助，请给个star，您的鼓励是我最大的动力。
 
+<a href='https://gitee.com/majun2232/vue3-sketch-Ruler'><img src='https://gitee.com/majun2232/vue3-sketch-Ruler/widgets/widget_4.svg' alt='Fork me on Gitee'></img></a>
+
 ## 引用
 
 vue标尺组件 [vue-sketch-ruler](https://github.com/chuxiaoguo/vue-sketch-ruler.git)
