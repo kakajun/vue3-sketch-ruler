@@ -22,7 +22,7 @@
   "style": "lib/style.css",
   "types": "lib/index.d.ts",
   "scripts": {
-    "dev": "vite --config vite.demo.ts",
+    "dev": "vite --config vite.demo.ts --host 0.0.0.0",
     "d": "nvm use 20.10.0 && npm run dev",
     "build": " vite build",
     "build:demo": "vite build --config ./vite.demo.ts",
