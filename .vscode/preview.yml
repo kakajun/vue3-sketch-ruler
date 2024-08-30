@@ -1,0 +1,20 @@
+# preview.yml
+name: Preview
+on:
+  push:
+    branches:
+      - master # 或者你的默认分支名
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20' # 或者你需要的 Node.js 版本
+      - name: Install dependencies
+        run: npm install
+      - name: Run development server
+        run: npm run dev
