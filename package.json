@@ -80,6 +80,7 @@
     "release-it": "^17.6.0",
     "rollup-plugin-banner": "^0.2.1",
     "sass": "^1.77.8",
+    "selecto": "^1.26.3",
     "stylelint": "^16.7.0",
     "stylelint-config-html": "^1.1.0",
     "stylelint-config-recommended": "^14.0.1",
@@ -91,7 +92,9 @@
     "vitest": "^2.0.3",
     "vue": "^3.4.33",
     "vue-tsc": "^2.0.26",
-    "vue3-moveable": "^0.28.0"
+    "vue3-moveable": "^0.28.0",
+    "framework-utils": "^1.1.0",
+    "@daybrush/utils": "^1.13.0"
   },
   "keywords": [
     "vue",
