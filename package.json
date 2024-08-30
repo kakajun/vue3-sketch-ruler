@@ -12,6 +12,10 @@
     "type": "git",
     "url": "https://github.com/kakajun/vue3-sketch-ruler"
   },
+  "repository2": {
+    "type": "gitee",
+    "url": "https://gitee.com/majun2232/vue3-sketch-Ruler"
+  },
   "sideEffects": false,
   "main": "lib/index.js",
   "module": "lib/index.mjs",
