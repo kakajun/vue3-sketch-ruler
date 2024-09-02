@@ -15,6 +15,7 @@
         v-model:scale="state.scale"
         v-model:lockLine="lockLine"
         v-bind="post"
+        :autoCenter="false"
         :selfHandle="true"
       >
         <template #default>
@@ -210,6 +211,7 @@ const canvasStyle = computed(() => {
     linear-gradient(90deg, transparent 20px, #86909c 0);
 }
 .container {
+  position: relative;
   background: rgb(236, 236, 234);
 }
 .button {

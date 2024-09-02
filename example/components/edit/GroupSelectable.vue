@@ -7,6 +7,7 @@
     :selectByClick="true"
     :selectFromInside="true"
     :toggleContinueSelect="['ctrl']"
+    :keyContainer="window"
     :ratio="0"
     @drag-start="onDragStart"
     @select-end="onSelectEnd"
@@ -17,10 +18,10 @@
 import { ref, onMounted } from 'vue'
 import Selecto from './Selecto.vue'
 const selectorRef = ref(null)
-
+const targets = ref()
 const emit = defineEmits(['setTargetClass', 'dragStart'])
 const props = defineProps({
-  moveableRef: Object
+  isMoveableElement: Function
 })
 
 const onSelectEnd = (e) => {
@@ -34,15 +35,17 @@ const onSelectEnd = (e) => {
     emit('dragStart', e.inputEvent)
     // props.moveableRef.dragStart(e.inputEvent)
   }
+  targets.value = selected
   let layerClass = selected.map((item) => '.' + item.id)
   emit('setTargetClass', layerClass)
 }
 
 const onDragStart = (e) => {
   const target = e.inputEvent.target
-  console.log(props.movableRef, 'props.movableRef')
-
-  if (props.movableRef.isMoveableElement(target)) {
+  if (
+    props.isMoveableElement(target) ||
+    targets.value.some((t) => t === target || t.contains(target))
+  ) {
     e.stop()
   }
 }

@@ -99,6 +99,10 @@ const handleClick = (event: MouseEvent, item: TargetItem) => {
 const onDragStart = (e: Record<string, any>) => {
   copyTargetList.value = JSON.parse(JSON.stringify(targetList.value))
 }
+
+const isMoveableElement = (target: any) => {
+  return moveableRef.value.isMoveableElement(target)
+}
 const onDrag = (params: Record<string, any>) => {
   let { target, translate } = params
   const { id } = target.dataset
@@ -149,6 +153,7 @@ const setTargetClass = (targetIds: string[]) => {
 const onDragEnd = (e: { lastEvent: any; target: any }) => {
   moveableRef.value.updateRect()
 }
+
 </script>
 <template>
   <div class="container">
@@ -169,6 +174,7 @@ const onDragEnd = (e: { lastEvent: any; target: any }) => {
 
   <Moveable
     ref="moveableRef"
+    id="moveable"
     :snappable="true"
     :snapGap="true"
     :scalable="true"
@@ -187,7 +193,7 @@ const onDragEnd = (e: { lastEvent: any; target: any }) => {
   />
   <GroupSelectable
     @dragStart="dragStart"
-    :movableRef="movableRef"
+    :isMoveableElement="isMoveableElement"
     @setTargetClass="setTargetClass"
   />
 </template>
