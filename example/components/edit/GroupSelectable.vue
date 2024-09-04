@@ -1,7 +1,6 @@
 <template>
   <Selecto
     ref="selectorRef"
-    dragContainer=".canvasedit-parent"
     :selectableTargets="['.target']"
     :hitRate="0"
     :selectByClick="true"
@@ -18,7 +17,7 @@
 import { ref, onMounted } from 'vue'
 import Selecto from './Selecto.vue'
 const selectorRef = ref(null)
-const targets = ref()
+const targets = ref([])
 const emit = defineEmits(['setTargetClass', 'dragStart'])
 const props = defineProps({
   isMoveableElement: Function
