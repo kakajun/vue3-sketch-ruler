@@ -1,7 +1,8 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "1.3.15",
+  "version": "1.3.16",
   "author": "kakajun <253495832@qq.com>",
+  "deprecated": "This version is deprecated. Please upgrade to version 2X for better features and performance.See https://github.com/kakajun/vue3-sketch-ruler",
   "license": "MIT",
   "private": false,
   "files": [

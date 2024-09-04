@@ -1,14 +1,15 @@
 import {
   DefineComponent,
+  ExtractPropTypes,
   PropType,
   Ref,
   ComputedRef,
   ComponentOptionsMixin,
   PublicProps,
-  ExtractPropTypes
+  ComponentProvideOptions
 } from 'vue-demi'
 declare const _default: DefineComponent<
-  {
+  ExtractPropTypes<{
     scale: NumberConstructor
     ratio: NumberConstructor
     thick: NumberConstructor
@@ -46,10 +47,10 @@ declare const _default: DefineComponent<
     isShowReferLine: {
       type: BooleanConstructor
     }
-  },
+  }>,
   {
-    showIndicator: Ref<boolean>
-    valueNum: Ref<number>
+    showIndicator: Ref<boolean, boolean>
+    valueNum: Ref<number, number>
     rwClassName: ComputedRef<'v-container' | 'h-container'>
     rwStyle: ComputedRef<
       | {
@@ -70,7 +71,7 @@ declare const _default: DefineComponent<
     handleLineRelease: (value: number, index: number) => void
     handleLineRemove: (index: any) => void
   },
-  unknown,
+  {},
   {},
   {},
   ComponentOptionsMixin,
@@ -79,45 +80,25 @@ declare const _default: DefineComponent<
   string,
   PublicProps,
   Readonly<
-    ExtractPropTypes<{
-      scale: NumberConstructor
-      ratio: NumberConstructor
-      thick: NumberConstructor
-      startNumX: NumberConstructor
-      endNumX: NumberConstructor
-      startNumY: NumberConstructor
-      endNumY: NumberConstructor
-      palette: ObjectConstructor
-      vertical: {
-        type: BooleanConstructor
-        default: boolean
-      }
-      width: {
-        type: NumberConstructor
-        default: number
-      }
-      height: {
-        type: NumberConstructor
-        default: number
-      }
-      start: {
-        type: NumberConstructor
-        default: number
-      }
-      lines: {
-        type: PropType<number[]>
-        default: () => never[]
-      }
-      selectStart: {
-        type: NumberConstructor
-      }
-      selectLength: {
-        type: NumberConstructor
-      }
-      isShowReferLine: {
-        type: BooleanConstructor
-      }
-    }>
+    {
+      width: number
+      height: number
+      vertical: boolean
+      start: number
+      isShowReferLine: boolean
+      lines: number[]
+    } & {
+      scale?: number | undefined
+      ratio?: number | undefined
+      palette?: Record<string, any> | undefined
+      selectStart?: number | undefined
+      selectLength?: number | undefined
+      startNumX?: number | undefined
+      endNumX?: number | undefined
+      startNumY?: number | undefined
+      endNumY?: number | undefined
+      thick?: number | undefined
+    } & {}
   >,
   {
     width: number
@@ -127,6 +108,165 @@ declare const _default: DefineComponent<
     isShowReferLine: boolean
     lines: number[]
   },
+  {},
+  {
+    CanvasRuler: DefineComponent<
+      ExtractPropTypes<{
+        showIndicator: BooleanConstructor
+        valueNum: NumberConstructor
+        scale: NumberConstructor
+        ratio: NumberConstructor
+        palette: ObjectConstructor
+        vertical: BooleanConstructor
+        start: NumberConstructor
+        width: NumberConstructor
+        height: NumberConstructor
+        selectStart: NumberConstructor
+        selectLength: NumberConstructor
+        startNumX: NumberConstructor
+        endNumX: NumberConstructor
+        startNumY: NumberConstructor
+        endNumY: NumberConstructor
+      }>,
+      {
+        handle: (e: MouseEvent, key: string) => void
+        canvas: Ref<HTMLCanvasElement | null, HTMLCanvasElement | null>
+      },
+      {},
+      {},
+      {},
+      ComponentOptionsMixin,
+      ComponentOptionsMixin,
+      ('onAddLine' | 'update:showIndicator' | 'update:valueNum')[],
+      'onAddLine' | 'update:showIndicator' | 'update:valueNum',
+      PublicProps,
+      Readonly<
+        {
+          showIndicator: boolean
+          vertical: boolean
+        } & {
+          scale?: number | undefined
+          width?: number | undefined
+          height?: number | undefined
+          ratio?: number | undefined
+          palette?: Record<string, any> | undefined
+          valueNum?: number | undefined
+          start?: number | undefined
+          selectStart?: number | undefined
+          selectLength?: number | undefined
+          startNumX?: number | undefined
+          endNumX?: number | undefined
+          startNumY?: number | undefined
+          endNumY?: number | undefined
+        } & {
+          onOnAddLine?: ((...args: any[]) => any) | undefined
+          'onUpdate:showIndicator'?: ((...args: any[]) => any) | undefined
+          'onUpdate:valueNum'?: ((...args: any[]) => any) | undefined
+        }
+      >,
+      {
+        showIndicator: boolean
+        vertical: boolean
+      },
+      {},
+      {},
+      {},
+      string,
+      ComponentProvideOptions,
+      true,
+      {}
+    >
+    RulerLine: DefineComponent<
+      ExtractPropTypes<{
+        scale: NumberConstructor
+        thick: NumberConstructor
+        palette: ObjectConstructor
+        index: NumberConstructor
+        start: NumberConstructor
+        vertical: BooleanConstructor
+        value: NumberConstructor
+        isShowReferLine: BooleanConstructor
+      }>,
+      {
+        startValue: Ref<number, number>
+        showLine: Ref<boolean, boolean>
+        offset: ComputedRef<
+          | {
+              top: string
+              left?: undefined
+            }
+          | {
+              left: string
+              top?: undefined
+            }
+        >
+        borderCursor: ComputedRef<
+          | {
+              borderTop: string
+              borderLeft?: undefined
+              cursor: string
+            }
+          | {
+              borderLeft: string
+              borderTop?: undefined
+              cursor: string
+            }
+        >
+        actionStyle: ComputedRef<
+          | {
+              left: string
+              top?: undefined
+            }
+          | {
+              top: string
+              left?: undefined
+            }
+        >
+        handleDown: (e: MouseEvent) => void
+        handleRemove: () => void
+      },
+      {},
+      {},
+      {},
+      ComponentOptionsMixin,
+      ComponentOptionsMixin,
+      ('onMouseDown' | 'onRelease' | 'onRemove')[],
+      'onMouseDown' | 'onRelease' | 'onRemove',
+      PublicProps,
+      Readonly<
+        {
+          vertical: boolean
+          isShowReferLine: boolean
+        } & {
+          scale?: number | undefined
+          palette?: Record<string, any> | undefined
+          start?: number | undefined
+          thick?: number | undefined
+          index?: number | undefined
+          value?: number | undefined
+        } & {
+          onOnMouseDown?: ((...args: any[]) => any) | undefined
+          onOnRelease?: ((...args: any[]) => any) | undefined
+          onOnRemove?: ((...args: any[]) => any) | undefined
+        }
+      >,
+      {
+        vertical: boolean
+        isShowReferLine: boolean
+      },
+      {},
+      {},
+      {},
+      string,
+      ComponentProvideOptions,
+      true,
+      {}
+    >
+  },
+  {},
+  string,
+  ComponentProvideOptions,
+  true,
   {}
 >
 export default _default
