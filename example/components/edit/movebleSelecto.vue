@@ -153,49 +153,50 @@ const setTargetClass = (targetIds: string[]) => {
 const onDragEnd = (e: { lastEvent: any; target: any }) => {
   moveableRef.value.updateRect()
 }
-
 </script>
 <template>
-  <div class="container">
-    <div
-      v-for="item in targetList"
-      class="target"
-      :class="item.className"
-      :data-id="item.id"
-      :data-left="item.left"
-      :data-top="item.top"
-      :id="item.id"
-      :style="getStyle(item)"
-      :key="item.id"
-      @mousedown="handleClick($event, item)"
-      >{{ item.className }}
+  <div>
+    <div class="container">
+      <div
+        v-for="item in targetList"
+        class="target"
+        :class="item.className"
+        :data-id="item.id"
+        :data-left="item.left"
+        :data-top="item.top"
+        :id="item.id"
+        :style="getStyle(item)"
+        :key="item.id"
+        @mousedown="handleClick($event, item)"
+        >{{ item.className }}
+      </div>
     </div>
-  </div>
 
-  <Moveable
-    ref="moveableRef"
-    id="moveable"
-    :snappable="true"
-    :snapGap="true"
-    :scalable="true"
-    :resizable="true"
-    :rotatable="true"
-    :zoom="2"
-    :snapDirections="snapDirections"
-    :elementSnapDirections="elementSnapDirections"
-    :snapThreshold="5 / scale"
-    :target="targets"
-    :draggable="draggable"
-    :elementGuidelines="['.container', '.element0', '.element1', '.element2']"
-    @drag="onDrag"
-    @drag-start="onDragStart"
-    @drag-end="onDragEnd"
-  />
-  <GroupSelectable
-    @dragStart="dragStart"
-    :isMoveableElement="isMoveableElement"
-    @setTargetClass="setTargetClass"
-  />
+    <Moveable
+      ref="moveableRef"
+      id="moveable"
+      :snappable="true"
+      :snapGap="true"
+      :scalable="true"
+      :resizable="true"
+      :rotatable="true"
+      :zoom="2"
+      :snapDirections="snapDirections"
+      :elementSnapDirections="elementSnapDirections"
+      :snapThreshold="5 / scale"
+      :target="targets"
+      :draggable="draggable"
+      :elementGuidelines="['.container', '.element0', '.element1', '.element2']"
+      @drag="onDrag"
+      @drag-start="onDragStart"
+      @drag-end="onDragEnd"
+    />
+    <GroupSelectable
+      @dragStart="dragStart"
+      :isMoveableElement="isMoveableElement"
+      @setTargetClass="setTargetClass"
+    />
+  </div>
 </template>
 
 <style lang="scss" scoped>

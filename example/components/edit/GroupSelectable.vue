@@ -1,6 +1,7 @@
 <template>
   <Selecto
     ref="selectorRef"
+    :dragContainer="'.container'"
     :selectableTargets="['.target']"
     :hitRate="0"
     :selectByClick="true"
