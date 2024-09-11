@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas Text Scaling Demo</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+      canvas {
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas width="300" height="150" style="width: 300px; height: 150px" id="canvas"></canvas>
+
+    <script>
+      // 获取canvas元素
+      var canvas = document.getElementById('canvas')
+      var ctx = canvas.getContext('2d')
+
+      // 根据设备像素比调整canvas大小
+      const dpr = window.devicePixelRatio
+      const { width, height } = canvas
+
+      canvas.width = Math.round(width * dpr)
+      canvas.height = Math.round(height * dpr)
+
+      ctx.font = `bold ${40 * dpr}px 宋体`
+      // ctx.scale(dpr, dpr)
+      // 将文字移动到左上角
+      ctx.fillText('你好呀', (canvas.clientWidth / 2) * dpr, (canvas.clientHeight / 2) * dpr)
+    </script>
+  </body>
+</html>

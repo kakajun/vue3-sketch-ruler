@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas Text Scaling Demo</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+      canvas {
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="400" height="200"></canvas>
+    <script>
+      // 获取canvas元素
+      var canvas = document.getElementById('myCanvas')
+      var context = canvas.getContext('2d')
+
+      // 假设高清屏的设备像素比为2，这个值可以通过window.devicePixelRatio获取
+      var ratio = window.devicePixelRatio || 1
+
+      // 放大倍数
+      context.scale(ratio, ratio)
+
+      // 设置字体和颜色
+      context.font = `12px -apple-system, "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif`
+      context.fillStyle = 'black'
+
+      // 绘制文字
+      context.fillText('123456', 50, 50)
+    </script>
+  </body>
+</html>

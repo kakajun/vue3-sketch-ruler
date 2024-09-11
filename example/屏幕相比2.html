@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas Text Scaling Demo with Vue 3</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+      canvas {
+        border: 1px solid #ccc;
+      }
+    </style>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <canvas
+        ref="canvas"
+        id="canvas"
+        width="300"
+        height="150"
+        style="width: 300px; height: 150px"
+      ></canvas>
+    </div>
+
+    <script>
+      // 创建一个Vue应用
+      const { createApp, ref, onMounted } = Vue
+      const App = {
+        setup() {
+          const canvas = ref(null)
+          const ctx = ref(null)
+          const getGridSize = (scale) => {
+            if (scale <= 0.25) return 40
+            if (scale <= 0.5) return 20
+            if (scale <= 1) return 10
+            if (scale <= 2) return 5
+            if (scale <= 4) return 2
+            return 1
+          }
+
+          const FONT_SCALE = 0.83 // 10 / 12
+
+          const drawHorizontalRuler = (ctx, start, options) => {
+            const { scale, width, height, canvasConfigs } = options
+            const { bgColor, fontColor, ratio, longfgColor, shortfgColor } = canvasConfigs
+
+            // 缩放ctx, 以简化计算
+            // ctx.scale(ratio, ratio)
+            ctx.clearRect(0, 0, width, height)
+
+            // 1. 画标尺底色
+            ctx.fillStyle = bgColor
+            ctx.fillRect(0, 0, width, height)
+
+            const gridSize = getGridSize(scale) // 每小格表示的宽度
+            const gridPixel = gridSize * scale
+            const gridSize_10 = gridSize * 10 // 每大格表示的宽度
+            const gridPixel_10 = gridSize_10 * scale
+
+            const startValue = Math.floor(start / gridSize) * gridSize // 绘制起点的刻度(略小于start, 且是gridSize的整数倍)
+            const startValue_10 = Math.floor(start / gridSize_10) * gridSize_10 // 长间隔绘制起点的刻度(略小于start, 且是gridSize_10的整数倍)
+
+            const offsetX = ((startValue - start) / gridSize) * gridPixel // 起点刻度距离ctx原点(start)的px距离
+            const offsetX_10 = ((startValue_10 - start) / gridSize_10) * gridPixel_10 // 长间隔起点刻度距离ctx原点(start)的px距离
+            const endValue = start + Math.ceil(width / scale) // 终点刻度(略超出标尺宽度即可)
+
+            // 3. 画刻度和文字(因为刻度遮住了阴影)
+            ctx.beginPath() // 一定要记得开关路径,因为clearRect并不能清除掉路径,如果不关闭路径下次绘制时会接着上次的绘制
+
+            ctx.fillStyle = fontColor
+            ctx.strokeStyle = longfgColor
+
+            // 长间隔和短间隔需要两次绘制，才可以完成不同颜色的设置；分开放到两个for循环是为了节省性能，因为如果放到一个for循环的话，每次循环都会重新绘制操作dom
+            // 绘制长间隔和文字
+            for (
+              let value = startValue_10, count = 0;
+              value < endValue;
+              value += gridSize_10, count++
+            ) {
+              const x = offsetX_10 + count * gridPixel_10 + 0.5 // prevent canvas 1px line blurry
+              ctx.moveTo(x, 0)
+              ctx.save()
+              ctx.translate(x, height * 0.4)
+              ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
+              ctx.fillText(value, 4 * ratio, 7 * ratio)
+              ctx.restore()
+              ctx.lineTo(x, (height * 9) / 16)
+            }
+            ctx.stroke()
+            ctx.closePath()
+
+            // 绘制短间隔
+            ctx.beginPath()
+            ctx.strokeStyle = shortfgColor
+            for (let value = startValue, count = 0; value < endValue; value += gridSize, count++) {
+              const x = offsetX + count * gridPixel + 0.5 // prevent canvas 1px line blurry
+              ctx.moveTo(x, 0)
+              if (value % gridSize_10 !== 0) {
+                ctx.lineTo(x, (height * 1) / 4)
+              }
+            }
+            ctx.stroke()
+            ctx.closePath()
+
+            // 恢复ctx matrix
+            ctx.setTransform(1, 0, 0, 1, 0, 0)
+          }
+
+          const drawCanvas = (dpr, width, height) => {
+            if (ctx.value) {
+              canvas.value.width = Math.round(width * dpr)
+              canvas.value.height = Math.round(height * dpr)
+              // 绘制文本
+              ctx.value.font = `${12 * dpr}px -apple-system,
+                "Helvetica Neue", ".SFNSText-Regular",
+                "SF UI Text", Arial, "PingFang SC", "Hiragino Sans GB",
+                "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif`
+              ctx.value.scale(dpr, dpr)
+              ctx.value.clearRect(0, 0, width, height)
+              drawHorizontalRuler(ctx.value, 0, {
+                scale: 1,
+                width,
+                height,
+                canvasConfigs: {
+                  bgColor: '#ccc',
+                  fontColor: '#000',
+                  ratio: dpr,
+                  longfgColor: 'rgb(0, 0, 0)',
+                  shortfgColor: 'rgb(0, 0, 0)'
+                }
+              })
+            }
+          }
+
+          onMounted(() => {
+            // const { width, height } = canvas.value
+            const width = 300
+            const height = 150
+            ctx.value = canvas.value.getContext('2d')
+            window.addEventListener('resize', () => {
+              drawCanvas(window.devicePixelRatio, width, height)
+            })
+            drawCanvas(window.devicePixelRatio, width, height)
+          })
+
+          return {
+            canvas
+          }
+        }
+      }
+
+      const app = createApp(App)
+      app.mount('#app')
+    </script>
+  </body>
+</html>
