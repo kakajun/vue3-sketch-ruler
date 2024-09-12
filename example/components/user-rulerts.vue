@@ -2,6 +2,7 @@
   <div class="demo">
     <div class="top font16">
       <div class="scale mr10"> 缩放比:{{ cpuScale }} </div>
+      <div class="scale mr10"> 参考线:{{ JSON.stringify(post.lines) }} </div>
       <button class="mr10 font16" @click="post.showRuler = !post.showRuler">{{
         (post.showRuler ? '隐藏' : '显示') + '规尺'
       }}</button>

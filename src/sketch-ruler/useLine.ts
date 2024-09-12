@@ -84,9 +84,12 @@ export default function useLine(props: Props, vertical: boolean) {
       } else {
         return // 新增越界,什么也不做
       }
-    }
-    if (typeof index !== 'number') {
-      linesArrs.push(value)
+    } else {
+      if (typeof index !== 'number') {
+        linesArrs.push(value)
+      } else {
+        linesArrs.splice(index, 1, value)
+      }
     }
   }
 
