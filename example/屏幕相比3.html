@@ -41,11 +41,25 @@
             return 1
           }
 
-          const FONT_SCALE = 0.5 // 10 / 12
-          const drawHorizontalRuler = (ctx, start, options) => {
-            const { scale, width, height, canvasConfigs } = options
-            const { bgColor, fontColor, gridRatio, ratio, longfgColor, shortfgColor } =
-              canvasConfigs
+          const drawHorizontalRuler = (
+            ctx,
+            start,
+            options,
+            selectStart = 20,
+            selectLength = 100,
+            isHorizontal = true
+          ) => {
+            const { scale, width, height, canvasConfigs, showShadowText } = options
+            const {
+              bgColor,
+              fontColor,
+              gridRatio,
+              ratio,
+              longfgColor,
+              shortfgColor,
+              shadowColor,
+              fontShadowColor
+            } = canvasConfigs
 
             // 缩放ctx, 以简化计算
             ctx.scale(ratio, ratio)
@@ -53,7 +67,7 @@
 
             // 1. 画标尺底色
             ctx.fillStyle = bgColor
-            ctx.fillRect(0, 0, width, height)
+            ctx.fillRect(0, 0, width, (height * 1) / 4)
 
             const gridSize = getGridSize(scale) * gridRatio // 每小格表示的宽度
             const gridPixel = gridSize * scale
@@ -67,8 +81,29 @@
             const offsetX_10 = ((startValue_10 - start) / gridSize_10) * gridPixel_10 // 长间隔起点刻度距离ctx原点(start)的px距离
             const endValue = start + Math.ceil(width / scale) // 终点刻度(略超出标尺宽度即可)
 
-            // 3. 画刻度和文字(因为刻度遮住了阴影)
-            ctx.beginPath() // 一定要记得开关路径,因为clearRect并不能清除掉路径,如果不关闭路径下次绘制时会接着上次的绘制
+            // 2. 画阴影
+            if (selectLength) {
+              const shadowX = (selectStart - start) * scale // 阴影起点坐标
+              const shadowWidth = selectLength * scale // 阴影宽度
+              ctx.fillStyle = shadowColor
+
+              isHorizontal
+                ? ctx.fillRect(shadowX, 0, shadowWidth, height)
+                : ctx.fillRect(0, shadowX, width, shadowWidth)
+
+              // 画阴影文字起始
+              if (showShadowText) {
+                if (isHorizontal) {
+                  drawShadowText(shadowX, height * 0.3, Math.round(selectStart))
+                  const shadowEnd = (selectStart + selectLength - start) * scale
+                  drawShadowText(shadowEnd, height * 0.3, Math.round(selectStart + selectLength))
+                } else {
+                  drawShadowText(width * 0.3, shadowX, Math.round(selectStart))
+                  const shadowEnd = (selectStart + selectLength - start) * scale
+                  drawShadowText(width * 0.3, shadowEnd, Math.round(selectStart + selectLength))
+                }
+              }
+            }
 
             ctx.fillStyle = fontColor
             ctx.strokeStyle = longfgColor
@@ -81,18 +116,25 @@
             ) {
               const x = offsetX_10 + count * gridPixel_10 + 0.5 // prevent canvas 1px line blurry
               ctx.moveTo(x, 0)
+              ctx.lineTo(x, (height * 9) / 16)
               ctx.save()
               ctx.translate(x, height * 0.4)
-              ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
-              ctx.fillText(value, 4 * ratio, 7 * ratio)
+
+              // 如果最后一个大刻度挨着最后一个刻度, 不画文字
+              if (endValue - value > gridSize_10 / 2) {
+                if (
+                  Math.abs(value - selectStart) > gridSize_10 / 2 &&
+                  Math.abs(value - (selectStart + selectLength)) > gridSize_10 / 2
+                ) {
+                  ctx.fillText(value, 4, 7)
+                }
+              }
               ctx.restore()
-              ctx.lineTo(x, (height * 9) / 16)
             }
             ctx.stroke()
-            ctx.closePath()
 
             // 绘制短间隔
-            ctx.beginPath()
+
             ctx.strokeStyle = shortfgColor
             for (let value = startValue, count = 0; value < endValue; value += gridSize, count++) {
               const x = offsetX + count * gridPixel + 0.5 // prevent canvas 1px line blurry
@@ -102,10 +144,16 @@
               }
             }
             ctx.stroke()
-            ctx.closePath()
 
-            // 恢复ctx matrix
-            ctx.setTransform(1, 0, 0, 1, 0, 0)
+            function drawShadowText(x, y, num) {
+              ctx.fillStyle = fontShadowColor
+              ctx.save()
+              ctx.translate(x, y)
+              if (!isHorizontal) ctx.rotate(-Math.PI / 2)
+              ctx.strokeText(String(num), 0, height * 0.6)
+              ctx.fillText(String(num), 0, height * 0.6)
+              ctx.restore()
+            }
           }
 
           const drawCanvas = (dpr, width, height) => {
@@ -113,20 +161,23 @@
               canvas.value.width = Math.round(width * dpr)
               canvas.value.height = Math.round(height * dpr)
               // 绘制文本
-              ctx.value.font = `${12 * dpr}px -apple-system,
-                "Helvetica Neue", ".SFNSText-Regular",
-                "SF UI Text", Arial, "PingFang SC", "Hiragino Sans GB",
-                "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif`
+              ctx.value.font = `${10}px -apple-system,
+                    "Helvetica Neue", ".SFNSText-Regular",
+                    "SF UI Text", Arial, "PingFang SC", "Hiragino Sans GB",
+                    "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif`
               ctx.value.clearRect(0, 0, width, height)
               drawHorizontalRuler(ctx.value, 0, {
                 scale: 2,
                 width,
                 height,
+                showShadowText: true,
                 canvasConfigs: {
-                  gridRatio: 0.2,
+                  gridRatio: 0.4,
                   bgColor: '#ccc',
+                  fontShadowColor: '#106ebe',
                   fontColor: '#000',
                   ratio: dpr,
+                  shadowColor: '#525252',
                   longfgColor: 'rgb(0, 0, 0)',
                   shortfgColor: 'rgb(0, 0, 0)'
                 }
@@ -135,7 +186,6 @@
           }
 
           onMounted(() => {
-            // const { width, height } = canvas.value
             const width = 300
             const height = 20
             ctx.value = canvas.value.getContext('2d')

@@ -47,6 +47,8 @@ const initCanvasRef = () => {
 
 const rulerStyle = computed(() => {
   return {
+    width: props.width + 'px',
+    height: props.height + 'px',
     cursor: props.vertical ? 'ew-resize' : 'ns-resize',
     [props.vertical ? 'borderRight' : 'borderBottom']:
       `1px solid ${props.palette.borderColor || '#eeeeef'} `
@@ -59,12 +61,12 @@ onUnmounted(() => {
 const updateCanvasContext = (ratio: number) => {
   if (canvas.value) {
     // 比例宽高
-    canvas.value.width = props.width!
-    canvas.value.height = props.height!
+    canvas.value.width = Math.round(props.width! * ratio)
+    canvas.value.height = Math.round(props.height! * ratio)
     const ctx = state.canvasContext
 
     if (ctx) {
-      ctx.font = `${12 * ratio!}px -apple-system,
+      ctx.font = `11px -apple-system,
                 "Helvetica Neue", ".SFNSText-Regular",
                 "SF UI Text", Arial, "PingFang SC", "Hiragino Sans GB",
                 "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif`

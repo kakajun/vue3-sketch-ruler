@@ -22,7 +22,7 @@
   </head>
   <body>
     <div id="app">
-      <canvas ref="canvas" style="width: 300px; height: 20px"></canvas>
+      <canvas ref="canvas" style="width: 300px; height: 16px"></canvas>
     </div>
 
     <script>
@@ -34,41 +34,35 @@
           const ctx = ref(null)
           const getGridSize = (scale) => {
             if (scale <= 0.25) return 40
-            if (scale <= 0.5) return 20
+            if (scale <= 0.5) return 16
             if (scale <= 1) return 10
             if (scale <= 2) return 5
             if (scale <= 4) return 2
             return 1
           }
-
-          const FONT_SCALE = 0.5 // 10 / 12
           const drawHorizontalRuler = (ctx, start, options) => {
             const { scale, width, height, canvasConfigs } = options
             const { bgColor, fontColor, gridRatio, ratio, longfgColor, shortfgColor } =
               canvasConfigs
 
-            // 缩放ctx, 以简化计算
             ctx.scale(ratio, ratio)
             ctx.clearRect(0, 0, width, height)
 
-            // 1. 画标尺底色
+            // 画标尺底色
             ctx.fillStyle = bgColor
-            ctx.fillRect(0, 0, width, height)
+            ctx.fillRect(0, 0, width, height / 4)
 
-            const gridSize = getGridSize(scale) * gridRatio // 每小格表示的宽度
+            const gridSize = getGridSize(scale) * gridRatio
             const gridPixel = gridSize * scale
-            const gridSize_10 = gridSize * 10 // 每大格表示的宽度
+            const gridSize_10 = gridSize * 10
             const gridPixel_10 = gridSize_10 * scale
 
-            const startValue = Math.floor(start / gridSize) * gridSize // 绘制起点的刻度(略小于start, 且是gridSize的整数倍)
-            const startValue_10 = Math.floor(start / gridSize_10) * gridSize_10 // 长间隔绘制起点的刻度(略小于start, 且是gridSize_10的整数倍)
+            const startValue = Math.floor(start / gridSize) * gridSize
+            const startValue_10 = Math.floor(start / gridSize_10) * gridSize_10
 
-            const offsetX = ((startValue - start) / gridSize) * gridPixel // 起点刻度距离ctx原点(start)的px距离
-            const offsetX_10 = ((startValue_10 - start) / gridSize_10) * gridPixel_10 // 长间隔起点刻度距离ctx原点(start)的px距离
-            const endValue = start + Math.ceil(width / scale) // 终点刻度(略超出标尺宽度即可)
-
-            // 3. 画刻度和文字(因为刻度遮住了阴影)
-            ctx.beginPath() // 一定要记得开关路径,因为clearRect并不能清除掉路径,如果不关闭路径下次绘制时会接着上次的绘制
+            const offsetX = ((startValue - start) / gridSize) * gridPixel
+            const offsetX_10 = ((startValue_10 - start) / gridSize_10) * gridPixel_10
+            const endValue = start + Math.ceil(width / scale)
 
             ctx.fillStyle = fontColor
             ctx.strokeStyle = longfgColor
@@ -79,41 +73,34 @@
               value < endValue;
               value += gridSize_10, count++
             ) {
-              const x = offsetX_10 + count * gridPixel_10 + 0.5 // prevent canvas 1px line blurry
+              const x = offsetX_10 + count * gridPixel_10 + 0.5
               ctx.moveTo(x, 0)
+              ctx.lineTo(x, (9 * height) / 16)
               ctx.save()
               ctx.translate(x, height * 0.4)
-              ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
-              ctx.fillText(value, 4 * ratio, 7 * ratio)
+              ctx.fillText(value, 4, 7)
               ctx.restore()
-              ctx.lineTo(x, (height * 9) / 16)
             }
             ctx.stroke()
-            ctx.closePath()
+
+            ctx.strokeStyle = shortfgColor
 
             // 绘制短间隔
-            ctx.beginPath()
-            ctx.strokeStyle = shortfgColor
             for (let value = startValue, count = 0; value < endValue; value += gridSize, count++) {
-              const x = offsetX + count * gridPixel + 0.5 // prevent canvas 1px line blurry
+              const x = offsetX + count * gridPixel + 0.5
               ctx.moveTo(x, 0)
               if (value % gridSize_10 !== 0) {
-                ctx.lineTo(x, (height * 1) / 4)
+                ctx.lineTo(x, height / 4)
               }
             }
             ctx.stroke()
-            ctx.closePath()
-
-            // 恢复ctx matrix
-            ctx.setTransform(1, 0, 0, 1, 0, 0)
           }
-
           const drawCanvas = (dpr, width, height) => {
             if (ctx.value) {
               canvas.value.width = Math.round(width * dpr)
               canvas.value.height = Math.round(height * dpr)
               // 绘制文本
-              ctx.value.font = `${12 * dpr}px -apple-system,
+              ctx.value.font = `${10}px -apple-system,
                 "Helvetica Neue", ".SFNSText-Regular",
                 "SF UI Text", Arial, "PingFang SC", "Hiragino Sans GB",
                 "Microsoft YaHei", "WenQuanYi Zen Hei", sans-serif`
@@ -123,21 +110,20 @@
                 width,
                 height,
                 canvasConfigs: {
-                  gridRatio: 0.2,
+                  gridRatio: 0.4,
                   bgColor: '#ccc',
                   fontColor: '#000',
                   ratio: dpr,
-                  longfgColor: 'rgb(0, 0, 0)',
-                  shortfgColor: 'rgb(0, 0, 0)'
+                  longfgColor: 'rgb(100, 100, 10)',
+                  shortfgColor: 'rgb(100, 100, 80)'
                 }
               })
             }
           }
 
           onMounted(() => {
-            // const { width, height } = canvas.value
             const width = 300
-            const height = 20
+            const height = 16
             ctx.value = canvas.value.getContext('2d')
             window.addEventListener('resize', () => {
               drawCanvas(window.devicePixelRatio, width, height)

@@ -8,7 +8,6 @@ const getGridSize = (scale: number) => {
   return 1
 }
 
-const FONT_SCALE = 0.83 // 10 / 12
 export const drawCanvasRuler = (
   ctx: CanvasRenderingContext2D,
   start: number,
@@ -32,7 +31,7 @@ export const drawCanvasRuler = (
   const endNum = isHorizontal ? options.canvasWidth : options.canvasHeight
   // 缩放ctx, 以简化计算
   ctx.scale(ratio, ratio)
-  ctx.clearRect(0, 0, width / ratio, height / ratio)
+  ctx.clearRect(0, 0, width, height)
 
   // 1. 画标尺底色
   ctx.fillStyle = bgColor
@@ -47,8 +46,8 @@ export const drawCanvasRuler = (
 
   // 2. 画阴影
   if (selectLength) {
-    const shadowX = ((selectStart - start) * scale) / ratio // 阴影起点坐标
-    const shadowWidth = (selectLength * scale) / ratio // 阴影宽度
+    const shadowX = (selectStart - start) * scale // 阴影起点坐标
+    const shadowWidth = selectLength * scale // 阴影宽度
     ctx.fillStyle = shadowColor
 
     isHorizontal
@@ -58,13 +57,13 @@ export const drawCanvasRuler = (
     // 画阴影文字起始
     if (showShadowText) {
       if (isHorizontal) {
-        drawShadowText(shadowX, height * 0.3, Math.round(selectStart))
-        const shadowEnd = ((selectStart + selectLength - start) * scale) / ratio
-        drawShadowText(shadowEnd, height * 0.3, Math.round(selectStart + selectLength))
+        drawShadowText(shadowX, height * 0.4, Math.round(selectStart))
+        const shadowEnd = (selectStart + selectLength - start) * scale
+        drawShadowText(shadowEnd, height * 0.4, Math.round(selectStart + selectLength))
       } else {
-        drawShadowText(width * 0.3, shadowX, Math.round(selectStart))
-        const shadowEnd = ((selectStart + selectLength - start) * scale) / ratio
-        drawShadowText(width * 0.3, shadowEnd, Math.round(selectStart + selectLength))
+        drawShadowText(width * 0.4, shadowX, Math.round(selectStart))
+        const shadowEnd = (selectStart + selectLength - start) * scale
+        drawShadowText(width * 0.4, shadowEnd, Math.round(selectStart + selectLength))
       }
     }
   }
@@ -86,11 +85,22 @@ export const drawCanvasRuler = (
 
     if (value >= 0 && value <= endNum) {
       if (value == 0) {
-        isHorizontal ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
+        if (isHorizontal) {
+          ctx.moveTo(x, 0)
+          ctx.lineTo(x, height)
+        } else {
+          ctx.moveTo(0, x)
+          ctx.lineTo(width, x)
+        }
       } else {
-        isHorizontal ? ctx.moveTo(x, 20) : ctx.moveTo(20, x)
+        if (isHorizontal) {
+          ctx.moveTo(x, 20)
+          ctx.lineTo(x, height / 1.3)
+        } else {
+          ctx.moveTo(20, x)
+          ctx.lineTo(width / 1.3, x)
+        }
       }
-
       ctx.save()
       // 影响文字位置
       if (value == 0) {
@@ -102,7 +112,7 @@ export const drawCanvasRuler = (
       if (!isHorizontal) {
         ctx.rotate(-Math.PI / 2) // 旋转 -90 度
       }
-      ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
+
       // 如果最后一个大刻度挨着最后一个刻度, 不画文字
       if (endNum - value > gridSize10 / 2) {
         if (
@@ -111,32 +121,21 @@ export const drawCanvasRuler = (
           (Math.abs(value - selectStart) > gridSize10 / 2 &&
             Math.abs(value - (selectStart + selectLength)) > gridSize10 / 2)
         ) {
-          ctx.fillText(value.toString(), 4 * ratio, 9 * ratio)
+          ctx.fillText(value.toString(), 4, 9)
         }
       }
-
       ctx.restore()
-      // 影响刻度位置
-      if (value == 0) {
-        isHorizontal ? ctx.lineTo(x, height) : ctx.lineTo(width, x)
-      } else {
-        isHorizontal ? ctx.lineTo(x, height / 1.3) : ctx.lineTo(width / 1.3, x)
-      }
     }
-    ctx.stroke()
-    ctx.closePath()
-    // 恢复ctx matrix
-    ctx.setTransform(1, 0, 0, 1, 0, 0)
   }
+  ctx.stroke()
+  ctx.closePath()
+
   function setLast(x: number, value: number) {
     isHorizontal ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
     ctx.save()
     isHorizontal ? ctx.translate(x + 5, height * 0.2) : ctx.translate(width * 0.1, x + 32)
-    if (!isHorizontal) {
-      ctx.rotate(-Math.PI / 2) // 旋转 -90 度
-    }
-    ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
-    ctx.fillText(Math.round(value).toString(), 4 * ratio, 7 * ratio)
+    if (!isHorizontal) ctx.rotate(-Math.PI / 2) // 旋转 -90 度
+    ctx.fillText(Math.round(value).toString(), 4, 7)
     ctx.restore()
     isHorizontal ? ctx.lineTo(x, height) : ctx.lineTo(width, x)
     ctx.stroke()
@@ -150,7 +149,6 @@ export const drawCanvasRuler = (
     ctx.save()
     ctx.translate(x, y)
     if (!isHorizontal) ctx.rotate(-Math.PI / 2)
-    ctx.scale(FONT_SCALE / ratio, FONT_SCALE / ratio)
     ctx.strokeText(String(num), 0, 0)
     ctx.fillText(String(num), 0, 0)
     ctx.restore()
