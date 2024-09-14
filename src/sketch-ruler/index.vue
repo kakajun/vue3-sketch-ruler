@@ -1,7 +1,7 @@
 <template>
   <div class="sketch-ruler">
     <slot name="btn" :reset="reset" :zoomIn="zoomIn" :zoomOut="zoomOut"></slot>
-    <div class="canvasedit-parent" :style="rectStyle">
+    <div class="canvasedit-parent" :style="rectStyle" :class="cursorClass">
       <div class="canvasedit" :class="cursorClass">
         <slot></slot>
       </div>

@@ -29,6 +29,7 @@ export const drawCanvasRuler = (
   const { scale, width, height, ratio, palette, gridRatio, showShadowText } = options
   const { bgColor, fontColor, fontShadowColor, shadowColor, longfgColor } = palette
   const endNum = isHorizontal ? options.canvasWidth : options.canvasHeight
+  ctx.setTransform(1, 0, 0, 1, 0, 0) // 还原,否则scale变大后会错乱
   // 缩放ctx, 以简化计算
   ctx.scale(ratio, ratio)
   ctx.clearRect(0, 0, width, height)

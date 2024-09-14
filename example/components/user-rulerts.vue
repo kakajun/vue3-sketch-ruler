@@ -90,6 +90,7 @@ const sketchruleRef = ref()
 
 // 更多配置,参见 https://github.com/timmywil/panzoom
 const panzoomOption = reactive({
+  canvas: true,
   maxScale: 3,
   minScale: 0.3,
   // startX: 0,   // 画布距离左边框距离, 如果想自动,那么不要传
