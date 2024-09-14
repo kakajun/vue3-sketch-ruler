@@ -13,6 +13,16 @@
         margin: 0;
         background-color: #f0f0f0;
       }
+      #app {
+        width: 100%;
+        height: 100%;
+      }
+      .content {
+        margin: 0 auto;
+        position: relative;
+        width: 50%;
+        height: 50%;
+      }
     </style>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -22,20 +32,22 @@
 
   <body>
     <div id="app">
-      <sketch-rule ref="sketchruleRef" v-bind="post">
-        <template #default>
-          <div data-type="page" :style="canvasStyle">
-            <img class="img-style" src="./assets/bg.png" alt="" />
-          </div>
-        </template>
-        <template #btn="{ reset, zoomIn, zoomOut }">
-          <div class="btns">
-            <button @click.stop="reset">还原</button>
-            <button @click.stop="zoomIn">放大</button>
-            <button @click.stop="zoomOut">缩小</button>
-          </div>
-        </template>
-      </sketch-rule>
+      <div class="content">
+        <sketch-rule ref="sketchruleRef" v-bind="post">
+          <template #default>
+            <div data-type="page" :style="canvasStyle">
+              <img class="img-style" src="./assets/bg.png" alt="" />
+            </div>
+          </template>
+          <template #btn="{ reset, zoomIn, zoomOut }">
+            <div class="btns">
+              <button @click.stop="reset">还原</button>
+              <button @click.stop="zoomIn">放大</button>
+              <button @click.stop="zoomOut">缩小</button>
+            </div>
+          </template>
+        </sketch-rule>
+      </div>
     </div>
 
     <script type="module">

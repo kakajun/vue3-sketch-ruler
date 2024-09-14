@@ -49,7 +49,6 @@
       :class="[state.isBlack ? 'balckwrapper' : 'whitewrapper']"
       :style="rectStyle"
     >
-      <!--  :gridRatio="0.5" -->
       <SketchRule
         ref="sketchruleRef"
         :key="rendIndex"
