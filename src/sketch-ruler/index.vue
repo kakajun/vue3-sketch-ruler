@@ -202,6 +202,7 @@ const getPanOptions = (scale: number) => {
     startX: zoomStartX,
     startY: zoomStartY,
     smoothScroll: true,
+    canvas: true,
     ...props.panzoomOption
   }
 }
