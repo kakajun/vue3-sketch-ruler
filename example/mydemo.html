@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas Text Scaling Demo with Vue 3</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+    </style>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="../lib/index.umd.js"></script>
+    <style src="../lib/style.css"></style>
+  </head>
+
+  <body>
+    <div id="app">
+      <sketch-rule ref="sketchruleRef" v-bind="post">
+        <template #default>
+          <div data-type="page" :style="canvasStyle">
+            <img class="img-style" src="./assets/bg.png" alt="" />
+          </div>
+        </template>
+        <template #btn="{ reset, zoomIn, zoomOut }">
+          <div class="btns">
+            <button @click.stop="reset">还原</button>
+            <button @click.stop="zoomIn">放大</button>
+            <button @click.stop="zoomOut">缩小</button>
+          </div>
+        </template>
+      </sketch-rule>
+    </div>
+
+    <script type="module">
+      // 创建一个Vue应用
+      const { createApp, ref, reactive, computed } = Vue
+      console.log(window.SketchRuler)
+      const SketchRule = window.SketchRuler
+      const App = {
+        name: 'landMain',
+        components: { 'sketch-rule': SketchRule },
+        setup() {
+          const sketchruleRef = ref()
+          const post = reactive({
+            thick: 20,
+            width: 1470,
+            height: 800,
+            showShadowText: false,
+            canvasWidth: 1000,
+            canvasHeight: 500,
+            showRuler: true,
+            isShowReferLine: true
+          })
+          const canvasStyle = computed(() => {
+            return {
+              width: `${post.canvasWidth}px`,
+              height: `${post.canvasHeight}px`
+            }
+          })
+          return {
+            canvasStyle,
+            post
+          }
+        }
+      }
+
+      const app = createApp(App)
+      app.mount('#app')
+    </script>
+  </body>
+</html>

@@ -1,6 +1,6 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "author": "kakajun <253495832@qq.com>",
   "license": "MIT",
   "private": false,
@@ -47,10 +47,8 @@
       "postcommit": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
     }
   },
-  "dependencies": {
-    "simple-panzoom": "^1.0.8"
-  },
   "devDependencies": {
+    "simple-panzoom": "^1.0.8",
     "@babel/preset-env": "^7.24.8",
     "@babel/preset-typescript": "^7.24.7",
     "@release-it/conventional-changelog": "^8.0.1",
