@@ -13,26 +13,43 @@
         margin: 0;
         background-color: #f0f0f0;
       }
-      #app {
+      .wrapper {
+        margin: 0 auto;
+        background-size:
+          21px 21px,
+          21px 21px;
+        border: 1px solid #dadadc;
+      }
+      .whitewrapper {
+        background-color: #fafafc;
+        background-image: linear-gradient(#fafafc 20px, transparent 0),
+          linear-gradient(90deg, transparent 20px, #373739 0);
+      }
+      .img-style {
         width: 100%;
         height: 100%;
       }
-      .content {
-        margin: 0 auto;
-        position: relative;
-        width: 50%;
-        height: 50%;
+      .btns {
+        position: absolute;
+        display: flex;
+        bottom: 20px;
+        right: 40px;
+        z-index: 999;
+      }
+
+      #app {
+        margin-top: 50px;
+        width: 100%;
       }
     </style>
-
+    <link type="text/css" rel="stylesheet" href="../lib/style.css" />
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="../lib/index.umd.js"></script>
-    <style src="../lib/style.css"></style>
   </head>
 
   <body>
     <div id="app">
-      <div class="content">
+      <div class="wrapper whitewrapper" :style="rectStyle">
         <sketch-rule ref="sketchruleRef" v-bind="post">
           <template #default>
             <div data-type="page" :style="canvasStyle">
@@ -51,12 +68,10 @@
     </div>
 
     <script type="module">
-      // 创建一个Vue应用
       const { createApp, ref, reactive, computed } = Vue
       console.log(window.SketchRuler)
       const SketchRule = window.SketchRuler
       const App = {
-        name: 'landMain',
         components: { 'sketch-rule': SketchRule },
         setup() {
           const sketchruleRef = ref()
@@ -68,8 +83,27 @@
             canvasWidth: 1000,
             canvasHeight: 500,
             showRuler: true,
-            isShowReferLine: true
+            palette: { bgColor: 'transparent', lineType: 'dashed' },
+            isShowReferLine: true,
+            shadow: {
+              x: 0,
+              y: 0,
+              width: 300,
+              height: 300
+            },
+            lines: {
+              h: [0, 250],
+              v: [0, 500]
+            }
           })
+
+          const rectStyle = computed(() => {
+            return {
+              width: `${post.width}px`,
+              height: `${post.height}px`
+            }
+          })
+
           const canvasStyle = computed(() => {
             return {
               width: `${post.canvasWidth}px`,
@@ -77,6 +111,7 @@
             }
           })
           return {
+            rectStyle,
             canvasStyle,
             post
           }

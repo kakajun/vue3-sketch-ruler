@@ -75,6 +75,20 @@ import 'vue3-sketch-ruler/lib/style.css'
 import type { SketchRulerProps } from 'vue3-sketch-ruler'
 ```
 
+CDN 引入, 详情参见 [CDN demo](https://github.com/kakajun/vue3-sketch-ruler/blob/master/example/mydemo.html)
+
+```js
+<script src="https://unpkg.com/vue3-sketch-ruler/lib/index.umd.js"></script>
+ <link type="text/css" rel="stylesheet" href="https://unpkg.com/vue3-sketch-ruler/lib/style.css" />
+
+const SketchRule = window.SketchRuler
+const App = {
+  components: { 'sketch-rule': SketchRule },
+  setup() {}
+}
+...
+```
+
 ## 支持的功能
 
 - [x] 标尺渲染
