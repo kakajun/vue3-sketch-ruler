@@ -1,8 +1,8 @@
 <template>
   <div class="sketch-ruler">
     <slot name="btn" :reset="reset" :zoomIn="zoomIn" :zoomOut="zoomOut"></slot>
-    <div class="canvasedit-parent" :style="rectStyle">
-      <div class="canvasedit" :class="cursorClass">
+    <div class="canvasedit-parent" :style="rectStyle" :class="cursorClass">
+      <div class="canvasedit">
         <slot></slot>
       </div>
     </div>
@@ -168,18 +168,33 @@ const handleWheel = (e: WheelEvent) => {
     panzoomInstance.value?.zoomWithWheel(e)
   }
 }
+const isPressSpace = ref(false)
+
 const handleSpaceKeyDown = (e: KeyboardEvent) => {
   if (e.key === ' ') {
     cursorClass.value = 'grabCursor'
-    panzoomInstance.value?.bind()
-    e.preventDefault()
+    isPressSpace.value = true
   }
 }
 
 const handleSpaceKeyUp = (e: KeyboardEvent) => {
   if (e.key === ' ') {
-    panzoomInstance.value?.destroy()
+    isPressSpace.value = false
     cursorClass.value = 'defaultCursor'
+  }
+}
+
+const handleMouseDown = (e: PointerEvent) => {
+  if (e.button === 0 && isPressSpace.value) {
+    panzoomInstance.value?.bind()
+    panzoomInstance.value?.handleDown(e)
+    e.preventDefault()
+  }
+}
+
+const handleMouseUp = (e: PointerEvent) => {
+  if (e.button === 0 && isPressSpace.value) {
+    panzoomInstance.value?.destroy()
   }
 }
 
@@ -191,6 +206,8 @@ onMounted(() => {
     parent.addEventListener('wheel', handleWheel)
     document.addEventListener('keydown', handleSpaceKeyDown)
     document.addEventListener('keyup', handleSpaceKeyUp)
+    parent.addEventListener('pointerdown', handleMouseDown)
+    parent.addEventListener('pointerup', handleMouseUp)
   }
 })
 
@@ -325,6 +342,10 @@ defineExpose({
     position: absolute;
     left: v-bind(thickness);
     top: v-bind(thickness);
+
+    .canvasedit {
+      cursor: inherit !important;
+    }
   }
   .corner {
     position: absolute;
