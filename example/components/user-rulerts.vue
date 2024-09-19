@@ -55,6 +55,7 @@
         v-model:scale="state.scale"
         v-model:lockLine="lockLine"
         v-bind="post"
+        :palette="cpuPalette"
         @on-corner-click="handleCornerClick"
         @zoomchange="zoomchange"
       >
@@ -167,7 +168,6 @@ const post = reactive({
   canvasWidth: 1000,
   canvasHeight: 500,
   showRuler: true,
-  palette: cpuPalette.value,
   snapsObj: { h: [0, 100, 200], v: [130] },
   shadow: {
     x: 0,
