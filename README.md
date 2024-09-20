@@ -54,7 +54,7 @@
 
 案例浏览: [https://kakajun.github.io/vue3-sketch-ruler](https://kakajun.github.io/vue3-sketch-ruler) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/master/example/assets/1.png)
 
-[CodePen 示例](https://codepen.io/vuejs-examples/pen/eYQpQEG)
+[CodePen 示例](https://codepen.io/kakajun/pen/eYwagJb)
 
 ## 安装
 
