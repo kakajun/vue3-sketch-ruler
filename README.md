@@ -176,7 +176,7 @@ const canvasHeight = 500
 | snapsObj | 吸附刻度集合 | object<Array> | {h:[],v:[]} |
 | snapThreshold | 吸附距离 | Number | 5 |
 | shadow | 阴影配置 | object<Number> | {x: 0,y: 0, width: 0, height: 0} |
-| gridRatio | 刻度分散比例 | Number | 1 |
+| gridRatio | 刻度分散比例(颗粒度) | Number | 1 |
 | selfHandle | 自己处理监听移动和缩放 | Boolean | false |
 | panzoomOption | panzoom相关的扩展参数 | object | - |
 | palette | 标尺的样式配置参数 | Object | 如下表 |

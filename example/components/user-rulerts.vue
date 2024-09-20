@@ -161,6 +161,7 @@ const post = reactive({
   width: 1470,
   height: 800,
   showShadowText: false,
+  gridRatio: '0.5',
   // width: 770,
   // height: 472,
   // canvasWidth: 1920,
