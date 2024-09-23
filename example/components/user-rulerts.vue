@@ -46,7 +46,7 @@
 
     <div
       class="wrapper"
-      :class="[state.isBlack ? 'balckwrapper' : 'whitewrapper']"
+      :class="[state.isBlack ? 'blackwrapper' : 'whitewrapper']"
       :style="rectStyle"
     >
       <SketchRule
@@ -147,7 +147,8 @@ const cpuPalette = computed(() => {
         fontColor: '#DEDEDE', // ruler font color
         shadowColor: '#525252', // ruler shadow color
         lineColor: '#51d6a9',
-        borderColor: '#B5B5B5'
+        borderColor: '#B5B5B5',
+        lineType: 'dashed'
       }
     : {
         bgColor: 'transparent',
@@ -284,7 +285,7 @@ const handleMouseDown = (e: MouseEvent) => {
   background-image: linear-gradient(#fafafc 20px, transparent 0),
     linear-gradient(90deg, transparent 20px, #373739 0);
 }
-.balckwrapper {
+.blackwrapper {
   background-color: #18181c;
   background-image: linear-gradient(#18181c 20px, transparent 0),
     linear-gradient(90deg, transparent 20px, #86909c 0);
