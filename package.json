@@ -1,41 +1,23 @@
 {
-  "name": "vue3-sketch-ruler",
+  "name": "root",
   "version": "2.2.2",
   "author": "kakajun <253495832@qq.com>",
   "license": "MIT",
   "private": false,
-  "files": [
-    "lib",
-    "src"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kakajun/vue3-sketch-ruler"
-  },
-  "repository2": {
-    "type": "gitee",
-    "url": "https://gitee.com/majun2232/vue3-sketch-Ruler"
-  },
-  "sideEffects": false,
-  "main": "lib/index.js",
-  "module": "lib/index.mjs",
-  "style": "lib/style.css",
-  "types": "lib/index.d.ts",
   "scripts": {
-    "dev": "vite --config vite.demo.ts --host 0.0.0.0",
-    "d": "nvm use 20.10.0 && npm run dev",
-    "build": " vite build",
-    "build:demo": "vite build --config ./vite.demo.ts",
+    "dev": "pnpm build && pnpm --filter ./packages/docs dev",
+    "d": "nvm use 20.10.0 && pnpm dev",
+    "build": "pnpm --filter ./packages/sketch-ruler build",
+    "build:demo": "pnpm build && pnpm --filter ./packages/docs build",
     "precommit": "lint-staged",
     "clean": "npx rimraf node_modules",
     "clean:cache": "npx rimraf node_modules/.cache",
-    "lint:eslint": "eslint --fix --ext .js,.ts,.vue ./src",
-    "lint:format": "prettier --write --loglevel warn \"src/**/*.{js,ts,json,tsx,css,less,scss,vue,html,md}\"",
-    "lint:style": "stylelint --fix \"./src/**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
+    "lint:eslint": "eslint --fix --ext .js,.ts,.vue ./packages",
+    "lint:format": "prettier --write --loglevel warn \"packages/**/*.{js,ts,json,tsx,css,less,scss,vue,html,md}\"",
+    "lint:style": "stylelint --fix \"./packages/**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
     "lint:lint-staged": "lint-staged -c ",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "test": "vitest",
-    "release": "release-it"
+    "changelog": "pnpm --filter ./packages/sketch-ruler changelog",
+    "release": "pnpm --filter ./packages/sketch-ruler release"
   },
   "lint-staged": {
     "*.{ts,tsx,js,vue,less}": "prettier --write",
@@ -58,6 +40,7 @@
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/babel-plugin-jsx": "^1.2.2",
     "@vue/test-utils": "^2.4.6",
+    "@element-plus/icons-vue": "^2.3.1",
     "canvas": "^2.11.2",
     "compare-func": "^2.0.0",
     "conventional-changelog": "^6.0.0",
@@ -77,7 +60,7 @@
     "pretty-quick": "^4.0.0",
     "release-it": "^17.6.0",
     "rollup-plugin-banner": "^0.2.1",
-    "sass": "^1.77.8",
+    "sass": "^1.79.3",
     "selecto": "^1.26.3",
     "stylelint": "^16.7.0",
     "stylelint-config-html": "^1.1.0",
@@ -92,20 +75,12 @@
     "vue-tsc": "^2.0.26",
     "vue3-moveable": "^0.28.0",
     "framework-utils": "^1.1.0",
-    "@daybrush/utils": "^1.13.0"
-  },
-  "keywords": [
-    "vue",
-    "vue3",
-    "ruler",
-    "sketch",
-    "sketch-ruler",
-    "vue-sketch-ruler",
-    "room",
-    "panzoom"
-  ],
-  "bugs": {
-    "url": "https://github.com/kakajun/vue3-sketch-ruler/issues"
+    "@daybrush/utils": "^1.13.0",
+    "element-plus": "^2.3.8",
+    "vue-router": "^4.2.2",
+    "highlight.js": "^11.8.0",
+    "pinia": "^2.1.4",
+    "pinia-plugin-persistedstate": "^3.2.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"

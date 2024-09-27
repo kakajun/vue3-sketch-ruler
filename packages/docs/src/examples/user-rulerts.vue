@@ -76,13 +76,13 @@
   </div>
 </template>
 <script setup lang="ts">
-// import { SketchRule } from 'vue3-sketch-ruler'
-// import 'vue3-sketch-ruler/lib/style.css'
-// import { SketchRule } from '../../lib/index.mjs'
+import SketchRule from 'vue3-sketch-ruler'
+import 'vue3-sketch-ruler/lib/style.css'
+// import  SketchRule  from '../../lib/index.mjs'
 // import '../../lib/style.css'
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive, onMounted } from 'vue'
-import SketchRule from '../../src/index' // 这里可以换成打包后的
+// import SketchRule from '../../src/index' // 这里可以换成打包后的
 import type { PanzoomEventDetail, PanzoomEvent } from 'simple-panzoom'
 
 const rendIndex = ref(0)

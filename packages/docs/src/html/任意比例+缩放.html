@@ -44,7 +44,7 @@
     </div>
     <script>
       const useZoom = (el, translateData = { x: 0, y: 0 }, scale, callback = () => {}) => {
-        el.style.transformOrigin = '0 0'
+        el.style.transformOrigin = '50% 50%'
         const { width, height } = el.getBoundingClientRect()
         /** 重置数据, 并触发回调更新元素 */
         const reset = () => {

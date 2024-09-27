@@ -1,0 +1,45 @@
+{
+  "name": "vue3-sketch-ruler",
+  "version": "2.2.2",
+  "author": "kakajun <253495832@qq.com>",
+  "license": "MIT",
+  "private": false,
+  "files": [
+    "lib",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kakajun/vue3-sketch-ruler"
+  },
+  "repository2": {
+    "type": "gitee",
+    "url": "https://gitee.com/majun2232/vue3-sketch-Ruler"
+  },
+  "sideEffects": false,
+  "main": "lib/index.js",
+  "module": "lib/index.mjs",
+  "style": "lib/style.css",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": " vite build",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+    "release": "release-it"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "ruler",
+    "sketch",
+    "sketch-ruler",
+    "vue-sketch-ruler",
+    "room",
+    "panzoom"
+  ],
+  "bugs": {
+    "url": "https://github.com/kakajun/vue3-sketch-ruler/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  }
+}
