@@ -1,23 +1,16 @@
 <template>
   <div class="es-header">
     <h1 class="es-logo">
-      <img class="es-logo-img" src="/logo/logo4.png" alt="ES Drager" />
+      <img class="es-logo-img" src="/logo.png" alt="vue3-sketch-ruler" />
       <span @click="router.replace('/')">{{ title }}</span>
     </h1>
     <slot />
     <div class="es-navbar">
       <slot name="navbar-start" />
-      <a
-        :class="['es-header-link', store.theme]"
-        @click.prevent="handleThemeChange"
-      >
+      <a :class="['es-header-link', store.theme]" @click.prevent="handleThemeChange">
         <img :src="store.isLight ? lightThemeIcon : darkThemeIcon" />
       </a>
-      <a
-        class="es-header-link"
-        href="https://github.com/vangleer/es-drager"
-        target="_blank"
-      >
+      <a class="es-header-link" href="https://github.com/kakajun/vue3-sketch-ruler" target="_blank">
         <img :src="store.isLight ? lightGithubIcon : darkGithubIcon" />
       </a>
       <slot name="navbar-end" />
@@ -38,7 +31,7 @@ const router = useRouter()
 defineProps({
   title: {
     type: String,
-    default: 'ES Drager'
+    default: 'vue3-sketch-ruler'
   }
 })
 function handleThemeChange() {
@@ -47,7 +40,7 @@ function handleThemeChange() {
 
 watch(
   () => store.theme,
-  val => {
+  (val) => {
     document.documentElement.className = val
     localStorage.setItem('theme', val)
   },
@@ -73,7 +66,7 @@ watch(
     display: flex;
     align-items: center;
     .es-logo-img {
-      width: 30px;
+      width: 100px;
       margin-right: 10px;
     }
   }

@@ -17,9 +17,7 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        <a class="es-header-cube" @click.prevent="router.push('/editor')">{{
-          t('common.editorDemo')
-        }}</a>
+
         <a class="es-header-cube" @click.prevent="showCode = !showCode">{{ t('common.code') }}</a>
       </template>
     </Header>
@@ -63,7 +61,7 @@ import { menuRoutes } from '../router'
 import 'highlight.js/styles/panda-syntax-light.css'
 import hljs from 'highlight.js'
 import { CopyDocument } from '@element-plus/icons-vue'
-import { langs, t, useLocaleStore } from 'root/common/i18n'
+import { langs, t, useLocaleStore } from 'root-common/i18n'
 import Header from '../components/layout/Header.vue'
 import Aside from '../components/layout/Aside.vue'
 import { ElMessage } from 'element-plus'
