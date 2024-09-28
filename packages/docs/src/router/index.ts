@@ -3,7 +3,7 @@ import Home from '../views/Home.vue'
 export const menuRoutes: RouteRecordRaw[] = [
   {
     path: 'basic',
-    component: () => import('../examples/user-rulerts.vue')
+    component: () => import('../examples/basic.vue')
   }
   // {
   //   path: 'temp',

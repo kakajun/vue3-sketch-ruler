@@ -25,7 +25,8 @@
 <script setup lang="ts">
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive, onMounted } from 'vue'
-import SketchRule from '../../src/index' // 这里可以换成打包后的
+import SketchRule from 'vue3-sketch-ruler'
+import 'vue3-sketch-ruler/lib/style.css'
 const sketchruleRef = ref()
 const post = reactive({
   thick: 20,

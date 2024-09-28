@@ -1,4 +1,3 @@
-
 name: gh-pages
 
 on:
@@ -27,6 +26,6 @@ jobs:
       - name: Deploy 🚀
         uses: peaceiris/actions-gh-pages@v3
         with:
-          publish_dir: dist # The folder the action should deploy.
+          publish_dir: ./packages/docs/dist # The folder the action should deploy.
 
           github_token: ${{ secrets.GITHUB_TOKEN }}
