@@ -14,9 +14,9 @@
 </template>
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import useLine from './useLine'
-import { debounce } from '../canvas-ruler/utils'
-import type { FinalPaletteType, LineType } from '../index-types'
+import useLine from './useLine.mts'
+import { debounce } from '../canvas-ruler/utils.mts'
+import type { FinalPaletteType, LineType } from '../index-types.mts'
 interface Props {
   scale: number
   palette: FinalPaletteType

@@ -1,4 +1,3 @@
-/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
@@ -16,21 +15,17 @@ export default defineConfig({
       rollupTypes: true
     })
   ],
-  test: {
-    globals: true,
-    environment: 'jsdom'
-  },
-
   resolve: {
     alias: {
       '@': resolve(__dirname)
-    }
+    },
+    extensions: ['.mts', '.ts', '.jsx', '.tsx', '.json']
   },
   build: {
     outDir: 'lib',
     // minify: true, // 不压缩代码,方便开发调试
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: resolve(__dirname, 'src/index.mts'),
       name: 'SketchRuler',
       fileName: 'index',
       formats: ['es', 'cjs', 'umd']

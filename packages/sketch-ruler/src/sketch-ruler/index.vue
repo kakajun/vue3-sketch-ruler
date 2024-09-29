@@ -64,9 +64,9 @@
 
 <script setup lang="ts">
 import RulerWrapper from './ruler-wrapper.vue'
-import { eye64, closeEye64 } from './cornerImg64'
+import { eye64, closeEye64 } from './cornerImg64.mts'
 import { computed, ref, watch, onMounted } from 'vue'
-import { SketchRulerProps } from '../index-types'
+import { SketchRulerProps } from '../index-types.mts'
 import Panzoom, { PanzoomObject, PanzoomEventDetail } from 'simple-panzoom'
 
 const props = withDefaults(defineProps<SketchRulerProps>(), {
@@ -139,8 +139,8 @@ const paletteCpu = computed(() => {
 const cornerStyle = computed(() => {
   return {
     backgroundImage: showReferLine.value
-      ? `url(${props.eyeIcon || eye64})`
-      : `url(${props.closeEyeIcon || closeEye64})`,
+      ? `url(${props.eyeIcon ?? eye64})`
+      : `url(${props.closeEyeIcon ?? closeEye64})`,
     width: props.thick + 'px',
     height: props.thick + 'px',
     borderRight: `1px solid ${paletteCpu.value.borderColor}`,

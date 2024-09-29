@@ -3,7 +3,12 @@
 
   "compilerOptions": {
     "outDir": "lib",
+    "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "allowJs": false
-  }
+  },
+  "include": ["**/*.vue", "**/*.mts", "**/*.json"]
 }

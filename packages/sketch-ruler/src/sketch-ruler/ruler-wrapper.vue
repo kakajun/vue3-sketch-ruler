@@ -30,8 +30,8 @@
 import RulerLine from './ruler-line.vue'
 import CanvasRuler from '../canvas-ruler/index.vue'
 import { ref, computed, watch } from 'vue'
-import useLine from './useLine' // 引入自定义hook
-import type { FinalPaletteType, LineType } from '../index-types'
+import useLine from './useLine.mts' // 引入自定义hook
+import type { FinalPaletteType, LineType } from '../index-types.mts'
 const props = defineProps<{
   scale: number
   thick: number

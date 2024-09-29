@@ -2,9 +2,9 @@
   <canvas ref="canvas" class="ruler" :style="rulerStyle" @mousedown.stop="handleDragStart"></canvas>
 </template>
 <script setup lang="ts">
-import { drawCanvasRuler } from './utils'
+import { drawCanvasRuler } from './utils.mts'
 import { reactive, ref, onMounted, watch, onUnmounted, computed } from 'vue'
-import type { FinalPaletteType } from '../index-types'
+import type { FinalPaletteType } from '../index-types.mts'
 interface Props {
   scale: number
   palette: FinalPaletteType

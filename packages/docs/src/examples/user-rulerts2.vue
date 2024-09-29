@@ -48,10 +48,10 @@
       <!--  这个可以传入图标  :gridRatio="0.5" -->
       <SketchRule
         :key="rendIndex"
+        ref="sketchruleRef"
         v-model:scale="state.scale"
         v-model:lock-line="lockLine"
         :thick="state.thick"
-        ref="sketchruleRef"
         :width="rectWidth"
         :show-ruler="showRuler"
         :height="rectHeight"

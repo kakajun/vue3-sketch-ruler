@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
-import type { PaletteType, LineType } from '../index-types'
-import { debounce } from '../canvas-ruler/utils'
+import type { PaletteType, LineType } from '../index-types.mts'
+import { debounce } from '../canvas-ruler/utils.mts'
 
 interface Props {
   palette: PaletteType
