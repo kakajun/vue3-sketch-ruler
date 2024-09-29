@@ -5,6 +5,6 @@ const props = defineProps({
 })
 </script>
 <template>
-  <component :item="item" :is="item.type"></component>
+  <component :is="item.type" :item="item"></component>
 </template>
 <style scoped></style>

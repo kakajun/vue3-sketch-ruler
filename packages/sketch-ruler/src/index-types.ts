@@ -36,13 +36,13 @@ export interface ShadowType {
   height: number
 }
 export interface LineType {
-  h: Array<number>
-  v: Array<number>
+  h: number[]
+  v: number[]
 }
 export interface SketchRulerProps {
   showRuler?: boolean
-  eyeIcon?: String
-  closeEyeIcon?: String
+  eyeIcon?: string
+  closeEyeIcon?: string
   scale?: number
   rate?: number
   thick?: number

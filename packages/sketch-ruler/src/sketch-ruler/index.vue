@@ -1,6 +1,6 @@
 <template>
   <div class="sketch-ruler">
-    <slot name="btn" :reset="reset" :zoomIn="zoomIn" :zoomOut="zoomOut"></slot>
+    <slot name="btn" :reset="reset" :zoom-in="zoomIn" :zoom-out="zoomOut"></slot>
     <div class="canvasedit-parent" :style="rectStyle" :class="cursorClass">
       <div class="canvasedit" :class="cursorClass">
         <slot></slot>
@@ -8,54 +8,54 @@
     </div>
     <!-- 水平方向 -->
     <RulerWrapper
-      :style="{ marginLeft: thick + 'px', width: rectWidth + 'px' }"
       v-show="showRuler"
+      :style="{ marginLeft: thick + 'px', width: rectWidth + 'px' }"
       :vertical="false"
       :width="width"
       :height="thick"
       :is-show-refer-line="showReferLine"
       :thick="thick"
       :start="startX"
-      :startOther="startY"
+      :start-other="startY"
       :lines="lines"
       :select-start="shadow.x"
-      :snapThreshold="snapThreshold"
-      :snapsObj="snapsObj"
+      :snap-threshold="snapThreshold"
+      :snaps-obj="snapsObj"
       :select-length="shadow.width"
       :scale="ownScale"
       :palette="paletteCpu"
-      :canvasWidth="canvasWidth"
-      :showShadowText="showShadowText"
-      :canvasHeight="canvasHeight"
+      :canvas-width="canvasWidth"
+      :show-shadow-text="showShadowText"
+      :canvas-height="canvasHeight"
       :rate="rate"
-      :gridRatio="gridRatio"
-      :lockLine="lockLine"
+      :grid-ratio="gridRatio"
+      :lock-line="lockLine"
       @change-line-state="changeLineState"
     />
     <!-- 竖直方向 -->
     <RulerWrapper
-      :style="{ marginTop: thick + 'px', top: 0, height: rectHeight + 'px' }"
       v-show="showRuler"
+      :style="{ marginTop: thick + 'px', top: 0, height: rectHeight + 'px' }"
       :vertical="true"
       :width="thick"
       :height="height"
       :is-show-refer-line="showReferLine"
       :thick="thick"
       :start="startY"
-      :startOther="startX"
+      :start-other="startX"
       :lines="lines"
       :select-start="shadow.y"
       :select-length="shadow.height"
-      :snapThreshold="snapThreshold"
-      :snapsObj="snapsObj"
+      :snap-threshold="snapThreshold"
+      :snaps-obj="snapsObj"
       :scale="ownScale"
       :palette="paletteCpu"
-      :canvasWidth="canvasWidth"
-      :canvasHeight="canvasHeight"
-      :showShadowText="showShadowText"
+      :canvas-width="canvasWidth"
+      :canvas-height="canvasHeight"
+      :show-shadow-text="showShadowText"
       :rate="rate"
-      :gridRatio="gridRatio"
-      :lockLine="lockLine"
+      :grid-ratio="gridRatio"
+      :lock-line="lockLine"
       @change-line-state="changeLineState"
     />
     <a v-show="showRuler" class="corner" :style="cornerStyle" @click="onCornerClick"></a>
@@ -207,7 +207,6 @@ const getPanOptions = (scale: number) => {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const handlePanzoomChange = (e: any) => {
   const { scale, dimsOut } = e.detail as PanzoomEventDetail
   if (dimsOut) {

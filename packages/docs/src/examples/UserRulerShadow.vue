@@ -13,16 +13,16 @@
       <SketchRule
         ref="sketchruleRef"
         v-model:scale="state.scale"
-        v-model:lockLine="lockLine"
+        v-model:lock-line="lockLine"
         v-bind="post"
-        :selfHandle="true"
+        :self-handle="true"
       >
         <template #default>
           <div class="container" :style="canvasStyle">
             <movebleCom
-              :scale="state.scale"
               v-model:shadow="post.shadow"
-              v-model:snapsObj="post.snapsObj"
+              v-model:snaps-obj="post.snapsObj"
+              :scale="state.scale"
             />
           </div>
         </template>

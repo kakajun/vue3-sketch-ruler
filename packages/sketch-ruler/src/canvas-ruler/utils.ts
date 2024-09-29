@@ -190,7 +190,7 @@ interface IDebounce {
 }
 // 定义一个泛型类型，确保T是一个函数类型
 type FunctionType<T = any, R = any> = (this: T, ...args: any[]) => R
-export function debounce<T extends FunctionType>(func: T, wait: number = 100): IDebounce {
+export function debounce<T extends FunctionType>(func: T, wait = 100): IDebounce {
   let timeout: ReturnType<typeof setTimeout> | null = null
 
   const debounced: IDebounce = function (...args: Parameters<T>) {

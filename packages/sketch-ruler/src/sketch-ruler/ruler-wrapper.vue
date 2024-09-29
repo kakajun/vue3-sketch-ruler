@@ -12,12 +12,12 @@
     </div>
 
     <div
-      class="indicator"
       v-if="isShowReferLine"
+      v-show="isdragle"
+      class="indicator"
+      :style="indicatorStyle"
       @mouseenter="handleMouseenter"
       @mouseleave="handleMouseLeave"
-      v-show="isdragle"
-      :style="indicatorStyle"
     >
       <div class="action" :style="actionStyle">
         <span v-if="showLabel" class="value">{{ labelContent }}</span>

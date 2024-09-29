@@ -39,8 +39,7 @@ const VueSelecto = defineComponent<
   {},
   VueSelectoEvents
 >({
-  name: 'selecto',
-  methods: methods as any,
+  name: 'Selecto',
   props: OPTIONS as any,
   watch,
   mounted(this: any) {
@@ -69,7 +68,8 @@ const VueSelecto = defineComponent<
   },
   beforeUnmount(this: any) {
     this.$_selecto.destroy()
-  }
+  },
+  methods: methods as any
 })
 interface VueSelecto
   extends MethodInterface<SelectoMethods, VanillaSelecto, VueSelecto>,

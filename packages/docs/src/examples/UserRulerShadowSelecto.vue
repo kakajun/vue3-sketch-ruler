@@ -147,7 +147,7 @@ export default {
   <button @click="zoom">缩小</button>
   <div class="moveable app">
     <div class="container" style="transform: scale(1)">
-      <div class="logo logos" id="logo">
+      <div id="logo" class="logo logos">
         <a>
           <img src="https://daybrush.com/selecto/images/256x256.png" class="selecto" />
         </a>
@@ -166,25 +166,25 @@ export default {
         ref="moveableRef"
         :target="targets"
         :draggable="true"
-        @clickGroup="onClickGroup"
+        @click-group="onClickGroup"
         @render="onRender"
-        @renderGroup="onRenderGroup"
+        @render-group="onRenderGroup"
       />
       <Selecto
         ref="selectoRef"
-        :dragContainer="'.elements'"
-        :selectableTargets="['.target']"
-        :hitRate="hitRate"
-        :selectByClick="selectByClick"
-        :selectFromInside="selectFromInside"
-        :toggleContinueSelect="toggleContinueSelect"
+        :drag-container="'.elements'"
+        :selectable-targets="['.target']"
+        :hit-rate="hitRate"
+        :select-by-click="selectByClick"
+        :select-from-inside="selectFromInside"
+        :toggle-continue-select="toggleContinueSelect"
         :ratio="ratio"
-        :keyContainer="window"
-        @dragStart="onDragStart"
-        @selectEnd="onSelectEnd"
+        :key-container="window"
+        @drag-start="onDragStart"
+        @select-end="onSelectEnd"
       />
       <div ref="elem" class="elements selecto-area">
-        <div class="cube target" :key="i" v-for="i in cubes"></div>
+        <div v-for="i in cubes" :key="i" class="cube target"></div>
       </div>
     </div>
   </div>

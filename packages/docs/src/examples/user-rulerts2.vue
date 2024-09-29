@@ -2,8 +2,8 @@
   <div class="demo">
     <div class="top font16">
       <div class="scale mr10"> 缩放比:{{ cpuScale }} </div>
-      <button class="mr10 font16" v-if="showRuler" @click="showRuler = false">隐藏规尺</button>
-      <button class="mr10 font16" v-else @click="handleShow">显示规尺</button>
+      <button v-if="showRuler" class="mr10 font16" @click="showRuler = false">隐藏规尺</button>
+      <button v-else class="mr10 font16" @click="handleShow">显示规尺</button>
       <button class="mr10 font16" @click="showLineClick">辅助线开关</button>
       <button class="mr10 font16" @click="lockLine = true">锁定参考线</button>
       <button class="mr10 font16" @click="changeShadow">模拟阴影切换</button>
@@ -19,12 +19,12 @@
       <input
         class="mr10 font16"
         :value="state.scale"
-        @input="scaleChange"
         type="range"
         min="0.3"
         max="3"
         step="0.1"
         defaultValue="1"
+        @input="scaleChange"
       />
       <div class="mr10"> 吸附横线: </div>
       <input class="mr10" style="width: 90px" :value="snapsObj.h" @blur="snapsChange" />
@@ -49,22 +49,22 @@
       <SketchRule
         :key="rendIndex"
         v-model:scale="state.scale"
-        v-model:lockLine="lockLine"
+        v-model:lock-line="lockLine"
         :thick="state.thick"
+        ref="sketchruleRef"
         :width="rectWidth"
-        :showRuler="showRuler"
+        :show-ruler="showRuler"
         :height="rectHeight"
         :palette="cpuPalette"
-        :snapsObj="snapsObj"
+        :snaps-obj="snapsObj"
         :shadow="state.shadow"
-        :canvasWidth="canvasWidth"
-        :canvasHeight="canvasHeight"
-        :panzoomOption="panzoomOption"
-        ref="sketchruleRef"
-        :isShowReferLine="state.isShowReferLine"
+        :canvas-width="canvasWidth"
+        :canvas-height="canvasHeight"
+        :panzoom-option="panzoomOption"
+        :is-show-refer-line="state.isShowReferLine"
+        :lines="state.lines"
         @on-corner-click="handleCornerClick"
         @zoomchange="zoomchange"
-        :lines="state.lines"
       >
         <template #default>
           <div data-type="page" :style="canvasStyle">

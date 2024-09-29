@@ -2,7 +2,7 @@
   <div class="es-app">
     <Header>
       <template #navbar-end>
-        <el-dropdown @command="handleCommand" class="es-header-lang" trigger="click">
+        <el-dropdown class="es-header-lang" trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
             {{ currentLan }}
             <el-icon class="el-icon--right">
@@ -43,8 +43,8 @@
             <el-button
               type="text"
               :icon="CopyDocument"
-              @click="copyCode"
               style="color: #aabbcc; font-size: 20px"
+              @click="copyCode"
             />
           </el-tooltip>
         </div>

@@ -23,12 +23,12 @@
       <input
         class="mr10 font16"
         :value="state.scale"
-        @input="scaleChange"
         type="range"
         min="0.3"
         max="3"
         step="0.1"
         defaultValue="1"
+        @input="scaleChange"
       />
       <div class="mr10"> 吸附横线: </div>
       <input class="mr10" style="width: 90px" :value="post.snapsObj.h" @blur="snapsChange" />
@@ -54,9 +54,9 @@
         ref="sketchruleRef"
         :key="rendIndex"
         v-model:scale="state.scale"
-        v-model:lockLine="lockLine"
+        v-model:lock-line="lockLine"
         v-bind="post"
-        :selfHandle="true"
+        :self-handle="true"
         @on-corner-click="handleCornerClick"
         @zoomchange="zoomchange"
       >

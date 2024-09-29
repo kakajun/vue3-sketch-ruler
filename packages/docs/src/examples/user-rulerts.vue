@@ -23,12 +23,12 @@
       <input
         class="mr10 font16"
         :value="state.scale"
-        @input="scaleChange"
         type="range"
         min="0.3"
         max="3"
         step="0.1"
         defaultValue="1"
+        @input="scaleChange"
       />
       <div class="mr10"> 吸附横线: </div>
       <input class="mr10" style="width: 90px" :value="post.snapsObj.h" @blur="snapsChange" />
@@ -53,14 +53,14 @@
         ref="sketchruleRef"
         :key="rendIndex"
         v-model:scale="state.scale"
-        v-model:lockLine="lockLine"
+        v-model:lock-line="lockLine"
         v-bind="post"
         :palette="cpuPalette"
         @on-corner-click="handleCornerClick"
         @zoomchange="zoomchange"
       >
         <template #default>
-          <div data-type="page" @mousedown="handleMouseDown" :style="canvasStyle">
+          <div data-type="page" :style="canvasStyle" @mousedown="handleMouseDown">
             <img class="img-style" :src="bgImg" alt="" />
           </div>
         </template>
@@ -204,12 +204,15 @@ const canvasStyle = computed(() => {
   }
 })
 
-const scaleChange = (e: { target: { value: number } }) => {
-  state.scale = e.target.value * 1
-  // 注意插件内部并没有监听scale的变化,所以需要手动调用zoom来改变scale
-  if (sketchruleRef.value) {
-    const panzoomInstance = sketchruleRef.value.panzoomInstance
-    panzoomInstance.zoom(state.scale)
+const scaleChange = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  if (target) {
+    state.scale = Number(target.value)
+    // 注意插件内部并没有监听scale的变化,所以需要手动调用zoom来改变scale
+    if (sketchruleRef.value) {
+      const panzoomInstance = sketchruleRef.value.panzoomInstance
+      panzoomInstance.zoom(state.scale)
+    }
   }
 }
 
@@ -230,15 +233,24 @@ const snapsChangeV = (e: { target: { value: string } }) => {
   post.snapsObj.v = arr.map((item) => Number(item))
 }
 
-const changeScale = (e: { target: { checked: boolean } }) => {
-  panzoomOption.disableZoom = e.target.checked
+const changeScale = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  if (target) {
+    panzoomOption.disableZoom = target.checked
+  }
 }
-const changeMove = (e: { target: { checked: boolean } }) => {
-  panzoomOption.disablePan = e.target.checked
+const changeMove = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  if (target) {
+    panzoomOption.disablePan = target.checked
+  }
 }
 
-const changeInsideMove = (e: { target: { checked: boolean } }) => {
-  panzoomOption.contain = e.target.checked ? 'inside' : 'none'
+const changeInsideMove = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  if (target) {
+    panzoomOption.contain = target.checked ? 'inside' : 'none'
+  }
 }
 
 const changeShadow = () => {

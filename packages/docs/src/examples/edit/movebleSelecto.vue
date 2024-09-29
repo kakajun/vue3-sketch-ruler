@@ -3,7 +3,7 @@ import Moveable from 'vue3-moveable'
 import { ref, nextTick, watch, toRefs } from 'vue'
 import GroupSelectable from './GroupSelectable.vue'
 
-type TargetItem = {
+interface TargetItem {
   id: string
   className: string
   left: number
@@ -159,42 +159,42 @@ const onDragEnd = (e: { lastEvent: any; target: any }) => {
     <div class="container">
       <div
         v-for="item in targetList"
+        :id="item.id"
+        :key="item.id"
         class="target"
         :class="item.className"
         :data-id="item.id"
         :data-left="item.left"
         :data-top="item.top"
-        :id="item.id"
         :style="getStyle(item)"
-        :key="item.id"
         @mousedown="handleClick($event, item)"
         >{{ item.className }}
       </div>
     </div>
 
     <Moveable
-      ref="moveableRef"
       id="moveable"
+      ref="moveableRef"
       :snappable="true"
-      :snapGap="true"
+      :snap-gap="true"
       :scalable="true"
       :resizable="true"
       :rotatable="true"
       :zoom="2"
-      :snapDirections="snapDirections"
-      :elementSnapDirections="elementSnapDirections"
-      :snapThreshold="5 / scale"
+      :snap-directions="snapDirections"
+      :element-snap-directions="elementSnapDirections"
+      :snap-threshold="5 / scale"
       :target="targets"
       :draggable="draggable"
-      :elementGuidelines="['.container', '.element0', '.element1', '.element2']"
+      :element-guidelines="['.container', '.element0', '.element1', '.element2']"
       @drag="onDrag"
       @drag-start="onDragStart"
       @drag-end="onDragEnd"
     />
     <GroupSelectable
-      @dragStart="dragStart"
-      :isMoveableElement="isMoveableElement"
-      @setTargetClass="setTargetClass"
+      :is-moveable-element="isMoveableElement"
+      @drag-start="dragStart"
+      @set-target-class="setTargetClass"
     />
   </div>
 </template>
