@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    // The following two settings are intended for just server-side and shared
+    // code compilation. We'll override them in the client config.
+    "target": "ES2022",
+    // Use Node's ES module support mode rather than classic node modules
+    "module": "Node16",
+
+    // Necessary in order to treat each subsection as a typescript project
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    // Various strictness guarantees when compiling
+    "strict": true,
+    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Recommended by github.com/tsconfig
+    "skipLibCheck": true,
+
+    // According to the TS team, this should always be set to true; the default
+    // is false for backwards compatibility.
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    "sourceMap": true
+  }
+}

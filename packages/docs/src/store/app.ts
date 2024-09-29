@@ -9,6 +9,6 @@ export const useAppStore = defineStore('app', {
     theme: (localStorage.getItem('theme') as any) || 'dark'
   }),
   getters: {
-    isLight: state => state.theme === 'light'
+    isLight: (state) => state.theme === 'light'
   }
 })

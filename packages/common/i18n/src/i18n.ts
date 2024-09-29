@@ -6,7 +6,7 @@ import en from './locales/en.json'
 let currentLanguage = navigator.language.replace(/-(\S*)/, '')
 
 // 如果本地缓存记录了语言环境，则使用本地缓存
-let lsLocale = localStorage.getItem('locale') || ''
+const lsLocale = localStorage.getItem('locale') || ''
 if (lsLocale) {
   currentLanguage = JSON.parse(lsLocale)?.locale
 }

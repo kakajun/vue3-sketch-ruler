@@ -4,7 +4,7 @@ import { ref } from 'vue'
 export const useLocaleStore = defineStore(
   'locale',
   () => {
-    let locale = ref(i18n.global.locale.value)
+    const locale = ref(i18n.global.locale.value)
 
     // 设置locale
     function setLocale(lang: any) {
