@@ -4,7 +4,7 @@
     // code compilation. We'll override them in the client config.
     "target": "ES2022",
     // Use Node's ES module support mode rather than classic node modules
-    "module": "Node16",
+    "module": "ESNext",
 
     // Necessary in order to treat each subsection as a typescript project
     "composite": true,
@@ -25,6 +25,5 @@
     "allowSyntheticDefaultImports": true,
 
     "sourceMap": true
-  },
-
+  }
 }

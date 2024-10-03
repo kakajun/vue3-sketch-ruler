@@ -39,7 +39,8 @@
 </template>
 <script setup lang="ts">
 import { computed, ref, reactive, onMounted } from 'vue'
-import SketchRule from '../../src/index' // 这里可以换成打包后的
+import SketchRule from 'vue3-sketch-ruler'
+import 'vue3-sketch-ruler/lib/style.css'
 import type { PanzoomEvent } from 'simple-panzoom'
 import movebleCom from './edit/moveble.vue'
 

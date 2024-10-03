@@ -5,10 +5,11 @@
     "outDir": "lib",
     "allowImportingTsExtensions": true,
     "emitDeclarationOnly": true,
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "allowJs": false
   },
-  "include": ["**/*.vue", "**/*.mts", "**/*.json"]
+  "include": ["**/*.vue", "**/*.ts", "**/*.json"]
 }

@@ -46,7 +46,7 @@ export interface SketchRulerProps {
   scale?: number
   rate?: number
   thick?: number
-  palette?: PaletteType
+  palette: PaletteType
   width?: number
   height?: number
   paddingRatio?: number

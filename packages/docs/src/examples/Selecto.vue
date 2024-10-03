@@ -3,7 +3,8 @@ import Moveable from 'vue3-moveable'
 import Selecto from './edit/Selecto.vue'
 import { ref, reactive, computed, onMounted } from 'vue'
 import Panzoom from 'simple-panzoom'
-import SketchRule from '../../src/index' // 这里可以换成打包后的
+import SketchRule from 'vue3-sketch-ruler'
+import 'vue3-sketch-ruler/lib/style.css'
 export default {
   components: { Moveable, Selecto, SketchRule },
   setup() {

@@ -1,14 +1,10 @@
 <template>
   <div class="demo">
     <div class="top font16">
-      <div class="mr10">鼠标中键移动画布 </div>
       <div class="scale mr10"> 缩放比:{{ cpuScale }} </div>
-      <button class="mr10 font16" @click="post.showRuler = !post.showRuler">{{
-        (post.showRuler ? '隐藏' : '显示') + '规尺'
-      }}</button>
-      <button class="mr10 font16" @click="post.isShowReferLine = !post.isShowReferLine">{{
-        (post.isShowReferLine ? '隐藏' : '显示') + '参考线'
-      }}</button>
+      <button v-if="showRuler" class="mr10 font16" @click="showRuler = false">隐藏规尺</button>
+      <button v-else class="mr10 font16" @click="handleShow">显示规尺</button>
+      <button class="mr10 font16" @click="showLineClick">辅助线开关</button>
       <button class="mr10 font16" @click="lockLine = true">锁定参考线</button>
       <button class="mr10 font16" @click="changeShadow">模拟阴影切换</button>
       <button class="mr10 font16" @click="changeTheme">主题切换</button>
@@ -31,9 +27,9 @@
         @input="scaleChange"
       />
       <div class="mr10"> 吸附横线: </div>
-      <input class="mr10" style="width: 90px" :value="post.snapsObj.h" @blur="snapsChange" />
+      <input class="mr10" style="width: 90px" :value="snapsObj.h" @blur="snapsChange" />
       <div class="mr10"> 吸附纵线: </div>
-      <input class="mr10" style="width: 90px" :value="post.snapsObj.v" @blur="snapsChangeV" />
+      <input class="mr10" style="width: 90px" :value="snapsObj.v" @blur="snapsChangeV" />
 
       <a
         href="https://github.com/kakajun/vue3-sketch-ruler"
@@ -49,14 +45,24 @@
       :class="[state.isBlack ? 'balckwrapper' : 'whitewrapper']"
       :style="rectStyle"
     >
-      <!--  :gridRatio="0.5" -->
+      <!--  这个可以传入图标  :gridRatio="0.5" -->
       <SketchRule
-        ref="sketchruleRef"
         :key="rendIndex"
+        ref="sketchruleRef"
         v-model:scale="state.scale"
         v-model:lock-line="lockLine"
-        v-bind="post"
-        :self-handle="true"
+        :thick="state.thick"
+        :width="rectWidth"
+        :show-ruler="showRuler"
+        :height="rectHeight"
+        :palette="cpuPalette"
+        :snaps-obj="snapsObj"
+        :shadow="state.shadow"
+        :canvas-width="canvasWidth"
+        :canvas-height="canvasHeight"
+        :panzoom-option="panzoomOption"
+        :is-show-refer-line="state.isShowReferLine"
+        :lines="state.lines"
         @on-corner-click="handleCornerClick"
         @zoomchange="zoomchange"
       >
@@ -77,18 +83,27 @@
   </div>
 </template>
 <script setup lang="ts">
-// import { SketchRule } from 'vue3-sketch-ruler'
-// import 'vue3-sketch-ruler/lib/style.css'
-// import { SketchRule } from '../../lib/index.mjs'
-// import '../../lib/style.css'
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive, onMounted } from 'vue'
-import SketchRule from '../../src/index' // 这里可以换成打包后的
+import SketchRule from 'vue3-sketch-ruler'
+import 'vue3-sketch-ruler/lib/style.css'
 import type { PanzoomEventDetail, PanzoomEvent } from 'simple-panzoom'
-
+const rectWidth = ref(1470)
+const rectHeight = ref(800)
+// const canvasWidth = ref(2800)
+// const canvasHeight = ref(1800)
+// const canvasWidth = ref(1920)
+// const canvasHeight = ref(1080)
+const canvasWidth = ref(1000)
+const canvasHeight = ref(500)
+// const rectWidth =ref( 800)
+// const rectHeight =ref( 400)
+// const canvasWidth =ref( 530)
+// const canvasHeight =ref( 250)
 const rendIndex = ref(0)
+const windowScale = ref(1)
 const sketchruleRef = ref()
-
+const showRuler = ref(true)
 // 更多配置,参见 https://github.com/timmywil/panzoom
 const panzoomOption = reactive({
   maxScale: 3,
@@ -103,8 +118,9 @@ const panzoomOption = reactive({
     console.log('handleStartEvent', event)
   }
 })
-const lockLine = ref(false)
 
+const lockLine = ref(false)
+const snapsObj = ref({ h: [0, 100, 200], v: [130] })
 // 另外一个方法调用内部方法
 const zoomOutMethod = () => {
   if (sketchruleRef.value) {
@@ -114,36 +130,11 @@ const zoomOutMethod = () => {
 
 onMounted(() => {
   window.addEventListener('resize', handleResize)
-  const panzoomInstance = sketchruleRef.value.panzoomInstance
-  const parentDom = document.getElementsByClassName('canvasedit-parent')
-  if (parentDom[0]) {
-    const parent = parentDom[0]
-    parent &&
-      parent.addEventListener('wheel', function (e: WheelEvent) {
-        if (e.ctrlKey || e.metaKey) {
-          panzoomInstance.zoomWithWheel(e)
-        }
-      })
-
-    // 让按下鼠标中键才能移动画布,千万不能用mousedown, 否则会出现缩放bug, 因为panzoom内部对pointerId有判断,而mousedown里面并没有pointerId
-    document.addEventListener('pointerdown', function (e) {
-      if (e.button === 1) {
-        sketchruleRef.value.cursorClass = 'grabCursor'
-        panzoomInstance.bind()
-        panzoomInstance.handleDown(e)
-        e.preventDefault()
-      }
-    })
-
-    document.addEventListener('pointerup', function (e) {
-      if (e.button === 1) {
-        panzoomInstance.destroy()
-        console.log('放开了')
-        sketchruleRef.value.cursorClass = 'defaultCursor'
-      }
-    })
-  }
 })
+
+const handleShow = () => {
+  showRuler.value = !showRuler.value
+}
 
 const handleResize = () => {
   if (sketchruleRef.value) {
@@ -163,9 +154,28 @@ const changeTheme = () => {
 
 const state = reactive({
   scale: 1,
-  isBlack: false
+  isBlack: false,
+  lines: {
+    h: [0, 250],
+    v: [0, 500]
+  },
+  thick: 20,
+  shadow: {
+    x: 0,
+    y: 0,
+    width: 300,
+    height: 300
+  },
+  isShowRuler: true, // 显示标尺
+  isShowReferLine: true // 显示参考线
 })
 
+const rectStyle = computed(() => {
+  return {
+    width: `${rectWidth.value}px`,
+    height: `${rectHeight.value}px`
+  }
+})
 const cpuPalette = computed(() => {
   return state.isBlack
     ? {
@@ -185,40 +195,6 @@ const cpuPalette = computed(() => {
       }
 })
 
-const post = reactive({
-  thick: 20,
-  width: 1470,
-  height: 800,
-  // width: 770,
-  // height: 400,
-  // canvasWidth: 1920,
-  // canvasHeight: 1080,
-  canvasWidth: 1000,
-  canvasHeight: 500,
-  showRuler: true,
-  palette: cpuPalette.value,
-  snapsObj: { h: [0, 100, 200], v: [130] },
-  shadow: {
-    x: 0,
-    y: 0,
-    width: 300,
-    height: 300
-  },
-  panzoomOption: panzoomOption,
-  isShowReferLine: true,
-  lines: {
-    h: [0, 250],
-    v: [0, 500]
-  }
-})
-
-const rectStyle = computed(() => {
-  return {
-    width: `${post.width}px`,
-    height: `${post.height}px`
-  }
-})
-
 const cpuScale = computed(() => {
   const num = Number(state.scale)
   return num.toFixed(1)
@@ -226,8 +202,8 @@ const cpuScale = computed(() => {
 
 const canvasStyle = computed(() => {
   return {
-    width: `${post.canvasWidth}px`,
-    height: `${post.canvasHeight}px`
+    width: `${canvasWidth.value}px`,
+    height: `${canvasHeight.value}px`
   }
 })
 
@@ -244,16 +220,20 @@ const handleCornerClick = (e: MouseEvent) => {
 }
 
 const zoomchange = (detail: PanzoomEventDetail) => {
-  // console.log('zoomchange', detail)
+  console.log('zoomchange', detail)
 }
 
+const showLineClick = () => {
+  state.isShowReferLine = !state.isShowReferLine
+  console.log(state.isShowReferLine, 'state.isShowReferLine')
+}
 const snapsChange = (e: { target: { value: string } }) => {
   const arr = e.target.value.split(',')
-  post.snapsObj.h = arr.map((item) => Number(item))
+  snapsObj.value.h = arr.map((item) => Number(item))
 }
 const snapsChangeV = (e: { target: { value: string } }) => {
   const arr = e.target.value.split(',')
-  post.snapsObj.v = arr.map((item) => Number(item))
+  snapsObj.value.v = arr.map((item) => Number(item))
 }
 
 const changeScale = (e: { target: { checked: boolean } }) => {
@@ -268,15 +248,15 @@ const changeInsideMove = (e: { target: { checked: boolean } }) => {
 }
 
 const changeShadow = () => {
-  post.shadow.x = Math.random() * post.canvasWidth
-  post.shadow.y = Math.random() * post.canvasHeight
+  // 模拟 x canvasWidth.value   y canvasHeight.value  范围内随机数据
+  state.shadow.x = Math.random() * canvasWidth.value
+  state.shadow.y = Math.random() * canvasHeight.value
 }
 </script>
 
 <style lang="scss">
 .demo {
   width: 100%;
-  // padding-top: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center; /* 水平居中 */

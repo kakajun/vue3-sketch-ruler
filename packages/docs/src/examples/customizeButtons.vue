@@ -1,8 +1,8 @@
 <template>
   <div class="demo">
     <div class="top font16">
-      <div class="scale mr10"> 缩放比:{{ cpuScale }} </div>
-      <div class="scale mr10"> 参考线:{{ JSON.stringify(post.lines) }} </div>
+      <div class="mr10">鼠标中键移动画布 </div>
+      <div class="scale mr10"> {{ cpuScale }} </div>
       <button class="mr10 font16" @click="post.showRuler = !post.showRuler">{{
         (post.showRuler ? '隐藏' : '显示') + '规尺'
       }}</button>
@@ -46,21 +46,22 @@
 
     <div
       class="wrapper"
-      :class="[state.isBlack ? 'blackwrapper' : 'whitewrapper']"
+      :class="[state.isBlack ? 'balckwrapper' : 'whitewrapper']"
       :style="rectStyle"
     >
+      <!--  :gridRatio="0.5" -->
       <SketchRule
         ref="sketchruleRef"
         :key="rendIndex"
         v-model:scale="state.scale"
         v-model:lock-line="lockLine"
         v-bind="post"
-        :palette="cpuPalette"
+        :self-handle="true"
         @on-corner-click="handleCornerClick"
         @zoomchange="zoomchange"
       >
         <template #default>
-          <div data-type="page" :style="canvasStyle" @mousedown="handleMouseDown">
+          <div data-type="page" :style="canvasStyle">
             <img class="img-style" :src="bgImg" alt="" />
           </div>
         </template>
@@ -76,13 +77,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import SketchRule from 'vue3-sketch-ruler'
-import 'vue3-sketch-ruler/lib/style.css'
-// import  SketchRule  from '../../lib/index.mjs'
-// import '../../lib/style.css'
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive, onMounted } from 'vue'
-// import SketchRule from '../../src/index' // 这里可以换成打包后的
+import SketchRule from 'vue3-sketch-ruler'
+import 'vue3-sketch-ruler/lib/style.css'
 import type { PanzoomEventDetail, PanzoomEvent } from 'simple-panzoom'
 
 const rendIndex = ref(0)
@@ -90,7 +88,6 @@ const sketchruleRef = ref()
 
 // 更多配置,参见 https://github.com/timmywil/panzoom
 const panzoomOption = reactive({
-  canvas: true,
   maxScale: 3,
   minScale: 0.3,
   // startX: 0,   // 画布距离左边框距离, 如果想自动,那么不要传
@@ -114,6 +111,35 @@ const zoomOutMethod = () => {
 
 onMounted(() => {
   window.addEventListener('resize', handleResize)
+  const panzoomInstance = sketchruleRef.value.panzoomInstance
+  const parentDom = document.getElementsByClassName('canvasedit-parent')
+  if (parentDom[0]) {
+    const parent = parentDom[0]
+    parent &&
+      parent.addEventListener('wheel', function (e: WheelEvent) {
+        if (e.ctrlKey || e.metaKey) {
+          panzoomInstance.zoomWithWheel(e)
+        }
+      })
+
+    // 让按下鼠标中键才能移动画布,千万不能用mousedown, 否则会出现缩放bug, 因为panzoom内部对pointerId有判断,而mousedown里面并没有pointerId
+    document.addEventListener('pointerdown', function (e) {
+      if (e.button === 1) {
+        sketchruleRef.value.cursorClass = 'grabCursor'
+        panzoomInstance.bind()
+        panzoomInstance.handleDown(e)
+        e.preventDefault()
+      }
+    })
+
+    document.addEventListener('pointerup', function (e) {
+      if (e.button === 1) {
+        panzoomInstance.destroy()
+        console.log('放开了')
+        sketchruleRef.value.cursorClass = 'defaultCursor'
+      }
+    })
+  }
 })
 
 const handleResize = () => {
@@ -147,8 +173,7 @@ const cpuPalette = computed(() => {
         fontColor: '#DEDEDE', // ruler font color
         shadowColor: '#525252', // ruler shadow color
         lineColor: '#51d6a9',
-        borderColor: '#B5B5B5',
-        lineType: 'dashed'
+        borderColor: '#B5B5B5'
       }
     : {
         bgColor: 'transparent',
@@ -161,15 +186,14 @@ const post = reactive({
   thick: 20,
   width: 1470,
   height: 800,
-  showShadowText: false,
-  // gridRatio: '0.5',
   // width: 770,
-  // height: 472,
-  canvasWidth: 1920,
-  canvasHeight: 1080,
-  // canvasWidth: 1000,
-  // canvasHeight: 500,
+  // height: 400,
+  // canvasWidth: 1920,
+  // canvasHeight: 1080,
+  canvasWidth: 1000,
+  canvasHeight: 500,
   showRuler: true,
+  palette: cpuPalette.value,
   snapsObj: { h: [0, 100, 200], v: [130] },
   shadow: {
     x: 0,
@@ -204,15 +228,11 @@ const canvasStyle = computed(() => {
   }
 })
 
-const scaleChange = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  if (target) {
-    state.scale = Number(target.value)
-    // 注意插件内部并没有监听scale的变化,所以需要手动调用zoom来改变scale
-    if (sketchruleRef.value) {
-      const panzoomInstance = sketchruleRef.value.panzoomInstance
-      panzoomInstance.zoom(state.scale)
-    }
+const scaleChange = (e: { target: { value: number } }) => {
+  state.scale = e.target.value * 1
+  if (sketchruleRef.value) {
+    const panzoomInstance = sketchruleRef.value.panzoomInstance
+    panzoomInstance.zoom(state.scale)
   }
 }
 
@@ -221,7 +241,7 @@ const handleCornerClick = (e: MouseEvent) => {
 }
 
 const zoomchange = (detail: PanzoomEventDetail) => {
-  console.log('zoomchange', detail)
+  // console.log('zoomchange', detail)
 }
 
 const snapsChange = (e: { target: { value: string } }) => {
@@ -233,33 +253,20 @@ const snapsChangeV = (e: { target: { value: string } }) => {
   post.snapsObj.v = arr.map((item) => Number(item))
 }
 
-const changeScale = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  if (target) {
-    panzoomOption.disableZoom = target.checked
-  }
+const changeScale = (e: { target: { checked: boolean } }) => {
+  panzoomOption.disableZoom = e.target.checked
 }
-const changeMove = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  if (target) {
-    panzoomOption.disablePan = target.checked
-  }
+const changeMove = (e: { target: { checked: boolean } }) => {
+  panzoomOption.disablePan = e.target.checked
 }
 
-const changeInsideMove = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  if (target) {
-    panzoomOption.contain = target.checked ? 'inside' : 'none'
-  }
+const changeInsideMove = (e: { target: { checked: boolean } }) => {
+  panzoomOption.contain = e.target.checked ? 'inside' : 'none'
 }
 
 const changeShadow = () => {
   post.shadow.x = Math.random() * post.canvasWidth
   post.shadow.y = Math.random() * post.canvasHeight
-}
-
-const handleMouseDown = (e: MouseEvent) => {
-  console.log('handleMouseDown', e)
 }
 </script>
 
@@ -297,7 +304,7 @@ const handleMouseDown = (e: MouseEvent) => {
   background-image: linear-gradient(#fafafc 20px, transparent 0),
     linear-gradient(90deg, transparent 20px, #373739 0);
 }
-.blackwrapper {
+.balckwrapper {
   background-color: #18181c;
   background-image: linear-gradient(#18181c 20px, transparent 0),
     linear-gradient(90deg, transparent 20px, #86909c 0);

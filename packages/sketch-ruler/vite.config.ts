@@ -12,20 +12,21 @@ export default defineConfig({
   plugins: [
     vue(),
     dts({
-      rollupTypes: true
+      rollupTypes: true,
+      tsconfigPath: resolve(__dirname, 'tsconfig.json') // 指定 tsconfig 文件
     })
   ],
   resolve: {
     alias: {
       '@': resolve(__dirname)
     },
-    extensions: ['.mts', '.ts', '.jsx', '.tsx', '.json']
+    extensions: ['.ts', '.jsx', '.tsx', '.json']
   },
   build: {
     outDir: 'lib',
     // minify: true, // 不压缩代码,方便开发调试
     lib: {
-      entry: resolve(__dirname, 'src/index.mts'),
+      entry: resolve(__dirname, 'src/index.ts'),
       name: 'SketchRuler',
       fileName: 'index',
       formats: ['es', 'cjs', 'umd']
@@ -37,7 +38,6 @@ export default defineConfig({
         banner,
         globals: {
           vue: 'Vue'
-          // panzoom: 'simple-panzoom' // 这里假设 panzoom 暴露在全局变量 Panzoom 下
         }
       }
     }
