@@ -26,9 +26,9 @@ jobs:
           cache: 'pnpm'
 
       - name: Get pnpm store directory
-      id: pnpm-cache
-      run: |
-        echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
 
       - name: Install and Build 🔧
         run: |
