@@ -14,14 +14,13 @@ jobs:
         node-version: [20.x]
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
 
       - name: Install and Build 🔧
         run: |
-          bun i
-          bun run build:demo
+          pnpm install
+          pnpm build:demo
 
       - name: Deploy 🚀
         uses: peaceiris/actions-gh-pages@v3
