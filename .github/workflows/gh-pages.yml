@@ -25,14 +25,14 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
-       - name: Get pnpm store directory
-        id: pnpm-cache
-        run: |
-          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+      - name: Get pnpm store directory
+      id: pnpm-cache
+      run: |
+        echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
 
       - name: Install and Build 🔧
         run: |
-          pnpm install
+          pnpm i --no-frozen-lockfile
           pnpm build:demo
 
       - name: Deploy 🚀
