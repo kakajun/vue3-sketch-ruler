@@ -38,7 +38,7 @@ export const menuRoutes: RouteRecordRaw[] = [
   },
   {
     path: 'selecto',
-    component: () => import('../examples/Selecto.vue'),
+    component: () => import('../examples/SelectoDemo.vue'),
     meta: {
       title: 'Selecto'
     }
@@ -57,7 +57,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: Home,
-    redirect: '/basic',
+    redirect: '/comprehensive',
     children: menuRoutes
   }
 ]
