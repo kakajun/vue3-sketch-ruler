@@ -2,6 +2,9 @@
   "name": "root",
   "version": "2.2.2",
   "author": "kakajun <253495832@qq.com>",
+  "workspaces": [
+    "packages/*"
+  ],
   "license": "MIT",
   "private": false,
   "scripts": {
