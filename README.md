@@ -7,7 +7,7 @@
 [![Cloud Studio Template](https://cs-res.codehub.cn/common/assets/icon-badge.svg)](https://cloudstudio.net/a/21005994397405184?channel=share&sharetype=Markdown)
 
 <div align=center>
-<img src="https://github.com/kakajun/vue3-sketch-ruler/blob/master/example/assets/logo.png" width="392" height="300">
+<img src="https://github.com/kakajun/vue3-sketch-ruler/blob/master/packages/docs/src/assets/logo.png" width="392" height="300">
 </div>
 
 ## 🚀 Features
@@ -52,7 +52,7 @@
 
 ## 🦄 demo
 
-案例浏览: [https://kakajun.github.io/vue3-sketch-ruler](https://kakajun.github.io/vue3-sketch-ruler) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/master/example/assets/1.png)
+案例浏览: [https://kakajun.github.io/vue3-sketch-ruler](https://kakajun.github.io/vue3-sketch-ruler) ![image](https://github.com/kakajun/vue3-sketch-ruler/blob/master/packages/docs/src/assets/1.png)
 
 [CodePen 示例](https://codepen.io/kakajun/pen/eYwagJb)
 
@@ -77,7 +77,7 @@ import 'vue3-sketch-ruler/lib/style.css'
 import type { SketchRulerProps } from 'vue3-sketch-ruler'
 ```
 
-CDN 引入, 详情参见 [CDN demo](https://github.com/kakajun/vue3-sketch-ruler/blob/master/example/mydemo.html)
+CDN 引入, 详情参见 [CDN demo](https://github.com/kakajun/vue3-sketch-ruler/blob/master/packages/docs/src/mydemo.html)
 
 ```js
 <script src="https://unpkg.com/vue3-sketch-ruler/lib/index.umd.js"></script>
@@ -150,7 +150,7 @@ const canvasHeight = 500
 
 ```
 
-参考一个完整的例子，[点击这里](https://github.com/kakajun/vue3-sketch-ruler/blob/master/example/components/user-rulerts.vue)
+参考一个完整的例子，[点击这里](https://github.com/kakajun/vue3-sketch-ruler/blob/master/packages/docs/src/components/user-rulerts.vue)
 
 ## api
 
@@ -256,10 +256,10 @@ document.addEventListener('pointerup', function (e) {
 
 ### QQ 技术交流群：
 
-<a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=oqnBX-qn7gkWsdfYQdvNCzYbkeNknuOc&jump_from=webapi&authKey=4YXd2jvmWYU0cN8zUky5DoCD6kz+fjUyWv782GLUjDEIHctXYviSXD/pbqxm/ZDD"><img border="0" src="https://github.com/kakajun/vue3-sketch-ruler/blob/master/example/assets/group.png" alt="vue3-sketch-ruler" title="点击这里加入QQ群640166628"></a>
+<a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=oqnBX-qn7gkWsdfYQdvNCzYbkeNknuOc&jump_from=webapi&authKey=4YXd2jvmWYU0cN8zUky5DoCD6kz+fjUyWv782GLUjDEIHctXYviSXD/pbqxm/ZDD"><img border="0" src="https://github.com/kakajun/vue3-sketch-ruler/blob/master/packages/docs/src/assets/group.png" alt="vue3-sketch-ruler" title="点击这里加入QQ群640166628"></a>
 
 <div align=center>
-<img src="https://github.com/kakajun/vue3-sketch-ruler/blob/master/example/assets/qq.png" width="243" height="287">
+<img src="https://github.com/kakajun/vue3-sketch-ruler/blob/master/packages/docs/src/assets/qq.png" width="243" height="287">
 </div>
 
 ## 贡献者
