@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Moveable from 'vue3-moveable'
-import { ref, nextTick, watch, toRefs } from 'vue'
+import { ref, nextTick, watch } from 'vue'
 import GroupSelectable from './GroupSelectable.vue'
 
 interface TargetItem {
@@ -79,7 +79,7 @@ const targetList = ref([
 
 const dragStart = (event: any) => {
   nextTick(() => {
-    moveableRef.value.dragStart(event)
+    moveableRef.value && moveableRef.value.dragStart(event)
   })
 }
 

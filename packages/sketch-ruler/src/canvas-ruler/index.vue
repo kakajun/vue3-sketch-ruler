@@ -42,7 +42,7 @@ const handleResize = () => {
   drawRuler(ratioValue)
 }
 const initCanvasRef = () => {
-  state.canvasContext = canvas.value && canvas.value.getContext('2d')
+  state.canvasContext = canvas.value?.getContext('2d') || null
 }
 
 const rulerStyle = computed(() => {

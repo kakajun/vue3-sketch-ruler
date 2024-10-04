@@ -5,7 +5,7 @@
     "target": "ES2022",
     // Use Node's ES module support mode rather than classic node modules
     "module": "ESNext",
-
+    "resolveJsonModule": true, // 添加这一行
     // Necessary in order to treat each subsection as a typescript project
     "composite": true,
     "declaration": true,

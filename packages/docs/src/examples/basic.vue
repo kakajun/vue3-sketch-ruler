@@ -4,11 +4,7 @@
       <sketch-rule ref="sketchruleRef" v-bind="post">
         <template #default>
           <div data-type="page" :style="canvasStyle">
-            <img
-              class="img-style"
-              src="https://assets.codepen.io/3685267/timed-cards-1.jpg"
-              alt=""
-            />
+            <img class="img-style" :src="bgImg" />
           </div>
         </template>
         <template #btn="{ reset, zoomIn, zoomOut }">
@@ -24,7 +20,7 @@
 </template>
 <script setup lang="ts">
 import bgImg from '../assets/bg.png'
-import { computed, ref, reactive, onMounted } from 'vue'
+import { computed, ref, reactive } from 'vue'
 import SketchRule from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
 const sketchruleRef = ref()
