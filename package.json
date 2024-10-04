@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "license": "MIT",
-  "private": false,
+  "private": true,
   "scripts": {
     "dev": "pnpm build && pnpm --filter ./packages/docs dev",
     "d": "pnpm --filter ./packages/docs dev",
