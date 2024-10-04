@@ -26,11 +26,16 @@
     "*.{ts,tsx,js,vue}": "eslint --fix",
     "*.{vue,css,less}": "stylelint --fix"
   },
-  "husky": {
-    "hooks": {
-      "postcommit": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
-    }
-  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "ruler",
+    "sketch",
+    "sketch-ruler",
+    "vue-sketch-ruler",
+    "room",
+    "panzoom"
+  ],
   "devDependencies": {
     "simple-panzoom": "^1.0.8",
     "root-common": "workspace:*",
