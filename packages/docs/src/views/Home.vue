@@ -143,7 +143,7 @@ watch(
 .es-header-lang {
   padding: 0 12px;
   border: none;
-  color: #001938;
+  color: var(--es-color);
   font-size: 14px;
 
   cursor: pointer;

@@ -88,7 +88,6 @@ watch(
       align-items: center;
       margin-left: 16px;
       border-radius: 50%;
-      background-color: var(--color-bg);
     }
     img {
       width: 30px;

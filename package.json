@@ -15,6 +15,7 @@
     "precommit": "lint-staged",
     "clean": "npx rimraf node_modules",
     "clean:cache": "npx rimraf node_modules/.cache",
+    "format": "prettier --write  \"packages/**/src/**/*.{js,ts,json,tsx,less,vue,html,md}\"",
     "lint": "esprint check --workers=4 --fix",
     "ci-pretty-check": "prettier --check .",
     "lint:format": "prettier --write --loglevel warn \"packages/**/*.{js,ts,json,tsx,css,less,scss,vue,html,md}\"",

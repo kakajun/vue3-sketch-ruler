@@ -153,30 +153,6 @@ const cpuPalette = computed<PaletteType>(() => {
       }
 })
 
-// 监听画布缩放比例
-// watch(
-//   () => store.isLight,
-//   (newValue, oldValue) => {
-//     state.palette = store.isLight
-//       ? {
-//           bgColor: 'transparent',
-//           lineColor: '#51d6a9',
-//           lineType: 'dashed'
-//         }
-//       : {
-//           bgColor: 'transparent',
-//           hoverBg: '#fff',
-//           hoverColor: '#000',
-//           longfgColor: '#BABBBC', // ruler longer mark color
-//           fontColor: '#DEDEDE', // ruler font color
-//           shadowColor: '#525252', // ruler shadow color
-//           lineColor: '#51d6a9',
-//           borderColor: '#B5B5B5',
-//           lineType: 'dashed'
-//         }
-//   }
-// )
-
 const post = reactive({
   thick: 20,
   width: 1470,

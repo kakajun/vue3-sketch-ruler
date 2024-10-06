@@ -4,7 +4,6 @@
   "author": "kakajun <253495832@qq.com>",
   "license": "MIT",
   "private": false,
-  "sideEffects": false,
   "scripts": {
     "dev": "vite  --host 0.0.0.0",
     "build": "vite build"

@@ -86,14 +86,4 @@ const canvasStyle = computed(() => {
   z-index: 999;
 }
 
-// #app {
-//   margin-top: 10px;
-//   width: 100%;
-// }
-.top-tittle {
-  display: flex;
-  justify-content: flex-end;
-  margin-right: 20px;
-  margin-bottom: 20px;
-}
 </style>
