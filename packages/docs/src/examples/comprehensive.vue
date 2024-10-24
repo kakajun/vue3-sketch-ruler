@@ -114,15 +114,6 @@ const zoomOutMethod = () => {
   }
 }
 
-onMounted(() => {
-  window.addEventListener('resize', handleResize)
-})
-
-const handleResize = () => {
-  if (sketchruleRef.value) {
-    sketchruleRef.value.initPanzoom()
-  }
-}
 const resetMethod = () => {
   if (sketchruleRef.value) {
     sketchruleRef.value.reset()
@@ -217,7 +208,7 @@ const handleCornerClick = (e: MouseEvent) => {
 }
 
 const zoomchange = (detail: PanzoomEventDetail) => {
-  console.log('zoomchange', detail)
+  // console.log('zoomchange', detail)
 }
 
 const snapsChange = (e: { target: { value: string } }) => {

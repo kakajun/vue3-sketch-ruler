@@ -110,7 +110,6 @@ const zoomOutMethod = () => {
 }
 
 onMounted(() => {
-  window.addEventListener('resize', handleResize)
   const panzoomInstance = sketchruleRef.value.panzoomInstance
   const parentDom = document.getElementsByClassName('canvasedit-parent')
   if (parentDom[0]) {
@@ -142,11 +141,6 @@ onMounted(() => {
   }
 })
 
-const handleResize = () => {
-  if (sketchruleRef.value) {
-    sketchruleRef.value.initPanzoom()
-  }
-}
 const resetMethod = () => {
   if (sketchruleRef.value) {
     sketchruleRef.value.reset()
