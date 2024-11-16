@@ -41,3 +41,17 @@ jobs:
           publish_dir: ./packages/docs/dist # The folder the action should deploy.
 
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache pnpm modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Run Tests
+        run: pnpm test
+
+      - name: Check bundle size
+        run: pnpm size-limit
