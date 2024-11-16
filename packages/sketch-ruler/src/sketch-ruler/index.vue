@@ -169,6 +169,18 @@ const handleWheel = (e: WheelEvent) => {
   }
 }
 const handleSpaceKeyDown = (e: KeyboardEvent) => {
+  // 检查当前焦点元素
+  const activeElement = document.activeElement
+  // fix: #57 如果焦点在monaco-editor、input、textarea或其他可编辑元素中,则不处理空格事件
+  if (
+    activeElement?.closest('.monaco-editor') ||
+    activeElement?.tagName === 'INPUT' ||
+    activeElement?.tagName === 'TEXTAREA' ||
+    activeElement?.getAttribute('contenteditable') === 'true'
+  ) {
+    return
+  }
+
   if (e.key === ' ') {
     cursorClass.value = 'grabCursor'
     panzoomInstance.value?.bind()
@@ -177,6 +189,18 @@ const handleSpaceKeyDown = (e: KeyboardEvent) => {
 }
 
 const handleSpaceKeyUp = (e: KeyboardEvent) => {
+  // 检查当前焦点元素
+  const activeElement = document.activeElement
+  // 如果焦点在monaco-editor、input、textarea或其他可编辑元素中,则不处理空格事件
+  if (
+    activeElement?.closest('.monaco-editor') ||
+    activeElement?.tagName === 'INPUT' ||
+    activeElement?.tagName === 'TEXTAREA' ||
+    activeElement?.getAttribute('contenteditable') === 'true'
+  ) {
+    return
+  }
+
   if (e.key === ' ') {
     panzoomInstance.value?.destroy()
     cursorClass.value = 'defaultCursor'
