@@ -128,19 +128,11 @@ const zoomOutMethod = () => {
   }
 }
 
-onMounted(() => {
-  window.addEventListener('resize', handleResize)
-})
-
 const handleShow = () => {
   showRuler.value = !showRuler.value
 }
 
-const handleResize = () => {
-  if (sketchruleRef.value) {
-    sketchruleRef.value.initPanzoom()
-  }
-}
+
 const resetMethod = () => {
   if (sketchruleRef.value) {
     sketchruleRef.value.reset()
