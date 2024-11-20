@@ -24,12 +24,6 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
 
-    "sourceMap": true,
-
-    // 添加以下配置以提升类型检查和构建性能
-    "incremental": true, // 增量编译
-    "isolatedModules": true, // 更好的构建性能
-    "noUncheckedIndexedAccess": true, // 更严格的数组索引检查
-    "verbatimModuleSyntax": true, // 更严格的模块导入导出检查
+    "sourceMap": true
   }
 }
