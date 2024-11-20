@@ -1,6 +1,6 @@
 {
   "name": "root",
-  "version": "2.2.2",
+  "version": "2.2.7",
   "author": "kakajun <253495832@qq.com>",
   "workspaces": [
     "packages/*"
@@ -20,7 +20,8 @@
     "ci-pretty-check": "prettier --check .",
     "lint:format": "prettier --write --loglevel warn \"packages/**/*.{js,ts,json,tsx,css,less,scss,vue,html,md}\"",
     "changelog": "pnpm --filter ./packages/sketch-ruler changelog",
-    "release": "pnpm --filter ./packages/sketch-ruler release"
+    "release": "pnpm build && node ./scripts/release.js"
+
   },
   "lint-staged": {
     "*.{ts,tsx,js,vue,less}": "prettier --write",

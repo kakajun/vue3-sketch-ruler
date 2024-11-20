@@ -77,7 +77,11 @@ export default [
       'no-unused-vars': 'off',
       'no-redeclare': 'off',
       'no-dupe-class-members': 'off',
-      'no-undef': 'off'
+      'no-undef': 'off',
+      'vue/component-name-in-template-casing': ['error', 'PascalCase'],
+      'vue/no-unused-properties': ['error'],
+      '@typescript-eslint/explicit-function-return-type': 'error',
+      '@typescript-eslint/no-floating-promises': 'error'
     }
   }
 ]

@@ -133,5 +133,8 @@
       "source.fixAll.stylelint": "explicit"
     }
   },
-  "i18n-ally.localesPaths": ["packages/common/i18n", "packages/common/i18n/src/locales"]
+  "i18n-ally.localesPaths": [
+    "packages/common/i18n",
+    "packages/common/i18n/src/locales"
+  ]
 }

@@ -40,17 +40,17 @@ export const menuRoutes: RouteRecordRaw[] = [
     path: 'selecto',
     component: () => import('../examples/SelectoDemo.vue'),
     meta: {
-      title: 'Selecto'
+      title: 'selecto'
+    }
+  },
+
+  {
+    path: 'input',
+    component: () => import('@/examples/input.vue'),
+    meta: {
+      title: 'input'
     }
   }
-
-  // {
-  //   path: 'temp',
-  //   component: () => import('@/examples/temp.vue'),
-  //   meta: {
-  //     title: 'temp'
-  //   }
-  // }
 ]
 
 const routes: RouteRecordRaw[] = [
