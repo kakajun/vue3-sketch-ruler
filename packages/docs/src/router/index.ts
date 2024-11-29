@@ -50,6 +50,13 @@ export const menuRoutes: RouteRecordRaw[] = [
     meta: {
       title: 'input'
     }
+  },
+  {
+    path: 'es-drager',
+    component: () => import('@/examples/esDragle.vue'),
+    meta: {
+      title: 'esDragle'
+    }
   }
 ]
 
