@@ -55,12 +55,12 @@ const post = reactive({
   shadow: {
     x: 0,
     y: 0,
-    width: 300,
-    height: 300
+    width: 0,
+    height: 0
   },
   lines: {
-    h: [0, 250],
-    v: [0, 500]
+    h: [],
+    v: []
   }
 })
 // 组件类型
@@ -117,6 +117,14 @@ const canvasStyle = computed(() => {
 })
 
 const onChange = (dragData: DragData, item: any) => {
+  // console.log('change', item)
+  post.shadow = {
+    x: item.left,
+    y: item.top,
+    width: item.width,
+    height: item.height
+  }
+
   Object.keys(dragData).forEach((key) => {
     ;(item as any)[key] = dragData[key as keyof DragData]
   })
