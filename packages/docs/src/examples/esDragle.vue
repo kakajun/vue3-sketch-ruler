@@ -137,7 +137,6 @@ const onChange = (dragData: DragData, item: any) => {
 const extraLines = (targetRect: DOMRect) => {
   // 可以返回dom元素列表
   return Array.from(document.querySelectorAll('.sketch-ruler .lines .line'))
-
   // 也可以根据 targetRect 显示位置
   // const pRect = dragParentRef.value!.getBoundingClientRect()
   // const hLines = post.lines.h.reduce((arr: any[], item: number) => {

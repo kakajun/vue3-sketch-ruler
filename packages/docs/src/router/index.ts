@@ -52,7 +52,7 @@ export const menuRoutes: RouteRecordRaw[] = [
     }
   },
   {
-    path: 'es-drager',
+    path: 'esDragle',
     component: () => import('@/examples/esDragle.vue'),
     meta: {
       title: 'esDragle'
