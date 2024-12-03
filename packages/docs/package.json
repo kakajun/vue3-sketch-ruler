@@ -9,6 +9,6 @@
     "build": "vite build"
   },
   "devDependencies": {
-    "es-drager":"^1.2.13"
+    "es-drager": "^1.2.14"
   }
 }
