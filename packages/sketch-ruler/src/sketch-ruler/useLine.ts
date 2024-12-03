@@ -88,7 +88,7 @@ export default function useLine(props: Props, vertical: boolean) {
       if (typeof index !== 'number') {
         linesArrs.push(value)
       } else {
-        linesArrs.splice(index, 1, value)
+        linesArrs[index] = value
       }
     }
   }
