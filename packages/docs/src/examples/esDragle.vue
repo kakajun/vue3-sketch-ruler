@@ -37,7 +37,7 @@
 </template>
 <script setup lang="ts">
 import { computed, ref, reactive, CSSProperties, nextTick } from 'vue'
-import SketchRule from 'vue3-sketch-ruler'
+import SketchRule from 'vue3-sketch-ruler/src/index'
 import 'vue3-sketch-ruler/lib/style.css'
 import Drager, { DragData } from 'es-drager'
 import { useAppStore } from '@/store/app'
@@ -49,7 +49,7 @@ const post = reactive<any>({
   thick: 20,
   width: 1470,
   height: 700,
-  showShadowText: false,
+  showShadowText: true,
   canvasWidth: 1000,
   canvasHeight: 500,
   showRuler: true,

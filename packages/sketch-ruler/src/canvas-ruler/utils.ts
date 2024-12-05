@@ -41,7 +41,9 @@ export function drawShadowText(
   ctx.save()
   ctx.translate(x, y)
   if (!isHorizontal) ctx.rotate(-Math.PI / 2)
-  ctx.strokeText(String(num), 0, 0)
+  // 设置字体为加粗
+  ctx.font = 'bold 12px  Aria'
+  // ctx.strokeText(String(num), 0, 0)
   ctx.fillText(String(num), 0, 0)
   ctx.restore()
 }

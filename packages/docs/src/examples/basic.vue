@@ -85,5 +85,4 @@ const canvasStyle = computed(() => {
   right: 40px;
   z-index: 999;
 }
-
 </style>
