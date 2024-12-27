@@ -141,7 +141,7 @@ const App = {
 </SketchRule>
 
 import Vue from 'vue';
-import {SketchRule} from "vue-sketch-ruler";
+import SketchRule from "vue3-sketch-ruler";
 import 'vue3-sketch-ruler/lib/style.css'
 const rectWidth = 1600
 const rectHeight = 800
