@@ -9,6 +9,13 @@ export const menuRoutes: RouteRecordRaw[] = [
     }
   },
   {
+    path: 'basic2',
+    component: () => import('../examples/basic2.vue'),
+    meta: {
+      title: 'basic'
+    }
+  },
+  {
     path: 'comprehensive',
     component: () => import('../examples/comprehensive.vue'),
     meta: {
