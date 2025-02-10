@@ -287,7 +287,7 @@ const zoomOut = () => panzoomInstance.value?.zoomOut()
  * @desc: 更新panzoom的配置
  * @param {*}
  */
-const setOtions = () => {
+const setOptions = () => {
   panzoomInstance.value?.setOptions(getPanOptions(props.scale))
 }
 
@@ -313,7 +313,7 @@ watch(
 watch(
   () => props.panzoomOption,
   () => {
-    setOtions()
+    setOptions()
   },
   { deep: true }
 )
