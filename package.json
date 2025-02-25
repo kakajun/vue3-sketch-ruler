@@ -1,6 +1,6 @@
 {
   "name": "root",
-  "version": "2.2.7",
+  "version": "2.2.8",
   "author": "kakajun <253495832@qq.com>",
   "workspaces": [
     "packages/*"
@@ -13,15 +13,13 @@
     "build": "pnpm --filter ./packages/sketch-ruler build",
     "build:demo": "pnpm build && pnpm --filter ./packages/docs build",
     "precommit": "lint-staged",
-    "clean": "npx rimraf node_modules",
-    "clean:cache": "npx rimraf node_modules/.cache",
+    "clean": "rimraf node_modules && rimraf ./packages/**/node_modules",
     "format": "prettier --write  \"packages/**/src/**/*.{js,ts,json,tsx,less,vue,html,md}\"",
     "lint": "esprint check --workers=4 --fix",
     "ci-pretty-check": "prettier --check .",
     "lint:format": "prettier --write --loglevel warn \"packages/**/*.{js,ts,json,tsx,css,less,scss,vue,html,md}\"",
     "changelog": "pnpm --filter ./packages/sketch-ruler changelog",
     "release": "pnpm build && node ./scripts/release.js"
-
   },
   "lint-staged": {
     "*.{ts,tsx,js,vue,less}": "prettier --write",
