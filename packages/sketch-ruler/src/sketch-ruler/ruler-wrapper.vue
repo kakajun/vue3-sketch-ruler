@@ -98,15 +98,17 @@ const indicatorStyle = computed(() => {
 const mousedown = async (e: MouseEvent) => {
   const { offsetX, offsetY } = e
   const { scale, vertical, thick, startOther } = props
-  isdragle.value = true
-  isLockLine.value = false
-  emit('changeLineState', false)
-  let tempStartValue = Math.round(
-    startOther - thick / scale + (vertical ? offsetX : offsetY) / scale
-  )
-  startValue.value = tempStartValue
-  await handleMouseDown(e, tempStartValue)
-  isdragle.value = false
+  if (!isLockLine.value) {
+    isdragle.value = true
+
+    emit('changeLineState', false)
+    let tempStartValue = Math.round(
+      startOther - thick / scale + (vertical ? offsetX : offsetY) / scale
+    )
+    startValue.value = tempStartValue
+    await handleMouseDown(e, tempStartValue)
+    isdragle.value = false
+  }
 }
 
 watch([() => props.lockLine], () => {
