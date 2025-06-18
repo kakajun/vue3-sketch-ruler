@@ -207,6 +207,12 @@ const handleSpaceKeyUp = (e: KeyboardEvent) => {
   }
 }
 
+function handleTouchStart(e: TouchEvent): void {
+  e.preventDefault()
+  e.stopPropagation()
+  panzoomInstance.value?.bind()
+}
+
 onMounted(() => {
   initPanzoom()
   if (!props.selfHandle && elem.value) {
@@ -215,6 +221,7 @@ onMounted(() => {
     parent.addEventListener('wheel', handleWheel)
     document.addEventListener('keydown', handleSpaceKeyDown)
     document.addEventListener('keyup', handleSpaceKeyUp)
+    parent.addEventListener('touchstart', handleTouchStart)
   }
 })
 
