@@ -1,6 +1,23 @@
 <template>
   <div class="demo">
     <div class="top font16">
+      <div class="mr10"> 自己给初始值--- </div>
+      <div class="mr10"> X方向: </div>
+      <el-input
+        class="mr10"
+        style="width: 90px"
+        v-model="panzoomOption.startX"
+        @change="rendIndex++"
+      />
+      <div class="mr10"> Y方向: </div>
+      <el-input
+        class="mr10"
+        style="width: 90px"
+        v-model="panzoomOption.startY"
+        @change="rendIndex++"
+      />
+    </div>
+    <div class="top font16">
       <div class="scale mr10"> 缩放比:{{ cpuScale }} </div>
       <button v-if="showRuler" class="mr10 font16" @click="showRuler = false">隐藏规尺</button>
       <button v-else class="mr10 font16" @click="handleShow">显示规尺</button>
@@ -108,8 +125,8 @@ const showRuler = ref(true)
 const panzoomOption = reactive({
   maxScale: 3,
   minScale: 0.3,
-  // startX: 0,   // 画布距离左边框距离, 如果想自动,那么不要传
-  // startY: 0,   // 画布距离顶边框距离, 如果想自动,那么不要传
+  startX: 0, // 画布距离左边框距离, 如果想自动,那么不要传
+  startY: 0, // 画布距离顶边框距离, 如果想自动,那么不要传
   disablePan: false,
   disableZoom: false,
   contain: 'none', // 'inside' | 'outside' | 'none'
@@ -131,7 +148,6 @@ const zoomOutMethod = () => {
 const handleShow = () => {
   showRuler.value = !showRuler.value
 }
-
 
 const resetMethod = () => {
   if (sketchruleRef.value) {
