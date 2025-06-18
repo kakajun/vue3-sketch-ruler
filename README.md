@@ -210,6 +210,8 @@ const canvasHeight = 500
 2. 同时按空格+鼠标左键, 拖动画布
 3. 有些需要自己定义监听移动和缩放，不想按空格移动, 或者不想Ctrl+weel 移动, 那么可以设置selfHandle为true，然后通过ref获取到组件实例，然后通过实例调用组件的方法, 自定义监听按键
 4. 具体操作参见我插件里面的监听移动和缩放方法
+5. panzoomOption 里面可以配置初始位置等参数, 具体查看pazoom插件
+6. 支持触屏操作
 
 ```js
 const panzoomInstance = sketchruleRef.value.panzoomInstance
