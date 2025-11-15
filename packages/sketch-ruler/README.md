@@ -131,11 +131,11 @@ const App = {
       <img class="img-style" :src="bgImg" alt="" />>
     </div>
   </template>
-  <template #btn="{ resetMethod, zoomInMethod, zoomOutMethod }">
+  <template #btn="{ reset, zoomIn, zoomOut }">
     <div class="btns">
-      <button class="btn reset-btn" @click="resetMethod">还原</button>
-      <button class="btn zoomin-btn" @click="zoomInMethod">放大</button>
-      <button class="btn zoomout-btn" @click="zoomOutMethod">缩小</button>
+      <button class="btn reset-btn" @click="reset">还原</button>
+      <button class="btn zoomin-btn" @click="zoomIn">放大</button>
+      <button class="btn zoomout-btn" @click="zoomOut">缩小</button>
     </div>
   </template>
 </SketchRule>
@@ -162,12 +162,12 @@ const canvasHeight = 500
 | rate | 初始化标尺的缩放 | Number | 1 |
 | thick | 标尺的厚度 | Number | 16 |
 | width | 放置标尺窗口的宽度 | Number | 1400 |
-| height | 放置标尺窗口的高度 | Number | 900 |
+| height | 放置标尺窗口的高度 | Number | 800 |
 | paddingRatio | 画布与外框间隔 | Number | 20% (基于外框宽高最小长度) |
 | autoCenter | 自动居中对齐 | Boolean | true (设为false,那么需要在panzoomOption中传入startX,startY) |
 | eyeIcon | 睁眼图标 | String | - |
 | closeEyeIcon | 闭眼图标 | String | - |
-| canvasWidth | 画布宽 | Number | 1000 |
+| canvasWidth | 画布宽 | Number | 700 |
 | canvasHeight | 画布高 | Number | 700 |
 | isShowReferLine | 是否显示标线 | Boolean | true |
 | showRuler | 是否显示尺规 | Boolean | true |
@@ -203,6 +203,8 @@ const canvasHeight = 500
 | ------------- | ----------------- | ----------------------------------------------------------- |
 | onCornerClick | 左上角点击事件    |                                                             |
 | zoomchange    | 画布移动,缩放事件 | {dimsOut:{elem: {}, parent: {}},originalEvent:{},scale,x,y} |
+| update:scale  | 缩放值双向更新事件 | number（当前 scale） |
+| update:lockLine | 参考线锁定状态更新 | boolean（是否锁定） |
 
 ### 使用说明
 
@@ -238,7 +240,7 @@ document.addEventListener('pointerup', function (e) {
 | -------- | ------------ | -------- |
 | reset    | 画布重置位置 |          |
 | zoomIn   | 画布放大     |          |
-| zoomIn   | 画布缩小     |          |
+| zoomOut  | 画布缩小     |          |
 
 ### 插件兼容问题
 

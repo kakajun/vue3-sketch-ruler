@@ -37,7 +37,7 @@
 </template>
 <script setup lang="ts">
 import { computed, ref, reactive, CSSProperties, nextTick } from 'vue'
-import SketchRule from 'vue3-sketch-ruler/src/index'
+import SketchRule from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
 import Drager, { DragData } from 'es-drager'
 import { useAppStore } from '@/store/app'

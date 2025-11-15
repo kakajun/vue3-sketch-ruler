@@ -19,9 +19,19 @@
   },
   "sideEffects": false,
   "main": "lib/index.js",
+  "module": "lib/index.js",
   "main1": "src/index.ts",
   "style": "lib/style.css",
   "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.umd.cjs",
+      "style": "./lib/style.css"
+    },
+    "./lib/style.css": "./lib/style.css"
+  },
   "scripts": {
     "build": "vite build",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
