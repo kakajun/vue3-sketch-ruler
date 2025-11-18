@@ -13,38 +13,42 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'pnpm'
+          node-version: ${{ matrix.node-version }}
+          # cache: 'pnpm'
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - name: Install simple-panzoom deps
-        run: npm install --no-audit --no-fund
+        run:  pnpm i --no-frozen-lockfile
         working-directory: packages/simple-panzoom
 
       - name: Install sketch-ruler deps
-        run: npm install --no-audit --no-fund
+        run: pnpm i --no-frozen-lockfile
         working-directory: packages/sketch-ruler
 
       - name: Build simple-panzoom
-        run: npm run build
+        run: pnpm run build
         working-directory: packages/simple-panzoom
 
       - name: Build sketch-ruler
-        run: npm run build
+        run: pnpm run build
         working-directory: packages/sketch-ruler
 
       - name: Test simple-panzoom
-        run: npm run test
+        run: pnpm run test
         working-directory: packages/simple-panzoom
 
       - name: Test sketch-ruler
-        run: npm run test
+        run: pnpm run test
         working-directory: packages/sketch-ruler
 
       - name: Build docs
-        run: npm run build
+        run: pnpm run build 
         working-directory: packages/docs
 
       - name: Deploy gh-pages
