@@ -65,7 +65,7 @@
 <script setup lang="ts">
 import RulerWrapper from './ruler-wrapper.vue'
 import { eye64, closeEye64 } from './cornerImg64'
-import { computed, ref, watch, onMounted } from 'vue'
+import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import { SketchRulerProps } from '../index-types'
 import Panzoom, { PanzoomObject, PanzoomEventDetail } from 'simple-panzoom'
 
@@ -110,6 +110,8 @@ const props = withDefaults(defineProps<SketchRulerProps>(), {
 
 const emit = defineEmits(['onCornerClick', 'update:scale', 'zoomchange', 'update:lockLine'])
 const elem = ref<HTMLElement | null>(null)
+const parentElem = ref<HTMLElement | null>(null)
+const lastElem = ref<HTMLElement | null>(null)
 const startX = ref(0)
 const startY = ref(0)
 let zoomStartX = 0
@@ -165,6 +167,7 @@ const rectHeight = computed(() => {
 
 const handleWheel = (e: WheelEvent) => {
   if (e.ctrlKey || e.metaKey) {
+    e.preventDefault()
     panzoomInstance.value?.zoomWithWheel(e)
   }
 }
@@ -218,11 +221,25 @@ onMounted(() => {
   if (!props.selfHandle && elem.value) {
     const parent = elem.value.parentElement
     if (!parent) return
-    parent.addEventListener('wheel', handleWheel)
+    parentElem.value = parent
+    parent.addEventListener('wheel', handleWheel, { passive: false })
     document.addEventListener('keydown', handleSpaceKeyDown)
     document.addEventListener('keyup', handleSpaceKeyUp)
-    parent.addEventListener('touchstart', handleTouchStart)
+    parent.addEventListener('touchstart', handleTouchStart, { passive: false })
   }
+})
+
+onUnmounted(() => {
+  if (parentElem.value) {
+    parentElem.value.removeEventListener('wheel', handleWheel as EventListener)
+    parentElem.value.removeEventListener('touchstart', handleTouchStart as EventListener)
+  }
+  document.removeEventListener('keydown', handleSpaceKeyDown as EventListener)
+  document.removeEventListener('keyup', handleSpaceKeyUp as EventListener)
+  if (lastElem.value) {
+    lastElem.value.removeEventListener('panzoomchange', handlePanzoomChange as EventListener)
+  }
+  panzoomInstance.value?.destroy()
 })
 
 const getPanOptions = (scale: number) => {
@@ -251,6 +268,12 @@ const handlePanzoomChange = (e: any) => {
   }
 }
 const initPanzoom = () => {
+  // 清理旧实例与监听
+  if (lastElem.value) {
+    lastElem.value.removeEventListener('panzoomchange', handlePanzoomChange as EventListener)
+  }
+  panzoomInstance.value?.destroy()
+
   elem.value = document.querySelector('.canvasedit')
   if (elem.value) {
     let scale = props.scale
@@ -258,9 +281,8 @@ const initPanzoom = () => {
       scale = calculateTransform()
     }
     panzoomInstance.value = Panzoom(elem.value, getPanOptions(scale))
-    if (elem.value) {
-      elem.value.addEventListener('panzoomchange', handlePanzoomChange)
-    }
+    elem.value.addEventListener('panzoomchange', handlePanzoomChange as EventListener)
+    lastElem.value = elem.value
   }
 }
 
