@@ -82,3 +82,6 @@ export interface PanzoomObject {
   zoomToPoint: (scale: number, point: { clientX: number; clientY: number }, zoomOptions?: ZoomOptions, originalEvent?: PointerEvent) => CurrentValues
   zoomWithWheel: (event: WheelEvent, zoomOptions?: ZoomOptions) => CurrentValues
 }
+
+declare function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): PanzoomObject
+export default Panzoom

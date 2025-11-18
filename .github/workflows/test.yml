@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'pnpm'
 
       - name: Setup PNPM
@@ -26,6 +26,12 @@ jobs:
 
       - name: Install dependencies
         run: pnpm i
+
+      - name: Build simple-panzoom
+        run: pnpm --filter ./packages/simple-panzoom build
+
+      - name: Build sketch-ruler
+        run: pnpm --filter ./packages/sketch-ruler build
 
       - name: Test simple-panzoom
         run: pnpm --filter ./packages/simple-panzoom test

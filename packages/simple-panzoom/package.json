@@ -7,10 +7,10 @@
     "lib"
   ],
   "main": "lib/panzoom.js",
-  "types": "lib/panzoom.d.ts",
+  "types": "lib/src/panzoom.d.ts",
   "exports": {
     ".": {
-      "types": "./lib/panzoom.d.ts",
+      "types": "./lib/src/panzoom.d.ts",
       "import": "./lib/panzoom.js",
       "require": "./lib/panzoom.cjs"
     }
