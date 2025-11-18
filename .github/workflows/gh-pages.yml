@@ -14,26 +14,22 @@ jobs:
         node-version: [22.x]
     steps:
       - uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          # cache: 'pnpm'
+      
+      - name: Install root deps
+        run: npm install --no-audit --no-fund
 
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        run: |
-          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - name: Build simple-panzoom
+        run: npm run --workspace packages/simple-panzoom build
 
-      - name: Install and Build 🔧
-        run: |
-          pnpm i --no-frozen-lockfile
-          pnpm build:demo
+      - name: Build sketch-ruler
+        run: npm run --workspace packages/sketch-ruler build
+
+      - name: Build docs
+        run: npm run --workspace packages/docs build
 
       - name: Deploy 🚀
         uses: peaceiris/actions-gh-pages@v3

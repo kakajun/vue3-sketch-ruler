@@ -19,23 +19,26 @@ jobs:
           node-version: '22'
           cache: 'pnpm'
 
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-          run_install: false
+      - name: Install simple-panzoom deps
+        run: npm install --no-audit --no-fund
+        working-directory: packages/simple-panzoom
 
-      - name: Install dependencies
-        run: pnpm i
+      - name: Install sketch-ruler deps
+        run: npm install --no-audit --no-fund
+        working-directory: packages/sketch-ruler
 
       - name: Build simple-panzoom
-        run: pnpm --filter ./packages/simple-panzoom build
+        run: npm run build
+        working-directory: packages/simple-panzoom
 
       - name: Build sketch-ruler
-        run: pnpm --filter ./packages/sketch-ruler build
+        run: npm run build
+        working-directory: packages/sketch-ruler
 
       - name: Test simple-panzoom
-        run: pnpm --filter ./packages/simple-panzoom test
+        run: npm run test
+        working-directory: packages/simple-panzoom
 
       - name: Test sketch-ruler
-        run: pnpm --filter ./packages/sketch-ruler test
+        run: npm run test
+        working-directory: packages/sketch-ruler
