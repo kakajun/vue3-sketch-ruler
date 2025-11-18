@@ -19,10 +19,11 @@ jobs:
           node-version: '22'
           cache: 'pnpm'
 
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Activate PNPM 10
+        run: corepack prepare pnpm@10.22.0 --activate
 
       - name: Install dependencies
         run: pnpm i
