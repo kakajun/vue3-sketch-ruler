@@ -2,9 +2,11 @@
   "name": "simple-panzoom",
   "version": "2.0.1",
   "type": "module",
-  "private": true,
+  "author": "kakajun <253495832@qq.com>",
+  "private": false,
   "files": [
-    "lib"
+    "lib",
+    "src"
   ],
   "main": "lib/panzoom.js",
   "types": "lib/src/panzoom.d.ts",

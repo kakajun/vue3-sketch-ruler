@@ -41,5 +41,8 @@
 ## 事件
 - `panzoomchange`：`detail` 包含 `{ x, y, scale, dimsOut }`
 
+## 引用
+- 基于 [panzoom](https://github.com/timmywil/panzoom) 实现
+
 ## 许可
 MIT
