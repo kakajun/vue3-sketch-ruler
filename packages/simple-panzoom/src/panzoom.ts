@@ -46,11 +46,11 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
   parent.style.overflow = options.overflow
   parent.style.userSelect = 'none'
   parent.style.touchAction = options.touchAction
-  ;(options.canvas ? parent : elem).style.cursor = options.cursor
+  ;(options!.canvas ? parent : elem).style.cursor = options!.cursor
 
   elem.style.userSelect = 'none'
   elem.style.touchAction = options.touchAction
-  setStyle(elem, 'transformOrigin', typeof options.origin === 'string' ? options.origin : '50% 50%')
+    setStyle(elem, 'transformOrigin', typeof options!.origin === 'string' ? (options as any).origin : '50% 50%')
 
   function resetStyle() {
     parent.style.overflow = ''
@@ -67,7 +67,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     for (const key in opts) if (Object.prototype.hasOwnProperty.call(opts, key)) (options as any)[key] = (opts as any)[key]
     if (opts.hasOwnProperty('cursor') || opts.hasOwnProperty('canvas')) {
       parent.style.cursor = elem.style.cursor = ''
-      ;(options.canvas ? parent : elem).style.cursor = options.cursor
+      ;(options!.canvas ? parent : elem).style.cursor = options!.cursor
     }
     if (opts.hasOwnProperty('overflow')) parent.style.overflow = (opts as any).overflow
     if (opts.hasOwnProperty('touchAction')) {
@@ -110,7 +110,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
   function constrainXY(toX: number | string, toY: number | string, toScale: number, panOptions?: PanOptions) {
     const opts = { ...options, ...panOptions }
     const result = { x, y, opts }
-    if (!(opts as any).force && (opts.disablePan || opts.disablePan === true)) return result
+    if (!(opts as any).force && opts.disablePan === true) return result
     toX = parseFloat(toX as string)
     toY = parseFloat(toY as string)
     result.x = toX
@@ -146,8 +146,8 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     const opts = { ...options, ...zoomOptions }
     const result = { scale, opts }
     if (!(opts as any).force && opts.disableZoom) return result
-    let minScale = options.minScale as number
-    let maxScale = options.maxScale as number
+    let minScale = options!.minScale as number
+    let maxScale = options!.maxScale as number
     if (opts.contain && opts.contain !== 'none') {
       const dims = getDimensionsFull(elem)
       const elemWidth = dims.elem.width / scale
@@ -157,8 +157,8 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
         const parentHeight = dims.parent.height - dims.parent.border.top - dims.parent.border.bottom
         const elemScaledWidth = parentWidth / elemWidth
         const elemScaledHeight = parentHeight / elemHeight
-        if (options.contain === 'inside') maxScale = Math.min(maxScale, elemScaledWidth, elemScaledHeight)
-        else if (options.contain === 'outside') minScale = Math.max(minScale, elemScaledWidth, elemScaledHeight)
+        if ((options as any).contain === 'inside') maxScale = Math.min(maxScale, elemScaledWidth, elemScaledHeight)
+        else if ((options as any).contain === 'outside') minScale = Math.max(minScale, elemScaledWidth, elemScaledHeight)
       }
     }
     result.scale = Math.min(Math.max(toScale, minScale), maxScale)
@@ -215,7 +215,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     }
     let clientX = point.clientX - dims.parent.left - dims.parent.padding.left - dims.parent.border.left - dims.elem.margin.left
     let clientY = point.clientY - dims.parent.top - dims.parent.padding.top - dims.parent.border.top - dims.elem.margin.top
-    if ((options.origin as string) !== '0 0') {
+    if (((options as any).origin as string) !== '0 0') {
       clientX -= dims.elem.width / scale / 2
       clientY -= dims.elem.height / scale / 2
     }

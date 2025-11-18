@@ -13,7 +13,8 @@ export default defineConfig({
     vue(),
     dts({
       rollupTypes: true,
-      tsconfigPath: resolve(__dirname, 'tsconfig.json') // 指定 tsconfig 文件
+      tsconfigPath: resolve(__dirname, 'tsconfig.json'), // 指定 tsconfig 文件
+      exclude: ['test', '**/*.spec.ts', 'vite.config.ts', 'vitest.config.ts']
     })
   ],
   resolve: {
@@ -31,11 +32,16 @@ export default defineConfig({
       fileName: 'index',
       formats: ['es', 'umd']
     },
+    cssFileName: 'style',
     rollupOptions: {
       // 确保外部化处理那些你不想打包进库的依赖
       external: ['vue'],
       output: {
         banner,
+        assetFileNames: (chunkInfo) => {
+          if (chunkInfo.name && /index\.css$/.test(chunkInfo.name)) return 'style.css'
+          return chunkInfo.name ? chunkInfo.name : '[name][extname]'
+        },
         globals: {
           vue: 'Vue'
         }
