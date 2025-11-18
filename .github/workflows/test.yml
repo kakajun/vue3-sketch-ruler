@@ -1,0 +1,34 @@
+name: test
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Test simple-panzoom
+        run: pnpm --filter ./packages/simple-panzoom test
+
+      - name: Test sketch-ruler
+        run: pnpm --filter ./packages/sketch-ruler test

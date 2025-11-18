@@ -1,6 +1,6 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "2.2.10",
+  "version": "2.2.11",
   "author": "kakajun <253495832@qq.com>",
   "license": "MIT",
   "type": "module",
@@ -18,12 +18,14 @@
     "url": "https://gitee.com/majun2232/vue3-sketch-Ruler"
   },
   "sideEffects": false,
-  "main": "lib/index.js",
-  "main1": "src/index.ts",
+  "main1": "lib/index.js",
+  "main": "src/index.ts",
   "style": "lib/style.css",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "release": "release-it"
   },
@@ -37,6 +39,12 @@
     "room",
     "panzoom"
   ],
+  "devDependencies": {
+    "vitest": "^4.0.1",
+    "@vue/test-utils": "^2.4.6",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "simple-panzoom": "workspace:*"
+  },
   "bugs": {
     "url": "https://github.com/kakajun/vue3-sketch-ruler/issues"
   },
