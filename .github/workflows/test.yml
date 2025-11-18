@@ -42,3 +42,14 @@ jobs:
       - name: Test sketch-ruler
         run: npm run test
         working-directory: packages/sketch-ruler
+
+      - name: Build docs
+        run: npm run build
+        working-directory: packages/docs
+
+      - name: Deploy gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.event_name == 'push'
+        with:
+          publish_dir: ./packages/docs/dist
+          github_token: ${{ secrets.GITHUB_TOKEN }}
