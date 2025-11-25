@@ -1,7 +1,7 @@
 <template>
   <div class="demo">
     <div class="top font16">
-      <div class="mr10"> 自己给初始值--- </div>
+      <div class="mr10">设置autoCenter=false, 自己给初始值--- </div>
       <div class="mr10"> X方向: </div>
       <el-input
         class="mr10"
@@ -74,6 +74,7 @@
         :height="rectHeight"
         :palette="cpuPalette"
         :snaps-obj="snapsObj"
+        :autoCenter="false"
         :shadow="state.shadow"
         :canvas-width="canvasWidth"
         :canvas-height="canvasHeight"
@@ -292,12 +293,14 @@ const changeShadow = () => {
 }
 .whitewrapper {
   background-color: #fafafc;
-  background-image: linear-gradient(#fafafc 20px, transparent 0),
+  background-image:
+    linear-gradient(#fafafc 20px, transparent 0),
     linear-gradient(90deg, transparent 20px, #373739 0);
 }
 .balckwrapper {
   background-color: #18181c;
-  background-image: linear-gradient(#18181c 20px, transparent 0),
+  background-image:
+    linear-gradient(#18181c 20px, transparent 0),
     linear-gradient(90deg, transparent 20px, #86909c 0);
 }
 
