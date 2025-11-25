@@ -130,6 +130,7 @@ const panzoomOption = reactive({
   startY: 0, // 画布距离顶边框距离, 如果想自动,那么不要传
   disablePan: false,
   disableZoom: false,
+  origin: '0 0', // 默认是'50% 50%'
   contain: 'none', // 'inside' | 'outside' | 'none'
   handleStartEvent: (event: PanzoomEvent['panzoomstart']) => {
     event.preventDefault()
