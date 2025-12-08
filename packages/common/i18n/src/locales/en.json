@@ -6,7 +6,8 @@
     "customizeButtons": "customizeButtons",
     "selecto": "Selecto test",
     "input": "input test",
-    "esDragle":"esDragle"
+    "esDragle": "esDragle test",
+    "bigscreen": "bigscreen-simple-panzoom"
   },
   "common": {
     "code": "Code",

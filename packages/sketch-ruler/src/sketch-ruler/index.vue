@@ -293,18 +293,8 @@ const calculateTransform = () => {
   const scaleX = (rectWidth.value * (1 - props.paddingRatio)) / props.canvasWidth
   const scaleY = (rectHeight.value * (1 - props.paddingRatio)) / props.canvasHeight
   const scale = Math.min(scaleX, scaleY)
-  zoomStartX = rectWidth.value / 2 - props.canvasWidth / 2
-  if (scale < 1) {
-    zoomStartY =
-      ((props.canvasHeight * scale) / 2 - props.canvasHeight / 2) / scale -
-      (props.canvasHeight * scale - rectHeight.value) / scale / 2
-  } else if (scale > 1) {
-    zoomStartY =
-      (props.canvasHeight * scale - props.canvasHeight) / 2 / scale +
-      (rectHeight.value - props.canvasHeight * scale) / scale / 2
-  } else {
-    zoomStartY = 0
-  }
+  zoomStartX = (rectWidth.value - props.canvasWidth) / 2 / scale
+  zoomStartY = (rectHeight.value - props.canvasHeight) / 2 / scale
 
   return scale
 }
@@ -369,11 +359,10 @@ defineExpose({
   span {
     line-height: 1;
   }
-  // TODO  这个加了影响居中
-  // .canvasedit {
-  //   width: v-bind("props.canvasWidth + 'px'");
-  //   height: v-bind("props.canvasHeight + 'px'");
-  // }
+  .canvasedit {
+    width: v-bind("props.canvasWidth + 'px'");
+    height: v-bind("props.canvasHeight + 'px'");
+  }
   .canvasedit-parent {
     position: absolute;
     left: v-bind(thickness);

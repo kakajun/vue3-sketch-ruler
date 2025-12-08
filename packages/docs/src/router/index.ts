@@ -64,6 +64,13 @@ export const menuRoutes: RouteRecordRaw[] = [
     meta: {
       title: 'esDragle'
     }
+  },
+  {
+    path: 'bigscreen',
+    component: () => import('@/examples/bigscreen/bigscreen.vue'),
+    meta: {
+      title: 'bigscreen'
+    }
   }
 ]
 
