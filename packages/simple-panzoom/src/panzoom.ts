@@ -50,7 +50,11 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
 
   elem.style.userSelect = 'none'
   elem.style.touchAction = options.touchAction
-    setStyle(elem, 'transformOrigin', typeof options!.origin === 'string' ? (options as any).origin : '50% 50%')
+  setStyle(
+    elem,
+    'transformOrigin',
+    typeof options!.origin === 'string' ? (options as any).origin : '50% 50%'
+  )
 
   function resetStyle() {
     parent.style.overflow = ''
@@ -64,7 +68,9 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
   }
 
   function setOptions(opts: Omit<PanzoomOptions, 'force'> = {}) {
-    for (const key in opts) if (Object.prototype.hasOwnProperty.call(opts, key)) (options as any)[key] = (opts as any)[key]
+    for (const key in opts)
+      if (Object.prototype.hasOwnProperty.call(opts, key))
+        (options as any)[key] = (opts as any)[key]
     if (opts.hasOwnProperty('cursor') || opts.hasOwnProperty('canvas')) {
       parent.style.cursor = elem.style.cursor = ''
       ;(options!.canvas ? parent : elem).style.cursor = options!.cursor
@@ -91,7 +97,10 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     elem.dispatchEvent(event)
   }
 
-  function setTransformWithEvent(opts: PanzoomOptions, originalEvent?: PanzoomEventDetail['originalEvent']) {
+  function setTransformWithEvent(
+    opts: PanzoomOptions,
+    originalEvent?: PanzoomEventDetail['originalEvent']
+  ) {
     const value = { x, y, scale }
     if (typeof opts.animate === 'boolean') {
       if (opts.animate) setTransition(elem, opts)
@@ -99,7 +108,10 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     }
     opts.setTransform!(elem, value, opts)
     const emit = () => {
-      const dims: Dimensions = opts.contain && opts.contain !== 'none' ? (getDimensionsFull(elem) as any) : (getDimensionsLite(elem) as any)
+      const dims: Dimensions =
+        opts.contain && opts.contain !== 'none'
+          ? (getDimensionsFull(elem) as any)
+          : (getDimensionsLite(elem) as any)
       trigger({ x, y, scale, dimsOut: dims, originalEvent }, opts)
     }
     if (opts.animate) setTimeout(emit, (opts.duration as number) + 50)
@@ -107,7 +119,12 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     return value
   }
 
-  function constrainXY(toX: number | string, toY: number | string, toScale: number, panOptions?: PanOptions) {
+  function constrainXY(
+    toX: number | string,
+    toY: number | string,
+    toScale: number,
+    panOptions?: PanOptions
+  ) {
     const opts = { ...options, ...panOptions }
     const result = { x, y, opts }
     if (!(opts as any).force && opts.disablePan === true) return result
@@ -125,16 +142,44 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
       const diffVertical = (scaledHeight - realHeight) / 2
       if (opts.contain === 'inside') {
         const minX = (-dims.elem.margin.left - dims.parent.padding.left + diffHorizontal) / toScale
-        const maxX = (dims.parent.width - scaledWidth - dims.parent.padding.left - dims.elem.margin.left - dims.parent.border.left - dims.parent.border.right + diffHorizontal) / toScale
+        const maxX =
+          (dims.parent.width -
+            scaledWidth -
+            dims.parent.padding.left -
+            dims.elem.margin.left -
+            dims.parent.border.left -
+            dims.parent.border.right +
+            diffHorizontal) /
+          toScale
         result.x = Math.max(Math.min(result.x, maxX), minX)
         const minY = (-dims.elem.margin.top - dims.parent.padding.top + diffVertical) / toScale
-        const maxY = (dims.parent.height - scaledHeight - dims.parent.padding.top - dims.elem.margin.top - dims.parent.border.top - dims.parent.border.bottom + diffVertical) / toScale
+        const maxY =
+          (dims.parent.height -
+            scaledHeight -
+            dims.parent.padding.top -
+            dims.elem.margin.top -
+            dims.parent.border.top -
+            dims.parent.border.bottom +
+            diffVertical) /
+          toScale
         result.y = Math.max(Math.min(result.y, maxY), minY)
       } else if (opts.contain === 'outside') {
-        const minX = (-(scaledWidth - dims.parent.width) - dims.parent.padding.left - dims.parent.border.left - dims.parent.border.right + diffHorizontal) / toScale
+        const minX =
+          (-(scaledWidth - dims.parent.width) -
+            dims.parent.padding.left -
+            dims.parent.border.left -
+            dims.parent.border.right +
+            diffHorizontal) /
+          toScale
         const maxX = (diffHorizontal - dims.parent.padding.left) / toScale
         result.x = Math.max(Math.min(result.x, maxX), minX)
-        const minY = (-(scaledHeight - dims.parent.height) - dims.parent.padding.top - dims.parent.border.top - dims.parent.border.bottom + diffVertical) / toScale
+        const minY =
+          (-(scaledHeight - dims.parent.height) -
+            dims.parent.padding.top -
+            dims.parent.border.top -
+            dims.parent.border.bottom +
+            diffVertical) /
+          toScale
         const maxY = (diffVertical - dims.parent.padding.top) / toScale
         result.y = Math.max(Math.min(result.y, maxY), minY)
       }
@@ -157,15 +202,22 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
         const parentHeight = dims.parent.height - dims.parent.border.top - dims.parent.border.bottom
         const elemScaledWidth = parentWidth / elemWidth
         const elemScaledHeight = parentHeight / elemHeight
-        if ((options as any).contain === 'inside') maxScale = Math.min(maxScale, elemScaledWidth, elemScaledHeight)
-        else if ((options as any).contain === 'outside') minScale = Math.max(minScale, elemScaledWidth, elemScaledHeight)
+        if ((options as any).contain === 'inside')
+          maxScale = Math.min(maxScale, elemScaledWidth, elemScaledHeight)
+        else if ((options as any).contain === 'outside')
+          minScale = Math.max(minScale, elemScaledWidth, elemScaledHeight)
       }
     }
     result.scale = Math.min(Math.max(toScale, minScale), maxScale)
     return result
   }
 
-  function pan(toX: number | string, toY: number | string, panOptions?: PanOptions, originalEvent?: PanzoomEventDetail['originalEvent']) {
+  function pan(
+    toX: number | string,
+    toY: number | string,
+    panOptions?: PanOptions,
+    originalEvent?: PanzoomEventDetail['originalEvent']
+  ) {
     const result = constrainXY(toX, toY, scale, panOptions)
     if (x !== result.x || y !== result.y) {
       x = result.x
@@ -175,7 +227,11 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     return { x, y, scale }
   }
 
-  function zoom(toScale: number, zoomOptions?: ZoomOptions, originalEvent?: PanzoomEventDetail['originalEvent']) {
+  function zoom(
+    toScale: number,
+    zoomOptions?: ZoomOptions,
+    originalEvent?: PanzoomEventDetail['originalEvent']
+  ) {
     const result = constrainScale(toScale, zoomOptions)
     const opts = result.opts
     if (!(opts as any).force && opts.disableZoom) return { x, y, scale }
@@ -200,21 +256,70 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
   }
 
   function zoomIn(zoomOptions?: ZoomOptions) {
+    // 如果没有指定 focal，则默认以中心点缩放
+    const opts = { ...options, animate: true, ...zoomOptions }
+    if (!(opts as any).focal) {
+      const dims = getDimensionsFull(elem)
+      const parentWidth = dims.parent.width - dims.parent.border.left - dims.parent.border.right
+      const parentHeight = dims.parent.height - dims.parent.border.top - dims.parent.border.bottom
+      const clientX =
+        dims.parent.left + dims.parent.border.left + dims.parent.padding.left + parentWidth / 2
+      const clientY =
+        dims.parent.top + dims.parent.border.top + dims.parent.padding.top + parentHeight / 2
+      return zoomToPoint(scale * Math.exp(opts.step as number), { clientX, clientY }, opts)
+    }
     return zoomInOut(true, zoomOptions)
   }
 
   function zoomOut(zoomOptions?: ZoomOptions) {
+    // 如果没有指定 focal，则默认以中心点缩放
+    const opts = { ...options, animate: true, ...zoomOptions }
+    if (!(opts as any).focal) {
+      const dims = getDimensionsFull(elem)
+      const parentWidth = dims.parent.width - dims.parent.border.left - dims.parent.border.right
+      const parentHeight = dims.parent.height - dims.parent.border.top - dims.parent.border.bottom
+      const clientX =
+        dims.parent.left + dims.parent.border.left + dims.parent.padding.left + parentWidth / 2
+      const clientY =
+        dims.parent.top + dims.parent.border.top + dims.parent.padding.top + parentHeight / 2
+      return zoomToPoint(scale * Math.exp(-(opts.step as number)), { clientX, clientY }, opts)
+    }
     return zoomInOut(false, zoomOptions)
   }
 
-  function zoomToPoint(toScale: number, point: { clientX: number; clientY: number }, zoomOptions?: ZoomOptions, originalEvent?: PanzoomEventDetail['originalEvent']) {
+  function zoomToPoint(
+    toScale: number,
+    point: { clientX: number; clientY: number },
+    zoomOptions?: ZoomOptions,
+    originalEvent?: PanzoomEventDetail['originalEvent']
+  ) {
     const dims = getDimensionsFull(elem)
     const effectiveArea = {
-      width: dims.parent.width - dims.parent.padding.left - dims.parent.padding.right - dims.parent.border.left - dims.parent.border.right,
-      height: dims.parent.height - dims.parent.padding.top - dims.parent.padding.bottom - dims.parent.border.top - dims.parent.border.bottom
+      width:
+        dims.parent.width -
+        dims.parent.padding.left -
+        dims.parent.padding.right -
+        dims.parent.border.left -
+        dims.parent.border.right,
+      height:
+        dims.parent.height -
+        dims.parent.padding.top -
+        dims.parent.padding.bottom -
+        dims.parent.border.top -
+        dims.parent.border.bottom
     }
-    let clientX = point.clientX - dims.parent.left - dims.parent.padding.left - dims.parent.border.left - dims.elem.margin.left
-    let clientY = point.clientY - dims.parent.top - dims.parent.padding.top - dims.parent.border.top - dims.elem.margin.top
+    let clientX =
+      point.clientX -
+      dims.parent.left -
+      dims.parent.padding.left -
+      dims.parent.border.left -
+      dims.elem.margin.left
+    let clientY =
+      point.clientY -
+      dims.parent.top -
+      dims.parent.padding.top -
+      dims.parent.border.top -
+      dims.elem.margin.top
     if (((options as any).origin as string) !== '0 0') {
       clientX -= dims.elem.width / scale / 2
       clientY -= dims.elem.height / scale / 2
@@ -231,7 +336,10 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     const opts = { ...options, ...(zoomOptions as any), animate: false }
     const delta = event.deltaY === 0 && (event as any).deltaX ? (event as any).deltaX : event.deltaY
     const wheel = delta < 0 ? 1 : -1
-    const toScale = constrainScale(scale * Math.exp((wheel * (opts.step as number)) / 3), opts).scale
+    const toScale = constrainScale(
+      scale * Math.exp((wheel * (opts.step as number)) / 3),
+      opts
+    ).scale
     return zoomToPoint(toScale, event as any, opts, event)
   }
 
@@ -262,11 +370,23 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
   }
 
   function handleMove(event: PointerEvent) {
-    if (!isPanning || origX === undefined || origY === undefined || startClientX === undefined || startClientY === undefined) return
+    if (
+      !isPanning ||
+      origX === undefined ||
+      origY === undefined ||
+      startClientX === undefined ||
+      startClientY === undefined
+    )
+      return
     addPointer(pointers, event)
     const current = getMiddle(pointers)
     const toScale = scale
-    pan(origX + (current.clientX - startClientX) / toScale, origY + (current.clientY - startClientY) / toScale, { animate: false } as any, event)
+    pan(
+      origX + (current.clientX - startClientX) / toScale,
+      origY + (current.clientY - startClientY) / toScale,
+      { animate: false } as any,
+      event
+    )
   }
 
   function handleUp(event: PointerEvent) {
