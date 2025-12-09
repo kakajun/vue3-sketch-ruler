@@ -20,6 +20,13 @@
       <template #default>
         <img style="width: 100%; height: 100%" :src="leftImg" alt="Left Screen" />
       </template>
+      <template #btn="{ reset, zoomIn, zoomOut }">
+        <div class="btns">
+          <button @click.stop="reset">还原</button>
+          <button @click.stop="zoomIn">放大</button>
+          <button @click.stop="zoomOut">缩小</button>
+        </div>
+      </template>
     </SketchRule>
   </div>
 </template>
@@ -103,5 +110,13 @@ onUnmounted(() => {
   background-image:
     linear-gradient(#fafafc 20px, transparent 0),
     linear-gradient(90deg, transparent 20px, #373739 0);
+}
+
+.btns {
+  position: absolute;
+  display: flex;
+  bottom: 20px;
+  right: 40px;
+  z-index: 999;
 }
 </style>
