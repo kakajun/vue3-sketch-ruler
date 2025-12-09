@@ -1,9 +1,15 @@
 <template>
   <div class="wrapper" ref="wrapperRef">
-    <div class="description"
-      >说明: 该案例展示了大分辨率8K大屏(8800*5097)上使用simple-panzoom插件,
-      依然能做到上下左右居中正确</div
-    >
+    <div class="description">
+      说明: 该案例展示了大分辨率8K大屏(8800*5097)上使用simple-panzoom插件,
+      依然能做到上下左右居中正确
+    </div>
+    <div class="control-panel">
+      <label style="cursor: pointer">
+        <input type="checkbox" v-model="isRemember" @change="handleRememberChange" />
+        记住位置 (刷新页面后保持位置)
+      </label>
+    </div>
     <div class="canvasedit-parent" :style="rectStyle" :class="cursorClass">
       <div class="canvasedit big-screen-demo" :style="canvasStyle" ref="elem">
         <!-- 下面可以分组件开发 -->
@@ -30,6 +36,7 @@ const canvasWidth = ref<number>(8800)
 const canvasHeight = ref<number>(5097)
 const paddingRatio = ref<number>(0.2) // padding
 const cursorClass = ref('')
+const isRemember = ref(false)
 let zoomStartX = 0
 let zoomStartY = 0
 
@@ -50,9 +57,29 @@ const canvasStyle = computed(() => {
 })
 
 const handlePanzoomChange = (e: any) => {
-  const { scale, dimsOut } = e.detail as PanzoomEventDetail
+  const { scale, dimsOut, x, y } = e.detail as PanzoomEventDetail
+  console.log('e.detail', e.detail)
   if (dimsOut) {
     ownScale.value = scale
+  }
+  if (isRemember.value) {
+    localStorage.setItem(
+      'simple-panzoom-8k-state',
+      JSON.stringify({
+        scale,
+        x,
+        y
+      })
+    )
+  }
+}
+
+const handleRememberChange = () => {
+  localStorage.setItem('simple-panzoom-8k-remember', String(isRemember.value))
+  if (!isRemember.value) {
+    localStorage.removeItem('simple-panzoom-8k-state')
+  } else {
+
   }
 }
 
@@ -65,6 +92,7 @@ const handleWheel = (e: WheelEvent) => {
 }
 
 const handleKeydown = (e: KeyboardEvent) => {
+  if ((e.target as HTMLElement).tagName === 'INPUT') return
   if (e.code === 'Space' && !e.repeat && panzoomInstance.value) {
     // 阻止空格键默认的滚动行为
     e.preventDefault()
@@ -81,7 +109,7 @@ const handleKeyup = (e: KeyboardEvent) => {
 }
 
 /**
- * @desc: 居中算法
+ * @desc: Centering Algorithm (居中算法)
  */
 const calculateTransform = () => {
   const rw = rectWidth.value
@@ -89,17 +117,17 @@ const calculateTransform = () => {
   const cw = canvasWidth.value
   const ch = canvasHeight.value
 
-  // 保持比例缩放以适应视口，并考虑 padding
+  // Scale proportionally to fit the viewport, considering padding (保持比例缩放以适应视口，并考虑 padding)
   const scaleX = (rw * (1 - paddingRatio.value)) / cw
   const scaleY = (rh * (1 - paddingRatio.value)) / ch
   const scale = Math.min(scaleX, scaleY)
 
-  // 计算居中偏移量
-  // simple-panzoom 默认 origin 为 '50% 50%'，即基于元素中心缩放
-  // 我们只需要让内容中心对齐视口中心
-  // 偏移量 = (视口宽 - 内容宽) / 2
-  // 由于 CSS transform 顺序为 scale() translate()，位移量会被缩放
-  // 所以需要除以 scale
+  // Calculate centering offset (计算居中偏移量)
+  // simple-panzoom defaults origin to '50% 50%', scaling based on element center (simple-panzoom 默认 origin 为 '50% 50%'，即基于元素中心缩放)
+  // We only need to align the content center with the viewport center (我们只需要让内容中心对齐视口中心)
+  // Offset = (Viewport Width - Content Width) / 2 (偏移量 = (视口宽 - 内容宽) / 2)
+  // Since CSS transform order is scale() translate(), translation is scaled (由于 CSS transform 顺序为 scale() translate()，位移量会被缩放)
+  // So we need to divide by scale (所以需要除以 scale)
   zoomStartX = (rw - cw) / 2 / scale
   zoomStartY = (rh - ch) / 2 / scale
 
@@ -131,6 +159,25 @@ const initPanzoom = () => {
   if (elem.value) {
     updateDimensions()
     let scale = calculateTransform()
+    let startX = zoomStartX
+    let startY = zoomStartY
+
+    const savedRemember = localStorage.getItem('simple-panzoom-8k-remember')
+    if (savedRemember === 'true') {
+      isRemember.value = true
+      const savedState = localStorage.getItem('simple-panzoom-8k-state')
+      if (savedState) {
+        try {
+          const state = JSON.parse(savedState)
+          scale = Number(state.scale)
+          startX = Number(state.x)
+          startY = Number(state.y)
+        } catch (e) {
+          console.error('Failed to parse saved state', e)
+        }
+      }
+    }
+
     console.log(scale, 'scale')
 
     panzoomInstance.value = Panzoom(elem.value, {
@@ -138,10 +185,12 @@ const initPanzoom = () => {
       startScale: scale,
       smoothScroll: true,
       canvas: true,
+      maxScale: 3,
+      minScale: 0.01,
       disablePan: true, // 默认禁止拖拽
       cursor: 'default', // 默认光标
-      startX: zoomStartX,
-      startY: zoomStartY
+      startX: startX,
+      startY: startY
     })
     elem.value.addEventListener('panzoomchange', handlePanzoomChange as EventListener)
     // 绑定 wheel 事件到 parent (因为 canvas: true 时事件绑定在 parent 上)
@@ -155,14 +204,16 @@ const initPanzoom = () => {
 const onResize = () => {
   updateDimensions()
   if (panzoomInstance.value) {
-    const scale = calculateTransform()
-    // 重新居中
-    panzoomInstance.value.reset({
-      startScale: scale,
-      startX: zoomStartX,
-      startY: zoomStartY,
-      animate: false
-    })
+    if (!isRemember.value) {
+      const scale = calculateTransform()
+      // 重新居中
+      panzoomInstance.value.reset({
+        startScale: scale,
+        startX: zoomStartX,
+        startY: zoomStartY,
+        animate: false
+      })
+    }
   }
 }
 
@@ -202,6 +253,18 @@ onUnmounted(() => {
   position: relative;
   overflow: hidden;
 }
+.control-panel {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.8);
+  color: #000;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .canvasedit-parent {
   position: absolute;
   top: 0;
