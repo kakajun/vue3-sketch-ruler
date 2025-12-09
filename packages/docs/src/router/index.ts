@@ -71,6 +71,13 @@ export const menuRoutes: RouteRecordRaw[] = [
     meta: {
       title: 'bigscreen'
     }
+  },
+  {
+    path: '8k',
+    component: () => import('@/examples/bigscreen/8K.vue'),
+    meta: {
+      title: '8k'
+    }
   }
 ]
 
