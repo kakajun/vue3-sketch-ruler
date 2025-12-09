@@ -83,7 +83,7 @@ import SketchRule from 'vue3-sketch-ruler'
 import type { PaletteType } from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
 import bgImg from '../assets/bg.png'
-import { computed, ref, reactive, onMounted, watch } from 'vue'
+import { computed, ref, reactive } from 'vue'
 import type { PanzoomEventDetail, PanzoomEvent } from 'simple-panzoom'
 import { useAppStore } from '@/store/app'
 const store = useAppStore()

@@ -78,6 +78,13 @@ export const menuRoutes: RouteRecordRaw[] = [
     meta: {
       title: '8k'
     }
+  },
+  {
+    path: 'sketch-ruler',
+    component: () => import('@/examples/bigscreen/8Ksketch-ruler.vue'),
+    meta: {
+      title: 'sketch-ruler'
+    }
   }
 ]
 

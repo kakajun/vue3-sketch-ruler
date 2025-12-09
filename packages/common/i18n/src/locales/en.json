@@ -8,7 +8,8 @@
     "input": "input test",
     "esDragle": "esDragle test",
     "bigscreen": "bigscreen-simple-panzoom",
-    "8k": "8K  test"
+    "8k": "8K  test",
+    "sketch-ruler": "8K sketch-ruler"
   },
   "common": {
     "code": "Code",

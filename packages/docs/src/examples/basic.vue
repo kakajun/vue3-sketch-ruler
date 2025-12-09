@@ -1,21 +1,19 @@
 <template>
-  <div>
-    <div class="wrapper whitewrapper" :style="rectStyle">
-      <sketch-rule ref="sketchruleRef" v-bind="post">
-        <template #default>
-          <div data-type="page" :style="canvasStyle">
-            <img class="img-style" :src="bgImg" />
-          </div>
-        </template>
-        <template #btn="{ reset, zoomIn, zoomOut }">
-          <div class="btns">
-            <button @click.stop="reset">还原</button>
-            <button @click.stop="zoomIn">放大</button>
-            <button @click.stop="zoomOut">缩小</button>
-          </div>
-        </template>
-      </sketch-rule>
-    </div>
+  <div class="wrapper whitewrapper" :style="rectStyle">
+    <sketch-rule ref="sketchruleRef" v-bind="post">
+      <template #default>
+        <div data-type="page" :style="canvasStyle">
+          <img class="img-style" :src="bgImg" />
+        </div>
+      </template>
+      <template #btn="{ reset, zoomIn, zoomOut }">
+        <div class="btns">
+          <button @click.stop="reset">还原</button>
+          <button @click.stop="zoomIn">放大</button>
+          <button @click.stop="zoomOut">缩小</button>
+        </div>
+      </template>
+    </sketch-rule>
   </div>
 </template>
 <script setup lang="ts">
@@ -71,7 +69,8 @@ const canvasStyle = computed(() => {
 }
 .whitewrapper {
   background-color: #fafafc;
-  background-image: linear-gradient(#fafafc 20px, transparent 0),
+  background-image:
+    linear-gradient(#fafafc 20px, transparent 0),
     linear-gradient(90deg, transparent 20px, #373739 0);
 }
 .img-style {
