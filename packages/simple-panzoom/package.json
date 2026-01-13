@@ -1,6 +1,6 @@
 {
   "name": "simple-panzoom",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "type": "module",
   "author": "kakajun <253495832@qq.com>",
   "private": false,
@@ -20,7 +20,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kakajun/vue3-sketch-ruler/packages/simple-panzoom"
+    "url": "https://github.com/kakajun/vue3-sketch-ruler/tree/master/packages/simple-panzoom"
   },
   "keywords": [
     "dom",
