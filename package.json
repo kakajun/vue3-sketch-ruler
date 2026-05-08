@@ -1,6 +1,6 @@
 {
   "name": "root",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "author": "kakajun <253495832@qq.com>",
   "workspaces": [
     "packages/*"

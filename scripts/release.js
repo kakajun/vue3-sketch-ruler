@@ -6,7 +6,7 @@ const fs = require('fs')
 const semver = require('semver')
 const { prompt } = require('enquirer')
 const args = require('minimist')(process.argv.slice(2))
-const currentVersion = require('../package.json').version
+const currentVersion = require('../packages/sketch-ruler/package.json').version
 
 const packages = ['sketch-ruler']
 
