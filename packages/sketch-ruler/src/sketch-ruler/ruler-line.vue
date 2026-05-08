@@ -32,6 +32,7 @@ interface Props {
   snapThreshold: number
   snapsObj: LineType
   lockLine: boolean
+  deleteLabel: string
 }
 type PointerEvents = 'auto' | 'none'
 

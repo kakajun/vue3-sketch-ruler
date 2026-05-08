@@ -40,11 +40,8 @@ jobs:
       - name: Build sketch-ruler
         run: pnpm --filter ./packages/sketch-ruler build
 
-      - name: Test simple-panzoom
-        run: pnpm --filter ./packages/simple-panzoom test
-
-      - name: Test sketch-ruler
-        run: pnpm --filter ./packages/sketch-ruler test
+      - name: Run tests
+        run: pnpm test
 
       - name: Build docs
         run: pnpm build:demo

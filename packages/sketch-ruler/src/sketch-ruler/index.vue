@@ -1,8 +1,8 @@
 <template>
-  <div class="sketch-ruler">
+  <div class="sketch-ruler" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
     <slot name="btn" :reset="reset" :zoom-in="zoomIn" :zoom-out="zoomOut"></slot>
     <div class="canvasedit-parent" :style="rectStyle" :class="cursorClass">
-      <div class="canvasedit" :class="cursorClass">
+      <div ref="canvaseditRef" class="canvasedit" :class="cursorClass">
         <slot></slot>
       </div>
     </div>
@@ -30,6 +30,7 @@
       :rate="rate"
       :grid-ratio="gridRatio"
       :lock-line="lockLine"
+      :delete-label="deleteLabel"
       @change-line-state="changeLineState"
     />
     <!-- 竖直方向 -->
@@ -56,6 +57,7 @@
       :rate="rate"
       :grid-ratio="gridRatio"
       :lock-line="lockLine"
+      :delete-label="deleteLabel"
       @change-line-state="changeLineState"
     />
     <a v-show="showRuler" class="corner" :style="cornerStyle" @click="onCornerClick"></a>
@@ -105,10 +107,12 @@ const props = withDefaults(defineProps<SketchRulerProps>(), {
   snapThreshold: 5,
   gridRatio: 1,
   lockLine: false,
-  selfHandle: false
+  selfHandle: false,
+  deleteLabel: '放开删除'
 })
 
 const emit = defineEmits(['onCornerClick', 'update:scale', 'zoomchange', 'update:lockLine'])
+const canvaseditRef = ref<HTMLElement | null>(null)
 const elem = ref<HTMLElement | null>(null)
 const parentElem = ref<HTMLElement | null>(null)
 const lastElem = ref<HTMLElement | null>(null)
@@ -120,6 +124,7 @@ const ownScale = ref(1)
 const showReferLine = ref(props.isShowReferLine)
 const panzoomInstance = ref<PanzoomObject | null>(null)
 const cursorClass = ref('defaultCursor')
+const isHovered = ref(false)
 // 这里处理默认值,因为直接写在props的default里面时,可能某些属性用户未必会传,那么这里要做属性合并,防止属性丢失
 const paletteCpu = computed(() => {
   return {
@@ -185,6 +190,7 @@ const handleSpaceKeyDown = (e: KeyboardEvent) => {
   }
 
   if (e.key === ' ') {
+    if (!isHovered.value) return
     cursorClass.value = 'grabCursor'
     panzoomInstance.value?.bind()
     e.preventDefault()
@@ -205,6 +211,7 @@ const handleSpaceKeyUp = (e: KeyboardEvent) => {
   }
 
   if (e.key === ' ') {
+    if (!isHovered.value) return
     panzoomInstance.value?.destroy()
     cursorClass.value = 'defaultCursor'
   }
@@ -217,6 +224,9 @@ function handleTouchStart(e: TouchEvent): void {
 }
 
 onMounted(() => {
+  if (canvaseditRef.value) {
+    elem.value = canvaseditRef.value
+  }
   initPanzoom()
   if (!props.selfHandle && elem.value) {
     const parent = elem.value.parentElement
@@ -274,7 +284,6 @@ const initPanzoom = () => {
   }
   panzoomInstance.value?.destroy()
 
-  elem.value = document.querySelector('.canvasedit')
   if (elem.value) {
     let scale = props.scale
     if (props.autoCenter) {

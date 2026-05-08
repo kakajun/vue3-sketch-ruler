@@ -10,7 +10,8 @@
     "esDragle": "esDragle测试",
     "bigscreen": "大屏辅助simple-panzoom",
     "8k": "8K画面测试",
-    "sketch-ruler": "8K画板"
+    "sketch-ruler": "8K画板",
+    "multi-instance": "多实例"
   },
   "common": {
     "code": "代码",

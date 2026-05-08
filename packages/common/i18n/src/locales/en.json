@@ -9,7 +9,8 @@
     "esDragle": "esDragle test",
     "bigscreen": "bigscreen-simple-panzoom",
     "8k": "8K  test",
-    "sketch-ruler": "8K sketch-ruler"
+    "sketch-ruler": "8K sketch-ruler",
+    "multi-instance": "multi-instance"
   },
   "common": {
     "code": "Code",

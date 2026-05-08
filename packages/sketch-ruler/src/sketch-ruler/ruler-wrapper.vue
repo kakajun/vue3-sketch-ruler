@@ -53,6 +53,7 @@ const props = defineProps<{
   gridRatio: number
   lockLine: boolean
   showShadowText: boolean
+  deleteLabel: string
 }>()
 
 const {

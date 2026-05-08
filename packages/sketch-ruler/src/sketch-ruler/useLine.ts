@@ -12,6 +12,7 @@ interface Props {
   canvasHeight: number
   canvasWidth: number
   rate: number
+  deleteLabel: string
   index?: number
 }
 export default function useLine(props: Props, vertical: boolean) {
@@ -103,7 +104,7 @@ export default function useLine(props: Props, vertical: boolean) {
   }
 
   const labelContent = computed(() => {
-    if (checkBoundary(startValue.value)) return '放开删除'
+    if (checkBoundary(startValue.value)) return props.deleteLabel
     return `${vertical ? 'Y' : 'X'}：${startValue.value * props.rate}`
   })
 

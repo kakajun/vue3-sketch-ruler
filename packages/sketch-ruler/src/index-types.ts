@@ -62,5 +62,6 @@ export interface SketchRulerProps {
   lockLine?: boolean
   selfHandle?: boolean
   showShadowText?: boolean
+  deleteLabel?: string
   panzoomOption?: PanzoomOptions
 }

@@ -85,6 +85,13 @@ export const menuRoutes: RouteRecordRaw[] = [
     meta: {
       title: 'sketch-ruler'
     }
+  },
+  {
+    path: 'multi-instance',
+    component: () => import('@/examples/multi-instance.vue'),
+    meta: {
+      title: 'multi-instance'
+    }
   }
 ]
 
