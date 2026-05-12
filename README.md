@@ -270,7 +270,6 @@ vue3-sketch-ruler 版本从 ^1.3.3 升级到 ^2.4.0（已改好）
 其他调整：
 
 移除了 startX / startY 的手动计算和 handleScroll
-移除了 $app / $container 等滚动容器 ref（2.x 内部用 panzoom 管理）
 scale 改用 computed 的 getter/setter 配合 v-model:scale
 添加了 :shadow 属性传入画布尺寸
 拖拽逻辑改为通过 panzoomInstance.pan() 控制

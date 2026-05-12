@@ -112,7 +112,8 @@ async function publishPackage(pkgName, version) {
     console.log(chalk.green(`Successfully published ${pkgName}@${version}`))
     fs.unlinkSync(path.resolve(pkgRoot, 'README.md'))
   } catch (e) {
-    if (e.stderr.match(/previously published/)) {
+    const stderrStr = e.stderr ? e.stderr.toString() : ''
+    if (stderrStr.match(/previously published/)) {
       console.log(chalk.red(`Skipping already published: ${pkgName}`))
     } else {
       throw e

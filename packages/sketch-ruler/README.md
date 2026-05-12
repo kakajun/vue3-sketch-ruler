@@ -248,6 +248,33 @@ document.addEventListener('pointerup', function (e) {
 ### 更改记录
 
 - 2.3.1 引用简化版 simple-panzoom, 提高性能与减少插件体积, 并使得功能可控, 同时把所有依赖全部更新到最新
+- 2.4.0 多实例
+
+### 升级指南
+1. package.json
+vue3-sketch-ruler 版本从 ^1.3.3 升级到 ^2.4.0（已改好）
+2. src/plugins/customComponents.ts
+旧版：import { SketchRule } from 'vue3-sketch-ruler'（命名导出）
+新版：import SketchRule from 'vue3-sketch-ruler'（默认导出）
+3. src/views/chart/ContentEdit/components/EditRule/index.vue
+主要适配 2.x 的 API 变化：
+
+| 变更项 | 1.x | 2.x |
+|--------|-----|-----|
+| scale 绑定 | `:scale="scale"` | `v-model:scale="scale"` |
+| 画布尺寸 | `:width` / `:height` 同时表示容器和画布 | 拆分为 `:width` / `:height`（容器）和 `:canvasWidth` / `:canvasHeight`（画布） |
+| 内容插槽 | 直接写在组件标签内 | 需用 `<template #default>` 包裹 |
+| 滚动处理 | 手动计算 `startX` / `startY` | 2.x 内部 panzoom 自动处理，移除相关逻辑 |
+| 容器结构 | 外层 `.edit-screens` + `.edit-screen-container` | 2.x 内部自带容器，移除多余 DOM |
+| CSS 选择器 | `#mb-ruler` | `.sketch-ruler` |
+其他调整：
+
+移除了 startX / startY 的手动计算和 handleScroll
+scale 改用 computed 的 getter/setter 配合 v-model:scale
+添加了 :shadow 属性传入画布尺寸
+拖拽逻辑改为通过 panzoomInstance.pan() 控制
+4. src/main.ts
+样式路径 vue3-sketch-ruler/lib/style.css 保持不变，2.x 依然兼容
 
 ## 🌈 Who is using this?
 

@@ -1,17 +1,18 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "author": "kakajun <253495832@qq.com>",
   "license": "MIT",
   "type": "module",
   "private": false,
   "files": [
     "lib",
-    "src"
+    "src",
+    "AGENTS.md"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/kakajun/vue3-sketch-ruler"
+    "url": "git+https://github.com/kakajun/vue3-sketch-ruler.git"
   },
   "repository2": {
     "type": "gitee",
