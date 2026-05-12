@@ -1,13 +1,23 @@
 {
   "name": "simple-panzoom",
   "version": "2.0.3",
-  "type": "module",
-  "author": "kakajun <253495832@qq.com>",
   "private": false,
+  "keywords": [
+    "dom",
+    "pan",
+    "zoom"
+  ],
+  "license": "MIT",
+  "author": "kakajun <253495832@qq.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kakajun/vue3-sketch-ruler/tree/master/packages/simple-panzoom"
+  },
   "files": [
     "lib",
     "src"
   ],
+  "type": "module",
   "main": "lib/panzoom.js",
   "types": "lib/src/panzoom.d.ts",
   "exports": {
@@ -17,16 +27,6 @@
       "require": "./lib/panzoom.cjs"
     }
   },
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kakajun/vue3-sketch-ruler/tree/master/packages/simple-panzoom"
-  },
-  "keywords": [
-    "dom",
-    "pan",
-    "zoom"
-  ],
   "scripts": {
     "test": "vitest run",
     "build": "tsup src/panzoom.ts --format esm,cjs --treeshake --clean --out-dir lib && tsc -p tsconfig.json",

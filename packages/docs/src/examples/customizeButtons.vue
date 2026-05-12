@@ -1,14 +1,14 @@
 <template>
   <div class="demo">
     <div class="top font16">
-      <div class="mr10">鼠标中键移动画布 </div>
-      <div class="scale mr10"> {{ cpuScale }} </div>
-      <button class="mr10 font16" @click="post.showRuler = !post.showRuler">{{
-        (post.showRuler ? '隐藏' : '显示') + '规尺'
-      }}</button>
-      <button class="mr10 font16" @click="post.isShowReferLine = !post.isShowReferLine">{{
-        (post.isShowReferLine ? '隐藏' : '显示') + '参考线'
-      }}</button>
+      <div class="mr10">鼠标中键移动画布</div>
+      <div class="scale mr10">{{ cpuScale }}</div>
+      <button class="mr10 font16" @click="post.showRuler = !post.showRuler">
+        {{ (post.showRuler ? '隐藏' : '显示') + '规尺' }}
+      </button>
+      <button class="mr10 font16" @click="post.isShowReferLine = !post.isShowReferLine">
+        {{ (post.isShowReferLine ? '隐藏' : '显示') + '参考线' }}
+      </button>
       <button class="mr10 font16" @click="lockLine = true">锁定参考线</button>
       <button class="mr10 font16" @click="changeShadow">模拟阴影切换</button>
       <button class="mr10 font16" @click="changeTheme">主题切换</button>
@@ -30,9 +30,9 @@
         defaultValue="1"
         @input="scaleChange"
       />
-      <div class="mr10"> 吸附横线: </div>
+      <div class="mr10">吸附横线:</div>
       <input class="mr10" style="width: 90px" :value="post.snapsObj.h" @blur="snapsChange" />
-      <div class="mr10"> 吸附纵线: </div>
+      <div class="mr10">吸附纵线:</div>
       <input class="mr10" style="width: 90px" :value="post.snapsObj.v" @blur="snapsChangeV" />
 
       <a
@@ -103,7 +103,7 @@ const panzoomOption = reactive({
 const lockLine = ref(false)
 
 // 另外一个方法调用内部方法
-const zoomOutMethod = () => {
+const zoomOutMethod = (): void => {
   if (sketchruleRef.value) {
     sketchruleRef.value.zoomOut()
   }
@@ -114,12 +114,13 @@ onMounted(() => {
   const parentDom = document.getElementsByClassName('canvasedit-parent')
   if (parentDom[0]) {
     const parent = parentDom[0]
-    parent &&
+    if (parent) {
       parent.addEventListener('wheel', function (e: WheelEvent) {
         if (e.ctrlKey || e.metaKey) {
           panzoomInstance.zoomWithWheel(e)
         }
       })
+    }
 
     // 让按下鼠标中键才能移动画布,千万不能用mousedown, 否则会出现缩放bug, 因为panzoom内部对pointerId有判断,而mousedown里面并没有pointerId
     document.addEventListener('pointerdown', function (e) {
@@ -141,13 +142,13 @@ onMounted(() => {
   }
 })
 
-const resetMethod = () => {
+const resetMethod = (): void => {
   if (sketchruleRef.value) {
     sketchruleRef.value.reset()
   }
 }
 
-const changeTheme = () => {
+const changeTheme = (): void => {
   state.isBlack = !state.isBlack
   rendIndex.value++
 }
@@ -222,7 +223,7 @@ const canvasStyle = computed(() => {
   }
 })
 
-const scaleChange = (e: { target: { value: number } }) => {
+const scaleChange = (e: { target: { value: number } }): void => {
   state.scale = e.target.value * 1
   if (sketchruleRef.value) {
     const panzoomInstance = sketchruleRef.value.panzoomInstance
@@ -230,35 +231,35 @@ const scaleChange = (e: { target: { value: number } }) => {
   }
 }
 
-const handleCornerClick = (e: MouseEvent) => {
+const handleCornerClick = (e: MouseEvent): void => {
   console.log('handleCornerClick', e)
 }
 
-const zoomchange = (detail: PanzoomEventDetail) => {
+const zoomchange = (detail: PanzoomEventDetail): void => {
   // console.log('zoomchange', detail)
 }
 
-const snapsChange = (e: { target: { value: string } }) => {
+const snapsChange = (e: { target: { value: string } }): void => {
   const arr = e.target.value.split(',')
   post.snapsObj.h = arr.map((item) => Number(item))
 }
-const snapsChangeV = (e: { target: { value: string } }) => {
+const snapsChangeV = (e: { target: { value: string } }): void => {
   const arr = e.target.value.split(',')
   post.snapsObj.v = arr.map((item) => Number(item))
 }
 
-const changeScale = (e: { target: { checked: boolean } }) => {
+const changeScale = (e: { target: { checked: boolean } }): void => {
   panzoomOption.disableZoom = e.target.checked
 }
-const changeMove = (e: { target: { checked: boolean } }) => {
+const changeMove = (e: { target: { checked: boolean } }): void => {
   panzoomOption.disablePan = e.target.checked
 }
 
-const changeInsideMove = (e: { target: { checked: boolean } }) => {
+const changeInsideMove = (e: { target: { checked: boolean } }): void => {
   panzoomOption.contain = e.target.checked ? 'inside' : 'none'
 }
 
-const changeShadow = () => {
+const changeShadow = (): void => {
   post.shadow.x = Math.random() * post.canvasWidth
   post.shadow.y = Math.random() * post.canvasHeight
 }
@@ -295,12 +296,14 @@ const changeShadow = () => {
 }
 .whitewrapper {
   background-color: #fafafc;
-  background-image: linear-gradient(#fafafc 20px, transparent 0),
+  background-image:
+    linear-gradient(#fafafc 20px, transparent 0),
     linear-gradient(90deg, transparent 20px, #373739 0);
 }
 .balckwrapper {
   background-color: #18181c;
-  background-image: linear-gradient(#18181c 20px, transparent 0),
+  background-image:
+    linear-gradient(#18181c 20px, transparent 0),
     linear-gradient(90deg, transparent 20px, #86909c 0);
 }
 

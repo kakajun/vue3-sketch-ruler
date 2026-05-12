@@ -157,12 +157,12 @@ export default {
         </a>
       </div>
       <h1>Change the Moveable targets by selecting it.</h1>
-      <p class="description"
-        >此例子存在意义是,Selecto不能和pzoom共存, 这到不是pazoom的问题,问题出在,
+      <p class="description">
+        此例子存在意义是,Selecto不能和pzoom共存, 这到不是pazoom的问题,问题出在,
         Select的定位是fixed,如果父级标签有transform, 那么fixed就会相对于它, 目前看上去是正常的,
         但只要把我注释的style="transform: scale(1)",加入到下面
-        container中,那么马上Slectro选择框定位就不准了</p
-      >
+        container中,那么马上Slectro选择框定位就不准了
+      </p>
       <Moveable
         ref="moveableRef"
         :target="targets"

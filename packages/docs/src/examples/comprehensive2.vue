@@ -1,15 +1,15 @@
 <template>
   <div class="demo">
     <div class="top font16">
-      <div class="mr10">设置autoCenter=false, 自己给初始值--- </div>
-      <div class="mr10"> X方向: </div>
+      <div class="mr10">设置autoCenter=false, 自己给初始值---</div>
+      <div class="mr10">X方向:</div>
       <el-input
         class="mr10"
         style="width: 90px"
         v-model="panzoomOption.startX"
         @change="rendIndex++"
       />
-      <div class="mr10"> Y方向: </div>
+      <div class="mr10">Y方向:</div>
       <el-input
         class="mr10"
         style="width: 90px"
@@ -18,7 +18,7 @@
       />
     </div>
     <div class="top font16">
-      <div class="scale mr10"> 缩放比:{{ cpuScale }} </div>
+      <div class="scale mr10">缩放比:{{ cpuScale }}</div>
       <button v-if="showRuler" class="mr10 font16" @click="showRuler = false">隐藏规尺</button>
       <button v-else class="mr10 font16" @click="handleShow">显示规尺</button>
       <button class="mr10 font16" @click="showLineClick">辅助线开关</button>
@@ -43,9 +43,9 @@
         defaultValue="1"
         @input="scaleChange"
       />
-      <div class="mr10"> 吸附横线: </div>
+      <div class="mr10">吸附横线:</div>
       <input class="mr10" style="width: 90px" :value="snapsObj.h" @blur="snapsChange" />
-      <div class="mr10"> 吸附纵线: </div>
+      <div class="mr10">吸附纵线:</div>
       <input class="mr10" style="width: 90px" :value="snapsObj.v" @blur="snapsChangeV" />
 
       <a
@@ -141,23 +141,23 @@ const panzoomOption = reactive({
 const lockLine = ref(false)
 const snapsObj = ref({ h: [0, 100, 200], v: [130] })
 // 另外一个方法调用内部方法
-const zoomOutMethod = () => {
+const zoomOutMethod = (): void => {
   if (sketchruleRef.value) {
     sketchruleRef.value.zoomOut()
   }
 }
 
-const handleShow = () => {
+const handleShow = (): void => {
   showRuler.value = !showRuler.value
 }
 
-const resetMethod = () => {
+const resetMethod = (): void => {
   if (sketchruleRef.value) {
     sketchruleRef.value.reset()
   }
 }
 
-const changeTheme = () => {
+const changeTheme = (): void => {
   state.isBlack = !state.isBlack
   rendIndex.value++
 }
@@ -217,7 +217,7 @@ const canvasStyle = computed(() => {
   }
 })
 
-const scaleChange = (e: { target: { value: number } }) => {
+const scaleChange = (e: { target: { value: number } }): void => {
   state.scale = e.target.value * 1
   if (sketchruleRef.value) {
     const panzoomInstance = sketchruleRef.value.panzoomInstance
@@ -225,39 +225,39 @@ const scaleChange = (e: { target: { value: number } }) => {
   }
 }
 
-const handleCornerClick = (e: MouseEvent) => {
+const handleCornerClick = (e: MouseEvent): void => {
   console.log('handleCornerClick', e)
 }
 
-const zoomchange = (detail: PanzoomEventDetail) => {
+const zoomchange = (detail: PanzoomEventDetail): void => {
   console.log('zoomchange', detail)
 }
 
-const showLineClick = () => {
+const showLineClick = (): void => {
   state.isShowReferLine = !state.isShowReferLine
   console.log(state.isShowReferLine, 'state.isShowReferLine')
 }
-const snapsChange = (e: { target: { value: string } }) => {
+const snapsChange = (e: { target: { value: string } }): void => {
   const arr = e.target.value.split(',')
   snapsObj.value.h = arr.map((item) => Number(item))
 }
-const snapsChangeV = (e: { target: { value: string } }) => {
+const snapsChangeV = (e: { target: { value: string } }): void => {
   const arr = e.target.value.split(',')
   snapsObj.value.v = arr.map((item) => Number(item))
 }
 
-const changeScale = (e: { target: { checked: boolean } }) => {
+const changeScale = (e: { target: { checked: boolean } }): void => {
   panzoomOption.disableZoom = e.target.checked
 }
-const changeMove = (e: { target: { checked: boolean } }) => {
+const changeMove = (e: { target: { checked: boolean } }): void => {
   panzoomOption.disablePan = e.target.checked
 }
 
-const changeInsideMove = (e: { target: { checked: boolean } }) => {
+const changeInsideMove = (e: { target: { checked: boolean } }): void => {
   panzoomOption.contain = e.target.checked ? 'inside' : 'none'
 }
 
-const changeShadow = () => {
+const changeShadow = (): void => {
   // 模拟 x canvasWidth.value   y canvasHeight.value  范围内随机数据
   state.shadow.x = Math.random() * canvasWidth.value
   state.shadow.y = Math.random() * canvasHeight.value

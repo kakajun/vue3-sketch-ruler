@@ -24,7 +24,7 @@ const i18n = createI18n({
 
 export default i18n
 
-export const t = (key: string) => i18n.global.t(key)
+export const t = (key: string): string => i18n.global.t(key)
 
 export const langs = [
   { key: 'zh', title: '中文' },

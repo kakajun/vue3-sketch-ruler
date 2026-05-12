@@ -1,9 +1,14 @@
-export type DimensionsLite = {
+export interface DimensionsLite {
   elem: { width: number; height: number; left: number; top: number }
   parent: { width: number; height: number; left: number; top: number }
 }
 
-export type Box = { left: number; right: number; top: number; bottom: number }
+export interface Box {
+  left: number
+  right: number
+  top: number
+  bottom: number
+}
 export type DimensionsFull = DimensionsLite & {
   elem: DimensionsLite['elem'] & { margin: Box; border: Box }
   parent: DimensionsLite['parent'] & { padding: Box; border: Box }
@@ -71,7 +76,12 @@ export interface PanzoomObject {
   handleDown: (event: PointerEvent) => void
   handleMove: (event: PointerEvent) => void
   handleUp: (event: PointerEvent) => void
-  pan: (x: number | string, y: number | string, panOptions?: PanOptions, originalEvent?: PointerEvent) => CurrentValues
+  pan: (
+    x: number | string,
+    y: number | string,
+    panOptions?: PanOptions,
+    originalEvent?: PointerEvent
+  ) => CurrentValues
   reset: (resetOptions?: PanzoomOptions) => CurrentValues
   resetStyle: () => void
   setOptions: (options?: PanzoomOptions) => void
@@ -79,6 +89,11 @@ export interface PanzoomObject {
   zoom: (scale: number, zoomOptions?: ZoomOptions, originalEvent?: PointerEvent) => CurrentValues
   zoomIn: (zoomOptions?: ZoomOptions) => CurrentValues
   zoomOut: (zoomOptions?: ZoomOptions) => CurrentValues
-  zoomToPoint: (scale: number, point: { clientX: number; clientY: number }, zoomOptions?: ZoomOptions, originalEvent?: PointerEvent) => CurrentValues
+  zoomToPoint: (
+    scale: number,
+    point: { clientX: number; clientY: number },
+    zoomOptions?: ZoomOptions,
+    originalEvent?: PointerEvent
+  ) => CurrentValues
   zoomWithWheel: (event: WheelEvent, zoomOptions?: ZoomOptions) => CurrentValues
 }

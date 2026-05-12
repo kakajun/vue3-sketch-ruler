@@ -96,7 +96,7 @@ const indicatorStyle = computed(() => {
  * @description: 指示器按下时
  * @param {*} e
  */
-const mousedown = async (e: MouseEvent) => {
+const mousedown = async (e: MouseEvent): Promise<void> => {
   const { offsetX, offsetY } = e
   const { scale, vertical, thick, startOther } = props
   if (!isLockLine.value) {
@@ -112,7 +112,7 @@ const mousedown = async (e: MouseEvent) => {
   }
 }
 
-watch([() => props.lockLine], () => {
+watch([(): boolean => props.lockLine], (): void => {
   isLockLine.value = props.lockLine
 })
 </script>

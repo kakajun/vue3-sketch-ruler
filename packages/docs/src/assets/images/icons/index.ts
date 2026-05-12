@@ -5,7 +5,7 @@ export const IconProps = {
   size: [String, Number]
 }
 
-export const getIcon = (name?: string) => {
+export const getIcon = (name?: string): string => {
   if (!name) return ''
   return svgs[`./${name}.svg`]
 }

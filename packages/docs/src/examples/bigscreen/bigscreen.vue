@@ -1,9 +1,9 @@
 <template>
   <div class="wrapper" ref="wrapperRef">
-    <div class="description"
-      >说明: 该案例展示了如何在大屏(3600*1080)上使用simple-panzoom插件, 实现大屏的缩放(Ctrl +
-      鼠标滚轮)功能, 拖动(空白键+鼠标拖动)功能.方便前端分组件开发</div
-    >
+    <div class="description">
+      说明: 该案例展示了如何在大屏(3600*1080)上使用simple-panzoom插件, 实现大屏的缩放(Ctrl +
+      鼠标滚轮)功能, 拖动(空白键+鼠标拖动)功能.方便前端分组件开发
+    </div>
     <div class="canvasedit-parent" :style="rectStyle" :class="cursorClass">
       <div class="canvasedit big-screen-demo" :style="canvasStyle" ref="elem">
         <!-- 下面可以分组件开发 -->
@@ -57,14 +57,14 @@ const canvasStyle = computed(() => {
   }
 })
 
-const handlePanzoomChange = (e: any) => {
+const handlePanzoomChange = (e: any): void => {
   const { scale, dimsOut } = e.detail as PanzoomEventDetail
   if (dimsOut) {
     ownScale.value = scale
   }
 }
 
-const handleWheel = (e: WheelEvent) => {
+const handleWheel = (e: WheelEvent): void => {
   if (e.ctrlKey && panzoomInstance.value) {
     // 阻止浏览器默认的缩放行为
     e.preventDefault()
@@ -72,7 +72,7 @@ const handleWheel = (e: WheelEvent) => {
   }
 }
 
-const handleKeydown = (e: KeyboardEvent) => {
+const handleKeydown = (e: KeyboardEvent): void => {
   if (e.code === 'Space' && !e.repeat && panzoomInstance.value) {
     // 阻止空格键默认的滚动行为
     e.preventDefault()
@@ -81,7 +81,7 @@ const handleKeydown = (e: KeyboardEvent) => {
   }
 }
 
-const handleKeyup = (e: KeyboardEvent) => {
+const handleKeyup = (e: KeyboardEvent): void => {
   if (e.code === 'Space' && panzoomInstance.value) {
     cursorClass.value = ''
     panzoomInstance.value.setOptions({ disablePan: true, cursor: 'default' })
@@ -91,7 +91,7 @@ const handleKeyup = (e: KeyboardEvent) => {
 /**
  * @desc: 居中算法
  */
-const calculateTransform = () => {
+const calculateTransform = (): number => {
   const rw = rectWidth.value
   const rh = rectHeight.value
   const cw = canvasWidth.value
@@ -114,7 +114,7 @@ const calculateTransform = () => {
   return scale
 }
 
-const updateDimensions = () => {
+const updateDimensions = (): void => {
   if (wrapperRef.value) {
     rectWidth.value = wrapperRef.value.clientWidth
     rectHeight.value = wrapperRef.value.clientHeight
@@ -124,7 +124,7 @@ const updateDimensions = () => {
   }
 }
 
-const initPanzoom = () => {
+const initPanzoom = (): void => {
   // 清理旧实例与监听
   if (lastElem.value) {
     lastElem.value.removeEventListener('panzoomchange', handlePanzoomChange as EventListener)
@@ -160,7 +160,7 @@ const initPanzoom = () => {
   }
 }
 
-const onResize = () => {
+const onResize = (): void => {
   updateDimensions()
   if (panzoomInstance.value) {
     const scale = calculateTransform()

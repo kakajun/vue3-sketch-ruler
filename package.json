@@ -1,12 +1,25 @@
 {
   "name": "root",
   "version": "2.4.1",
+  "private": true,
+  "keywords": [
+    "panzoom",
+    "room",
+    "ruler",
+    "sketch",
+    "sketch-ruler",
+    "vue",
+    "vue-sketch-ruler",
+    "vue3"
+  ],
+  "license": "MIT",
   "author": "kakajun <253495832@qq.com>",
   "workspaces": [
     "packages/*"
   ],
-  "license": "MIT",
-  "private": true,
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "dev": "pnpm build && pnpm --filter ./packages/docs dev",
     "d": "pnpm --filter ./packages/docs dev",
@@ -14,39 +27,20 @@
     "build:demo": "pnpm build && pnpm --filter ./packages/docs build",
     "precommit": "lint-staged",
     "clean": "rimraf node_modules && rimraf ./packages/**/node_modules",
-    "format": "prettier --write  \"packages/**/src/**/*.{js,ts,json,tsx,less,vue,html,md}\"",
-    "lint": "esprint check --workers=4 --fix",
-    "ci-pretty-check": "prettier --check .",
+    "lint:check": "oxlint",
+    "lint": "oxlint --fix",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
     "test": "pnpm --filter ./packages/simple-panzoom test && pnpm --filter ./packages/sketch-ruler test",
-    "lint:format": "prettier --write --loglevel warn \"packages/**/*.{js,ts,json,tsx,css,less,scss,vue,html,md}\"",
     "changelog": "pnpm --filter ./packages/sketch-ruler changelog",
     "release": "pnpm build && node ./scripts/release.js"
   },
-  "lint-staged": {
-    "*.{ts,tsx,js,vue,less}": "prettier --write",
-    "*.{ts,tsx,js,vue}": "eslint --fix",
-    "*.{vue,css,less}": "stylelint --fix"
-  },
-  "keywords": [
-    "vue",
-    "vue3",
-    "ruler",
-    "sketch",
-    "sketch-ruler",
-    "vue-sketch-ruler",
-    "room",
-    "panzoom"
-  ],
   "devDependencies": {
     "@babel/preset-env": "^7.28.5",
     "@babel/preset-typescript": "^7.28.5",
     "@daybrush/utils": "^1.13.0",
     "@element-plus/icons-vue": "^2.3.2",
-    "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.39.1",
     "@types/node": "^24.10.1",
-    "@typescript-eslint/eslint-plugin": "^8.47.0",
-    "@typescript-eslint/parser": "^8.47.0",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/babel-plugin-jsx": "^2.0.1",
     "chalk": "^4.1.2",
@@ -55,11 +49,6 @@
     "conventional-changelog-cli": "^5.0.0",
     "element-plus": "^2.11.8",
     "enquirer": "^2.4.1",
-    "eslint": "^9.39.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-prettier-vue": "^5.0.0",
-    "eslint-plugin-vue": "^10.5.1",
     "esprint": "^3.6.0",
     "gh-pages": "^6.3.0",
     "globals": "^16.5.0",
@@ -69,11 +58,11 @@
     "lint-staged": "^16.2.6",
     "lodash": "^4.17.21",
     "minimist": "^1.2.8",
+    "oxfmt": "^0.49.0",
+    "oxlint": "^1.64.0",
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",
     "postcss-html": "^1.8.0",
-    "prettier": "^3.6.2",
-    "pretty-quick": "^4.2.2",
     "rollup-plugin-banner": "^0.2.1",
     "root-common": "workspace:*",
     "sass": "^1.94.1",
@@ -85,19 +74,22 @@
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^4.0.10",
     "vue": "^3.5.24",
-    "vue-eslint-parser": "^10.2.0",
     "vue-i18n": "^11.1.12",
     "vue-router": "^4.6.3",
     "vue-tsc": "^3.1.4",
     "vue3-moveable": "^0.28.0",
     "vue3-sketch-ruler": "workspace:*"
   },
+  "lint-staged": {
+    "*.{vue,css,less}": "stylelint --fix",
+    "*.{js,ts,mjs,cjs,vue}": [
+      "oxlint --fix",
+      "oxfmt"
+    ]
+  },
   "pnpm": {
     "overrides": {
       "parse5": "^7.1.2"
     }
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
   }
 }

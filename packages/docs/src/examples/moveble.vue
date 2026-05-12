@@ -1,8 +1,8 @@
 <template>
   <div class="demo">
     <div class="top font16">
-      <div class="mr10">鼠标中键移动画布 </div>
-      <div class="scale mr10"> 缩放比:{{ cpuScale }} </div>
+      <div class="mr10">鼠标中键移动画布</div>
+      <div class="scale mr10">缩放比:{{ cpuScale }}</div>
     </div>
 
     <div
@@ -65,12 +65,13 @@ onMounted(() => {
   const parentDom = document.getElementsByClassName('canvasedit-parent')
   if (parentDom[0]) {
     const parent = parentDom[0]
-    parent &&
+    if (parent) {
       parent.addEventListener('wheel', function (e: WheelEvent) {
         if (e.ctrlKey || e.metaKey) {
           panzoomInstance.zoomWithWheel(e)
         }
       })
+    }
 
     // 让按下鼠标中键才能移动画布,千万不能用mousedown, 否则会出现缩放bug, 因为panzoom内部对pointerId有判断,而mousedown里面并没有pointerId
     document.addEventListener('pointerdown', function (e) {
@@ -195,12 +196,14 @@ const canvasStyle = computed(() => {
 }
 .whitewrapper {
   background-color: #fafafc;
-  background-image: linear-gradient(#fafafc 20px, transparent 0),
+  background-image:
+    linear-gradient(#fafafc 20px, transparent 0),
     linear-gradient(90deg, transparent 20px, #373739 0);
 }
 .balckwrapper {
   background-color: #18181c;
-  background-image: linear-gradient(#18181c 20px, transparent 0),
+  background-image:
+    linear-gradient(#18181c 20px, transparent 0),
     linear-gradient(90deg, transparent 20px, #86909c 0);
 }
 .container {

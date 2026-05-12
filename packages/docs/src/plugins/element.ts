@@ -4,7 +4,7 @@ import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 export default {
-  install: (app: App) => {
+  install: (app: App): void => {
     app.use(ElementPlus)
 
     for (const [key, component] of Object.entries(ElementPlusIconsVue)) {

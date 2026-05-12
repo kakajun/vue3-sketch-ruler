@@ -11,10 +11,10 @@ const currentVersion = require('../packages/sketch-ruler/package.json').version
 const packages = ['sketch-ruler']
 
 const versionIncrements = ['patch', 'minor', 'major']
-const step = msg => console.log(chalk.cyan(msg))
-const getPkgRoot = pkg => path.resolve(__dirname, '../packages/' + pkg)
+const step = (msg) => console.log(chalk.cyan(msg))
+const getPkgRoot = (pkg) => path.resolve(__dirname, '../packages/' + pkg)
 
-const inc = i => semver.inc(currentVersion, i)
+const inc = (i) => semver.inc(currentVersion, i)
 
 async function main() {
   let targetVersion = args._[0]
@@ -26,7 +26,7 @@ async function main() {
       type: 'select',
       name: 'release',
       message: 'Select release type',
-      choices: versionIncrements.map(i => `${i} (${inc(i)})`).concat(['custom'])
+      choices: versionIncrements.map((i) => `${i} (${inc(i)})`).concat(['custom'])
     })
 
     if (release === 'custom') {
@@ -75,7 +75,7 @@ function updateVersions(version) {
   // 1. update root package.json
   updatePackage(path.resolve(__dirname, '..'), version)
   // 2. update all packages
-  packages.forEach(p => updatePackage(getPkgRoot(p), version))
+  packages.forEach((p) => updatePackage(getPkgRoot(p), version))
 }
 
 function updatePackage(pkgRoot, version) {

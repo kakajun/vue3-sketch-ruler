@@ -120,7 +120,7 @@ const canvasStyle = computed<CSSProperties>(() => {
   }
 })
 
-const onChange = (dragData: DragData, item: any) => {
+const onChange = (dragData: DragData, item: any): void => {
   nextTick(() => {
     post.shadow = {
       x: item.left,
@@ -134,7 +134,7 @@ const onChange = (dragData: DragData, item: any) => {
   })
 }
 
-const extraLines = (targetRect: DOMRect) => {
+const extraLines = (targetRect: DOMRect): Element[] => {
   // 可以返回dom元素列表
   return Array.from(document.querySelectorAll('.sketch-ruler .lines .line'))
   // 也可以根据 targetRect 显示位置
@@ -172,13 +172,15 @@ const extraLines = (targetRect: DOMRect) => {
 
 .whitewrapper {
   background-color: #fafafc;
-  background-image: linear-gradient(#fafafc 20px, transparent 0),
+  background-image:
+    linear-gradient(#fafafc 20px, transparent 0),
     linear-gradient(90deg, transparent 20px, #373739 0);
 }
 
 .blackwrapper {
   background-color: #18181c;
-  background-image: linear-gradient(#18181c 20px, transparent 0),
+  background-image:
+    linear-gradient(#18181c 20px, transparent 0),
     linear-gradient(90deg, transparent 20px, #86909c 0);
 }
 

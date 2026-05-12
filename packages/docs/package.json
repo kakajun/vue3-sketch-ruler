@@ -1,9 +1,9 @@
 {
   "name": "root-doc",
   "version": "2.2.2",
-  "author": "kakajun <253495832@qq.com>",
-  "license": "MIT",
   "private": false,
+  "license": "MIT",
+  "author": "kakajun <253495832@qq.com>",
   "scripts": {
     "dev": "vite  --host 0.0.0.0",
     "build": "vite build"

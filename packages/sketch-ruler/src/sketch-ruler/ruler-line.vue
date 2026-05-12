@@ -78,7 +78,7 @@ onMounted(() => {
 const deactivateAfterDelay = debounce(() => {
   isInscale.value = false
 }, 1000)
-watch([() => props.scale], () => {
+watch([(): number => props.scale], (): void => {
   isInscale.value = true
   deactivateAfterDelay()
 })

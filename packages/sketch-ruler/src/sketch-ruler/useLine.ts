@@ -15,7 +15,7 @@ interface Props {
   deleteLabel: string
   index?: number
 }
-export default function useLine(props: Props, vertical: boolean) {
+export default function useLine(props: Props, vertical: boolean): any {
   const offsetLine = ref(0)
   const startValue = ref(0)
   const showLabel = ref(false)
@@ -27,18 +27,18 @@ export default function useLine(props: Props, vertical: boolean) {
     [vertical ? 'left' : 'top']: `${offsetLine.value + 10}px`
   }))
 
-  const handleMouseMove = ({ offsetX, offsetY }: { offsetX: number; offsetY: number }) => {
+  const handleMouseMove = ({ offsetX, offsetY }: { offsetX: number; offsetY: number }): void => {
     offsetLine.value = vertical ? offsetX : offsetY
   }
 
-  const handleMouseDown = (e: MouseEvent, propValue?: number) => {
+  const handleMouseDown = (e: MouseEvent, propValue?: number): Promise<void> => {
     return new Promise<void>((resolve) => {
       if (props.lockLine) return
       const startPosition = vertical ? e.clientY : e.clientX
       handleMouseMove(e)
       const initialValue = propValue || startValue.value
       let tempStartValue = initialValue
-      const moveHandler = (e: MouseEvent) => {
+      const moveHandler = (e: MouseEvent): void => {
         const currentPosition = vertical ? e.clientY : e.clientX
         const delta = (currentPosition - startPosition) / props.scale
         let nextPos = delta + initialValue
@@ -58,7 +58,7 @@ export default function useLine(props: Props, vertical: boolean) {
         tempStartValue = Math.round(nextPos)
         startValue.value = tempStartValue
       }
-      const mouseUpHandler = () => {
+      const mouseUpHandler = (): void => {
         document.removeEventListener('mousemove', moveHandler)
         handleLineRelease(tempStartValue, props.index)
         resolve()
@@ -73,7 +73,7 @@ export default function useLine(props: Props, vertical: boolean) {
    * @param {*} value  距离边框的位置
    * @param {*} index  选的哪条线
    */
-  const handleLineRelease = (value: number, index?: number) => {
+  const handleLineRelease = (value: number, index?: number): void => {
     const linesArrs = vertical ? props.lines?.h : props.lines?.v
     const isOutOfRange = checkBoundary(value)
     if (!linesArrs) {
@@ -98,7 +98,7 @@ export default function useLine(props: Props, vertical: boolean) {
    * @desc:检查越界
    * @param {number} value
    */
-  const checkBoundary = (value: number) => {
+  const checkBoundary = (value: number): boolean => {
     const maxOffset = vertical ? props.canvasHeight : props.canvasWidth
     return value < 0 || value > maxOffset
   }
@@ -116,7 +116,7 @@ export default function useLine(props: Props, vertical: boolean) {
     showLabel.value = true
   }, 200)
 
-  const handleMouseenter = (e: MouseEvent) => {
+  const handleMouseenter = (e: MouseEvent): void => {
     if (!props.lockLine) {
       handleMouseMove(e)
       debouncedHandleMouseEnter()
@@ -124,7 +124,7 @@ export default function useLine(props: Props, vertical: boolean) {
     }
   }
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = (): void => {
     debouncedHandleMouseLeave()
   }
 

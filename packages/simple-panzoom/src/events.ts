@@ -1,4 +1,9 @@
-type PointerEventName = 'pointerdown' | 'pointermove' | 'pointerup' | 'pointerleave' | 'pointercancel'
+type PointerEventName =
+  | 'pointerdown'
+  | 'pointermove'
+  | 'pointerup'
+  | 'pointerleave'
+  | 'pointercancel'
 
 const events = {
   down: 'pointerdown',
@@ -11,9 +16,13 @@ export function onPointer(
   elem: HTMLElement | Document,
   handler: (event: PointerEvent) => void,
   eventOpts?: boolean | AddEventListenerOptions
-) {
+): void {
   events[event].split(' ').forEach((name) => {
-    ;(elem as HTMLElement).addEventListener<PointerEventName>(name as PointerEventName, handler, eventOpts)
+    ;(elem as HTMLElement).addEventListener<PointerEventName>(
+      name as PointerEventName,
+      handler,
+      eventOpts
+    )
   })
 }
 
@@ -21,7 +30,7 @@ export function destroyPointer(
   event: 'down' | 'move' | 'up',
   elem: HTMLElement | Document,
   handler: (event: PointerEvent) => void
-) {
+): void {
   events[event].split(' ').forEach((name) => {
     ;(elem as HTMLElement).removeEventListener<PointerEventName>(name as PointerEventName, handler)
   })

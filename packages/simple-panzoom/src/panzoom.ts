@@ -4,7 +4,8 @@ import type {
   PanzoomEventDetail,
   PanOptions,
   ZoomOptions,
-  Dimensions
+  Dimensions,
+  CurrentValues
 } from './types'
 import { addPointer, getMiddle, removePointer } from './pointers'
 import { destroyPointer, onPointer } from './events'
@@ -56,7 +57,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     typeof options!.origin === 'string' ? (options as any).origin : '50% 50%'
   )
 
-  function resetStyle() {
+  function resetStyle(): void {
     parent.style.overflow = ''
     parent.style.userSelect = ''
     parent.style.touchAction = ''
@@ -67,16 +68,20 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     setStyle(elem, 'transformOrigin', '')
   }
 
-  function setOptions(opts: Omit<PanzoomOptions, 'force'> = {}) {
+  function setOptions(opts: Omit<PanzoomOptions, 'force'> = {}): void {
     for (const key in opts)
       if (Object.prototype.hasOwnProperty.call(opts, key))
         (options as any)[key] = (opts as any)[key]
-    if (opts.hasOwnProperty('cursor') || opts.hasOwnProperty('canvas')) {
+    if (
+      Object.prototype.hasOwnProperty.call(opts, 'cursor') ||
+      Object.prototype.hasOwnProperty.call(opts, 'canvas')
+    ) {
       parent.style.cursor = elem.style.cursor = ''
       ;(options!.canvas ? parent : elem).style.cursor = options!.cursor
     }
-    if (opts.hasOwnProperty('overflow')) parent.style.overflow = (opts as any).overflow
-    if (opts.hasOwnProperty('touchAction')) {
+    if (Object.prototype.hasOwnProperty.call(opts, 'overflow'))
+      parent.style.overflow = (opts as any).overflow
+    if (Object.prototype.hasOwnProperty.call(opts, 'touchAction')) {
       parent.style.touchAction = (opts as any).touchAction
       elem.style.touchAction = (opts as any).touchAction
     }
@@ -91,7 +96,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     pan(options.startX as number, options.startY as number, { animate: false, force: true } as any)
   })
 
-  function trigger(detail: PanzoomEventDetail, opts: PanzoomOptions) {
+  function trigger(detail: PanzoomEventDetail, opts: PanzoomOptions): void {
     if (opts.silent) return
     const event = new CustomEvent('panzoomchange', { detail })
     elem.dispatchEvent(event)
@@ -100,14 +105,14 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
   function setTransformWithEvent(
     opts: PanzoomOptions,
     originalEvent?: PanzoomEventDetail['originalEvent']
-  ) {
+  ): CurrentValues {
     const value = { x, y, scale }
     if (typeof opts.animate === 'boolean') {
       if (opts.animate) setTransition(elem, opts)
       else setStyle(elem, 'transition', 'none')
     }
     opts.setTransform!(elem, value, opts)
-    const emit = () => {
+    const emit = (): void => {
       const dims: Dimensions =
         opts.contain && opts.contain !== 'none'
           ? (getDimensionsFull(elem) as any)
@@ -124,7 +129,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     toY: number | string,
     toScale: number,
     panOptions?: PanOptions
-  ) {
+  ): { x: number; y: number; opts: PanzoomOptions } {
     const opts = { ...options, ...panOptions }
     const result = { x, y, opts }
     if (!(opts as any).force && opts.disablePan === true) return result
@@ -187,7 +192,10 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     return result
   }
 
-  function constrainScale(toScale: number, zoomOptions?: ZoomOptions) {
+  function constrainScale(
+    toScale: number,
+    zoomOptions?: ZoomOptions
+  ): { scale: number; opts: PanzoomOptions } {
     const opts = { ...options, ...zoomOptions }
     const result = { scale, opts }
     if (!(opts as any).force && opts.disableZoom) return result
@@ -217,7 +225,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     toY: number | string,
     panOptions?: PanOptions,
     originalEvent?: PanzoomEventDetail['originalEvent']
-  ) {
+  ): CurrentValues {
     const result = constrainXY(toX, toY, scale, panOptions)
     if (x !== result.x || y !== result.y) {
       x = result.x
@@ -231,7 +239,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     toScale: number,
     zoomOptions?: ZoomOptions,
     originalEvent?: PanzoomEventDetail['originalEvent']
-  ) {
+  ): CurrentValues {
     const result = constrainScale(toScale, zoomOptions)
     const opts = result.opts
     if (!(opts as any).force && opts.disableZoom) return { x, y, scale }
@@ -250,12 +258,12 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     return setTransformWithEvent(opts, originalEvent)
   }
 
-  function zoomInOut(isIn: boolean, zoomOptions?: ZoomOptions) {
+  function zoomInOut(isIn: boolean, zoomOptions?: ZoomOptions): CurrentValues {
     const opts = { ...options, animate: true, ...zoomOptions }
     return zoom(scale * Math.exp((isIn ? 1 : -1) * (opts.step as number)), opts)
   }
 
-  function zoomIn(zoomOptions?: ZoomOptions) {
+  function zoomIn(zoomOptions?: ZoomOptions): CurrentValues {
     // 如果没有指定 focal，则默认以中心点缩放
     const opts = { ...options, animate: true, ...zoomOptions }
     if (!(opts as any).focal) {
@@ -271,7 +279,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     return zoomInOut(true, zoomOptions)
   }
 
-  function zoomOut(zoomOptions?: ZoomOptions) {
+  function zoomOut(zoomOptions?: ZoomOptions): CurrentValues {
     // 如果没有指定 focal，则默认以中心点缩放
     const opts = { ...options, animate: true, ...zoomOptions }
     if (!(opts as any).focal) {
@@ -292,7 +300,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     point: { clientX: number; clientY: number },
     zoomOptions?: ZoomOptions,
     originalEvent?: PanzoomEventDetail['originalEvent']
-  ) {
+  ): CurrentValues {
     const dims = getDimensionsFull(elem)
     const effectiveArea = {
       width:
@@ -331,7 +339,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     return zoom(toScale, { ...(zoomOptions as any), animate: false, focal } as any, originalEvent)
   }
 
-  function zoomWithWheel(event: WheelEvent, zoomOptions?: ZoomOptions) {
+  function zoomWithWheel(event: WheelEvent, zoomOptions?: ZoomOptions): CurrentValues {
     event.preventDefault()
     const opts = { ...options, ...(zoomOptions as any), animate: false }
     const delta = event.deltaY === 0 && (event as any).deltaX ? (event as any).deltaX : event.deltaY
@@ -343,7 +351,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     return zoomToPoint(toScale, event as any, opts, event)
   }
 
-  function reset(resetOptions?: PanzoomOptions) {
+  function reset(resetOptions?: PanzoomOptions): CurrentValues {
     const opts = { ...options, animate: true, force: true, ...(resetOptions as any) }
     scale = constrainScale(opts.startScale as number, opts).scale
     const panResult = constrainXY(opts.startX as number, opts.startY as number, scale, opts)
@@ -358,7 +366,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
   let startClientY: number
   const pointers: PointerEvent[] = []
 
-  function handleDown(event: PointerEvent) {
+  function handleDown(event: PointerEvent): void {
     addPointer(pointers, event)
     isPanning = true
     options!.handleStartEvent!(event)
@@ -369,7 +377,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     startClientY = point.clientY
   }
 
-  function handleMove(event: PointerEvent) {
+  function handleMove(event: PointerEvent): void {
     if (
       !isPanning ||
       origX === undefined ||
@@ -389,7 +397,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     )
   }
 
-  function handleUp(event: PointerEvent) {
+  function handleUp(event: PointerEvent): void {
     removePointer(pointers, event)
     if (!isPanning) return
     isPanning = false
@@ -397,7 +405,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
   }
 
   let bound = false
-  function bind() {
+  function bind(): void {
     if (bound) return
     bound = true
     onPointer('down', options!.canvas ? parent : elem, handleDown)
@@ -405,7 +413,7 @@ function Panzoom(elem: HTMLElement, options?: Omit<PanzoomOptions, 'force'>): Pa
     onPointer('up', document, handleUp, { passive: true })
   }
 
-  function destroy() {
+  function destroy(): void {
     bound = false
     destroyPointer('down', options!.canvas ? parent : elem, handleDown)
     destroyPointer('move', document, handleMove)

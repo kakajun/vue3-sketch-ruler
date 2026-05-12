@@ -1,4 +1,4 @@
-function findEventIndex(pointers: PointerEvent[], event: PointerEvent) {
+function findEventIndex(pointers: PointerEvent[], event: PointerEvent): number {
   let i = pointers.length
   while (i--) {
     if (pointers[i].pointerId === event.pointerId) return i
@@ -6,18 +6,18 @@ function findEventIndex(pointers: PointerEvent[], event: PointerEvent) {
   return -1
 }
 
-export function addPointer(pointers: PointerEvent[], event: PointerEvent) {
+export function addPointer(pointers: PointerEvent[], event: PointerEvent): void {
   const i = findEventIndex(pointers, event)
   if (i > -1) pointers.splice(i, 1)
   pointers.push(event)
 }
 
-export function removePointer(pointers: PointerEvent[], event: PointerEvent) {
+export function removePointer(pointers: PointerEvent[], event: PointerEvent): void {
   const i = findEventIndex(pointers, event)
   if (i > -1) pointers.splice(i, 1)
 }
 
-export function getMiddle(pointers: PointerEvent[]) {
+export function getMiddle(pointers: PointerEvent[]): { clientX: number; clientY: number } {
   const p = pointers.slice(0)
   let e1: Pick<PointerEvent, 'clientX' | 'clientY'> = p.pop() as any
   let e2: PointerEvent

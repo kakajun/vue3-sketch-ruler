@@ -1,6 +1,9 @@
 import Panzoom from '../src/panzoom'
 
-function mockRect(el: HTMLElement, rect: { width: number; height: number; left: number; top: number }) {
+function mockRect(
+  el: HTMLElement,
+  rect: { width: number; height: number; left: number; top: number }
+): void {
   Object.defineProperty(el, 'getBoundingClientRect', {
     value: () => ({
       width: rect.width,
@@ -40,7 +43,7 @@ describe('simple-panzoom basic', () => {
     // simplify computed style to return inline styles
     origGetComputedStyle = window.getComputedStyle
     // @ts-expect-error override
-    window.getComputedStyle = (el: Element) => (el as HTMLElement).style as any
+    window.getComputedStyle = (el: Element): CSSStyleDeclaration => (el as HTMLElement).style as any
   })
 
   afterEach(() => {

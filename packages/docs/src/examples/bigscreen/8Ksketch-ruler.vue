@@ -56,7 +56,7 @@ const panzoomOption = reactive({
   disableZoom: false
 })
 
-const updateDimensions = () => {
+const updateDimensions = (): void => {
   if (wrapperRef.value) {
     rectWidth.value = wrapperRef.value.clientWidth
     rectHeight.value = wrapperRef.value.clientHeight
@@ -66,15 +66,15 @@ const updateDimensions = () => {
   }
 }
 
-const initOptions = () => {
+const initOptions = (): void => {
   updateDimensions()
 }
 
-const onResize = () => {
+const onResize = (): void => {
   initOptions()
 }
 
-const handleCornerClick = () => {
+const handleCornerClick = (): void => {
   console.log('handleCornerClick')
 }
 

@@ -1,5 +1,5 @@
 // 标尺中每小格代表的宽度(根据scale的不同实时变化)
-const getGridSize = (scale: number) => {
+const getGridSize = (scale: number): number => {
   if (scale <= 0.25) return 40
   if (scale <= 0.5) return 20
   if (scale <= 1) return 10
@@ -15,14 +15,26 @@ export function setLast(
   height: number,
   ctx: CanvasRenderingContext2D,
   isHorizontal?: boolean
-) {
-  isHorizontal ? ctx.moveTo(x, 0) : ctx.moveTo(0, x)
+): void {
+  if (isHorizontal) {
+    ctx.moveTo(x, 0)
+  } else {
+    ctx.moveTo(0, x)
+  }
   ctx.save()
-  isHorizontal ? ctx.translate(x + 5, height * 0.2) : ctx.translate(width * 0.1, x + 32)
+  if (isHorizontal) {
+    ctx.translate(x + 5, height * 0.2)
+  } else {
+    ctx.translate(width * 0.1, x + 32)
+  }
   if (!isHorizontal) ctx.rotate(-Math.PI / 2) // 旋转 -90 度
   ctx.fillText(Math.round(value).toString(), 4, 7)
   ctx.restore()
-  isHorizontal ? ctx.lineTo(x, height) : ctx.lineTo(width, x)
+  if (isHorizontal) {
+    ctx.lineTo(x, height)
+  } else {
+    ctx.lineTo(width, x)
+  }
   ctx.stroke()
   ctx.closePath()
   ctx.setTransform(1, 0, 0, 1, 0, 0)
@@ -35,7 +47,7 @@ export function drawShadowText(
   ctx: CanvasRenderingContext2D,
   palette: any,
   isHorizontal?: boolean
-) {
+): void {
   ctx.fillStyle = palette.fontShadowColor
   ctx.strokeStyle = palette.longfgColor
   ctx.save()
@@ -65,7 +77,7 @@ export const drawCanvasRuler = (
     showShadowText: boolean
   },
   isHorizontal?: boolean //横向为true,纵向缺省
-) => {
+): void => {
   const { scale, width, height, ratio, palette, gridRatio, showShadowText } = options
   const { bgColor, fontColor, shadowColor, longfgColor } = palette
   const endNum = isHorizontal ? options.canvasWidth : options.canvasHeight
@@ -91,9 +103,11 @@ export const drawCanvasRuler = (
     const shadowWidth = selectLength * scale // 阴影宽度
     ctx.fillStyle = shadowColor
 
-    isHorizontal
-      ? ctx.fillRect(shadowX, 0, shadowWidth, height)
-      : ctx.fillRect(0, shadowX, width, shadowWidth)
+    if (isHorizontal) {
+      ctx.fillRect(shadowX, 0, shadowWidth, height)
+    } else {
+      ctx.fillRect(0, shadowX, width, shadowWidth)
+    }
 
     // 画阴影文字起始
     if (showShadowText) {
@@ -159,9 +173,17 @@ export const drawCanvasRuler = (
       ctx.save()
       // 影响文字位置
       if (value == 0) {
-        isHorizontal ? ctx.translate(x - 15, height * 0.01) : ctx.translate(width * 0.3, x - 5)
+        if (isHorizontal) {
+          ctx.translate(x - 15, height * 0.01)
+        } else {
+          ctx.translate(width * 0.3, x - 5)
+        }
       } else {
-        isHorizontal ? ctx.translate(x - 12, height * 0.05) : ctx.translate(width * 0.05, x + 12)
+        if (isHorizontal) {
+          ctx.translate(x - 12, height * 0.05)
+        } else {
+          ctx.translate(width * 0.05, x + 12)
+        }
       }
 
       if (!isHorizontal) {
@@ -204,7 +226,7 @@ export function debounce<T extends FunctionType>(func: T, wait = 100): IDebounce
     }, wait)
   }
 
-  debounced.cancel = function () {
+  debounced.cancel = function (): void {
     if (timeout !== null) {
       clearTimeout(timeout)
       timeout = null

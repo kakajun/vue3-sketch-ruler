@@ -34,7 +34,7 @@ defineProps({
     default: 'vue3-sketch-ruler'
   }
 })
-function handleThemeChange() {
+function handleThemeChange(): void {
   store.theme = store.isLight ? 'dark' : 'light'
 }
 

@@ -56,7 +56,7 @@ const canvasStyle = computed(() => {
   }
 })
 
-const handlePanzoomChange = (e: any) => {
+const handlePanzoomChange = (e: any): void => {
   const { scale, dimsOut, x, y } = e.detail as PanzoomEventDetail
   console.log('e.detail', e.detail)
   if (dimsOut) {
@@ -74,16 +74,14 @@ const handlePanzoomChange = (e: any) => {
   }
 }
 
-const handleRememberChange = () => {
+const handleRememberChange = (): void => {
   localStorage.setItem('simple-panzoom-8k-remember', String(isRemember.value))
   if (!isRemember.value) {
     localStorage.removeItem('simple-panzoom-8k-state')
-  } else {
-
   }
 }
 
-const handleWheel = (e: WheelEvent) => {
+const handleWheel = (e: WheelEvent): void => {
   if (e.ctrlKey && panzoomInstance.value) {
     // 阻止浏览器默认的缩放行为
     e.preventDefault()
@@ -91,7 +89,7 @@ const handleWheel = (e: WheelEvent) => {
   }
 }
 
-const handleKeydown = (e: KeyboardEvent) => {
+const handleKeydown = (e: KeyboardEvent): void => {
   if ((e.target as HTMLElement).tagName === 'INPUT') return
   if (e.code === 'Space' && !e.repeat && panzoomInstance.value) {
     // 阻止空格键默认的滚动行为
@@ -101,7 +99,7 @@ const handleKeydown = (e: KeyboardEvent) => {
   }
 }
 
-const handleKeyup = (e: KeyboardEvent) => {
+const handleKeyup = (e: KeyboardEvent): void => {
   if (e.code === 'Space' && panzoomInstance.value) {
     cursorClass.value = ''
     panzoomInstance.value.setOptions({ disablePan: true, cursor: 'default' })
@@ -111,7 +109,7 @@ const handleKeyup = (e: KeyboardEvent) => {
 /**
  * @desc: Centering Algorithm (居中算法)
  */
-const calculateTransform = () => {
+const calculateTransform = (): number => {
   const rw = rectWidth.value
   const rh = rectHeight.value
   const cw = canvasWidth.value
@@ -134,7 +132,7 @@ const calculateTransform = () => {
   return scale
 }
 
-const updateDimensions = () => {
+const updateDimensions = (): void => {
   if (wrapperRef.value) {
     rectWidth.value = wrapperRef.value.clientWidth
     rectHeight.value = wrapperRef.value.clientHeight
@@ -144,7 +142,7 @@ const updateDimensions = () => {
   }
 }
 
-const initPanzoom = () => {
+const initPanzoom = (): void => {
   // 清理旧实例与监听
   if (lastElem.value) {
     lastElem.value.removeEventListener('panzoomchange', handlePanzoomChange as EventListener)
@@ -201,7 +199,7 @@ const initPanzoom = () => {
   }
 }
 
-const onResize = () => {
+const onResize = (): void => {
   updateDimensions()
   if (panzoomInstance.value) {
     if (!isRemember.value) {

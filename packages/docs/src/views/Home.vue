@@ -75,7 +75,7 @@ const route = useRoute()
 const useLocale = useLocaleStore()
 
 // copy code set
-const copyCode = async () => {
+const copyCode = async (): Promise<void> => {
   try {
     const tempElement = document.createElement('div')
     tempElement.innerHTML = codeHtml.value
@@ -92,7 +92,7 @@ const copyCode = async () => {
 let curLocale = useLocale.locale
 let currentLan = ref(langs.find((cur) => cur.key === curLocale)?.title || '')
 
-const handleCommand = (command: any) => {
+const handleCommand = (command: any): void => {
   console.log(command)
 
   currentLan.value = command.title
@@ -108,7 +108,7 @@ const codeHtml = computed(() => {
 const current = shallowRef()
 
 const showCode = ref(false)
-function handleClick(item: RouteRecordRaw) {
+function handleClick(item: RouteRecordRaw): void {
   router.push(item.path)
 }
 

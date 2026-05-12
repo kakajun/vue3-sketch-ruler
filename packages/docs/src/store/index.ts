@@ -7,7 +7,7 @@ const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 
 export default {
-  install: (app: App) => {
+  install: (app: App): void => {
     app.use(pinia)
   }
 }

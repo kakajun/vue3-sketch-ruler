@@ -9,7 +9,7 @@
 本项目采用 **pnpm workspace** 管理的 monorepo 结构，包含以下包：
 
 | 包路径 | 名称 | 说明 |
-|--------|------|------|
+| --- | --- | --- |
 | `packages/sketch-ruler` | `vue3-sketch-ruler` | 核心标尺组件库，发布到 npm |
 | `packages/simple-panzoom` | `simple-panzoom` | 简化的 panzoom 工具库（支持缩放/拖拽），独立发布 |
 | `packages/docs` | `root-doc` | 文档与示例站点（Vite 应用） |
@@ -101,6 +101,7 @@ pnpm release
 ## 构建流程
 
 ### sketch-ruler
+
 - 使用 Vite 的 **library mode** 构建
 - 入口：`src/index.ts`
 - 输出格式：`es` + `umd`
@@ -110,12 +111,14 @@ pnpm release
 - CSS 产物固定输出为 `lib/style.css`
 
 ### simple-panzoom
+
 - 使用 `tsup` 构建
 - 输出格式：`esm` + `cjs`
 - 产物目录：`packages/simple-panzoom/lib/`
 - 同时运行 `tsc` 生成类型声明
 
 ### docs
+
 - 标准 Vite 应用
 - 构建输出到 `packages/docs/dist/`
 - 通过 GitHub Actions 自动部署到 `gh-pages`
@@ -130,6 +133,7 @@ pnpm release
 - **组件名模板大小写**: PascalCase（`vue/component-name-in-template-casing`）
 
 ESLint 关键规则：
+
 - 要求显式函数返回类型（`@typescript-eslint/explicit-function-return-type: error`）
 - 禁止 floating promises（`@typescript-eslint/no-floating-promises: error`）
 - Vue 3 推荐规则 + Prettier 集成
@@ -175,11 +179,13 @@ SketchRule (sketch-ruler/index.vue)
 ## 发布与部署
 
 ### CI / CD
+
 - GitHub Actions 工作流 `.github/workflows/gh-pages.yml`
 - 触发条件：`push` 或 `pull_request` 到 `main` / `master`
 - 流程：安装依赖 → 构建 `simple-panzoom` → 构建 `sketch-ruler` → 运行测试 → 构建文档 → 部署到 GitHub Pages
 
 ### npm 发布
+
 - 使用 `scripts/release.js` 手动执行
 - 支持交互式选择 `patch` / `minor` / `major` 或自定义版本
 - 发布前会自动将根目录 `README.md` 拷贝到 `packages/sketch-ruler/`

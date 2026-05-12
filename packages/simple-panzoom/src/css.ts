@@ -1,11 +1,11 @@
-import type { CurrentValues, PanzoomOptions, DimensionsLite, DimensionsFull } from './types'
+import type { CurrentValues, PanzoomOptions, DimensionsLite, DimensionsFull, Box } from './types'
 
 const prefixes = ['webkit', 'moz', 'ms']
-const prefixCache: { [key: string]: string } = {}
-function createStyle() {
+const prefixCache: Record<string, string> = {}
+function createStyle(): CSSStyleDeclaration {
   return document.createElement('div').style
 }
-function getPrefixedName(name: string) {
+function getPrefixedName(name: string): string {
   if (prefixCache[name]) return prefixCache[name]
   const divStyle = createStyle()
   if (name in divStyle) return (prefixCache[name] = name)
@@ -17,20 +17,28 @@ function getPrefixedName(name: string) {
   return name
 }
 
-export function setStyle(elem: HTMLElement, name: string, value: string) {
+export function setStyle(elem: HTMLElement, name: string, value: string): void {
   ;(elem.style as any)[getPrefixedName(name)] = value
 }
 
-export function setTransition(elem: HTMLElement, options: PanzoomOptions) {
+export function setTransition(elem: HTMLElement, options: PanzoomOptions): void {
   const transform = getPrefixedName('transform')
   setStyle(elem, 'transition', `${transform} ${options.duration}ms ${options.easing}`)
 }
 
-export function setTransform(elem: HTMLElement, { x, y, scale }: CurrentValues, _options?: PanzoomOptions) {
+export function setTransform(
+  elem: HTMLElement,
+  { x, y, scale }: CurrentValues,
+  _options?: PanzoomOptions
+): void {
   setStyle(elem, 'transform', `scale(${scale}) translate(${x}px, ${y}px)`)
 }
 
-function getBoxStyle(elem: HTMLElement, name: string, style: CSSStyleDeclaration = window.getComputedStyle(elem)) {
+function getBoxStyle(
+  elem: HTMLElement,
+  name: string,
+  style: CSSStyleDeclaration = window.getComputedStyle(elem)
+): Box {
   const suffix = name === 'border' ? 'Width' : ''
   return {
     left: parseFloat(style[`${name}Left${suffix}` as any]) || 0,

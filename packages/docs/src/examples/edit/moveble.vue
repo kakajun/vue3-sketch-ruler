@@ -76,7 +76,7 @@ const targetList = ref([
 ])
 
 // 点击事件，设置当前选中元素的id
-const handleClick = (event: MouseEvent, item: TargetItem) => {
+const handleClick = (event: MouseEvent, item: TargetItem): void => {
   const id = item.id
   targetList.value.forEach((o: TargetItem) => (o.zIndex = 1))
   item.zIndex = 2
@@ -85,10 +85,10 @@ const handleClick = (event: MouseEvent, item: TargetItem) => {
     moveableRef.value.dragStart(event)
   })
 }
-const onDragStart = (e: Record<string, any>) => {
+const onDragStart = (e: Record<string, any>): void => {
   copyTargetList.value = JSON.parse(JSON.stringify(targetList.value))
 }
-const onDrag = (params: Record<string, any>) => {
+const onDrag = (params: Record<string, any>): void => {
   let { target, translate } = params
   const { id } = target.dataset
   const { left, top, width, height } = copyTargetList.value.find((o: { id: string }) => o.id == id)
@@ -117,7 +117,7 @@ watch(
   { deep: true } // 确保深度监听
 )
 
-const getStyle = (item: any) => {
+const getStyle = (item: any): Record<string, string> => {
   return {
     left: item.left + 'px',
     top: item.top + 'px',
@@ -130,7 +130,7 @@ const getStyle = (item: any) => {
   }
 }
 
-const onDragEnd = (e: { lastEvent: any; target: any }) => {
+const onDragEnd = (e: { lastEvent: any; target: any }): void => {
   moveableRef.value.updateRect()
 }
 </script>
@@ -147,7 +147,8 @@ const onDragEnd = (e: { lastEvent: any; target: any }) => {
       :data-top="item.top"
       :style="getStyle(item)"
       @mousedown="handleClick($event, item)"
-      >{{ item.className }}
+    >
+      {{ item.className }}
     </div>
   </div>
 

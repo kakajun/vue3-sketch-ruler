@@ -4,7 +4,7 @@
       <sketch-rule ref="sketchruleRef" v-bind="post">
         <template #default>
           <div data-type="page" :style="canvasStyle">
-            <el-input v-model="inputValue"   type="text" />
+            <el-input v-model="inputValue" type="text" />
           </div>
         </template>
         <template #btn="{ reset, zoomIn, zoomOut }">
@@ -73,7 +73,8 @@ const canvasStyle = computed(() => {
 }
 .whitewrapper {
   background-color: #fafafc;
-  background-image: linear-gradient(#fafafc 20px, transparent 0),
+  background-image:
+    linear-gradient(#fafafc 20px, transparent 0),
     linear-gradient(90deg, transparent 20px, #373739 0);
 }
 .img-style {
@@ -87,5 +88,4 @@ const canvasStyle = computed(() => {
   right: 40px;
   z-index: 999;
 }
-
 </style>

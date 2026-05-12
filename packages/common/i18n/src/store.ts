@@ -7,7 +7,7 @@ export const useLocaleStore = defineStore(
     const locale = ref(i18n.global.locale.value)
 
     // 设置locale
-    function setLocale(lang: any) {
+    function setLocale(lang: any): void {
       locale.value = lang
       i18n.global.locale.value = lang
     }

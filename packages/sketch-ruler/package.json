@@ -1,27 +1,35 @@
 {
   "name": "vue3-sketch-ruler",
   "version": "2.4.1",
-  "author": "kakajun <253495832@qq.com>",
-  "license": "MIT",
-  "type": "module",
   "private": false,
+  "keywords": [
+    "panzoom",
+    "room",
+    "ruler",
+    "sketch",
+    "sketch-ruler",
+    "vue",
+    "vue-sketch-ruler",
+    "vue3"
+  ],
+  "bugs": {
+    "url": "https://github.com/kakajun/vue3-sketch-ruler/issues"
+  },
+  "license": "MIT",
+  "author": "kakajun <253495832@qq.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kakajun/vue3-sketch-ruler.git"
+  },
+  "style": "lib/style.css",
   "files": [
     "lib",
     "src",
     "AGENTS.md"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kakajun/vue3-sketch-ruler.git"
-  },
-  "repository2": {
-    "type": "gitee",
-    "url": "https://gitee.com/majun2232/vue3-sketch-Ruler"
-  },
+  "type": "module",
   "sideEffects": false,
-  "main1": "src/index.ts",
   "main": "lib/index.js",
-  "style": "lib/style.css",
   "types": "lib/index.d.ts",
   "exports": {
     ".": {
@@ -31,6 +39,9 @@
     },
     "./lib/style.css": "./lib/style.css"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "build": "vite build",
     "test": "vitest run",
@@ -38,26 +49,15 @@
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "release": "release-it"
   },
-  "keywords": [
-    "vue",
-    "vue3",
-    "ruler",
-    "sketch",
-    "sketch-ruler",
-    "vue-sketch-ruler",
-    "room",
-    "panzoom"
-  ],
   "devDependencies": {
-    "vitest": "^4.0.1",
-    "@vue/test-utils": "^2.4.6",
     "@vitejs/plugin-vue": "^6.0.1",
-    "simple-panzoom": "workspace:*"
+    "@vue/test-utils": "^2.4.6",
+    "simple-panzoom": "workspace:*",
+    "vitest": "^4.0.1"
   },
-  "bugs": {
-    "url": "https://github.com/kakajun/vue3-sketch-ruler/issues"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+  "main1": "src/index.ts",
+  "repository2": {
+    "type": "gitee",
+    "url": "https://gitee.com/majun2232/vue3-sketch-Ruler"
   }
 }

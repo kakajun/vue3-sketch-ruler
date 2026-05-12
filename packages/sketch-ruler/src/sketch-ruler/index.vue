@@ -69,7 +69,7 @@ import RulerWrapper from './ruler-wrapper.vue'
 import { eye64, closeEye64 } from './cornerImg64'
 import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import { SketchRulerProps } from '../index-types'
-import Panzoom, { PanzoomObject, PanzoomEventDetail } from 'simple-panzoom'
+import Panzoom, { PanzoomObject, PanzoomEventDetail, PanzoomOptions, CurrentValues } from 'simple-panzoom'
 
 const props = withDefaults(defineProps<SketchRulerProps>(), {
   showRuler: true,
@@ -170,13 +170,13 @@ const rectHeight = computed(() => {
   return props.height - props.thick
 })
 
-const handleWheel = (e: WheelEvent) => {
+const handleWheel = (e: WheelEvent): void => {
   if (e.ctrlKey || e.metaKey) {
     e.preventDefault()
     panzoomInstance.value?.zoomWithWheel(e)
   }
 }
-const handleSpaceKeyDown = (e: KeyboardEvent) => {
+const handleSpaceKeyDown = (e: KeyboardEvent): void => {
   // 检查当前焦点元素
   const activeElement = document.activeElement
   // fix: #57 如果焦点在monaco-editor、input、textarea或其他可编辑元素中,则不处理空格事件
@@ -197,7 +197,7 @@ const handleSpaceKeyDown = (e: KeyboardEvent) => {
   }
 }
 
-const handleSpaceKeyUp = (e: KeyboardEvent) => {
+const handleSpaceKeyUp = (e: KeyboardEvent): void => {
   // 检查当前焦点元素
   const activeElement = document.activeElement
   // 如果焦点在monaco-editor、input、textarea或其他可编辑元素中,则不处理空格事件
@@ -252,7 +252,7 @@ onUnmounted(() => {
   panzoomInstance.value?.destroy()
 })
 
-const getPanOptions = (scale: number) => {
+const getPanOptions = (scale: number): PanzoomOptions => {
   return {
     noBind: true,
     startScale: scale,
@@ -265,7 +265,7 @@ const getPanOptions = (scale: number) => {
   }
 }
 
-const handlePanzoomChange = (e: any) => {
+const handlePanzoomChange = (e: any): void => {
   const { scale, dimsOut } = e.detail as PanzoomEventDetail
   if (dimsOut) {
     emit('update:scale', scale)
@@ -277,7 +277,7 @@ const handlePanzoomChange = (e: any) => {
     startY.value = top
   }
 }
-const initPanzoom = () => {
+const initPanzoom = (): void => {
   // 清理旧实例与监听
   if (lastElem.value) {
     lastElem.value.removeEventListener('panzoomchange', handlePanzoomChange as EventListener)
@@ -298,7 +298,7 @@ const initPanzoom = () => {
 /**
  * @desc: 居中算法
  */
-const calculateTransform = () => {
+const calculateTransform = (): number => {
   const scaleX = (rectWidth.value * (1 - props.paddingRatio)) / props.canvasWidth
   const scaleY = (rectHeight.value * (1 - props.paddingRatio)) / props.canvasHeight
   const scale = Math.min(scaleX, scaleY)
@@ -307,40 +307,45 @@ const calculateTransform = () => {
 
   return scale
 }
-const reset = () => panzoomInstance.value?.reset()
-const zoomIn = () => panzoomInstance.value?.zoomIn()
-const zoomOut = () => panzoomInstance.value?.zoomOut()
+const reset = (): CurrentValues | undefined => panzoomInstance.value?.reset()
+const zoomIn = (): CurrentValues | undefined => panzoomInstance.value?.zoomIn()
+const zoomOut = (): CurrentValues | undefined => panzoomInstance.value?.zoomOut()
 
 /**
  * @desc: 更新panzoom的配置
  * @param {*}
  */
-const setOptions = () => {
+const setOptions = (): void => {
   panzoomInstance.value?.setOptions(getPanOptions(props.scale))
 }
 
-const onCornerClick = () => {
+const onCornerClick = (): void => {
   showReferLine.value = !showReferLine.value
   emit('onCornerClick', showReferLine.value)
 }
-const changeLineState = (val: boolean) => {
+const changeLineState = (val: boolean): void => {
   emit('update:lockLine', val)
 }
 const thickness = computed(() => props.thick + 'px')
 
-watch([() => props.isShowReferLine], () => {
+watch([(): boolean => props.isShowReferLine], (): void => {
   showReferLine.value = props.isShowReferLine
 })
 
 watch(
-  [() => props.canvasWidth, () => props.canvasHeight, () => props.width, () => props.height],
-  () => {
+  [
+    (): number => props.canvasWidth,
+    (): number => props.canvasHeight,
+    (): number => props.width,
+    (): number => props.height
+  ],
+  (): void => {
     initPanzoom()
   }
 )
 watch(
   () => props.panzoomOption,
-  () => {
+  (): void => {
     setOptions()
   },
   { deep: true }

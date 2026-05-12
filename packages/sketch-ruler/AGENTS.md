@@ -7,6 +7,7 @@
 `vue3-sketch-ruler` 是 monorepo 的核心 npm 包，提供一个基于 Vue 3 + TypeScript 的标尺组件，适用于低代码平台、大屏可视化、做图工具等场景，提供类似 Photoshop 的缩放与标尺辅助线体验。
 
 主要能力：
+
 - 水平 / 竖直 Canvas 标尺刻度绘制
 - 以鼠标为中心的画布缩放（基于 `simple-panzoom`）
 - 空格 + 拖拽平移画布
@@ -80,7 +81,7 @@ const handleCornerClick = () => {
 ## Props
 
 | 属性名 | 说明 | 类型 | 默认值 |
-|--------|------|------|--------|
+| --- | --- | --- | --- |
 | scale | 缩放值（支持 `v-model:scale`） | `number` | `1` |
 | rate | 初始化标尺的缩放 | `number` | `1` |
 | thick | 标尺厚度 | `number` | `16` |
@@ -104,35 +105,35 @@ const handleCornerClick = () => {
 
 ### palette 默认值
 
-| 属性 | 说明 | 默认值 |
-|------|------|--------|
-| bgColor | 画布背景 | `#f6f7f9` |
-| longfgColor | 长刻度颜色 | `#BABBBC` |
-| fontColor | 刻度字体颜色 | `#7D8694` |
+| 属性            | 说明             | 默认值    |
+| --------------- | ---------------- | --------- |
+| bgColor         | 画布背景         | `#f6f7f9` |
+| longfgColor     | 长刻度颜色       | `#BABBBC` |
+| fontColor       | 刻度字体颜色     | `#7D8694` |
 | fontShadowColor | 阴影刻度字体颜色 | `#106ebe` |
-| shadowColor | 激活阴影背景 | `#E8E8E8` |
-| lineColor | 参考线颜色 | `#51d6a9` |
-| lineType | 参考线线型 | `solid` |
-| lockLineColor | 锁定参考线颜色 | `#d4d7dc` |
-| hoverColor | 标签字体颜色 | `#fff` |
-| hoverBg | 标签背景颜色 | `#000` |
-| borderColor | 尺子外边框颜色 | `#eeeeef` |
+| shadowColor     | 激活阴影背景     | `#E8E8E8` |
+| lineColor       | 参考线颜色       | `#51d6a9` |
+| lineType        | 参考线线型       | `solid`   |
+| lockLineColor   | 锁定参考线颜色   | `#d4d7dc` |
+| hoverColor      | 标签字体颜色     | `#fff`    |
+| hoverBg         | 标签背景颜色     | `#000`    |
+| borderColor     | 尺子外边框颜色   | `#eeeeef` |
 
 ## Events
 
-| 事件名 | 说明 | 回调参数 |
-|--------|------|----------|
-| onCornerClick | 左上角眼睛图标点击 | `-` |
-| zoomchange | 画布移动/缩放 | `{ dimsOut, originalEvent, scale, x, y }` |
-| update:scale | 缩放值双向绑定更新 | `number` |
-| update:lockLine | 参考线锁定状态更新 | `boolean` |
+| 事件名          | 说明               | 回调参数                                  |
+| --------------- | ------------------ | ----------------------------------------- |
+| onCornerClick   | 左上角眼睛图标点击 | `-`                                       |
+| zoomchange      | 画布移动/缩放      | `{ dimsOut, originalEvent, scale, x, y }` |
+| update:scale    | 缩放值双向绑定更新 | `number`                                  |
+| update:lockLine | 参考线锁定状态更新 | `boolean`                                 |
 
 ## 插槽
 
-| 插槽名 | 说明 | 作用域参数 |
-|--------|------|------------|
-| default | 画布内容（必须用 `<template #default>` 包裹） | `-` |
-| btn | 右下角控制按钮 | `{ reset, zoomIn, zoomOut }` |
+| 插槽名  | 说明                                          | 作用域参数                   |
+| ------- | --------------------------------------------- | ---------------------------- |
+| default | 画布内容（必须用 `<template #default>` 包裹） | `-`                          |
+| btn     | 右下角控制按钮                                | `{ reset, zoomIn, zoomOut }` |
 
 ## 自定义缩放/平移（selfHandle）
 
@@ -142,14 +143,14 @@ const handleCornerClick = () => {
 const panzoomInstance = sketchruleRef.value.panzoomInstance
 
 // 示例：中键拖拽
- document.addEventListener('pointerdown', (e) => {
-   if (e.button === 1) {
-     sketchruleRef.value.cursorClass = 'grabCursor'
-     panzoomInstance.bind()
-     panzoomInstance.handleDown(e)
-     e.preventDefault()
-   }
- })
+document.addEventListener('pointerdown', (e) => {
+  if (e.button === 1) {
+    sketchruleRef.value.cursorClass = 'grabCursor'
+    panzoomInstance.bind()
+    panzoomInstance.handleDown(e)
+    e.preventDefault()
+  }
+})
 ```
 
 ## 1.x 升级到 2.x 指南
@@ -160,15 +161,15 @@ const panzoomInstance = sketchruleRef.value.panzoomInstance
 
 ### 2. 引入方式
 
-| 版本 | 引入方式 |
-|------|----------|
-| 1.x | `import { SketchRule } from 'vue3-sketch-ruler'`（命名导出） |
-| 2.x | `import SketchRule from 'vue3-sketch-ruler'`（默认导出） |
+| 版本 | 引入方式                                                     |
+| ---- | ------------------------------------------------------------ |
+| 1.x  | `import { SketchRule } from 'vue3-sketch-ruler'`（命名导出） |
+| 2.x  | `import SketchRule from 'vue3-sketch-ruler'`（默认导出）     |
 
 ### 3. API 变更
 
 | 变更项 | 1.x | 2.x |
-|--------|-----|-----|
+| --- | --- | --- |
 | scale 绑定 | `:scale="scale"` | `v-model:scale="scale"` |
 | 画布尺寸 | `:width` / `:height` 同时表示容器和画布 | 拆分为 `:width` / `:height`（容器）和 `:canvasWidth` / `:canvasHeight`（画布） |
 | 内容插槽 | 直接写在组件标签内 | 需用 `<template #default>` 包裹 |
@@ -207,6 +208,7 @@ pnpm build
 ```
 
 产物输出到 `packages/sketch-ruler/lib/`，包含：
+
 - `index.js`（ES 模块）
 - `index.umd.cjs`（UMD）
 - `index.d.ts`（类型声明，由 vite-plugin-dts 自动生成）

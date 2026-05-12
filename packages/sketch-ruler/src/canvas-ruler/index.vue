@@ -36,12 +36,12 @@ onMounted(() => {
   drawRuler(ratioValue)
 })
 
-const handleResize = () => {
+const handleResize = (): void => {
   ratioValue = window.devicePixelRatio
   updateCanvasContext(ratioValue)
   drawRuler(ratioValue)
 }
-const initCanvasRef = () => {
+const initCanvasRef = (): void => {
   state.canvasContext = canvas.value?.getContext('2d') || null
 }
 
@@ -58,7 +58,7 @@ const rulerStyle = computed(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
 })
-const updateCanvasContext = (ratio: number) => {
+const updateCanvasContext = (ratio: number): void => {
   if (canvas.value) {
     // 比例宽高
     canvas.value.width = Math.round(props.width! * ratio)
@@ -75,7 +75,7 @@ const updateCanvasContext = (ratio: number) => {
     }
   }
 }
-const drawRuler = (ratio: number) => {
+const drawRuler = (ratio: number): void => {
   const options = {
     scale: props.scale!,
     width: props.width!,
@@ -104,22 +104,22 @@ const drawRuler = (ratio: number) => {
 }
 watch(
   [
-    () => props.width,
-    () => props.height,
-    () => props.start,
-    () => props.palette,
-    () => props.selectStart,
-    () => props.selectLength
+    (): number => props.width,
+    (): number => props.height,
+    (): number => props.start,
+    (): any => props.palette,
+    (): number => props.selectStart,
+    (): number => props.selectLength
   ],
-  () => {
+  (): void => {
     drawRuler(ratioValue)
   }
 )
-watch([() => props.width, () => props.height], () => {
+watch([(): number => props.width, (): number => props.height], (): void => {
   updateCanvasContext(ratioValue)
 })
 
-const handleDragStart = (e: MouseEvent) => {
+const handleDragStart = (e: MouseEvent): void => {
   emit('handleDragStart', e)
 }
 </script>
