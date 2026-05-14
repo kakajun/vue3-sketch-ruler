@@ -6,6 +6,7 @@
 
 import { ref, shallowRef, readonly, watch, type Ref, type DeepReadonly } from 'vue'
 import { TransformEngine, type TransformState, type TransformEngineOptions } from '../engine/transform-engine'
+import { fitRect } from '../engine/coordinate'
 import { markRaw } from 'vue'
 
 export interface CanvasTransformOptions {
@@ -14,6 +15,10 @@ export interface CanvasTransformOptions {
   minZoom?: number
   maxZoom?: number
   enableAnimation?: boolean
+  autoCenter?: boolean
+  canvasSize?: { width: number; height: number }
+  viewportSize?: { width: number; height: number }
+  paddingRatio?: number
 }
 
 export interface UseCanvasTransformReturn {
@@ -35,15 +40,34 @@ export function useCanvasTransform(options: CanvasTransformOptions = {}): UseCan
     initialOffset = { x: 0, y: 0 },
     minZoom = 0.1,
     maxZoom = 10,
-    enableAnimation = false
+    enableAnimation = false,
+    autoCenter = false,
+    canvasSize,
+    viewportSize,
+    paddingRatio = 0.2
   } = options
 
-  const scale = ref(initialScale)
-  const offset = ref({ x: initialOffset.x, y: initialOffset.y })
+  // 自动居中计算
+  let startScale = initialScale
+  let startOffset = { x: initialOffset.x, y: initialOffset.y }
+
+  if (autoCenter && canvasSize && viewportSize) {
+    const fit = fitRect(
+      { x: 0, y: 0, width: canvasSize.width, height: canvasSize.height },
+      { x: 0, y: 0, width: viewportSize.width, height: viewportSize.height },
+      'contain',
+      paddingRatio
+    )
+    startScale = fit.scale
+    startOffset = { x: fit.x, y: fit.y }
+  }
+
+  const scale = ref(startScale)
+  const offset = ref({ x: startOffset.x, y: startOffset.y })
 
   const engine = markRaw(
     new TransformEngine(
-      { x: initialOffset.x, y: initialOffset.y, scale: initialScale },
+      { x: startOffset.x, y: startOffset.y, scale: startScale },
       { minZoom, maxZoom, enableAnimation }
     )
   )
@@ -101,7 +125,7 @@ export function useCanvasTransform(options: CanvasTransformOptions = {}): UseCan
   }
 
   const reset = (): void => {
-    engine.setTransform({ scale: initialScale, x: initialOffset.x, y: initialOffset.y })
+    engine.setTransform({ scale: startScale, x: startOffset.x, y: startOffset.y })
   }
 
   return {

@@ -124,11 +124,18 @@ const emit = defineEmits([
 ])
 
 // === 变换引擎 ===
+const rectWidth = computed(() => props.width - props.thick)
+const rectHeight = computed(() => props.height - props.thick)
+
 const { scale, offset, engine, setTransform, zoomBy, zoomTo, panBy, reset } = useCanvasTransform({
   initialScale: props.scale,
   initialOffset: { x: 0, y: 0 },
   minZoom: props.minZoom,
-  maxZoom: props.maxZoom
+  maxZoom: props.maxZoom,
+  autoCenter: true,
+  canvasSize: { width: props.canvasWidth, height: props.canvasHeight },
+  viewportSize: { width: rectWidth.value, height: rectHeight.value },
+  paddingRatio: 0.2
 })
 
 const ownScale = computed(() => scale.value)
@@ -213,6 +220,26 @@ watch(
   { deep: true }
 )
 
+// 画布/容器尺寸变化时重新居中
+watch(
+  [() => props.canvasWidth, () => props.canvasHeight, () => props.width, () => props.height],
+  () => {
+    // 直接调用 setTransform 重新计算居中
+    const w = props.width - props.thick
+    const h = props.height - props.thick
+    const cw = props.canvasWidth
+    const ch = props.canvasHeight
+    if (w > 0 && h > 0 && cw > 0 && ch > 0) {
+      const scaleX = (w * 0.8) / cw
+      const scaleY = (h * 0.8) / ch
+      const newScale = Math.min(scaleX, scaleY)
+      const newX = (w - cw * newScale) / 2
+      const newY = (h - ch * newScale) / 2
+      setTransform({ scale: newScale, x: newX, y: newY })
+    }
+  }
+)
+
 const showReferLine = ref(props.isShowReferLine)
 watch(() => props.isShowReferLine, (v) => { showReferLine.value = v })
 
@@ -264,8 +291,7 @@ const context: RulerContext = {
 provide(RulerContextKey, context)
 
 // === 计算属性 ===
-const rectWidth = computed(() => props.width - props.thick)
-const rectHeight = computed(() => props.height - props.thick)
+// rectWidth / rectHeight 已在变换引擎区域声明
 
 const rectStyle = computed(() => ({
   background: paletteCpu.value.bgColor,
