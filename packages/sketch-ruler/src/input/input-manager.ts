@@ -1,10 +1,12 @@
 /**
  * InputManager - 统一输入抽象
- * M1 先实现鼠标滚轮缩放 + 空格拖拽平移
- * M3 再扩展为完整的 Pointer/Keyboard/Touch 适配器体系
+ * M1 基础版：鼠标滚轮缩放 + 空格拖拽平移
+ * 底层事件由 MouseAdapter 封装，滚轮标准化由 WheelNormalizer 处理
  */
 
 import type { TransformEngine } from '../engine/transform-engine'
+import { MouseAdapter, type MouseAdapterCallbacks } from './mouse-adapter'
+import { getZoomDelta } from './wheel-normalizer'
 
 export interface InputManagerOptions {
   /** 缩放步长 */
@@ -18,31 +20,25 @@ export class InputManager {
   private zoomStep: number
   private selfHandle: boolean
 
-  private boundWheel: (e: WheelEvent) => void
-  private boundKeyDown: (e: KeyboardEvent) => void
-  private boundKeyUp: (e: KeyboardEvent) => void
-  private boundMouseDown: (e: MouseEvent) => void
-  private boundMouseMove: (e: MouseEvent) => void
-  private boundMouseUp: (e: MouseEvent) => void
-
   private container: HTMLElement | null = null
+  private mouseAdapter: MouseAdapter | null = null
+
   private isSpacePressed = false
   private isDragging = false
   private dragStart = { x: 0, y: 0 }
   private lastMouse = { x: 0, y: 0 }
   private isHovered = false
 
+  private boundKeyDown: (e: KeyboardEvent) => void
+  private boundKeyUp: (e: KeyboardEvent) => void
+
   constructor(engine: TransformEngine, options: InputManagerOptions = {}) {
     this.engine = engine
     this.zoomStep = options.zoomStep ?? 0.25
     this.selfHandle = options.selfHandle ?? false
 
-    this.boundWheel = this.handleWheel.bind(this)
     this.boundKeyDown = this.handleKeyDown.bind(this)
     this.boundKeyUp = this.handleKeyUp.bind(this)
-    this.boundMouseDown = this.handleMouseDown.bind(this)
-    this.boundMouseMove = this.handleMouseMove.bind(this)
-    this.boundMouseUp = this.handleMouseUp.bind(this)
   }
 
   /** 绑定到容器元素 */
@@ -54,30 +50,32 @@ export class InputManager {
     const parent = container.parentElement
     if (!parent) return
 
-    parent.addEventListener('wheel', this.boundWheel, { passive: false })
+    // 键盘事件仍直接监听 document
     document.addEventListener('keydown', this.boundKeyDown)
     document.addEventListener('keyup', this.boundKeyUp)
-    parent.addEventListener('mousedown', this.boundMouseDown)
-    document.addEventListener('mousemove', this.boundMouseMove)
-    document.addEventListener('mouseup', this.boundMouseUp)
 
-    // 监听鼠标进入/离开容器
-    parent.addEventListener('mouseenter', () => { this.isHovered = true })
-    parent.addEventListener('mouseleave', () => { this.isHovered = false })
+    // 鼠标事件通过 MouseAdapter 封装
+    const callbacks: MouseAdapterCallbacks = {
+      onWheel: this.handleWheel.bind(this),
+      onMouseDown: this.handleMouseDown.bind(this),
+      onMouseMove: this.handleMouseMove.bind(this),
+      onMouseUp: this.handleMouseUp.bind(this),
+      onMouseEnter: () => { this.isHovered = true },
+      onMouseLeave: () => { this.isHovered = false }
+    }
+
+    this.mouseAdapter = new MouseAdapter(parent, callbacks)
+    this.mouseAdapter.bind()
   }
 
   /** 解绑所有事件 */
   unbind(): void {
-    if (!this.container) return
-    const parent = this.container.parentElement
-    if (parent) {
-      parent.removeEventListener('wheel', this.boundWheel)
-      parent.removeEventListener('mousedown', this.boundMouseDown)
-    }
+    this.mouseAdapter?.unbind()
+    this.mouseAdapter = null
+
     document.removeEventListener('keydown', this.boundKeyDown)
     document.removeEventListener('keyup', this.boundKeyUp)
-    document.removeEventListener('mousemove', this.boundMouseMove)
-    document.removeEventListener('mouseup', this.boundMouseUp)
+
     this.container = null
   }
 
@@ -89,20 +87,18 @@ export class InputManager {
   private handleWheel(e: WheelEvent): void {
     if (e.ctrlKey || e.metaKey) {
       e.preventDefault()
-      // 使用 parent（无 CSS transform）的 rect 计算稳定坐标
-      // 避免 container（有 transform）的 getBoundingClientRect() 随缩放漂移
       const parent = this.container?.parentElement
       const rect = parent ? parent.getBoundingClientRect() : new DOMRect(0, 0, 0, 0)
       const originX = e.clientX - rect.left
       const originY = e.clientY - rect.top
-      const delta = -e.deltaY * 0.001 * this.zoomStep
+      const delta = getZoomDelta(e, this.zoomStep)
       this.engine.zoomBy(delta, originX, originY)
     }
   }
 
   private handleKeyDown(e: KeyboardEvent): void {
     if (!this.isHovered) return
-    // 忽略输入框内的空格
+
     const activeElement = document.activeElement
     if (
       activeElement?.closest('.monaco-editor') ||
@@ -146,13 +142,6 @@ export class InputManager {
 
   private handleMouseUp(): void {
     this.isDragging = false
-  }
-
-  private getContainerRect(): DOMRect {
-    if (this.container) {
-      return this.container.getBoundingClientRect()
-    }
-    return new DOMRect(0, 0, 0, 0)
   }
 
   getCursorClass(): string {

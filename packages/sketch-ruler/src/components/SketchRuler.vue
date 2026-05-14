@@ -17,9 +17,16 @@
       :style="rectStyle"
       :class="cursorClass"
     >
-      <div ref="canvasRef" class="canvasedit" :class="cursorClass">
+      <div ref="canvasRef" class="canvasedit" :style="canvasStyle" :class="cursorClass">
         <slot />
       </div>
+      <!-- M2: 全局参考线 Canvas 层，pointer-events: none 由 RulerLine.vue 处理交互 -->
+      <canvas
+        v-show="showReferLine"
+        ref="guideLinesCanvasRef"
+        class="guide-lines-canvas"
+        :style="guideLinesCanvasStyle"
+      />
     </div>
 
     <!-- 水平标尺 -->
@@ -35,6 +42,7 @@
       :lines="horizontalLines"
       :palette="paletteCpu"
       :show-refer-line="showReferLine"
+      :render-lines-in-canvas="true"
       @add-line="handleAddLine"
       @update-line="handleUpdateLine"
     />
@@ -52,6 +60,7 @@
       :lines="verticalLines"
       :palette="paletteCpu"
       :show-refer-line="showReferLine"
+      :render-lines-in-canvas="true"
       @add-line="handleAddLine"
       @update-line="handleUpdateLine"
     />
@@ -73,6 +82,7 @@ import { InputManager } from '../input/input-manager'
 import { StateManager } from '../state/state-manager'
 import { RulerContextKey } from '../state/ruler-context'
 import type { GuideLine, RulerContext, RulerPalette } from '../state/ruler-context'
+import { renderGuideLines } from '../renderers/guide-line-renderer'
 import RulerWrapperV3 from './RulerWrapperV3.vue'
 
 // 2.x 兼容 props
@@ -302,7 +312,14 @@ provide(RulerContextKey, context)
 const rectStyle = computed(() => ({
   background: paletteCpu.value.bgColor,
   width: rectWidth.value + 'px',
-  height: rectHeight.value + 'px'
+  height: rectHeight.value + 'px',
+  left: props.thick + 'px',
+  top: props.thick + 'px'
+}))
+
+const canvasStyle = computed(() => ({
+  width: props.canvasWidth + 'px',
+  height: props.canvasHeight + 'px'
 }))
 
 const cornerStyle = computed(() => ({
@@ -311,6 +328,60 @@ const cornerStyle = computed(() => ({
   borderRight: `1px solid ${paletteCpu.value.borderColor}`,
   borderBottom: `1px solid ${paletteCpu.value.borderColor}`
 }))
+
+// === M2: 全局参考线 Canvas 层 ===
+const guideLinesCanvasRef = ref<HTMLCanvasElement | null>(null)
+const dpr = typeof window !== 'undefined' ? window.devicePixelRatio : 1
+
+const guideLinesCanvasStyle = computed(() => ({
+  position: 'absolute',
+  left: '0',
+  top: '0',
+  width: rectWidth.value + 'px',
+  height: rectHeight.value + 'px',
+  pointerEvents: 'none',
+  zIndex: 2
+}))
+
+function drawGuideLines(): void {
+  const canvas = guideLinesCanvasRef.value
+  if (!canvas) return
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return
+
+  canvas.width = Math.round(rectWidth.value * dpr)
+  canvas.height = Math.round(rectHeight.value * dpr)
+
+  renderGuideLines(ctx, {
+    lines: stateManager.getLines().value,
+    scale: ownScale.value,
+    offsetX: offset.value.x,
+    offsetY: offset.value.y,
+    thick: props.thick,
+    width: rectWidth.value,
+    height: rectHeight.value,
+    ratio: dpr,
+    palette: paletteCpu.value
+  })
+}
+
+watch(
+  () => [
+    stateManager.getLines().value.length,
+    ownScale.value,
+    offset.value.x,
+    offset.value.y,
+    showReferLine.value
+  ],
+  () => {
+    drawGuideLines()
+  },
+  { deep: true, flush: 'post' }
+)
+
+onMounted(() => {
+  drawGuideLines()
+})
 
 // === 方法 ===
 const zoomIn = (): void => {
@@ -354,15 +425,11 @@ defineExpose({
   font-size: 12px;
 
   .canvasedit {
-    width: v-bind("props.canvasWidth + 'px'");
-    height: v-bind("props.canvasHeight + 'px'");
     transform-origin: 0 0;
   }
 
   .canvasedit-parent {
     position: absolute;
-    left: v-bind("props.thick + 'px'");
-    top: v-bind("props.thick + 'px'");
     overflow: hidden;
   }
 

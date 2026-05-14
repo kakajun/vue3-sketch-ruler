@@ -4,7 +4,7 @@
  * 纯计算逻辑，零 DOM 依赖
  */
 
-import { computed, type Ref } from 'vue'
+import { computed, ref, watch, type Ref } from 'vue'
 
 export interface TickConfig {
   /** 主刻度间隔（世界坐标） */
@@ -43,31 +43,61 @@ export interface RulerScaleOptions {
   vertical?: boolean
 }
 
+/** 刻度配置表，按 maxScale 升序排列 */
+const TICK_CONFIGS: Array<TickConfig & { maxScale: number }> = [
+  { maxScale: 0.2, interval: 500, subdivisions: 5, showLabel: true, formatLabel: (v) => `${Math.round(v / 1000)}k` },
+  { maxScale: 0.5, interval: 200, subdivisions: 4, showLabel: true },
+  { maxScale: 1.0, interval: 100, subdivisions: 5, showLabel: true },
+  { maxScale: 2.0, interval: 50, subdivisions: 5, showLabel: true },
+  { maxScale: 5.0, interval: 20, subdivisions: 4, showLabel: true },
+  { maxScale: 10.0, interval: 10, subdivisions: 5, showLabel: true },
+  { maxScale: Infinity, interval: 5, subdivisions: 5, showLabel: true }
+]
+
+const HYSTERESIS_UP = 1.1   // 升级滞后：阈值 * 1.1
+const HYSTERESIS_DOWN = 0.9 // 降级滞后：阈值 * 0.9
+
 /** 根据缩放级别获取刻度配置 */
 export function getTickConfig(scale: number): TickConfig {
-  if (scale < 0.2) {
-    return { interval: 500, subdivisions: 5, showLabel: true, formatLabel: (v) => `${Math.round(v / 1000)}k` }
+  const idx = TICK_CONFIGS.findIndex((c) => scale < c.maxScale)
+  return TICK_CONFIGS[idx === -1 ? TICK_CONFIGS.length - 1 : idx]
+}
+
+/**
+ * 应用滞后带（Hysteresis）机制，避免临界振荡
+ * @param currentIdx 当前配置索引
+ * @param scale 当前缩放值
+ * @returns 新的配置索引
+ */
+export function applyHysteresis(currentIdx: number, scale: number): number {
+  let idx = currentIdx
+
+  // 尝试升级
+  while (idx < TICK_CONFIGS.length - 1 && scale >= TICK_CONFIGS[idx].maxScale * HYSTERESIS_UP) {
+    idx++
   }
-  if (scale < 0.5) {
-    return { interval: 200, subdivisions: 4, showLabel: true }
+
+  // 尝试降级
+  while (idx > 0 && scale < TICK_CONFIGS[idx - 1].maxScale * HYSTERESIS_DOWN) {
+    idx--
   }
-  if (scale < 1.0) {
-    return { interval: 100, subdivisions: 5, showLabel: true }
-  }
-  if (scale < 2.0) {
-    return { interval: 50, subdivisions: 5, showLabel: true }
-  }
-  if (scale < 5.0) {
-    return { interval: 20, subdivisions: 4, showLabel: true }
-  }
-  if (scale < 10.0) {
-    return { interval: 10, subdivisions: 5, showLabel: true }
-  }
-  return { interval: 5, subdivisions: 5, showLabel: true }
+
+  return idx
 }
 
 export function useRulerScale(options: RulerScaleOptions) {
   const { thick, viewportSize, scale, offset, vertical = false } = options
+
+  // 滞后带状态：维护当前刻度配置索引，避免临界振荡
+  const currentIdx = ref(0)
+
+  watch(
+    scale,
+    (s) => {
+      currentIdx.value = applyHysteresis(currentIdx.value, s)
+    },
+    { immediate: true }
+  )
 
   const ticks = computed<ScaleMark[]>(() => {
     const s = scale.value
@@ -78,7 +108,7 @@ export function useRulerScale(options: RulerScaleOptions) {
       return []
     }
 
-    const config = getTickConfig(s)
+    const config = TICK_CONFIGS[currentIdx.value]
     const interval = config.interval
     const subdivisions = config.subdivisions
     const subInterval = interval / subdivisions
@@ -128,6 +158,7 @@ export function useRulerScale(options: RulerScaleOptions) {
   })
 
   return {
-    ticks
+    ticks,
+    currentConfig: computed(() => TICK_CONFIGS[currentIdx.value])
   }
 }

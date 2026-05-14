@@ -2,4 +2,10 @@ export type { GuideLine, SnapConfig, RulerPalette, RulerContext } from './ruler-
 export { RulerContextKey } from './ruler-context'
 
 export { StateManager } from './state-manager'
-export type { RulerState } from './state-manager'
+
+export {
+  createDefaultState,
+  produceState,
+  type RulerState,
+  type RulerAction
+} from './ruler-state'

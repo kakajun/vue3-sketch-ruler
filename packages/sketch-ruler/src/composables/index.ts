@@ -6,3 +6,6 @@ export type { TickConfig, ScaleMark, RulerScaleOptions } from './useRulerScale'
 
 export { useSnapDetection } from './useSnapDetection'
 export type { SnapTarget, SnapResult, SnapOptions } from './useSnapDetection'
+
+export { useSketchRuler } from './useSketchRuler'
+export type { SketchRulerOptions, UseSketchRulerReturn } from './useSketchRuler'

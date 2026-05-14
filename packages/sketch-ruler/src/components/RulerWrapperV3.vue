@@ -6,7 +6,7 @@
       :style="rulerStyle"
       @mousedown.stop="handleDragStart"
     />
-    <div v-show="showReferLine" class="lines">
+    <div v-show="showReferLine && !renderLinesInCanvas" class="lines">
       <div
         v-for="line in displayLines"
         :key="line.id"
@@ -21,6 +21,8 @@
 import { computed, ref, watch, onMounted } from 'vue'
 import type { RulerPalette } from '../state/ruler-context'
 import type { GuideLine } from '../state/ruler-context'
+import { useRulerScale } from '../composables/useRulerScale'
+import { Canvas2DRenderer } from '../renderers/canvas-2d-renderer'
 
 interface Props {
   vertical: boolean
@@ -32,9 +34,13 @@ interface Props {
   lines: GuideLine[]
   palette: RulerPalette
   showReferLine: boolean
+  /** 参考线是否由外部 Canvas 统一绘制（M2 性能优化） */
+  renderLinesInCanvas?: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  renderLinesInCanvas: false
+})
 const emit = defineEmits(['addLine', 'updateLine'])
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
@@ -74,7 +80,28 @@ const lineStyle = (line: GuideLine) => {
   }
 }
 
-// 简化的标尺绘制（M1 基础版，M2 将全面 Canvas 化）
+// === 接入 useRulerScale + Canvas2DRenderer ===
+const viewportSize = computed(() => ({
+  width: props.width,
+  height: props.height
+}))
+
+const scaleRef = computed(() => props.scale)
+const offsetRef = computed(() => ({
+  x: props.vertical ? 0 : props.offset,
+  y: props.vertical ? props.offset : 0
+}))
+
+const { ticks } = useRulerScale({
+  thick: props.thick,
+  viewportSize,
+  scale: scaleRef,
+  offset: offsetRef,
+  vertical: props.vertical
+})
+
+const renderer = new Canvas2DRenderer()
+
 function drawRuler(): void {
   const canvas = canvasRef.value
   if (!canvas) return
@@ -86,60 +113,21 @@ function drawRuler(): void {
   canvas.width = Math.round(props.width * dpr)
   canvas.height = Math.round(props.height * dpr)
 
-  ctx.scale(dpr, dpr)
-  ctx.clearRect(0, 0, props.width, props.height)
-
-  // 背景
-  ctx.fillStyle = props.palette.bgColor
-  ctx.fillRect(0, 0, props.width, props.height)
-
-  // 刻度
-  ctx.fillStyle = props.palette.tickColor
-  ctx.font = '10px sans-serif'
-  ctx.textBaseline = 'middle'
-
-  const scale = props.scale
-  const offset = props.offset
-  const isHorizontal = !props.vertical
-  const size = isHorizontal ? props.width : props.height
-
-  // 主刻度间隔（简化版，固定 50px）
-  const interval = 50
-  const startWorld = (-offset) / scale
-  const endWorld = (size - offset) / scale
-  const firstTick = Math.floor(startWorld / interval) * interval
-
-  for (let world = firstTick; world <= endWorld; world += interval / 5) {
-    const isMajor = Math.abs(world % interval) < 0.1
-    const screenPos = world * scale + offset
-
-    if (screenPos < -5 || screenPos > size + 5) continue
-
-    ctx.beginPath()
-    if (isHorizontal) {
-      ctx.moveTo(screenPos, isMajor ? 0 : props.thick * 0.5)
-      ctx.lineTo(screenPos, props.thick)
-    } else {
-      ctx.moveTo(isMajor ? 0 : props.thick * 0.5, screenPos)
-      ctx.lineTo(props.thick, screenPos)
-    }
-    ctx.strokeStyle = props.palette.tickColor
-    ctx.lineWidth = 1
-    ctx.stroke()
-
-    if (isMajor && world >= 0) {
-      const label = `${Math.round(world)}`
-      if (isHorizontal) {
-        ctx.fillText(label, screenPos + 2, props.thick * 0.6)
-      } else {
-        ctx.save()
-        ctx.translate(props.thick * 0.6, screenPos + 2)
-        ctx.rotate(-Math.PI / 2)
-        ctx.fillText(label, 0, 0)
-        ctx.restore()
-      }
-    }
-  }
+  renderer.render(ctx, [{
+    type: 'ruler',
+    marks: ticks.value,
+    vertical: props.vertical,
+    thick: props.thick,
+    width: props.width,
+    height: props.height,
+    ratio: dpr,
+    palette: props.palette
+  }], {
+    x: 0,
+    y: 0,
+    width: props.width,
+    height: props.height
+  })
 }
 
 onMounted(() => {
