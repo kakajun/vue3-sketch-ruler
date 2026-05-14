@@ -89,7 +89,10 @@ export class InputManager {
   private handleWheel(e: WheelEvent): void {
     if (e.ctrlKey || e.metaKey) {
       e.preventDefault()
-      const rect = this.getContainerRect()
+      // 使用 parent（无 CSS transform）的 rect 计算稳定坐标
+      // 避免 container（有 transform）的 getBoundingClientRect() 随缩放漂移
+      const parent = this.container?.parentElement
+      const rect = parent ? parent.getBoundingClientRect() : new DOMRect(0, 0, 0, 0)
       const originX = e.clientX - rect.left
       const originY = e.clientY - rect.top
       const delta = -e.deltaY * 0.001 * this.zoomStep
