@@ -11,6 +11,8 @@
       :palette="post.palette"
       :lines="post.lines"
       :is-show-refer-line="post.isShowReferLine"
+      :enable-animation="true"
+      animation-mode="ease-out"
       @zoomchange="handleZoomChange"
       @update:lines="handleLinesChange"
     >
