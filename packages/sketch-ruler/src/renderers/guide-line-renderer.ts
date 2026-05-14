@@ -81,7 +81,7 @@ export function renderGuideLines(
     ctx.setLineDash(lineDash)
 
     for (const line of normalH) {
-      const pos = line.position * scale + offsetY + thick
+      const pos = line.position * scale + offsetY
       ctx.moveTo(0, pos)
       ctx.lineTo(width, pos)
     }
@@ -98,7 +98,7 @@ export function renderGuideLines(
     ctx.setLineDash(lineDash)
 
     for (const line of normalV) {
-      const pos = line.position * scale + offsetX + thick
+      const pos = line.position * scale + offsetX
       ctx.moveTo(pos, 0)
       ctx.lineTo(pos, height)
     }
@@ -117,7 +117,7 @@ export function renderGuideLines(
     ctx.setLineDash(lineDash)
 
     for (const line of lockedH) {
-      const pos = line.position * scale + offsetY + thick
+      const pos = line.position * scale + offsetY
       ctx.moveTo(0, pos)
       ctx.lineTo(width, pos)
     }
@@ -132,7 +132,7 @@ export function renderGuideLines(
     ctx.setLineDash(lineDash)
 
     for (const line of lockedV) {
-      const pos = line.position * scale + offsetX + thick
+      const pos = line.position * scale + offsetX
       ctx.moveTo(pos, 0)
       ctx.lineTo(pos, height)
     }
@@ -147,13 +147,13 @@ export function renderGuideLines(
     ctx.textBaseline = 'middle'
 
     for (const line of hLines) {
-      const pos = line.position * scale + offsetY + thick
+      const pos = line.position * scale + offsetY
       const text = getLabelText(line, palette)
       const textWidth = ctx.measureText(text).width
       let x: number
       switch (labelPos) {
         case 'start':
-          x = thick + 4
+          x = 4
           break
         case 'center':
           x = (width - textWidth) / 2
@@ -168,12 +168,12 @@ export function renderGuideLines(
     }
 
     for (const line of vLines) {
-      const pos = line.position * scale + offsetX + thick
+      const pos = line.position * scale + offsetX
       const text = getLabelText(line, palette)
       let y: number
       switch (labelPos) {
         case 'start':
-          y = thick + 8
+          y = 8
           break
         case 'center':
           y = height / 2

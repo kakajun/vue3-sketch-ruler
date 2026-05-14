@@ -7,7 +7,6 @@
 import type { TransformEngine } from '../engine/transform-engine'
 import { MouseAdapter, type MouseAdapterCallbacks } from './mouse-adapter'
 import { KeyboardAdapter } from './keyboard-adapter'
-import { getZoomDelta } from './wheel-normalizer'
 import type { KeyCombo } from './keyboard-adapter'
 
 export type ZoomMode = 'pointer' | 'viewport-center' | 'content-center'
@@ -44,6 +43,8 @@ export class InputManager {
 
   private boundKeyUp: (e: KeyboardEvent) => void
   private keyboardAdapter: KeyboardAdapter | null = null
+  private lastWheelTime = 0
+  private readonly WHEEL_THROTTLE_MS = 100
 
   constructor(engine: TransformEngine, options: InputManagerOptions = {}) {
     this.engine = engine
@@ -139,8 +140,19 @@ export class InputManager {
         }
       }
 
-      const delta = getZoomDelta(e, this.zoomStep)
-      this.engine.zoomBy(delta, originX, originY)
+      // 滚轮节流：防止触控板/高频鼠标产生过多事件导致缩放过快
+      const now = Date.now()
+      if (now - this.lastWheelTime < this.WHEEL_THROTTLE_MS) return
+      this.lastWheelTime = now
+
+      // 采用 simple-panzoom 的指数乘数公式，只看滚轮方向不看 delta 大小
+      // 保证无论鼠标滚轮还是触控板，每次滚动动作都只做固定比例缩放（约 8~9%）
+      const rawDelta = e.deltaY !== 0 ? e.deltaY : e.deltaX
+      const wheel = rawDelta < 0 ? 1 : -1
+      const currentScale = this.engine.getState().scale
+      const toScale = currentScale * Math.exp(wheel * this.zoomStep / 3)
+
+      this.engine.zoomTo(toScale, originX, originY)
     }
   }
 

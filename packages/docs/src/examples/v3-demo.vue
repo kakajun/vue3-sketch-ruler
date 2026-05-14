@@ -19,11 +19,11 @@
           <img class="img-style" :src="bgImg" />
         </div>
       </template>
-      <template #toolbar="{ reset, zoomIn, zoomOut, state }">
+      <template #toolbar="{ tools, state }">
         <div class="btns">
-          <button @click.stop="reset">还原</button>
-          <button @click.stop="zoomIn">放大</button>
-          <button @click.stop="zoomOut">缩小</button>
+          <button @click.stop="tools.reset">还原</button>
+          <button @click.stop="tools.zoomIn">放大</button>
+          <button @click.stop="tools.zoomOut">缩小</button>
           <span class="scale-label">{{ (state.scale * 100).toFixed(0) }}%</span>
         </div>
       </template>

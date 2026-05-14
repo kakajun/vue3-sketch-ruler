@@ -39,7 +39,7 @@ interface Props {
   height: number
   thick: number
   scale: number
-  offset: number
+  offset: { x: number; y: number }
   lines: GuideLine[]
   palette: RulerPalette
   showReferLine: boolean
@@ -136,8 +136,11 @@ function updatePreview(e: PointerEvent): void {
     ? e.clientX - rect.left
     : e.clientY - rect.top
 
-  // 基础世界坐标
-  let worldPos = (screenPos - props.offset) / props.scale
+  // 参考线创建需要另一方向的 offset（水平标尺创建水平线需 Y 偏移，垂直标尺创建垂直线需 X 偏移）
+  const canvasOffset = props.vertical ? props.offset.x : props.offset.y
+
+  // 基础世界坐标：screenPos 是相对于标尺的坐标，需减去 thick 转换到画布坐标系
+  let worldPos = (screenPos - props.thick - canvasOffset) / props.scale
 
   // 吸附检测：查找最近的刻度
   const snapThreshold = 10 / props.scale // 10 像素转换为世界坐标
@@ -160,12 +163,14 @@ function updatePreview(e: PointerEvent): void {
     isSnapping.value = false
   }
 
-  previewScreenPos.value = worldPos * props.scale + props.offset
+  // 转回标尺容器坐标系，让预览线跟随鼠标/吸附位置
+  previewScreenPos.value = worldPos * props.scale + canvasOffset + props.thick
   previewWorldPos.value = worldPos
 }
 
 const lineStyle = (line: GuideLine) => {
-  const pos = line.position * props.scale + props.offset + props.thick
+  const canvasOffset = props.vertical ? props.offset.x : props.offset.y
+  const pos = line.position * props.scale + canvasOffset + props.thick
   if (props.vertical) {
     return {
       left: `${pos}px`,
@@ -192,8 +197,8 @@ const viewportSize = computed(() => ({
 
 const scaleRef = computed(() => props.scale)
 const offsetRef = computed(() => ({
-  x: props.vertical ? 0 : props.offset,
-  y: props.vertical ? props.offset : 0
+  x: props.vertical ? 0 : props.offset.x,
+  y: props.vertical ? props.offset.y : 0
 }))
 
 const { ticks } = useRulerScale({
