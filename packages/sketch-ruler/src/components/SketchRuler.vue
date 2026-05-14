@@ -7,10 +7,16 @@
   >
     <slot
       name="toolbar"
-      :reset="reset"
-      :zoom-in="zoomIn"
-      :zoom-out="zoomOut"
-      :state="{ scale: ownScale, offset }"
+      :tools="{
+        zoomIn,
+        zoomOut,
+        reset,
+        setZoomMode,
+        zoomToPreset,
+        toggleReferLine: onCornerClick,
+        toggleLinePanel
+      }"
+      :state="{ scale: ownScale, offset, zoomMode: props.zoomMode, showReferLine: showReferLine.value, showLinePanel: showLinePanel.value }"
     />
     <div
       class="canvasedit-parent"
@@ -71,6 +77,15 @@
       :style="cornerStyle"
       @click="onCornerClick"
     />
+
+    <RulerLinePanel
+      v-if="showLinePanel"
+      :lines="stateManager.getLines().value"
+      @add="handlePanelAdd"
+      @remove="handlePanelRemove"
+      @update="handlePanelUpdate"
+      @clear="handlePanelClear"
+    />
   </div>
 </template>
 
@@ -84,6 +99,9 @@ import { RulerContextKey } from '../state/ruler-context'
 import type { GuideLine, RulerContext, RulerPalette } from '../state/ruler-context'
 import { renderGuideLines } from '../renderers/guide-line-renderer'
 import RulerWrapperV3 from './RulerWrapperV3.vue'
+import RulerLinePanel from './RulerLinePanel.vue'
+import { PluginManager } from '../plugins/plugin-manager'
+import type { SketchRulerPlugin } from '../plugins/types'
 
 // 2.x 兼容 props
 export interface SketchRulerV3Props {
@@ -103,6 +121,16 @@ export interface SketchRulerV3Props {
   zoomStep?: number
   minZoom?: number
   maxZoom?: number
+  /** 动画模式：direct | ease-out | damped | exponential */
+  animationMode?: 'direct' | 'ease-out' | 'damped' | 'exponential'
+  /** 缩放原点模式：pointer | viewport-center | content-center */
+  zoomMode?: 'pointer' | 'viewport-center' | 'content-center'
+  /** 是否启用平滑动画 */
+  enableAnimation?: boolean
+  /** 是否显示参考线管理面板 */
+  showLinePanel?: boolean
+  /** 插件列表 */
+  plugins?: SketchRulerPlugin[]
 }
 
 const props = withDefaults(defineProps<SketchRulerV3Props>(), {
@@ -121,7 +149,12 @@ const props = withDefaults(defineProps<SketchRulerV3Props>(), {
   selfHandle: false,
   zoomStep: 0.25,
   minZoom: 0.1,
-  maxZoom: 10
+  maxZoom: 10,
+  animationMode: 'ease-out',
+  zoomMode: 'pointer',
+  enableAnimation: false,
+  showLinePanel: false,
+  plugins: () => []
 })
 
 const emit = defineEmits([
@@ -142,6 +175,8 @@ const { scale, offset, engine, setTransform, zoomBy, zoomTo, panBy, reset } = us
   initialOffset: { x: 0, y: 0 },
   minZoom: props.minZoom,
   maxZoom: props.maxZoom,
+  enableAnimation: props.enableAnimation,
+  animationMode: props.animationMode,
   autoCenter: true,
   canvasSize: { width: props.canvasWidth, height: props.canvasHeight },
   viewportSize: { width: rectWidth.value, height: rectHeight.value },
@@ -149,6 +184,15 @@ const { scale, offset, engine, setTransform, zoomBy, zoomTo, panBy, reset } = us
 })
 
 const ownScale = computed(() => scale.value)
+
+// === 插件系统 ===
+const pluginManager = new PluginManager()
+watch(() => props.plugins, (newPlugins) => {
+  pluginManager.clear()
+  for (const plugin of (newPlugins ?? [])) {
+    pluginManager.register(plugin)
+  }
+}, { immediate: true, deep: true })
 
 // 外部 prop 变化 → 同步到引擎
 watch(() => props.scale, (newScale) => {
@@ -202,7 +246,10 @@ onMounted(() => {
   if (canvasRef.value && !props.selfHandle) {
     inputManager = new InputManager(engine, {
       zoomStep: props.zoomStep,
-      selfHandle: false
+      selfHandle: false,
+      zoomMode: props.zoomMode,
+      viewportSize: { width: rectWidth.value, height: rectHeight.value },
+      contentSize: { width: props.canvasWidth, height: props.canvasHeight }
     })
     inputManager.bind(canvasRef.value)
   }
@@ -260,12 +307,49 @@ const showReferLine = ref(props.isShowReferLine)
 watch(() => props.isShowReferLine, (v) => { showReferLine.value = v })
 
 const handleAddLine = (line: Omit<GuideLine, 'id'>): void => {
-  stateManager.addLine(line)
+  const newLine = stateManager.addLine(line)
+  pluginManager.onLineCreate({ line: newLine })
   emit('update:lines', stateManager.exportToLegacy())
 }
 
 const handleUpdateLine = (id: string, position: number): void => {
   stateManager.moveLine(id, position)
+  emit('update:lines', stateManager.exportToLegacy())
+}
+
+// === 参考线面板事件处理 ===
+const handlePanelAdd = (orientation: 'h' | 'v', position?: number): void => {
+  const pos = position ?? (orientation === 'h'
+    ? (-offset.value.y + rectHeight.value / 2) / ownScale.value
+    : (-offset.value.x + rectWidth.value / 2) / ownScale.value)
+  stateManager.addLine({ orientation, position: pos, locked: false })
+  emit('update:lines', stateManager.exportToLegacy())
+}
+
+const handlePanelRemove = (id: string): void => {
+  const line = stateManager.getLines().value.find((l) => l.id === id)
+  stateManager.removeLine(id)
+  if (line) pluginManager.onLineDelete({ line })
+  emit('update:lines', stateManager.exportToLegacy())
+}
+
+const handlePanelUpdate = (id: string, updates: Partial<Omit<GuideLine, 'id'>>): void => {
+  const line = stateManager.getLines().value.find((l) => l.id === id)
+  const prevPosition = line?.position
+  stateManager.updateLine(id, updates)
+  const updated = stateManager.getLines().value.find((l) => l.id === id)
+  if (updated && prevPosition !== undefined && 'position' in updates && updates.position !== undefined) {
+    pluginManager.onLineMove({ line: updated, from: prevPosition, to: updates.position })
+  }
+  emit('update:lines', stateManager.exportToLegacy())
+}
+
+const handlePanelClear = (): void => {
+  const removed = [...stateManager.getLines().value]
+  stateManager.clear()
+  for (const line of removed) {
+    pluginManager.onLineDelete({ line })
+  }
   emit('update:lines', stateManager.exportToLegacy())
 }
 
@@ -384,23 +468,58 @@ onMounted(() => {
 })
 
 // === 方法 ===
-const zoomIn = (): void => {
+const zoomIn = async (): Promise<void> => {
   const rect = canvasRef.value?.getBoundingClientRect()
   const cx = rect ? rect.width / 2 : 0
   const cy = rect ? rect.height / 2 : 0
-  zoomBy(props.zoomStep, cx, cy)
+  const allowed = await pluginManager.beforeZoom({
+    from: scale.value,
+    to: scale.value + props.zoomStep,
+    center: { x: cx, y: cy },
+    cancel: () => {}
+  })
+  if (allowed) zoomBy(props.zoomStep, cx, cy)
 }
 
-const zoomOut = (): void => {
+const zoomOut = async (): Promise<void> => {
   const rect = canvasRef.value?.getBoundingClientRect()
   const cx = rect ? rect.width / 2 : 0
   const cy = rect ? rect.height / 2 : 0
-  zoomBy(-props.zoomStep, cx, cy)
+  const allowed = await pluginManager.beforeZoom({
+    from: scale.value,
+    to: scale.value - props.zoomStep,
+    center: { x: cx, y: cy },
+    cancel: () => {}
+  })
+  if (allowed) zoomBy(-props.zoomStep, cx, cy)
 }
 
 const onCornerClick = (): void => {
   showReferLine.value = !showReferLine.value
   emit('onCornerClick', showReferLine.value)
+}
+
+const showLinePanel = ref(props.showLinePanel)
+watch(() => props.showLinePanel, (v) => { showLinePanel.value = v })
+
+const toggleLinePanel = (): void => {
+  showLinePanel.value = !showLinePanel.value
+}
+
+const setZoomMode = (mode: 'pointer' | 'viewport-center' | 'content-center'): void => {
+  if (inputManager) {
+    inputManager.setZoomMode(mode)
+  }
+}
+
+const ZOOM_PRESETS = [0.1, 0.25, 0.33, 0.5, 0.66, 1, 1.5, 2, 3, 4, 6, 8, 16]
+
+const zoomToPreset = (preset: number): void => {
+  const target = ZOOM_PRESETS.find((p) => p >= preset) ?? ZOOM_PRESETS[ZOOM_PRESETS.length - 1]
+  const rect = canvasRef.value?.getBoundingClientRect()
+  const cx = rect ? rect.width / 2 : 0
+  const cy = rect ? rect.height / 2 : 0
+  zoomTo(target, cx, cy)
 }
 
 // === 暴露 ===
@@ -411,7 +530,10 @@ defineExpose({
   zoomOut,
   cursorClass,
   setTransform,
-  stateManager
+  stateManager,
+  setZoomMode,
+  zoomToPreset,
+  toggleLinePanel
 })
 </script>
 

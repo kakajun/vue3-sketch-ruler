@@ -6,19 +6,32 @@
 
 import type { TransformEngine } from '../engine/transform-engine'
 import { MouseAdapter, type MouseAdapterCallbacks } from './mouse-adapter'
+import { KeyboardAdapter } from './keyboard-adapter'
 import { getZoomDelta } from './wheel-normalizer'
+import type { KeyCombo } from './keyboard-adapter'
+
+export type ZoomMode = 'pointer' | 'viewport-center' | 'content-center'
 
 export interface InputManagerOptions {
   /** 缩放步长 */
   zoomStep?: number
   /** 是否由外部自行处理事件 */
   selfHandle?: boolean
+  /** 缩放原点模式 */
+  zoomMode?: ZoomMode
+  /** 视口尺寸（viewport-center / content-center 模式需要） */
+  viewportSize?: { width: number; height: number }
+  /** 内容尺寸（content-center 模式需要） */
+  contentSize?: { width: number; height: number }
 }
 
 export class InputManager {
   private engine: TransformEngine
   private zoomStep: number
   private selfHandle: boolean
+  private zoomMode: ZoomMode
+  private viewportSize: { width: number; height: number }
+  private contentSize: { width: number; height: number }
 
   private container: HTMLElement | null = null
   private mouseAdapter: MouseAdapter | null = null
@@ -29,15 +42,17 @@ export class InputManager {
   private lastMouse = { x: 0, y: 0 }
   private isHovered = false
 
-  private boundKeyDown: (e: KeyboardEvent) => void
   private boundKeyUp: (e: KeyboardEvent) => void
+  private keyboardAdapter: KeyboardAdapter | null = null
 
   constructor(engine: TransformEngine, options: InputManagerOptions = {}) {
     this.engine = engine
     this.zoomStep = options.zoomStep ?? 0.25
     this.selfHandle = options.selfHandle ?? false
+    this.zoomMode = options.zoomMode ?? 'pointer'
+    this.viewportSize = options.viewportSize ?? { width: 0, height: 0 }
+    this.contentSize = options.contentSize ?? { width: 0, height: 0 }
 
-    this.boundKeyDown = this.handleKeyDown.bind(this)
     this.boundKeyUp = this.handleKeyUp.bind(this)
   }
 
@@ -50,12 +65,11 @@ export class InputManager {
     const parent = container.parentElement
     if (!parent) return
 
-    // 键盘事件仍直接监听 document
-    document.addEventListener('keydown', this.boundKeyDown)
+    // 空格释放仍直接监听（用于拖拽状态清理）
     document.addEventListener('keyup', this.boundKeyUp)
 
     // 鼠标事件通过 MouseAdapter 封装
-    const callbacks: MouseAdapterCallbacks = {
+    const mouseCallbacks: MouseAdapterCallbacks = {
       onWheel: this.handleWheel.bind(this),
       onMouseDown: this.handleMouseDown.bind(this),
       onMouseMove: this.handleMouseMove.bind(this),
@@ -64,8 +78,14 @@ export class InputManager {
       onMouseLeave: () => { this.isHovered = false }
     }
 
-    this.mouseAdapter = new MouseAdapter(parent, callbacks)
+    this.mouseAdapter = new MouseAdapter(parent, mouseCallbacks)
     this.mouseAdapter.bind()
+
+    // 键盘快捷键通过 KeyboardAdapter 封装
+    this.keyboardAdapter = new KeyboardAdapter({
+      onShortcut: this.handleShortcut.bind(this)
+    })
+    this.keyboardAdapter.bind()
   }
 
   /** 解绑所有事件 */
@@ -73,7 +93,9 @@ export class InputManager {
     this.mouseAdapter?.unbind()
     this.mouseAdapter = null
 
-    document.removeEventListener('keydown', this.boundKeyDown)
+    this.keyboardAdapter?.unbind()
+    this.keyboardAdapter = null
+
     document.removeEventListener('keyup', this.boundKeyUp)
 
     this.container = null
@@ -84,34 +106,94 @@ export class InputManager {
     this.unbind()
   }
 
+  setZoomMode(mode: ZoomMode): void {
+    this.zoomMode = mode
+  }
+
   private handleWheel(e: WheelEvent): void {
     if (e.ctrlKey || e.metaKey) {
       e.preventDefault()
       const parent = this.container?.parentElement
       const rect = parent ? parent.getBoundingClientRect() : new DOMRect(0, 0, 0, 0)
-      const originX = e.clientX - rect.left
-      const originY = e.clientY - rect.top
+
+      let originX: number
+      let originY: number
+
+      switch (this.zoomMode) {
+        case 'viewport-center': {
+          originX = this.viewportSize.width / 2
+          originY = this.viewportSize.height / 2
+          break
+        }
+        case 'content-center': {
+          originX = this.viewportSize.width / 2
+          originY = this.viewportSize.height / 2
+          // 内容中心模式下，原点固定为视口中心，引擎内部会处理内容居中
+          break
+        }
+        case 'pointer':
+        default: {
+          originX = e.clientX - rect.left
+          originY = e.clientY - rect.top
+          break
+        }
+      }
+
       const delta = getZoomDelta(e, this.zoomStep)
       this.engine.zoomBy(delta, originX, originY)
     }
   }
 
-  private handleKeyDown(e: KeyboardEvent): void {
+  private handleShortcut(combo: KeyCombo, e: KeyboardEvent): void {
     if (!this.isHovered) return
 
-    const activeElement = document.activeElement
-    if (
-      activeElement?.closest('.monaco-editor') ||
-      activeElement?.tagName === 'INPUT' ||
-      activeElement?.tagName === 'TEXTAREA' ||
-      activeElement?.getAttribute('contenteditable') === 'true'
-    ) {
-      return
-    }
+    const centerX = this.viewportSize.width / 2
+    const centerY = this.viewportSize.height / 2
 
-    if (e.key === ' ' && !this.isSpacePressed) {
-      this.isSpacePressed = true
-      e.preventDefault()
+    switch (combo) {
+      case 'ctrl+0': {
+        e.preventDefault()
+        this.engine.zoomTo(1, centerX, centerY)
+        break
+      }
+      case 'ctrl+minus': {
+        e.preventDefault()
+        this.engine.zoomBy(-this.zoomStep, centerX, centerY)
+        break
+      }
+      case 'ctrl+equal':
+      case 'ctrl+plus': {
+        e.preventDefault()
+        this.engine.zoomBy(this.zoomStep, centerX, centerY)
+        break
+      }
+      case 'ctrl+1': {
+        e.preventDefault()
+        // Fit to viewport：缩放至内容适配视口，留 5% 边距
+        // 简化实现：重置到初始居中状态
+        const vw = this.viewportSize.width
+        const vh = this.viewportSize.height
+        const cw = this.contentSize.width
+        const ch = this.contentSize.height
+        if (vw > 0 && vh > 0 && cw > 0 && ch > 0) {
+          const scaleX = (vw * 0.9) / cw
+          const scaleY = (vh * 0.9) / ch
+          const newScale = Math.min(scaleX, scaleY)
+          const newX = (vw - cw * newScale) / 2
+          const newY = (vh - ch * newScale) / 2
+          this.engine.setTransform({ scale: newScale, x: newX, y: newY })
+        }
+        break
+      }
+      case 'space': {
+        if (!this.isSpacePressed) {
+          this.isSpacePressed = true
+          e.preventDefault()
+        }
+        break
+      }
+      default:
+        break
     }
   }
 

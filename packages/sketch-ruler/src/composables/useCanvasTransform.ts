@@ -15,6 +15,10 @@ export interface CanvasTransformOptions {
   minZoom?: number
   maxZoom?: number
   enableAnimation?: boolean
+  animationMode?: TransformEngineOptions['animationMode']
+  dampingRatio?: number
+  naturalFrequency?: number
+  timeConstant?: number
   autoCenter?: boolean
   canvasSize?: { width: number; height: number }
   viewportSize?: { width: number; height: number }
@@ -41,6 +45,10 @@ export function useCanvasTransform(options: CanvasTransformOptions = {}): UseCan
     minZoom = 0.1,
     maxZoom = 10,
     enableAnimation = false,
+    animationMode,
+    dampingRatio,
+    naturalFrequency,
+    timeConstant,
     autoCenter = false,
     canvasSize,
     viewportSize,
@@ -68,7 +76,15 @@ export function useCanvasTransform(options: CanvasTransformOptions = {}): UseCan
   const engine = markRaw(
     new TransformEngine(
       { x: startOffset.x, y: startOffset.y, scale: startScale },
-      { minZoom, maxZoom, enableAnimation }
+      {
+        minZoom,
+        maxZoom,
+        enableAnimation,
+        animationMode,
+        dampingRatio,
+        naturalFrequency,
+        timeConstant
+      }
     )
   )
 

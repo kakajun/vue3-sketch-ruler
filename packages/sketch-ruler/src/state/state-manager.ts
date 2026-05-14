@@ -1,7 +1,6 @@
 /**
  * StateManager - 不可变状态快照管理
  * M1 基础版本：管理参考线数组的增删改
- * M4 将扩展为完整历史栈与 JSON Patch 序列化
  */
 
 import { ref, type Ref } from 'vue'
@@ -73,24 +72,25 @@ export class StateManager {
   /** 从 2.x 格式的 lines 导入 */
   importFromLegacy(legacyLines: { h: number[]; v: number[] }): void {
     const newLines: GuideLine[] = []
-    legacyLines.h.forEach((pos, i) => {
+    let id = 0
+    for (const h of legacyLines.h) {
       newLines.push({
-        id: `legacy-h-${i}-${Date.now()}`,
+        id: `legacy-h-${id++}-${Date.now()}`,
         orientation: 'h',
-        position: pos,
+        position: h,
         visible: true,
         locked: false
       })
-    })
-    legacyLines.v.forEach((pos, i) => {
+    }
+    for (const v of legacyLines.v) {
       newLines.push({
-        id: `legacy-v-${i}-${Date.now()}`,
+        id: `legacy-v-${id++}-${Date.now()}`,
         orientation: 'v',
-        position: pos,
+        position: v,
         visible: true,
         locked: false
       })
-    })
+    }
     this.lines.value = newLines
   }
 

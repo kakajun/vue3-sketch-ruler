@@ -31,6 +31,16 @@ export interface RulerPalette {
   hoverBg: string
   hoverColor: string
   borderColor: string
+  /** 参考线样式：solid | dashed | dotted */
+  guideLineStyle?: 'solid' | 'dashed' | 'dotted'
+  /** 参考线宽度 */
+  guideLineWidth?: number
+  /** 是否显示参考线标签 */
+  labelEnabled?: boolean
+  /** 标签位置 */
+  labelPosition?: 'start' | 'center' | 'end'
+  /** 标签格式化函数 */
+  labelFormat?: (value: number) => string
 }
 
 export interface RulerContext {

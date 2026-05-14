@@ -4,8 +4,17 @@
       ref="canvasRef"
       class="ruler"
       :style="rulerStyle"
-      @mousedown.stop="handleDragStart"
+      @pointerdown.stop="handlePointerDown"
     />
+    <!-- 拖拽创建参考线预览 -->
+    <div
+      v-if="isCreatingLine"
+      class="preview-line"
+      :class="{ snapping: isSnapping }"
+      :style="previewStyle"
+    >
+      <span class="preview-label">{{ Math.round(previewWorldPos) }}</span>
+    </div>
     <div v-show="showReferLine && !renderLinesInCanvas" class="lines">
       <div
         v-for="line in displayLines"
@@ -59,6 +68,101 @@ const rulerStyle = computed(() => ({
 }))
 
 const displayLines = computed(() => props.lines)
+
+// === M3 W12: 拖拽创建参考线 + 吸附预览 ===
+const isCreatingLine = ref(false)
+const isSnapping = ref(false)
+const previewScreenPos = ref(0)
+const previewWorldPos = ref(0)
+
+const previewStyle = computed(() => {
+  const pos = previewScreenPos.value
+  if (props.vertical) {
+    return {
+      left: `${pos}px`,
+      top: 0,
+      height: '100%',
+      width: '1px'
+    }
+  }
+  return {
+    top: `${pos}px`,
+    left: 0,
+    width: '100%',
+    height: '1px'
+  }
+})
+
+function handlePointerDown(e: PointerEvent): void {
+  // 仅在标尺区域（非刻度标签区域）触发
+  isCreatingLine.value = true
+  isSnapping.value = false
+  updatePreview(e)
+
+  const onMove = (moveEvent: PointerEvent) => {
+    updatePreview(moveEvent)
+  }
+
+  const onUp = (upEvent: PointerEvent) => {
+    document.removeEventListener('pointermove', onMove)
+    document.removeEventListener('pointerup', onUp)
+
+    if (isCreatingLine.value) {
+      // 如果拖拽距离很小（< 3px），视为点击直接创建；否则按最终位置创建
+      const worldPos = previewWorldPos.value
+      if (worldPos >= 0) {
+        emit('addLine', {
+          orientation: props.vertical ? 'v' : 'h',
+          position: Math.round(worldPos),
+          visible: true,
+          locked: false
+        })
+      }
+    }
+
+    isCreatingLine.value = false
+    isSnapping.value = false
+  }
+
+  document.addEventListener('pointermove', onMove)
+  document.addEventListener('pointerup', onUp)
+}
+
+function updatePreview(e: PointerEvent): void {
+  const rect = canvasRef.value?.getBoundingClientRect()
+  if (!rect) return
+
+  const screenPos = props.vertical
+    ? e.clientX - rect.left
+    : e.clientY - rect.top
+
+  // 基础世界坐标
+  let worldPos = (screenPos - props.offset) / props.scale
+
+  // 吸附检测：查找最近的刻度
+  const snapThreshold = 10 / props.scale // 10 像素转换为世界坐标
+  let bestTick: number | null = null
+  let bestDist = Infinity
+
+  for (const mark of ticks.value) {
+    if (!mark.isMajor) continue
+    const dist = Math.abs(worldPos - mark.value)
+    if (dist < snapThreshold && dist < bestDist) {
+      bestDist = dist
+      bestTick = mark.value
+    }
+  }
+
+  if (bestTick !== null) {
+    worldPos = bestTick
+    isSnapping.value = true
+  } else {
+    isSnapping.value = false
+  }
+
+  previewScreenPos.value = worldPos * props.scale + props.offset
+  previewWorldPos.value = worldPos
+}
 
 const lineStyle = (line: GuideLine) => {
   const pos = line.position * props.scale + props.offset + props.thick
@@ -142,21 +246,7 @@ watch(
   { deep: true }
 )
 
-const handleDragStart = (e: MouseEvent): void => {
-  // M1 简化版：直接从标尺拖拽创建参考线
-  const rect = (e.target as HTMLElement).getBoundingClientRect()
-  const pos = props.vertical
-    ? e.clientX - rect.left
-    : e.clientY - rect.top
-  const worldPos = (pos - props.offset) / props.scale
-
-  emit('addLine', {
-    orientation: props.vertical ? 'v' : 'h',
-    position: Math.round(worldPos),
-    visible: true,
-    locked: false
-  })
-}
+// handleDragStart 已替换为 handlePointerDown + 吸附预览
 </script>
 
 <style lang="scss" scoped>
@@ -175,5 +265,29 @@ const handleDragStart = (e: MouseEvent): void => {
 .line {
   position: absolute;
   pointer-events: auto;
+}
+
+.preview-line {
+  position: absolute;
+  pointer-events: none;
+  background: v-bind('palette.guideLineColor');
+  opacity: 0.5;
+  z-index: 5;
+
+  &.snapping {
+    opacity: 0.9;
+    background: v-bind('palette.hoverBg');
+  }
+}
+
+.preview-label {
+  position: absolute;
+  background: v-bind('palette.hoverBg');
+  color: v-bind('palette.hoverColor');
+  font-size: 10px;
+  padding: 2px 4px;
+  border-radius: 2px;
+  white-space: nowrap;
+  pointer-events: none;
 }
 </style>

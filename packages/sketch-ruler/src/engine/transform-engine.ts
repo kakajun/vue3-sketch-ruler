@@ -13,11 +13,20 @@ export interface TransformState {
   scale: number
 }
 
+export type AnimationMode = 'direct' | 'ease-out' | 'damped' | 'exponential'
+
 export interface TransformEngineOptions {
   minZoom?: number
   maxZoom?: number
   enableAnimation?: boolean
   animationDuration?: number
+  animationMode?: AnimationMode
+  /** 阻尼系数（damped 模式），默认 0.8 */
+  dampingRatio?: number
+  /** 自然频率 rad/s（damped 模式），默认 20 */
+  naturalFrequency?: number
+  /** 时间常数 ms（exponential 模式），默认 80 */
+  timeConstant?: number
 }
 
 export type TransformUpdateCallback = (state: TransformState) => void
@@ -30,18 +39,28 @@ export class TransformEngine {
   private maxZoom: number
   private enableAnimation: boolean
   private animationDuration: number
+  private animationMode: AnimationMode
+  private dampingRatio: number
+  private naturalFrequency: number
+  private timeConstant: number
 
   private pendingTransform = false
   private rafId: number | null = null
   private callbacks: Set<TransformUpdateCallback> = new Set()
 
   private lastFrameTime = 0
+  // damped 模式需要维护速度状态
+  private velocity = { x: 0, y: 0, scale: 0 }
 
   constructor(initial: TransformState = { x: 0, y: 0, scale: 1 }, options: TransformEngineOptions = {}) {
     this.minZoom = options.minZoom ?? 0.1
     this.maxZoom = options.maxZoom ?? 10
     this.enableAnimation = options.enableAnimation ?? false
     this.animationDuration = options.animationDuration ?? 200
+    this.animationMode = options.animationMode ?? 'ease-out'
+    this.dampingRatio = options.dampingRatio ?? 0.8
+    this.naturalFrequency = options.naturalFrequency ?? 20
+    this.timeConstant = options.timeConstant ?? 80
 
     const clampedScale = this.clampScale(initial.scale)
     this.currentState = { ...initial, scale: clampedScale }
@@ -190,23 +209,69 @@ export class TransformEngine {
       return
     }
 
-    // 简单的 ease-out 插值动画
     const deltaTime = this.lastFrameTime === 0 ? 16 : time - this.lastFrameTime
     this.lastFrameTime = time
+    const dt = deltaTime / 1000 // 秒
 
-    const t = Math.min(1, deltaTime / this.animationDuration)
-    const easeT = 1 - Math.pow(1 - t, 3) // ease-out cubic
+    switch (this.animationMode) {
+      case 'direct': {
+        this.currentState = { ...this.targetState }
+        break
+      }
+      case 'ease-out': {
+        const t = Math.min(1, deltaTime / this.animationDuration)
+        const easeT = 1 - Math.pow(1 - t, 3)
+        this.currentState.x = this.lerp(this.currentState.x, this.targetState.x, easeT)
+        this.currentState.y = this.lerp(this.currentState.y, this.targetState.y, easeT)
+        this.currentState.scale = this.lerp(this.currentState.scale, this.targetState.scale, easeT)
+        break
+      }
+      case 'exponential': {
+        // s_new = s_old + (s_target - s_old) * (1 - e^(-Δt/τ))
+        const tau = this.timeConstant / 1000
+        const k = 1 - Math.exp(-dt / tau)
+        this.currentState.x = this.lerp(this.currentState.x, this.targetState.x, k)
+        this.currentState.y = this.lerp(this.currentState.y, this.targetState.y, k)
+        this.currentState.scale = this.lerp(this.currentState.scale, this.targetState.scale, k)
+        break
+      }
+      case 'damped': {
+        // 二阶系统：s̈ + 2ζω₀ṡ + ω₀²s = ω₀²s_target
+        // 离散化（ semi-implicit Euler ）
+        const zeta = this.dampingRatio
+        const omega = this.naturalFrequency
+        const omega2 = omega * omega
 
-    this.currentState.x = this.lerp(this.currentState.x, this.targetState.x, easeT)
-    this.currentState.y = this.lerp(this.currentState.y, this.targetState.y, easeT)
-    this.currentState.scale = this.lerp(this.currentState.scale, this.targetState.scale, easeT)
+        // x 轴
+        const ax = omega2 * (this.targetState.x - this.currentState.x) - 2 * zeta * omega * this.velocity.x
+        this.velocity.x += ax * dt
+        this.currentState.x += this.velocity.x * dt
+
+        // y 轴
+        const ay = omega2 * (this.targetState.y - this.currentState.y) - 2 * zeta * omega * this.velocity.y
+        this.velocity.y += ay * dt
+        this.currentState.y += this.velocity.y * dt
+
+        // scale
+        const as = omega2 * (this.targetState.scale - this.currentState.scale) - 2 * zeta * omega * this.velocity.scale
+        this.velocity.scale += as * dt
+        this.currentState.scale += this.velocity.scale * dt
+        break
+      }
+    }
+
+    this.currentState.scale = this.clampScale(this.currentState.scale)
 
     // 如果还有明显差异，继续下一帧
-    const eps = 1e-4
+    const eps = this.animationMode === 'damped' ? 1e-2 : 1e-4
     const needsMore =
       Math.abs(this.currentState.x - this.targetState.x) > eps ||
       Math.abs(this.currentState.y - this.targetState.y) > eps ||
-      Math.abs(this.currentState.scale - this.targetState.scale) > eps
+      Math.abs(this.currentState.scale - this.targetState.scale) > eps ||
+      (this.animationMode === 'damped' &&
+        (Math.abs(this.velocity.x) > eps ||
+          Math.abs(this.velocity.y) > eps ||
+          Math.abs(this.velocity.scale) > eps))
 
     this.updateMatrix()
     this.notify()
@@ -215,6 +280,7 @@ export class TransformEngine {
       this.scheduleUpdate()
     } else {
       this.currentState = { ...this.targetState }
+      this.velocity = { x: 0, y: 0, scale: 0 }
       this.lastFrameTime = 0
     }
   }

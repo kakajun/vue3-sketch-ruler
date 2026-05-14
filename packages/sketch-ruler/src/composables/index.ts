@@ -4,8 +4,8 @@ export type { CanvasTransformOptions, UseCanvasTransformReturn } from './useCanv
 export { useRulerScale, getTickConfig } from './useRulerScale'
 export type { TickConfig, ScaleMark, RulerScaleOptions } from './useRulerScale'
 
-export { useSnapDetection } from './useSnapDetection'
-export type { SnapTarget, SnapResult, SnapOptions } from './useSnapDetection'
+export { useRulerSnap, useSnapDetection } from './useRulerSnap'
+export type { SnapTarget, SnapResult, SnapRule, SnapContext, SnapOptions } from './useRulerSnap'
 
 export { useSketchRuler } from './useSketchRuler'
 export type { SketchRulerOptions, UseSketchRulerReturn } from './useSketchRuler'

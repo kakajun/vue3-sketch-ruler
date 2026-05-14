@@ -37,7 +37,11 @@ export function createDefaultState(): RulerState {
       guideLineLockedColor: '#d4d7dc',
       hoverBg: '#000',
       hoverColor: '#fff',
-      borderColor: '#eeeeef'
+      borderColor: '#eeeeef',
+      guideLineStyle: 'dashed',
+      guideLineWidth: 1,
+      labelEnabled: true,
+      labelPosition: 'end'
     },
     snapConfig: {
       enabled: true,
