@@ -566,7 +566,7 @@ sketchRuler.setActiveRenderer('minimal')
 
 ---
 
-### Milestone 5：工程化与生态（预计 4 周）
+### Milestone 5：工程化与生态（✅ 已完成）
 
 **目标**：测试体系完善、构建分发现代化、调试模式、文档与迁移工具上线。
 

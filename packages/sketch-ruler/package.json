@@ -22,22 +22,48 @@
     "url": "git+https://github.com/kakajun/vue3-sketch-ruler.git"
   },
   "style": "lib/style.css",
+  "bin": {
+    "vue3-sketch-ruler-migrate": "./bin/migrate.js"
+  },
   "files": [
     "lib",
-    "src",
+    "bin",
     "AGENTS.md"
   ],
   "type": "module",
   "sideEffects": false,
   "main": "lib/index.js",
+  "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
       "import": "./lib/index.js",
-      "require": "./lib/index.umd.cjs"
+      "require": "./lib/index.cjs",
+      "browser": "./lib/index.iife.js"
     },
-    "./lib/style.css": "./lib/style.css"
+    "./style.css": "./lib/style.css",
+    "./lib/style.css": "./lib/style.css",
+    "./engine": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs"
+    },
+    "./composables": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs"
+    },
+    "./renderers": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs"
+    },
+    "./plugins": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs"
+    }
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
@@ -54,10 +80,5 @@
     "@vue/test-utils": "^2.4.6",
     "simple-panzoom": "workspace:*",
     "vitest": "^4.0.1"
-  },
-  "main1": "src/index.ts",
-  "repository2": {
-    "type": "gitee",
-    "url": "https://gitee.com/majun2232/vue3-sketch-Ruler"
   }
 }

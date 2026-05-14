@@ -16,7 +16,7 @@
         toggleReferLine: onCornerClick,
         toggleLinePanel
       }"
-      :state="{ scale: ownScale, offset, zoomMode: props.zoomMode, showReferLine: showReferLine.value, showLinePanel: showLinePanel.value }"
+      :state="toolbarState"
     />
     <div
       class="canvasedit-parent"
@@ -86,6 +86,17 @@
       @update="handlePanelUpdate"
       @clear="handlePanelClear"
     />
+
+    <DebugOverlay
+      v-if="props.debug"
+      ref="debugRef"
+      :transform="{
+        scale: ownScale.value,
+        offsetX: offset.value.x,
+        offsetY: offset.value.y
+      }"
+      :draw-calls="drawCallCount"
+    />
   </div>
 </template>
 
@@ -102,6 +113,7 @@ import RulerWrapperV3 from './RulerWrapperV3.vue'
 import RulerLinePanel from './RulerLinePanel.vue'
 import { PluginManager } from '../plugins/plugin-manager'
 import type { SketchRulerPlugin } from '../plugins/types'
+import DebugOverlay from './DebugOverlay.vue'
 
 // 2.x 兼容 props
 export interface SketchRulerV3Props {
@@ -131,6 +143,8 @@ export interface SketchRulerV3Props {
   showLinePanel?: boolean
   /** 插件列表 */
   plugins?: SketchRulerPlugin[]
+  /** 是否启用调试模式 */
+  debug?: boolean
 }
 
 const props = withDefaults(defineProps<SketchRulerV3Props>(), {
@@ -154,7 +168,8 @@ const props = withDefaults(defineProps<SketchRulerV3Props>(), {
   zoomMode: 'pointer',
   enableAnimation: false,
   showLinePanel: false,
-  plugins: () => []
+  plugins: () => [],
+  debug: false
 })
 
 const emit = defineEmits([
@@ -415,15 +430,17 @@ const cornerStyle = computed(() => ({
 
 // === M2: 全局参考线 Canvas 层 ===
 const guideLinesCanvasRef = ref<HTMLCanvasElement | null>(null)
+const debugRef = ref<InstanceType<typeof DebugOverlay> | null>(null)
+const drawCallCount = ref(0)
 const dpr = typeof window !== 'undefined' ? window.devicePixelRatio : 1
 
 const guideLinesCanvasStyle = computed(() => ({
-  position: 'absolute',
+  position: 'absolute' as const,
   left: '0',
   top: '0',
   width: rectWidth.value + 'px',
   height: rectHeight.value + 'px',
-  pointerEvents: 'none',
+  pointerEvents: 'none' as const,
   zIndex: 2
 }))
 
@@ -447,6 +464,7 @@ function drawGuideLines(): void {
     ratio: dpr,
     palette: paletteCpu.value
   })
+  drawCallCount.value++
 }
 
 watch(
@@ -502,6 +520,14 @@ const onCornerClick = (): void => {
 const showLinePanel = ref(props.showLinePanel)
 watch(() => props.showLinePanel, (v) => { showLinePanel.value = v })
 
+const toolbarState = computed(() => ({
+  scale: ownScale.value,
+  offset: offset.value,
+  zoomMode: props.zoomMode,
+  showReferLine: showReferLine.value,
+  showLinePanel: showLinePanel.value
+}))
+
 const toggleLinePanel = (): void => {
   showLinePanel.value = !showLinePanel.value
 }
@@ -533,7 +559,8 @@ defineExpose({
   stateManager,
   setZoomMode,
   zoomToPreset,
-  toggleLinePanel
+  toggleLinePanel,
+  debugRef
 })
 </script>
 

@@ -13,6 +13,10 @@
       :is-show-refer-line="post.isShowReferLine"
       :enable-animation="true"
       animation-mode="ease-out"
+      :zoom-mode="post.zoomMode"
+      :show-line-panel="post.showLinePanel"
+      :debug="post.debug"
+      :plugins="plugins"
       @zoomchange="handleZoomChange"
       @update:lines="handleLinesChange"
     >
@@ -26,6 +30,16 @@
           <button @click.stop="tools.reset">还原</button>
           <button @click.stop="tools.zoomIn">放大</button>
           <button @click.stop="tools.zoomOut">缩小</button>
+          <button @click.stop="tools.zoomToPreset(1)">100%</button>
+          <button @click.stop="toggleZoomMode">
+            {{ state.zoomMode === 'pointer' ? '鼠标' : state.zoomMode === 'viewport-center' ? '视口' : '内容' }}
+          </button>
+          <button @click.stop="post.showLinePanel = !post.showLinePanel">
+            {{ state.showLinePanel ? '隐藏面板' : '参考线面板' }}
+          </button>
+          <button @click.stop="post.debug = !post.debug">
+            {{ state.debug ? '关闭调试' : '调试' }}
+          </button>
           <span class="scale-label">{{ (state.scale * 100).toFixed(0) }}%</span>
         </div>
       </template>
@@ -37,6 +51,7 @@
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive } from 'vue'
 import { SketchRulerV3 } from 'vue3-sketch-ruler'
+import type { SketchRulerPlugin } from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
 
 const sketchRef = ref()
@@ -48,13 +63,24 @@ const post = reactive({
   canvasWidth: 1000,
   canvasHeight: 500,
   showRuler: true,
-  palette: { bgColor: 'transparent', lineType: 'dashed' },
+  palette: { bgColor: 'transparent', guideLineStyle: 'dashed' as const, labelEnabled: true },
   isShowReferLine: true,
+  zoomMode: 'pointer' as 'pointer' | 'viewport-center' | 'content-center',
+  showLinePanel: false,
+  debug: false,
   lines: {
     h: [0, 250],
     v: [0, 500]
   }
 })
+
+const plugins: SketchRulerPlugin[] = [
+  {
+    name: 'demo-logger',
+    onLineCreate: (ctx) => console.log('[plugin] line created', ctx.line.id),
+    onLineDelete: (ctx) => console.log('[plugin] line deleted', ctx.line.id)
+  }
+]
 
 const rectStyle = computed(() => {
   return {
@@ -69,6 +95,12 @@ const canvasStyle = computed(() => {
     height: `${post.canvasHeight}px`
   }
 })
+
+const toggleZoomMode = () => {
+  const modes: Array<'pointer' | 'viewport-center' | 'content-center'> = ['pointer', 'viewport-center', 'content-center']
+  const idx = modes.indexOf(post.zoomMode)
+  post.zoomMode = modes[(idx + 1) % modes.length]
+}
 
 const handleZoomChange = (detail: any) => {
   console.log('zoomchange', detail)
@@ -107,6 +139,7 @@ const handleLinesChange = (lines: { h: number[]; v: number[] }) => {
   button {
     padding: 4px 12px;
     cursor: pointer;
+    font-size: 12px;
   }
 
   .scale-label {

@@ -67,7 +67,8 @@ import Aside from '../components/layout/Aside.vue'
 import { ElMessage } from 'element-plus'
 const examplesSource = import.meta.glob('../examples/*.vue', {
   eager: true,
-  as: 'raw'
+  query: '?raw',
+  import: 'default'
 })
 
 const router = useRouter()

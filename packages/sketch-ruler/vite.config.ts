@@ -29,8 +29,13 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'SketchRuler',
-      fileName: 'index',
-      formats: ['es', 'umd']
+      fileName: (format) => {
+        if (format === 'umd') return 'index.umd.cjs'
+        if (format === 'cjs') return 'index.cjs'
+        if (format === 'iife') return 'index.iife.js'
+        return 'index.js'
+      },
+      formats: ['es', 'cjs', 'umd', 'iife']
     },
 
     rollupOptions: {
@@ -39,12 +44,13 @@ export default defineConfig({
       output: {
         banner,
         assetFileNames: (chunkInfo) => {
-          if (chunkInfo.name && /index\.css$/.test(chunkInfo.name)) return 'style.css'
+          if (chunkInfo.name && /\.css$/.test(chunkInfo.name)) return 'style.css'
           return chunkInfo.name ? chunkInfo.name : '[name][extname]'
         },
         globals: {
           vue: 'Vue'
-        }
+        },
+        exports: 'named'
       }
     }
   }
