@@ -116,6 +116,7 @@ const props = withDefaults(defineProps<SketchRulerV3Props>(), {
 
 const emit = defineEmits([
   'update:scale',
+  'update:offset',
   'zoomchange',
   'update:lines',
   'update:lockLine',
@@ -132,29 +133,40 @@ const { scale, offset, engine, setTransform, zoomBy, zoomTo, panBy, reset } = us
 
 const ownScale = computed(() => scale.value)
 
-// 监听引擎变化，向上 emit
-watch(scale, (newScale) => {
-  emit('update:scale', newScale)
+// 外部 prop 变化 → 同步到引擎
+watch(() => props.scale, (newScale) => {
+  if (newScale !== undefined && Math.abs(newScale - scale.value) > 1e-10) {
+    engine.setTransform({ scale: newScale })
+  }
 })
 
+// 监听引擎变化，向上 emit（带防抖避免循环）
+let emittingScale = false
+watch(scale, (newScale) => {
+  if (!emittingScale) {
+    emittingScale = true
+    emit('update:scale', newScale)
+    requestAnimationFrame(() => { emittingScale = false })
+  }
+})
+
+let emittingOffset = false
 watch(offset, (newOffset) => {
-  emit('zoomchange', {
-    scale: scale.value,
-    x: newOffset.x,
-    y: newOffset.y
-  })
-  // 同步 DOM transform
-  if (canvasRef.value) {
-    canvasRef.value.style.transform = `matrix(${scale.value}, 0, 0, ${scale.value}, ${newOffset.x}, ${newOffset.y})`
+  if (!emittingOffset) {
+    emittingOffset = true
+    emit('zoomchange', {
+      scale: scale.value,
+      x: newOffset.x,
+      y: newOffset.y
+    })
+    emit('update:offset', { x: newOffset.x, y: newOffset.y })
+    // 同步 DOM transform
+    if (canvasRef.value) {
+      canvasRef.value.style.transform = `matrix(${scale.value}, 0, 0, ${scale.value}, ${newOffset.x}, ${newOffset.y})`
+    }
+    requestAnimationFrame(() => { emittingOffset = false })
   }
 }, { deep: true })
-
-watch(scale, (newScale) => {
-  if (canvasRef.value) {
-    const o = offset.value
-    canvasRef.value.style.transform = `matrix(${newScale}, 0, 0, ${newScale}, ${o.x}, ${o.y})`
-  }
-})
 
 // === 输入管理 ===
 const rootRef = ref<HTMLElement | null>(null)

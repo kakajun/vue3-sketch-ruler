@@ -92,6 +92,13 @@ export const menuRoutes: RouteRecordRaw[] = [
     meta: {
       title: 'multi-instance'
     }
+  },
+  {
+    path: 'v3-demo',
+    component: () => import('@/examples/v3-demo.vue'),
+    meta: {
+      title: 'v3-demo (新架构)'
+    }
   }
 ]
 
