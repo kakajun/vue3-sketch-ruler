@@ -183,6 +183,12 @@ const isHovered = ref(false)
 let inputManager: InputManager | null = null
 
 onMounted(() => {
+  // 初始状态同步到 DOM（watch 不会在初始化时触发）
+  if (canvasRef.value) {
+    const s = scale.value
+    const o = offset.value
+    canvasRef.value.style.transform = `matrix(${s}, 0, 0, ${s}, ${o.x}, ${o.y})`
+  }
   if (canvasRef.value && !props.selfHandle) {
     inputManager = new InputManager(engine, {
       zoomStep: props.zoomStep,
@@ -357,6 +363,7 @@ defineExpose({
     position: absolute;
     left: v-bind("props.thick + 'px'");
     top: v-bind("props.thick + 'px'");
+    overflow: hidden;
   }
 
   .corner {
