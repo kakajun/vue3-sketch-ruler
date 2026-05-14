@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import SketchRule from '../src/index'
+import SketchRule from '../src/sketch-ruler/index.vue'
 
 describe('SketchRule integration', () => {
   test('emits update:scale on zoomIn', async () => {
