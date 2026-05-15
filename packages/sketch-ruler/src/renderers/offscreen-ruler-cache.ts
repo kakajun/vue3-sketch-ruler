@@ -95,7 +95,20 @@ export class OffscreenRulerCache {
     const { thick, palette, vertical, width, height } = payload
     // 刻度密度由 marks 中首尾 value 差推断
     const density = marks.length > 1 ? marks[1].value - marks[0].value : 0
-    return `${thick}:${palette.bgColor}:${palette.tickColor}:${palette.labelColor}:${vertical}:${width}:${height}:${density}`
+
+    // 从 marks 推断 scale 和 offset，确保缩放/平移变化时缓存失效
+    let scale = 1
+    let offset = 0
+    if (marks.length >= 2) {
+      const first = marks[0]
+      const second = marks.find((m) => m.value !== first.value) ?? marks[1]
+      if (second && second.value !== first.value) {
+        scale = (second.position - first.position) / (second.value - first.value)
+        offset = first.position - first.value * scale
+      }
+    }
+
+    return `${thick}:${palette.bgColor}:${palette.tickColor}:${palette.labelColor}:${vertical}:${width}:${height}:${density}:${scale.toFixed(4)}:${offset.toFixed(2)}`
   }
 
   /** 清空缓存 */

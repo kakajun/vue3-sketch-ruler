@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 
-interface Props {
+export interface DebugOverlayProps {
   transform: {
     scale: number
     offsetX: number
@@ -49,7 +49,7 @@ interface Props {
   drawCalls?: number
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<DebugOverlayProps>(), {
   drawCalls: 0
 })
 

@@ -48,7 +48,8 @@ export class LabelCache {
   private createEntry(ctx: CanvasRenderingContext2D, key: LabelCacheKey): CacheEntry {
     const { text, font, color } = key
 
-    // 使用传入 ctx 的 font 设置测量
+    // 必须先设置字体再测量，否则 measureText 会使用 ctx 当前的默认字体
+    ctx.font = font
     const metrics = ctx.measureText(text)
     const width = Math.ceil(metrics.width)
     const height = Math.ceil(metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent) || 12

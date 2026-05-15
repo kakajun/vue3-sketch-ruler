@@ -4,7 +4,7 @@
       ref="canvasRef"
       class="ruler"
       :style="rulerStyle"
-      @pointerdown.stop="handlePointerDown"
+      @mousedown.stop="handlePointerDown"
     />
     <!-- 拖拽创建参考线预览 -->
     <div
@@ -20,8 +20,16 @@
         v-for="line in displayLines"
         :key="line.id"
         class="line"
+        :class="{ active: activeLineId === line.id }"
         :style="lineStyle(line)"
-      />
+        @mouseenter.stop="handleLineEnter(line)"
+        @mouseleave.stop="handleLineLeave"
+        @mousedown.stop="handleLineMouseDown(line, $event)"
+      >
+        <span v-if="showLineLabel && activeLineId === line.id" class="line-label">
+          {{ lineLabelText(line) }}
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -45,6 +53,10 @@ interface Props {
   showReferLine: boolean
   /** 参考线是否由外部 Canvas 统一绘制（M2 性能优化） */
   renderLinesInCanvas?: boolean
+  /** 阴影起始位置（世界坐标） */
+  shadowStart?: number
+  /** 阴影长度（世界坐标） */
+  shadowLength?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -68,6 +80,81 @@ const rulerStyle = computed(() => ({
 }))
 
 const displayLines = computed(() => props.lines)
+
+// === 已存在参考线交互 ===
+const activeLineId = ref<string | null>(null)
+const showLineLabel = ref(false)
+let labelTimer: ReturnType<typeof setTimeout> | null = null
+
+function handleLineEnter(line: GuideLine): void {
+  if (line.locked) return
+  activeLineId.value = line.id
+  if (labelTimer) clearTimeout(labelTimer)
+  labelTimer = setTimeout(() => {
+    if (activeLineId.value === line.id) showLineLabel.value = true
+  }, 50)
+}
+
+function handleLineLeave(): void {
+  if (labelTimer) clearTimeout(labelTimer)
+  labelTimer = setTimeout(() => {
+    showLineLabel.value = false
+    activeLineId.value = null
+  }, 200)
+}
+
+function lineLabelText(line: GuideLine): string {
+  return `${props.vertical ? 'X' : 'Y'}: ${Math.round(line.position)}`
+}
+
+function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
+  if (line.locked) return
+  e.preventDefault()
+  activeLineId.value = line.id
+  showLineLabel.value = true
+
+  const rect = canvasRef.value?.getBoundingClientRect()
+  if (!rect) return
+
+  const startMouse = props.vertical
+    ? e.clientX - rect.left
+    : e.clientY - rect.top
+  const startPos = line.position
+
+  const onMove = (moveEvent: MouseEvent) => {
+    const currentMouse = props.vertical
+      ? moveEvent.clientX - rect.left
+      : moveEvent.clientY - rect.top
+    const delta = (currentMouse - startMouse) / props.scale
+    let newPos = startPos + delta
+
+    // 吸附到最近刻度
+    const snapThreshold = 10 / props.scale
+    let bestTick: number | null = null
+    let bestDist = Infinity
+    for (const mark of ticks.value) {
+      if (!mark.isMajor) continue
+      const dist = Math.abs(newPos - mark.value)
+      if (dist < snapThreshold && dist < bestDist) {
+        bestDist = dist
+        bestTick = mark.value
+      }
+    }
+    if (bestTick !== null) newPos = bestTick
+
+    emit('updateLine', line.id, Math.round(newPos))
+  }
+
+  const onUp = () => {
+    document.removeEventListener('mousemove', onMove)
+    document.removeEventListener('mouseup', onUp)
+    showLineLabel.value = false
+    activeLineId.value = null
+  }
+
+  document.addEventListener('mousemove', onMove)
+  document.addEventListener('mouseup', onUp)
+}
 
 // === M3 W12: 拖拽创建参考线 + 吸附预览 ===
 const isCreatingLine = ref(false)
@@ -93,19 +180,19 @@ const previewStyle = computed(() => {
   }
 })
 
-function handlePointerDown(e: PointerEvent): void {
+function handlePointerDown(e: MouseEvent): void {
   // 仅在标尺区域（非刻度标签区域）触发
   isCreatingLine.value = true
   isSnapping.value = false
   updatePreview(e)
 
-  const onMove = (moveEvent: PointerEvent) => {
+  const onMove = (moveEvent: MouseEvent) => {
     updatePreview(moveEvent)
   }
 
-  const onUp = (upEvent: PointerEvent) => {
-    document.removeEventListener('pointermove', onMove)
-    document.removeEventListener('pointerup', onUp)
+  const onUp = () => {
+    document.removeEventListener('mousemove', onMove)
+    document.removeEventListener('mouseup', onUp)
 
     if (isCreatingLine.value) {
       // 如果拖拽距离很小（< 3px），视为点击直接创建；否则按最终位置创建
@@ -124,11 +211,11 @@ function handlePointerDown(e: PointerEvent): void {
     isSnapping.value = false
   }
 
-  document.addEventListener('pointermove', onMove)
-  document.addEventListener('pointerup', onUp)
+  document.addEventListener('mousemove', onMove)
+  document.addEventListener('mouseup', onUp)
 }
 
-function updatePreview(e: PointerEvent): void {
+function updatePreview(e: MouseEvent): void {
   const rect = canvasRef.value?.getBoundingClientRect()
   if (!rect) return
 
@@ -171,13 +258,15 @@ function updatePreview(e: PointerEvent): void {
 const lineStyle = (line: GuideLine) => {
   const canvasOffset = props.vertical ? props.offset.x : props.offset.y
   const pos = line.position * props.scale + canvasOffset + props.thick
+  const cursor = line.locked ? 'default' : props.vertical ? 'ew-resize' : 'ns-resize'
   if (props.vertical) {
     return {
       left: `${pos}px`,
       top: 0,
       height: '100vh',
       width: '1px',
-      borderLeft: `1px dashed ${props.palette.guideLineColor}`
+      borderLeft: `1px dashed ${props.palette.guideLineColor}`,
+      cursor
     }
   }
   return {
@@ -185,7 +274,8 @@ const lineStyle = (line: GuideLine) => {
     left: 0,
     width: '100vw',
     height: '1px',
-    borderBottom: `1px dashed ${props.palette.guideLineColor}`
+    borderBottom: `1px dashed ${props.palette.guideLineColor}`,
+    cursor
   }
 }
 
@@ -230,7 +320,10 @@ function drawRuler(): void {
     width: props.width,
     height: props.height,
     ratio: dpr,
-    palette: props.palette
+    palette: props.palette,
+    shadowStart: props.shadowStart,
+    shadowLength: props.shadowLength,
+    showShadowText: true
   }], {
     x: 0,
     y: 0,
@@ -260,6 +353,14 @@ watch(
   position: absolute;
 }
 
+.h-container {
+  top: 0;
+}
+
+.v-container {
+  left: 0;
+}
+
 .lines {
   position: absolute;
   top: 0;
@@ -270,6 +371,32 @@ watch(
 .line {
   position: absolute;
   pointer-events: auto;
+}
+
+.h-container .line {
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 4px;
+  }
+  &::before { top: -4px; }
+  &::after { bottom: -4px; }
+}
+
+.v-container .line {
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 4px;
+  }
+  &::before { left: -4px; }
+  &::after { right: -4px; }
 }
 
 .preview-line {
@@ -283,6 +410,18 @@ watch(
     opacity: 0.9;
     background: v-bind('palette.hoverBg');
   }
+}
+
+.line-label {
+  position: absolute;
+  background: v-bind('palette.hoverBg');
+  color: v-bind('palette.hoverColor');
+  font-size: 10px;
+  padding: 2px 4px;
+  border-radius: 2px;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: scale(0.83);
 }
 
 .preview-label {

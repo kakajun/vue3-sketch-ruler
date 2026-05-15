@@ -26,13 +26,7 @@
       <div ref="canvasRef" class="canvasedit" :style="canvasStyle" :class="cursorClass">
         <slot />
       </div>
-      <!-- M2: 全局参考线 Canvas 层，pointer-events: none 由 RulerLine.vue 处理交互 -->
-      <canvas
-        v-show="showReferLine"
-        ref="guideLinesCanvasRef"
-        class="guide-lines-canvas"
-        :style="guideLinesCanvasStyle"
-      />
+
     </div>
 
     <!-- 水平标尺 -->
@@ -48,7 +42,9 @@
       :lines="horizontalLines"
       :palette="paletteCpu"
       :show-refer-line="showReferLine"
-      :render-lines-in-canvas="true"
+      :shadow-start="shadow.x"
+      :shadow-length="shadow.width"
+      :render-lines-in-canvas="false"
       @add-line="handleAddLine"
       @update-line="handleUpdateLine"
     />
@@ -66,7 +62,9 @@
       :lines="verticalLines"
       :palette="paletteCpu"
       :show-refer-line="showReferLine"
-      :render-lines-in-canvas="true"
+      :shadow-start="shadow.y"
+      :shadow-length="shadow.height"
+      :render-lines-in-canvas="false"
       @add-line="handleAddLine"
       @update-line="handleUpdateLine"
     />
@@ -91,11 +89,11 @@
       v-if="props.debug"
       ref="debugRef"
       :transform="{
-        scale: ownScale.value,
-        offsetX: offset.value.x,
-        offsetY: offset.value.y
+        scale: ownScale,
+        offsetX: offset.x,
+        offsetY: offset.y
       }"
-      :draw-calls="drawCallCount"
+
     />
   </div>
 </template>
@@ -108,7 +106,7 @@ import { InputManager } from '../input/input-manager'
 import { StateManager } from '../state/state-manager'
 import { RulerContextKey } from '../state/ruler-context'
 import type { GuideLine, RulerContext, RulerPalette } from '../state/ruler-context'
-import { renderGuideLines } from '../renderers/guide-line-renderer'
+
 import RulerWrapperV3 from './RulerWrapperV3.vue'
 import RulerLinePanel from './RulerLinePanel.vue'
 import { PluginManager } from '../plugins/plugin-manager'
@@ -145,6 +143,12 @@ export interface SketchRulerV3Props {
   plugins?: SketchRulerPlugin[]
   /** 是否启用调试模式 */
   debug?: boolean
+  /** 是否自动居中画布 */
+  autoCenter?: boolean
+  /** 阴影区域（画布高亮） */
+  shadow?: { x: number; y: number; width: number; height: number }
+  /** 初始偏移（autoCenter=false 时生效） */
+  initialOffset?: { x: number; y: number }
 }
 
 const props = withDefaults(defineProps<SketchRulerV3Props>(), {
@@ -169,7 +173,10 @@ const props = withDefaults(defineProps<SketchRulerV3Props>(), {
   enableAnimation: false,
   showLinePanel: false,
   plugins: () => [],
-  debug: false
+  debug: false,
+  autoCenter: true,
+  shadow: () => ({ x: 0, y: 0, width: 0, height: 0 }),
+  initialOffset: () => ({ x: 0, y: 0 })
 })
 
 const emit = defineEmits([
@@ -187,12 +194,12 @@ const rectHeight = computed(() => props.height - props.thick)
 
 const { scale, offset, engine, setTransform, zoomBy, zoomTo, panBy, reset } = useCanvasTransform({
   initialScale: props.scale,
-  initialOffset: { x: 0, y: 0 },
+  initialOffset: props.initialOffset,
   minZoom: props.minZoom,
   maxZoom: props.maxZoom,
   enableAnimation: props.enableAnimation,
   animationMode: props.animationMode,
-  autoCenter: true,
+  autoCenter: props.autoCenter,
   canvasSize: { width: props.canvasWidth, height: props.canvasHeight },
   viewportSize: { width: rectWidth.value, height: rectHeight.value },
   paddingRatio: 0.2
@@ -302,7 +309,7 @@ watch(
 watch(
   [() => props.canvasWidth, () => props.canvasHeight, () => props.width, () => props.height],
   () => {
-    // 直接调用 setTransform 重新计算居中
+    if (!props.autoCenter) return
     const w = props.width - props.thick
     const h = props.height - props.thick
     const cw = props.canvasWidth
@@ -428,62 +435,8 @@ const cornerStyle = computed(() => ({
   borderBottom: `1px solid ${paletteCpu.value.borderColor}`
 }))
 
-// === M2: 全局参考线 Canvas 层 ===
-const guideLinesCanvasRef = ref<HTMLCanvasElement | null>(null)
 const debugRef = ref<InstanceType<typeof DebugOverlay> | null>(null)
-const drawCallCount = ref(0)
 const dpr = typeof window !== 'undefined' ? window.devicePixelRatio : 1
-
-const guideLinesCanvasStyle = computed(() => ({
-  position: 'absolute' as const,
-  left: '0',
-  top: '0',
-  width: rectWidth.value + 'px',
-  height: rectHeight.value + 'px',
-  pointerEvents: 'none' as const,
-  zIndex: 2
-}))
-
-function drawGuideLines(): void {
-  const canvas = guideLinesCanvasRef.value
-  if (!canvas) return
-  const ctx = canvas.getContext('2d')
-  if (!ctx) return
-
-  canvas.width = Math.round(rectWidth.value * dpr)
-  canvas.height = Math.round(rectHeight.value * dpr)
-
-  renderGuideLines(ctx, {
-    lines: stateManager.getLines().value,
-    scale: ownScale.value,
-    offsetX: offset.value.x,
-    offsetY: offset.value.y,
-    thick: props.thick,
-    width: rectWidth.value,
-    height: rectHeight.value,
-    ratio: dpr,
-    palette: paletteCpu.value
-  })
-  drawCallCount.value++
-}
-
-watch(
-  () => [
-    stateManager.getLines().value.length,
-    ownScale.value,
-    offset.value.x,
-    offset.value.y,
-    showReferLine.value
-  ],
-  () => {
-    drawGuideLines()
-  },
-  { deep: true, flush: 'post' }
-)
-
-onMounted(() => {
-  drawGuideLines()
-})
 
 // === 方法 ===
 const zoomIn = async (): Promise<void> => {
