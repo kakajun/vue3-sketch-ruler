@@ -68,8 +68,13 @@ describe('produceState', () => {
     expect(next.lines[0].id).toBe('x')
   })
 
-  it('importLegacy converts h/v arrays to lines', () => {
-    const next = produceState(base, { type: 'importLegacy', legacy: { h: [10, 20], v: [30] } })
+  it('setLines replaces with converted h/v arrays', () => {
+    const lines: GuideLine[] = [
+      { id: 'h1', orientation: 'h', position: 10, visible: true, locked: false },
+      { id: 'h2', orientation: 'h', position: 20, visible: true, locked: false },
+      { id: 'v1', orientation: 'v', position: 30, visible: true, locked: false }
+    ]
+    const next = produceState(base, { type: 'setLines', lines })
     expect(next.lines).toHaveLength(3)
     expect(next.lines.filter((l) => l.orientation === 'h')).toHaveLength(2)
     expect(next.lines.filter((l) => l.orientation === 'v')).toHaveLength(1)

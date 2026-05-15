@@ -51,8 +51,6 @@ export interface UseSketchRulerReturn {
   moveLine: (id: string, position: number) => void
   removeLine: (id: string) => void
   toggleLineLock: (id: string) => void
-  exportToLegacy: () => { h: number[]; v: number[] }
-  importFromLegacy: (lines: { h: number[]; v: number[] }) => void
   context: RulerContext
 }
 
@@ -95,10 +93,30 @@ export function useSketchRuler(options: SketchRulerOptions): UseSketchRulerRetur
 
   // 导入初始参考线
   if (options.lines) {
-    state.value = produceState(state.value, { type: 'importLegacy', legacy: options.lines })
+    const newLines: GuideLine[] = []
+    let id = 0
+    for (const h of options.lines.h) {
+      newLines.push({
+        id: `h-${id++}-${Date.now()}`,
+        orientation: 'h',
+        position: h,
+        visible: true,
+        locked: false
+      })
+    }
+    for (const v of options.lines.v) {
+      newLines.push({
+        id: `v-${id++}-${Date.now()}`,
+        orientation: 'v',
+        position: v,
+        visible: true,
+        locked: false
+      })
+    }
+    state.value = produceState(state.value, { type: 'setLines', lines: newLines })
   }
 
-  // 兼容：同步 lockLine prop 到全局参考线状态
+  // 同步 lockLine prop 到全局参考线状态
   if (options.lockLine !== undefined && options.lockLine) {
     state.value = produceState(state.value, {
       type: 'setLines',
@@ -160,22 +178,6 @@ export function useSketchRuler(options: SketchRulerOptions): UseSketchRulerRetur
     }
   }
 
-  const exportToLegacy = (): { h: number[]; v: number[] } => {
-    const h: number[] = []
-    const v: number[] = []
-    for (const line of state.value.lines) {
-      if (line.visible !== false) {
-        if (line.orientation === 'h') h.push(line.position)
-        else v.push(line.position)
-      }
-    }
-    return { h, v }
-  }
-
-  const importFromLegacy = (lines: { h: number[]; v: number[] }): void => {
-    dispatch({ type: 'importLegacy', legacy: lines })
-  }
-
   const zoomIn = (): void => {
     const step = options.zoomStep ?? 0.25
     zoomBy(step, canvasWidth / 2, canvasHeight / 2)
@@ -233,8 +235,6 @@ export function useSketchRuler(options: SketchRulerOptions): UseSketchRulerRetur
     moveLine,
     removeLine,
     toggleLineLock,
-    exportToLegacy,
-    importFromLegacy,
     context
   }
 }

@@ -69,41 +69,7 @@ export class StateManager {
     this.lines.value = []
   }
 
-  /** 从 2.x 格式的 lines 导入 */
-  importFromLegacy(legacyLines: { h: number[]; v: number[] }): void {
-    const newLines: GuideLine[] = []
-    let id = 0
-    for (const h of legacyLines.h) {
-      newLines.push({
-        id: `legacy-h-${id++}-${Date.now()}`,
-        orientation: 'h',
-        position: h,
-        visible: true,
-        locked: false
-      })
-    }
-    for (const v of legacyLines.v) {
-      newLines.push({
-        id: `legacy-v-${id++}-${Date.now()}`,
-        orientation: 'v',
-        position: v,
-        visible: true,
-        locked: false
-      })
-    }
-    this.lines.value = newLines
-  }
-
-  /** 导出为 2.x 格式的 lines（兼容层） */
-  exportToLegacy(): { h: number[]; v: number[] } {
-    const h: number[] = []
-    const v: number[] = []
-    for (const line of this.lines.value) {
-      if (line.visible !== false) {
-        if (line.orientation === 'h') h.push(line.position)
-        else v.push(line.position)
-      }
-    }
-    return { h, v }
+  setLines(lines: GuideLine[]): void {
+    this.lines.value = [...lines]
   }
 }

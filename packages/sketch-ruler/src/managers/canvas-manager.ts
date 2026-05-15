@@ -202,12 +202,12 @@ export class CanvasManager {
     }
   }
 
-  private importLines(legacy?: { h: number[]; v: number[] }): GuideLine[] {
-    if (!legacy) return []
-    const lines: GuideLine[] = []
+  private importLines(lines?: { h: number[]; v: number[] }): GuideLine[] {
+    if (!lines) return []
+    const result: GuideLine[] = []
     let id = 0
-    for (const h of legacy.h) {
-      lines.push({
+    for (const h of lines.h) {
+      result.push({
         id: `h-${id++}-${Date.now()}`,
         orientation: 'h',
         position: h,
@@ -215,8 +215,8 @@ export class CanvasManager {
         locked: false
       })
     }
-    for (const v of legacy.v) {
-      lines.push({
+    for (const v of lines.v) {
+      result.push({
         id: `v-${id++}-${Date.now()}`,
         orientation: 'v',
         position: v,
@@ -224,6 +224,6 @@ export class CanvasManager {
         locked: false
       })
     }
-    return lines
+    return result
   }
 }

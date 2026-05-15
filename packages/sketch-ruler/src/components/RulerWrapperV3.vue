@@ -337,7 +337,7 @@ onMounted(() => {
 })
 
 watch(
-  () => [props.scale, props.offset, props.width, props.height, props.palette],
+  () => [props.scale, props.offset, props.width, props.height, props.palette, props.shadowStart, props.shadowLength],
   () => {
     drawRuler()
   },

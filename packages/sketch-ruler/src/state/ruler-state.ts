@@ -18,7 +18,6 @@ export type RulerAction =
   | { type: 'moveLine'; id: string; position: number }
   | { type: 'updateLine'; id: string; updates: Partial<Omit<GuideLine, 'id'>> }
   | { type: 'setLines'; lines: GuideLine[] }
-  | { type: 'importLegacy'; legacy: { h: number[]; v: number[] } }
   | { type: 'setPalette'; palette: Partial<RulerPalette> }
   | { type: 'setSnapConfig'; config: Partial<SnapConfig> }
   | { type: 'toggleReferLine'; value?: boolean }
@@ -90,30 +89,6 @@ export function produceState(current: RulerState, action: RulerAction): RulerSta
     case 'setLines': {
       if (action.lines === current.lines) return current
       return { ...current, lines: action.lines }
-    }
-
-    case 'importLegacy': {
-      const lines: GuideLine[] = []
-      let id = 0
-      for (const h of action.legacy.h) {
-        lines.push({
-          id: `h-${id++}`,
-          orientation: 'h',
-          position: h,
-          visible: true,
-          locked: false
-        })
-      }
-      for (const v of action.legacy.v) {
-        lines.push({
-          id: `v-${id++}`,
-          orientation: 'v',
-          position: v,
-          visible: true,
-          locked: false
-        })
-      }
-      return { ...current, lines }
     }
 
     case 'setPalette': {

@@ -13,8 +13,7 @@
         reset,
         setZoomMode,
         zoomToPreset,
-        toggleReferLine: onCornerClick,
-        toggleLinePanel
+        toggleReferLine: onCornerClick
       }"
       :state="toolbarState"
     />
@@ -76,25 +75,7 @@
       @click="onCornerClick"
     />
 
-    <RulerLinePanel
-      v-if="showLinePanel"
-      :lines="stateManager.getLines().value"
-      @add="handlePanelAdd"
-      @remove="handlePanelRemove"
-      @update="handlePanelUpdate"
-      @clear="handlePanelClear"
-    />
 
-    <DebugOverlay
-      v-if="props.debug"
-      ref="debugRef"
-      :transform="{
-        scale: ownScale,
-        offsetX: offset.x,
-        offsetY: offset.y
-      }"
-
-    />
   </div>
 </template>
 
@@ -108,13 +89,10 @@ import { RulerContextKey } from '../state/ruler-context'
 import type { GuideLine, RulerContext, RulerPalette } from '../state/ruler-context'
 
 import RulerWrapperV3 from './RulerWrapperV3.vue'
-import RulerLinePanel from './RulerLinePanel.vue'
 import { PluginManager } from '../plugins/plugin-manager'
 import type { SketchRulerPlugin } from '../plugins/types'
-import DebugOverlay from './DebugOverlay.vue'
 
-// 2.x 兼容 props
-export interface SketchRulerV3Props {
+export interface SketchRulerProps {
   showRuler?: boolean
   scale?: number
   thick?: number
@@ -137,12 +115,8 @@ export interface SketchRulerV3Props {
   zoomMode?: 'pointer' | 'viewport-center' | 'content-center'
   /** 是否启用平滑动画 */
   enableAnimation?: boolean
-  /** 是否显示参考线管理面板 */
-  showLinePanel?: boolean
   /** 插件列表 */
   plugins?: SketchRulerPlugin[]
-  /** 是否启用调试模式 */
-  debug?: boolean
   /** 是否自动居中画布 */
   autoCenter?: boolean
   /** 阴影区域（画布高亮） */
@@ -151,7 +125,7 @@ export interface SketchRulerV3Props {
   initialOffset?: { x: number; y: number }
 }
 
-const props = withDefaults(defineProps<SketchRulerV3Props>(), {
+const props = withDefaults(defineProps<SketchRulerProps>(), {
   showRuler: true,
   scale: 1,
   thick: 16,
@@ -171,9 +145,7 @@ const props = withDefaults(defineProps<SketchRulerV3Props>(), {
   animationMode: 'ease-out',
   zoomMode: 'pointer',
   enableAnimation: false,
-  showLinePanel: false,
   plugins: () => [],
-  debug: false,
   autoCenter: true,
   shadow: () => ({ x: 0, y: 0, width: 0, height: 0 }),
   initialOffset: () => ({ x: 0, y: 0 })
@@ -288,7 +260,32 @@ const cursorClass = computed(() => {
 
 // === 参考线状态管理 ===
 const stateManager = new StateManager()
-stateManager.importFromLegacy(props.lines)
+
+function importLines(lines: { h: number[]; v: number[] }): void {
+  const newLines: GuideLine[] = []
+  let id = 0
+  for (const h of lines.h) {
+    newLines.push({
+      id: `h-${id++}-${Date.now()}`,
+      orientation: 'h',
+      position: h,
+      visible: true,
+      locked: false
+    })
+  }
+  for (const v of lines.v) {
+    newLines.push({
+      id: `v-${id++}-${Date.now()}`,
+      orientation: 'v',
+      position: v,
+      visible: true,
+      locked: false
+    })
+  }
+  stateManager.setLines(newLines)
+}
+
+importLines(props.lines)
 
 const horizontalLines = computed(() =>
   stateManager.getLines().value.filter((l) => l.orientation === 'h' && l.visible !== false)
@@ -300,7 +297,7 @@ const verticalLines = computed(() =>
 watch(
   () => props.lines,
   (newLines) => {
-    stateManager.importFromLegacy(newLines)
+    if (newLines) importLines(newLines)
   },
   { deep: true }
 )
@@ -328,51 +325,27 @@ watch(
 const showReferLine = ref(props.isShowReferLine)
 watch(() => props.isShowReferLine, (v) => { showReferLine.value = v })
 
+function exportLines(): { h: number[]; v: number[] } {
+  const h: number[] = []
+  const v: number[] = []
+  for (const line of stateManager.getLines().value) {
+    if (line.visible !== false) {
+      if (line.orientation === 'h') h.push(line.position)
+      else v.push(line.position)
+    }
+  }
+  return { h, v }
+}
+
 const handleAddLine = (line: Omit<GuideLine, 'id'>): void => {
   const newLine = stateManager.addLine(line)
   pluginManager.onLineCreate({ line: newLine })
-  emit('update:lines', stateManager.exportToLegacy())
+  emit('update:lines', exportLines())
 }
 
 const handleUpdateLine = (id: string, position: number): void => {
   stateManager.moveLine(id, position)
-  emit('update:lines', stateManager.exportToLegacy())
-}
-
-// === 参考线面板事件处理 ===
-const handlePanelAdd = (orientation: 'h' | 'v', position?: number): void => {
-  const pos = position ?? (orientation === 'h'
-    ? (-offset.value.y + rectHeight.value / 2) / ownScale.value
-    : (-offset.value.x + rectWidth.value / 2) / ownScale.value)
-  stateManager.addLine({ orientation, position: pos, locked: false })
-  emit('update:lines', stateManager.exportToLegacy())
-}
-
-const handlePanelRemove = (id: string): void => {
-  const line = stateManager.getLines().value.find((l) => l.id === id)
-  stateManager.removeLine(id)
-  if (line) pluginManager.onLineDelete({ line })
-  emit('update:lines', stateManager.exportToLegacy())
-}
-
-const handlePanelUpdate = (id: string, updates: Partial<Omit<GuideLine, 'id'>>): void => {
-  const line = stateManager.getLines().value.find((l) => l.id === id)
-  const prevPosition = line?.position
-  stateManager.updateLine(id, updates)
-  const updated = stateManager.getLines().value.find((l) => l.id === id)
-  if (updated && prevPosition !== undefined && 'position' in updates && updates.position !== undefined) {
-    pluginManager.onLineMove({ line: updated, from: prevPosition, to: updates.position })
-  }
-  emit('update:lines', stateManager.exportToLegacy())
-}
-
-const handlePanelClear = (): void => {
-  const removed = [...stateManager.getLines().value]
-  stateManager.clear()
-  for (const line of removed) {
-    pluginManager.onLineDelete({ line })
-  }
-  emit('update:lines', stateManager.exportToLegacy())
+  emit('update:lines', exportLines())
 }
 
 // === provide/inject 上下文 ===
@@ -435,9 +408,6 @@ const cornerStyle = computed(() => ({
   borderBottom: `1px solid ${paletteCpu.value.borderColor}`
 }))
 
-const debugRef = ref<InstanceType<typeof DebugOverlay> | null>(null)
-const dpr = typeof window !== 'undefined' ? window.devicePixelRatio : 1
-
 // === 方法 ===
 const zoomIn = async (): Promise<void> => {
   const rect = canvasRef.value?.getBoundingClientRect()
@@ -470,20 +440,12 @@ const onCornerClick = (): void => {
   emit('onCornerClick', showReferLine.value)
 }
 
-const showLinePanel = ref(props.showLinePanel)
-watch(() => props.showLinePanel, (v) => { showLinePanel.value = v })
-
 const toolbarState = computed(() => ({
   scale: ownScale.value,
   offset: offset.value,
   zoomMode: props.zoomMode,
-  showReferLine: showReferLine.value,
-  showLinePanel: showLinePanel.value
+  showReferLine: showReferLine.value
 }))
-
-const toggleLinePanel = (): void => {
-  showLinePanel.value = !showLinePanel.value
-}
 
 const setZoomMode = (mode: 'pointer' | 'viewport-center' | 'content-center'): void => {
   if (inputManager) {
@@ -511,9 +473,7 @@ defineExpose({
   setTransform,
   stateManager,
   setZoomMode,
-  zoomToPreset,
-  toggleLinePanel,
-  debugRef
+  zoomToPreset
 })
 </script>
 

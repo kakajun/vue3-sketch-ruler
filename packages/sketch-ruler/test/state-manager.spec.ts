@@ -55,20 +55,27 @@ describe('StateManager', () => {
     expect(sm.getLines().value).toHaveLength(0)
   })
 
-  it('importFromLegacy converts h/v arrays', () => {
+  it('setLines replaces entire array', () => {
     const sm = new StateManager()
-    sm.importFromLegacy({ h: [10, 20], v: [30] })
+    sm.setLines([
+      { id: 'h1', orientation: 'h', position: 10, visible: true, locked: false },
+      { id: 'h2', orientation: 'h', position: 20, visible: true, locked: false },
+      { id: 'v1', orientation: 'v', position: 30, visible: true, locked: false }
+    ])
     expect(sm.getLines().value).toHaveLength(3)
     expect(sm.getLines().value.filter((l) => l.orientation === 'h')).toHaveLength(2)
     expect(sm.getLines().value.filter((l) => l.orientation === 'v')).toHaveLength(1)
   })
 
-  it('exportToLegacy filters invisible lines', () => {
+  it('getLines filters invisible lines correctly', () => {
     const sm = new StateManager()
-    sm.importFromLegacy({ h: [10, 20], v: [30] })
-    sm.updateLine(sm.getLines().value[0].id, { visible: false })
-    const legacy = sm.exportToLegacy()
-    expect(legacy.h).toHaveLength(1)
-    expect(legacy.v).toHaveLength(1)
+    sm.setLines([
+      { id: 'h1', orientation: 'h', position: 10, visible: false, locked: false },
+      { id: 'h2', orientation: 'h', position: 20, visible: true, locked: false },
+      { id: 'v1', orientation: 'v', position: 30, visible: true, locked: false }
+    ])
+    const visibleLines = sm.getLines().value.filter((l) => l.visible !== false)
+    expect(visibleLines.filter((l) => l.orientation === 'h')).toHaveLength(1)
+    expect(visibleLines.filter((l) => l.orientation === 'v')).toHaveLength(1)
   })
 })

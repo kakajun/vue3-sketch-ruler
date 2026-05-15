@@ -139,7 +139,7 @@ describe('useSketchRuler', () => {
     expect(result.paletteCpu.value.tickColor).toBeDefined()
   })
 
-  it('exportToLegacy and importFromLegacy are symmetric', async () => {
+  it('lines initialization and state updates work correctly', async () => {
     const wrapper = mount(TestComp as any, {
       props: {
         options: {
@@ -155,14 +155,17 @@ describe('useSketchRuler', () => {
     await nextTick()
 
     const { result } = wrapper.vm as any
-    const legacy = result.exportToLegacy()
-    expect(legacy.h).toContain(10)
-    expect(legacy.h).toContain(20)
-    expect(legacy.v).toContain(30)
+    // 验证初始 lines 被正确导入
+    expect(result.horizontalLines.value).toHaveLength(2)
+    expect(result.verticalLines.value).toHaveLength(1)
+    expect(result.horizontalLines.value.map((l: any) => l.position)).toContain(10)
+    expect(result.horizontalLines.value.map((l: any) => l.position)).toContain(20)
+    expect(result.verticalLines.value.map((l: any) => l.position)).toContain(30)
 
-    result.importFromLegacy({ h: [100], v: [] })
+    // 验证 addLine 后状态更新
+    result.addLine({ orientation: 'h', position: 100, visible: true, locked: false })
     await nextTick()
-    expect(result.horizontalLines.value).toHaveLength(1)
-    expect(result.horizontalLines.value[0].position).toBe(100)
+    expect(result.horizontalLines.value).toHaveLength(3)
+    expect(result.horizontalLines.value.map((l: any) => l.position)).toContain(100)
   })
 })

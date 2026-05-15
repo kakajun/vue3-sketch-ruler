@@ -1,13 +1,9 @@
-// v3 新架构组件
-import SketchRulerV3 from './components/SketchRuler.vue'
+// 新架构组件
+import SketchRuler from './components/SketchRuler.vue'
 import Minimap from './components/Minimap.vue'
-import RulerLinePanel from './components/RulerLinePanel.vue'
-
-// 保持向后兼容的旧组件（将在 M5 迁移阶段移除）
-import SketchRuleLegacy from './sketch-ruler/index.vue'
 
 // 类型导出
-export type { SketchRulerV3Props } from './components/SketchRuler.vue'
+export type { SketchRulerProps } from './components/SketchRuler.vue'
 export type { TransformState, TransformEngineOptions } from './engine/transform-engine'
 export type { CanvasTransformOptions, UseCanvasTransformReturn } from './composables/useCanvasTransform'
 export type { ScaleMark, RulerScaleOptions } from './composables/useRulerScale'
@@ -27,9 +23,6 @@ export { InputManager } from './input/input-manager'
 export { PluginManager } from './plugins/plugin-manager'
 export { CanvasManager, BUILTIN_TEMPLATES } from './managers/canvas-manager'
 
-// v3 组件导出
-export { SketchRulerV3, Minimap, RulerLinePanel }
-export default SketchRulerV3
-
-// 兼容导出（2.x 别名）
-export { SketchRuleLegacy as SketchRule }
+// 组件导出
+export { SketchRuler, Minimap }
+export default SketchRuler

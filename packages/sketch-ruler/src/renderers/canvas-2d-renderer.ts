@@ -43,6 +43,7 @@ export class Canvas2DRenderer implements Renderer {
     this.offscreenCache.drawStatic(ctx, marks, payload)
 
     // 2. 阴影区域（动态，不缓存）
+    const shadowTextPositions: number[] = []
     if (shadowLength && marks.length > 0) {
       const shadowX = shadowStart ?? 0
       // 从 marks 推断 scale 和 offset：position = value * scale + offset
@@ -70,31 +71,41 @@ export class Canvas2DRenderer implements Renderer {
           const shadowEnd = shadowX + shadowLength
           const screenEnd = shadowEnd * scale + offset
           this.renderShadowText(ctx, shadowEnd, screenEnd, thick, vertical, palette, true)
+          shadowTextPositions.push(screenStart, screenEnd)
         }
       }
     }
 
-    // 3. 标签（使用 LabelCache 缓存）
+    // 3. 标签（和 v2 坐标保持一致，直接 fillText）
     for (const mark of marks) {
       if (mark.isMajor && mark.label) {
+        // 靠近阴影文字时跳过，避免重叠
+        const isNearShadow = shadowTextPositions.some(
+          (pos) => Math.abs(mark.position - pos) < thick * 1.5
+        )
+        if (isNearShadow) continue
+
         ctx.save()
+        ctx.fillStyle = palette.labelColor
+        ctx.font = `${Math.max(9, Math.floor(thick * 0.5))}px -apple-system, "Helvetica Neue", ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif`
+
         if (vertical) {
-          ctx.translate(width * 0.2, mark.position + thick * 0.15)
-          ctx.rotate(-Math.PI / 2)
+          const metrics = ctx.measureText(mark.label)
+          const textWidth = metrics.width
+          // rotate(-90°) 后文字沿新 x 轴向上排列，反转字符串保持从上到下读
+          const labelY = mark.position + textWidth + 4
+          ctx.translate(width * 0.3, labelY)
+          ctx.rotate(-90 * Math.PI / 180)
+          ctx.fillText(mark.label.split('').reverse().join(''), 4, 9)
         } else {
-          ctx.translate(mark.position + thick * 0.05, height * 0.4)
+          if (mark.value === 0) {
+            ctx.translate(mark.position - 15, height * 0.01)
+          } else {
+            ctx.translate(mark.position - 12, height * 0.05)
+          }
+          ctx.fillText(mark.label, 4, 9)
         }
 
-        const font = `${thick * 0.5}px sans-serif`
-        const entry = this.labelCache.get(ctx, {
-          text: mark.label,
-          font,
-          color: palette.labelColor
-        })
-
-        if (entry.width > 0) {
-          ctx.drawImage(entry.canvas, 0, -entry.height / 2)
-        }
         ctx.restore()
       }
     }
