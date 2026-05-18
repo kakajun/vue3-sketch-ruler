@@ -1,9 +1,5 @@
 <template>
-  <canvas
-    ref="canvasRef"
-    class="ruler"
-    :style="canvasStyle"
-  />
+  <canvas ref="canvasRef" class="ruler" :style="canvasStyle" />
 </template>
 
 <script setup lang="ts">
@@ -73,7 +69,15 @@ onMounted(() => {
 })
 
 watch(
-  () => [props.marks, props.palette, props.vertical, props.thick, props.width, props.height, props.ratio],
+  () => [
+    props.marks,
+    props.palette,
+    props.vertical,
+    props.thick,
+    props.width,
+    props.height,
+    props.ratio
+  ],
   () => {
     draw()
   },

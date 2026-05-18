@@ -17,15 +17,10 @@
       }"
       :state="toolbarState"
     />
-    <div
-      class="canvasedit-parent"
-      :style="rectStyle"
-      :class="cursorClass"
-    >
+    <div class="canvasedit-parent" :style="rectStyle" :class="cursorClass">
       <div ref="canvasRef" class="canvasedit" :style="canvasStyle" :class="cursorClass">
         <slot />
       </div>
-
     </div>
 
     <!-- 水平标尺 -->
@@ -68,14 +63,7 @@
       @update-line="handleUpdateLine"
     />
 
-    <a
-      v-show="showRuler"
-      class="corner"
-      :style="cornerStyle"
-      @click="onCornerClick"
-    />
-
-
+    <a v-show="showRuler" class="corner" :style="cornerStyle" @click="onCornerClick" />
   </div>
 </template>
 
@@ -181,19 +169,26 @@ const ownScale = computed(() => scale.value)
 
 // === 插件系统 ===
 const pluginManager = new PluginManager()
-watch(() => props.plugins, (newPlugins) => {
-  pluginManager.clear()
-  for (const plugin of (newPlugins ?? [])) {
-    pluginManager.register(plugin)
-  }
-}, { immediate: true, deep: true })
+watch(
+  () => props.plugins,
+  (newPlugins) => {
+    pluginManager.clear()
+    for (const plugin of newPlugins ?? []) {
+      pluginManager.register(plugin)
+    }
+  },
+  { immediate: true, deep: true }
+)
 
 // 外部 prop 变化 → 同步到引擎
-watch(() => props.scale, (newScale) => {
-  if (newScale !== undefined && Math.abs(newScale - scale.value) > 1e-10) {
-    engine.setTransform({ scale: newScale })
+watch(
+  () => props.scale,
+  (newScale) => {
+    if (newScale !== undefined && Math.abs(newScale - scale.value) > 1e-10) {
+      engine.setTransform({ scale: newScale })
+    }
   }
-})
+)
 
 // 监听引擎变化，向上 emit（带防抖避免循环）
 let emittingScale = false
@@ -201,27 +196,35 @@ watch(scale, (newScale) => {
   if (!emittingScale) {
     emittingScale = true
     emit('update:scale', newScale)
-    requestAnimationFrame(() => { emittingScale = false })
+    requestAnimationFrame(() => {
+      emittingScale = false
+    })
   }
 })
 
 let emittingOffset = false
-watch(offset, (newOffset) => {
-  if (!emittingOffset) {
-    emittingOffset = true
-    emit('zoomchange', {
-      scale: scale.value,
-      x: newOffset.x,
-      y: newOffset.y
-    })
-    emit('update:offset', { x: newOffset.x, y: newOffset.y })
-    // 同步 DOM transform
-    if (canvasRef.value) {
-      canvasRef.value.style.transform = `matrix(${scale.value}, 0, 0, ${scale.value}, ${newOffset.x}, ${newOffset.y})`
+watch(
+  offset,
+  (newOffset) => {
+    if (!emittingOffset) {
+      emittingOffset = true
+      emit('zoomchange', {
+        scale: scale.value,
+        x: newOffset.x,
+        y: newOffset.y
+      })
+      emit('update:offset', { x: newOffset.x, y: newOffset.y })
+      // 同步 DOM transform
+      if (canvasRef.value) {
+        canvasRef.value.style.transform = `matrix(${scale.value}, 0, 0, ${scale.value}, ${newOffset.x}, ${newOffset.y})`
+      }
+      requestAnimationFrame(() => {
+        emittingOffset = false
+      })
     }
-    requestAnimationFrame(() => { emittingOffset = false })
-  }
-}, { deep: true })
+  },
+  { deep: true }
+)
 
 // === 输入管理 ===
 const rootRef = ref<HTMLElement | null>(null)
@@ -323,9 +326,19 @@ watch(
 )
 
 const showReferLine = ref(props.isShowReferLine)
-watch(() => props.isShowReferLine, (v) => { showReferLine.value = v })
+watch(
+  () => props.isShowReferLine,
+  (v) => {
+    showReferLine.value = v
+  }
+)
 
-watch(() => props.showRuler, (v) => { context.showRuler.value = v })
+watch(
+  () => props.showRuler,
+  (v) => {
+    context.showRuler.value = v
+  }
+)
 
 function exportLines(): { h: number[]; v: number[] } {
   const h: number[] = []
@@ -505,7 +518,7 @@ defineExpose({
     cursor: pointer;
     box-sizing: content-box;
     transition: all 0.2s ease-in-out;
-    background: v-bind("paletteCpu.bgColor");
+    background: v-bind('paletteCpu.bgColor');
   }
 
   .default {

@@ -3,9 +3,4 @@ export { RulerContextKey } from './ruler-context'
 
 export { StateManager } from './state-manager'
 
-export {
-  createDefaultState,
-  produceState,
-  type RulerState,
-  type RulerAction
-} from './ruler-state'
+export { createDefaultState, produceState, type RulerState, type RulerAction } from './ruler-state'

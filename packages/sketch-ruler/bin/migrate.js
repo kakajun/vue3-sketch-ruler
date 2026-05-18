@@ -64,9 +64,9 @@ const REPLACEMENTS = [
   // handleLine 事件
   {
     pattern: /@handleLine\s*=\s*["']([^"']+)["']/g,
-    replacement: "@update:lines=\"$1\"",
+    replacement: '@update:lines="$1"',
     desc: 'handleLine → update:lines'
-  },
+  }
   // v-model:scale 已兼容，无需替换
   // canvasWidth/canvasHeight 已兼容
   // isShowReferLine 已兼容
@@ -92,10 +92,16 @@ function scanFile(filePath) {
 
   // 检测不可自动迁移的模式
   if (/simple-panzoom/.test(content)) {
-    stats.warnings.push({ file: filePath, msg: '检测到 simple-panzoom 引用，v3 已内置 TransformEngine，需手动移除' })
+    stats.warnings.push({
+      file: filePath,
+      msg: '检测到 simple-panzoom 引用，v3 已内置 TransformEngine，需手动移除'
+    })
   }
   if (/useLine\b/.test(content)) {
-    stats.warnings.push({ file: filePath, msg: '检测到 useLine 引用，v3 已重构为 StateManager 和 composables' })
+    stats.warnings.push({
+      file: filePath,
+      msg: '检测到 useLine 引用，v3 已重构为 StateManager 和 composables'
+    })
   }
   if (/lockLine\b/.test(content) && !/update:lockLine/.test(content)) {
     stats.warnings.push({ file: filePath, msg: 'lockLine API 已变更，请查阅迁移指南' })
@@ -136,7 +142,9 @@ function printReport() {
   }
 
   console.log('\n✅ 迁移完成！请检查变更并运行测试。')
-  console.log('📖 详细迁移指南: https://github.com/kakajun/vue3-sketch-ruler/blob/main/MIGRATION.md')
+  console.log(
+    '📖 详细迁移指南: https://github.com/kakajun/vue3-sketch-ruler/blob/main/MIGRATION.md'
+  )
 }
 
 console.log(`🔍 扫描目录: ${targetDir}\n`)

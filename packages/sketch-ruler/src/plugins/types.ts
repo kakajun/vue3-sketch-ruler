@@ -62,16 +62,8 @@ export interface RenderConfig {
 }
 
 export interface RulerRenderer {
-  renderTicks(
-    ctx: CanvasRenderingContext2D,
-    ticks: TickInfo[],
-    config: RenderConfig
-  ): void
-  renderLabels(
-    ctx: CanvasRenderingContext2D,
-    labels: LabelInfo[],
-    config: RenderConfig
-  ): void
+  renderTicks(ctx: CanvasRenderingContext2D, ticks: TickInfo[], config: RenderConfig): void
+  renderLabels(ctx: CanvasRenderingContext2D, labels: LabelInfo[], config: RenderConfig): void
 }
 
 export interface SketchRulerPlugin {

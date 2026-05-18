@@ -1,11 +1,6 @@
 <template>
   <div :class="containerClass">
-    <canvas
-      ref="canvasRef"
-      class="ruler"
-      :style="rulerStyle"
-      @mousedown.stop="handlePointerDown"
-    />
+    <canvas ref="canvasRef" class="ruler" :style="rulerStyle" @mousedown.stop="handlePointerDown" />
     <!-- 拖拽创建参考线预览 -->
     <div
       v-if="isCreatingLine"
@@ -67,16 +62,13 @@ const emit = defineEmits(['addLine', 'updateLine'])
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const ratio = ref(typeof window !== 'undefined' ? window.devicePixelRatio : 1)
 
-const containerClass = computed(() =>
-  props.vertical ? 'v-container' : 'h-container'
-)
+const containerClass = computed(() => (props.vertical ? 'v-container' : 'h-container'))
 
 const rulerStyle = computed(() => ({
   width: props.width + 'px',
   height: props.height + 'px',
   cursor: props.vertical ? 'ew-resize' : 'ns-resize',
-  [props.vertical ? 'borderRight' : 'borderBottom']:
-    `1px solid ${props.palette.borderColor}`
+  [props.vertical ? 'borderRight' : 'borderBottom']: `1px solid ${props.palette.borderColor}`
 }))
 
 const displayLines = computed(() => props.lines)
@@ -116,9 +108,7 @@ function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
   const rect = canvasRef.value?.getBoundingClientRect()
   if (!rect) return
 
-  const startMouse = props.vertical
-    ? e.clientX - rect.left
-    : e.clientY - rect.top
+  const startMouse = props.vertical ? e.clientX - rect.left : e.clientY - rect.top
   const startPos = line.position
 
   const onMove = (moveEvent: MouseEvent) => {
@@ -219,9 +209,7 @@ function updatePreview(e: MouseEvent): void {
   const rect = canvasRef.value?.getBoundingClientRect()
   if (!rect) return
 
-  const screenPos = props.vertical
-    ? e.clientX - rect.left
-    : e.clientY - rect.top
+  const screenPos = props.vertical ? e.clientX - rect.left : e.clientY - rect.top
 
   // 参考线创建需要另一方向的 offset（水平标尺创建水平线需 Y 偏移，垂直标尺创建垂直线需 X 偏移）
   const canvasOffset = props.vertical ? props.offset.x : props.offset.y
@@ -312,24 +300,30 @@ function drawRuler(): void {
   canvas.width = Math.round(props.width * dpr)
   canvas.height = Math.round(props.height * dpr)
 
-  renderer.render(ctx, [{
-    type: 'ruler',
-    marks: ticks.value,
-    vertical: props.vertical,
-    thick: props.thick,
-    width: props.width,
-    height: props.height,
-    ratio: dpr,
-    palette: props.palette,
-    shadowStart: props.shadowStart,
-    shadowLength: props.shadowLength,
-    showShadowText: true
-  }], {
-    x: 0,
-    y: 0,
-    width: props.width,
-    height: props.height
-  })
+  renderer.render(
+    ctx,
+    [
+      {
+        type: 'ruler',
+        marks: ticks.value,
+        vertical: props.vertical,
+        thick: props.thick,
+        width: props.width,
+        height: props.height,
+        ratio: dpr,
+        palette: props.palette,
+        shadowStart: props.shadowStart,
+        shadowLength: props.shadowLength,
+        showShadowText: true
+      }
+    ],
+    {
+      x: 0,
+      y: 0,
+      width: props.width,
+      height: props.height
+    }
+  )
 }
 
 onMounted(() => {
@@ -337,7 +331,15 @@ onMounted(() => {
 })
 
 watch(
-  () => [props.scale, props.offset, props.width, props.height, props.palette, props.shadowStart, props.shadowLength],
+  () => [
+    props.scale,
+    props.offset,
+    props.width,
+    props.height,
+    props.palette,
+    props.shadowStart,
+    props.shadowLength
+  ],
   () => {
     drawRuler()
   },
@@ -382,8 +384,12 @@ watch(
     width: 100%;
     height: 4px;
   }
-  &::before { top: -4px; }
-  &::after { bottom: -4px; }
+  &::before {
+    top: -4px;
+  }
+  &::after {
+    bottom: -4px;
+  }
 }
 
 .v-container .line {
@@ -395,8 +401,12 @@ watch(
     height: 100%;
     width: 4px;
   }
-  &::before { left: -4px; }
-  &::after { right: -4px; }
+  &::before {
+    left: -4px;
+  }
+  &::after {
+    right: -4px;
+  }
 }
 
 .preview-line {

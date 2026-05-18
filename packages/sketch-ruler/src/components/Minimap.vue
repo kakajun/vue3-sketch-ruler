@@ -143,7 +143,15 @@ function drawMinimap(): void {
 }
 
 watch(
-  () => [props.contentWidth, props.contentHeight, props.viewportX, props.viewportY, props.scale, props.width, props.height],
+  () => [
+    props.contentWidth,
+    props.contentHeight,
+    props.viewportX,
+    props.viewportY,
+    props.scale,
+    props.width,
+    props.height
+  ],
   () => {
     drawMinimap()
   },

@@ -95,7 +95,7 @@ export class Canvas2DRenderer implements Renderer {
           // rotate(-90°) 后文字沿新 x 轴向上排列，反转字符串保持从上到下读
           const labelY = mark.position + textWidth + 4
           ctx.translate(width * 0.3, labelY)
-          ctx.rotate(-90 * Math.PI / 180)
+          ctx.rotate((-90 * Math.PI) / 180)
           ctx.fillText(mark.label.split('').reverse().join(''), 4, 9)
         } else {
           if (mark.value === 0) {

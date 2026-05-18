@@ -20,8 +20,18 @@ export function fromTransform(scale: number, tx: number, ty: number): Matrix6 {
 
 /** 矩阵乘法：result = m1 × m2 */
 export function multiply(m1: Matrix6, m2: Matrix6): Matrix6 {
-  const a1 = m1[0], b1 = m1[1], c1 = m1[2], d1 = m1[3], e1 = m1[4], f1 = m1[5]
-  const a2 = m2[0], b2 = m2[1], c2 = m2[2], d2 = m2[3], e2 = m2[4], f2 = m2[5]
+  const a1 = m1[0],
+    b1 = m1[1],
+    c1 = m1[2],
+    d1 = m1[3],
+    e1 = m1[4],
+    f1 = m1[5]
+  const a2 = m2[0],
+    b2 = m2[1],
+    c2 = m2[2],
+    d2 = m2[3],
+    e2 = m2[4],
+    f2 = m2[5]
 
   return new Float64Array([
     a1 * a2 + c1 * b2,
@@ -35,7 +45,12 @@ export function multiply(m1: Matrix6, m2: Matrix6): Matrix6 {
 
 /** 矩阵求逆 */
 export function invert(m: Matrix6): Matrix6 | null {
-  const a = m[0], b = m[1], c = m[2], d = m[3], e = m[4], f = m[5]
+  const a = m[0],
+    b = m[1],
+    c = m[2],
+    d = m[3],
+    e = m[4],
+    f = m[5]
   const det = a * d - b * c
 
   if (Math.abs(det) < 1e-10) {

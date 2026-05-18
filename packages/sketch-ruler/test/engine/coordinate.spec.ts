@@ -1,6 +1,12 @@
 import { describe, test, expect } from 'vitest'
 import { fromTransform } from '../../src/engine/matrix'
-import { toWorldPoint, toScreenPoint, batchToWorld, batchToScreen, fitRect } from '../../src/engine/coordinate'
+import {
+  toWorldPoint,
+  toScreenPoint,
+  batchToWorld,
+  batchToScreen,
+  fitRect
+} from '../../src/engine/coordinate'
 
 describe('coordinate', () => {
   test('toWorldPoint converts screen to world', () => {
@@ -35,7 +41,10 @@ describe('coordinate', () => {
 
   test('batchToWorld converts multiple points', () => {
     const m = fromTransform(2, 100, 50)
-    const points = [{ x: 300, y: 250 }, { x: 400, y: 350 }]
+    const points = [
+      { x: 300, y: 250 },
+      { x: 400, y: 350 }
+    ]
     const result = batchToWorld(m, points)
     expect(result[0].x).toBe(100)
     expect(result[0].y).toBe(100)
@@ -45,7 +54,10 @@ describe('coordinate', () => {
 
   test('batchToScreen converts multiple points', () => {
     const m = fromTransform(2, 100, 50)
-    const points = [{ x: 100, y: 100 }, { x: 150, y: 150 }]
+    const points = [
+      { x: 100, y: 100 },
+      { x: 150, y: 150 }
+    ]
     const result = batchToScreen(m, points)
     expect(result[0].x).toBe(300)
     expect(result[0].y).toBe(250)

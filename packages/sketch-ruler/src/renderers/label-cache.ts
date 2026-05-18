@@ -52,7 +52,8 @@ export class LabelCache {
     ctx.font = font
     const metrics = ctx.measureText(text)
     const width = Math.ceil(metrics.width)
-    const height = Math.ceil(metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent) || 12
+    const height =
+      Math.ceil(metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent) || 12
 
     if (width === 0 || height === 0) {
       return { canvas: document.createElement('canvas'), width: 0, height: 0 }

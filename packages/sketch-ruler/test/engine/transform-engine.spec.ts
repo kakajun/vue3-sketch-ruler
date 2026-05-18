@@ -120,10 +120,7 @@ describe('TransformEngine', () => {
   })
 
   test('destroy cleans up', () => {
-    const animated = new TransformEngine(
-      { x: 0, y: 0, scale: 1 },
-      { enableAnimation: true }
-    )
+    const animated = new TransformEngine({ x: 0, y: 0, scale: 1 }, { enableAnimation: true })
     animated.setTransform({ scale: 2 })
     animated.destroy()
     expect(true).toBe(true)

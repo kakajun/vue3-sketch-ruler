@@ -5,7 +5,10 @@ import Minimap from './components/Minimap.vue'
 // 类型导出
 export type { SketchRulerProps } from './components/SketchRuler.vue'
 export type { TransformState, TransformEngineOptions } from './engine/transform-engine'
-export type { CanvasTransformOptions, UseCanvasTransformReturn } from './composables/useCanvasTransform'
+export type {
+  CanvasTransformOptions,
+  UseCanvasTransformReturn
+} from './composables/useCanvasTransform'
 export type { ScaleMark, RulerScaleOptions } from './composables/useRulerScale'
 export type { SnapTarget, SnapResult, SnapOptions } from './composables/useSnapDetection'
 export type { GuideLine, RulerPalette, RulerContext, SnapConfig } from './state/ruler-context'

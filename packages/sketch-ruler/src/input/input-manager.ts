@@ -75,8 +75,12 @@ export class InputManager {
       onMouseDown: this.handleMouseDown.bind(this),
       onMouseMove: this.handleMouseMove.bind(this),
       onMouseUp: this.handleMouseUp.bind(this),
-      onMouseEnter: () => { this.isHovered = true },
-      onMouseLeave: () => { this.isHovered = false }
+      onMouseEnter: () => {
+        this.isHovered = true
+      },
+      onMouseLeave: () => {
+        this.isHovered = false
+      }
     }
 
     this.mouseAdapter = new MouseAdapter(parent, mouseCallbacks)
@@ -155,7 +159,7 @@ export class InputManager {
           if (this.pendingWheelDelta === 0) return
 
           const currentScale = this.engine.getState().scale
-          const toScale = currentScale * Math.exp(this.pendingWheelDelta * this.zoomStep / 3)
+          const toScale = currentScale * Math.exp((this.pendingWheelDelta * this.zoomStep) / 3)
           this.pendingWheelDelta = 0
 
           this.engine.zoomTo(toScale, originX, originY)

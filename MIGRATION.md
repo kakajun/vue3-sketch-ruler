@@ -18,8 +18,8 @@ npx vue3-sketch-ruler-migrate ./src
 
 ### 1. 组件名变更
 
-| 2.x | 3.x |
-|-----|-----|
+| 2.x                              | 3.x             |
+| -------------------------------- | --------------- |
 | `<SketchRule>` / `<sketch-rule>` | `<SketchRuler>` |
 
 ```vue
@@ -32,8 +32,8 @@ npx vue3-sketch-ruler-migrate ./src
 
 ### 2. 插槽变更
 
-| 2.x | 3.x |
-|-----|-----|
+| 2.x    | 3.x                           |
+| ------ | ----------------------------- |
 | `#btn` | `#toolbar="{ tools, state }"` |
 
 ```vue
@@ -50,6 +50,7 @@ npx vue3-sketch-ruler-migrate ./src
 ```
 
 `tools` 暴露的方法：
+
 - `zoomIn()` / `zoomOut()` — 缩放
 - `reset()` — 还原
 - `setZoomMode(mode)` — 切换缩放模式
@@ -58,6 +59,7 @@ npx vue3-sketch-ruler-migrate ./src
 - `toggleLinePanel()` — 切换参考线面板
 
 `state` 暴露的状态：
+
 - `scale: number` — 当前缩放比例
 - `offset: { x, y }` — 当前偏移
 - `zoomMode: string` — 当前缩放模式
@@ -66,11 +68,11 @@ npx vue3-sketch-ruler-migrate ./src
 
 ### 3. 事件变更
 
-| 2.x | 3.x |
-|-----|-----|
-| `@zoomStart` | `@update:scale` |
+| 2.x           | 3.x             |
+| ------------- | --------------- |
+| `@zoomStart`  | `@update:scale` |
 | `@handleLine` | `@update:lines` |
-| `@zoomchange` | 保留，参数不变 |
+| `@zoomchange` | 保留，参数不变  |
 
 ### 4. 移除 simple-panzoom 依赖
 
@@ -107,7 +109,7 @@ interface RulerPalette {
 ### 6. 新增 Props
 
 | Prop | 类型 | 说明 |
-|------|------|------|
+| --- | --- | --- |
 | `zoomMode` | `'pointer' \| 'viewport-center' \| 'content-center'` | 缩放原点模式 |
 | `animationMode` | `'direct' \| 'ease-out' \| 'damped' \| 'exponential'` | 动画模式 |
 | `enableAnimation` | `boolean` | 是否启用平滑动画 |
@@ -117,13 +119,13 @@ interface RulerPalette {
 
 ### 7. 键盘快捷键（默认启用）
 
-| 快捷键 | 功能 |
-|--------|------|
-| `Ctrl/Cmd + 0` | 缩放至 100% |
-| `Ctrl/Cmd + -` | 缩小 |
-| `Ctrl/Cmd + =` | 放大 |
-| `Ctrl/Cmd + 1` | 适配视口 |
-| `Space + 拖拽` | 临时平移 |
+| 快捷键             | 功能         |
+| ------------------ | ------------ |
+| `Ctrl/Cmd + 0`     | 缩放至 100%  |
+| `Ctrl/Cmd + -`     | 缩小         |
+| `Ctrl/Cmd + =`     | 放大         |
+| `Ctrl/Cmd + 1`     | 适配视口     |
+| `Space + 拖拽`     | 临时平移     |
 | `Ctrl + Shift + D` | 切换调试面板 |
 
 ## 新功能速览
@@ -174,12 +176,12 @@ manager.applyTemplate('A4 Portrait')
 
 3.x 提供四种构建格式：
 
-| 格式 | 文件 | 适用场景 |
-|------|------|----------|
-| ESM | `lib/index.js` | Vite、Webpack 5+ |
-| CJS | `lib/index.cjs` | Node.js、旧版构建工具 |
-| UMD | `lib/index.umd.cjs` | 浏览器 `<script src>` |
-| IIFE | `lib/index.iife.js` | 书签脚本、微前端 |
+| 格式 | 文件                | 适用场景              |
+| ---- | ------------------- | --------------------- |
+| ESM  | `lib/index.js`      | Vite、Webpack 5+      |
+| CJS  | `lib/index.cjs`     | Node.js、旧版构建工具 |
+| UMD  | `lib/index.umd.cjs` | 浏览器 `<script src>` |
+| IIFE | `lib/index.iife.js` | 书签脚本、微前端      |
 
 ```ts
 // Tree-shaking 友好

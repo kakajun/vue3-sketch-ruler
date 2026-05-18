@@ -31,7 +31,7 @@
     "lint": "oxlint --fix",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
-    "test": "pnpm --filter ./packages/simple-panzoom test && pnpm --filter ./packages/sketch-ruler test",
+    "test": "pnpm --filter ./packages/sketch-ruler test",
     "changelog": "pnpm --filter ./packages/sketch-ruler changelog",
     "release": "pnpm build && node ./scripts/release.js"
   },

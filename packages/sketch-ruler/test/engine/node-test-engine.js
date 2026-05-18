@@ -16,8 +16,18 @@ function fromTransform(scale, tx, ty) {
   return new Float64Array([scale, 0, 0, scale, tx, ty])
 }
 function multiply(m1, m2) {
-  const a1 = m1[0], b1 = m1[1], c1 = m1[2], d1 = m1[3], e1 = m1[4], f1 = m1[5]
-  const a2 = m2[0], b2 = m2[1], c2 = m2[2], d2 = m2[3], e2 = m2[4], f2 = m2[5]
+  const a1 = m1[0],
+    b1 = m1[1],
+    c1 = m1[2],
+    d1 = m1[3],
+    e1 = m1[4],
+    f1 = m1[5]
+  const a2 = m2[0],
+    b2 = m2[1],
+    c2 = m2[2],
+    d2 = m2[3],
+    e2 = m2[4],
+    f2 = m2[5]
   return new Float64Array([
     a1 * a2 + c1 * b2,
     b1 * a2 + d1 * b2,
@@ -28,13 +38,22 @@ function multiply(m1, m2) {
   ])
 }
 function invert(m) {
-  const a = m[0], b = m[1], c = m[2], d = m[3], e = m[4], f = m[5]
+  const a = m[0],
+    b = m[1],
+    c = m[2],
+    d = m[3],
+    e = m[4],
+    f = m[5]
   const det = a * d - b * c
   if (Math.abs(det) < 1e-10) return null
   const invDet = 1 / det
   return new Float64Array([
-    d * invDet, -b * invDet, -c * invDet, a * invDet,
-    (c * f - d * e) * invDet, (b * e - a * f) * invDet
+    d * invDet,
+    -b * invDet,
+    -c * invDet,
+    a * invDet,
+    (c * f - d * e) * invDet,
+    (b * e - a * f) * invDet
   ])
 }
 function decompose(m) {
@@ -55,14 +74,17 @@ function toScreenPoint(m, worldX, worldY) {
   return { x: worldX * m[0] + m[4], y: worldY * m[3] + m[5] }
 }
 function fitRect(contentRect, viewportRect, mode = 'contain', paddingRatio = 0) {
-  const contentW = contentRect.width, contentH = contentRect.height
+  const contentW = contentRect.width,
+    contentH = contentRect.height
   const viewportW = viewportRect.width * (1 - paddingRatio)
   const viewportH = viewportRect.height * (1 - paddingRatio)
   if (contentW <= 0 || contentH <= 0 || viewportW <= 0 || viewportH <= 0) {
     return { scale: 1, x: 0, y: 0 }
   }
-  const scaleX = viewportW / contentW, scaleY = viewportH / contentH
-  const scale = mode === 'contain' ? Math.min(scaleX, scaleY) : (mode === 'cover' ? Math.max(scaleX, scaleY) : 1)
+  const scaleX = viewportW / contentW,
+    scaleY = viewportH / contentH
+  const scale =
+    mode === 'contain' ? Math.min(scaleX, scaleY) : mode === 'cover' ? Math.max(scaleX, scaleY) : 1
   return {
     scale,
     x: (viewportRect.width - contentW * scale) / 2,
@@ -76,7 +98,10 @@ class TransformEngine {
     this.minZoom = options.minZoom ?? 0.1
     this.maxZoom = options.maxZoom ?? 10
     this.enableAnimation = options.enableAnimation ?? false
-    this.currentState = { ...initial, scale: Math.max(this.minZoom, Math.min(this.maxZoom, initial.scale)) }
+    this.currentState = {
+      ...initial,
+      scale: Math.max(this.minZoom, Math.min(this.maxZoom, initial.scale))
+    }
     this.targetState = { ...this.currentState }
     this.callbacks = []
   }
@@ -89,7 +114,8 @@ class TransformEngine {
     }
   }
   setTransform(t) {
-    if (t.scale !== undefined) this.targetState.scale = Math.max(this.minZoom, Math.min(this.maxZoom, t.scale))
+    if (t.scale !== undefined)
+      this.targetState.scale = Math.max(this.minZoom, Math.min(this.maxZoom, t.scale))
     if (t.x !== undefined) this.targetState.x = t.x
     if (t.y !== undefined) this.targetState.y = t.y
     this.currentState = { ...this.targetState }
@@ -113,7 +139,11 @@ class TransformEngine {
     this._notify()
   }
   zoomTo(scale, originX, originY) {
-    this.zoomBy(Math.max(this.minZoom, Math.min(this.maxZoom, scale)) - this.targetState.scale, originX, originY)
+    this.zoomBy(
+      Math.max(this.minZoom, Math.min(this.maxZoom, scale)) - this.targetState.scale,
+      originX,
+      originY
+    )
   }
   toWorldPoint(screenX, screenY) {
     const s = this.currentState.scale
@@ -123,16 +153,21 @@ class TransformEngine {
     const s = this.currentState.scale
     return { x: worldX * s + this.currentState.x, y: worldY * s + this.currentState.y }
   }
-  getState() { return { ...this.currentState } }
-  destroy() { this.callbacks = [] }
+  getState() {
+    return { ...this.currentState }
+  }
+  destroy() {
+    this.callbacks = []
+  }
   _notify() {
     const s = { ...this.currentState }
-    this.callbacks.forEach(cb => cb(s))
+    this.callbacks.forEach((cb) => cb(s))
   }
 }
 
 // ===== 测试运行 =====
-let pass = 0, fail = 0
+let pass = 0,
+  fail = 0
 function test(name, fn) {
   try {
     fn()
@@ -148,8 +183,10 @@ function test(name, fn) {
 console.log('\nmatrix')
 test('createMatrix returns identity', () => {
   const m = createMatrix()
-  assert.equal(m[0], 1); assert.equal(m[3], 1)
-  assert.equal(m[4], 0); assert.equal(m[5], 0)
+  assert.equal(m[0], 1)
+  assert.equal(m[3], 1)
+  assert.equal(m[4], 0)
+  assert.equal(m[5], 0)
 })
 test('multiply combines transforms', () => {
   const r = multiply(fromTransform(2, 100, 50), fromTransform(0.5, 20, 10))
@@ -166,7 +203,7 @@ test('invert reverses transform', () => {
   assert.ok(Math.abs(restored[4]) < 1e-6)
 })
 test('invert returns null for singular', () => {
-  assert.equal(invert(new Float64Array([0,0,0,0,0,0])), null)
+  assert.equal(invert(new Float64Array([0, 0, 0, 0, 0, 0])), null)
 })
 test('decompose extracts values', () => {
   const d = decompose(fromTransform(2.5, 100, -50))
@@ -178,7 +215,8 @@ console.log('\ncoordinate')
 test('toWorldPoint converts correctly', () => {
   const m = fromTransform(2, 100, 50)
   const p = toWorldPoint(m, 300, 250)
-  assert.equal(p.x, 100); assert.equal(p.y, 100)
+  assert.equal(p.x, 100)
+  assert.equal(p.y, 100)
 })
 test('round-trip conversion', () => {
   const m = fromTransform(1.5, -30, 40)
@@ -189,11 +227,20 @@ test('round-trip conversion', () => {
   assert.ok(Math.abs(back.y - world.y) < 1e-6)
 })
 test('fitRect contain mode', () => {
-  const r = fitRect({x:0,y:0,width:1000,height:800}, {x:0,y:0,width:500,height:400}, 'contain')
+  const r = fitRect(
+    { x: 0, y: 0, width: 1000, height: 800 },
+    { x: 0, y: 0, width: 500, height: 400 },
+    'contain'
+  )
   assert.equal(r.scale, 0.5)
 })
 test('fitRect with padding', () => {
-  const r = fitRect({x:0,y:0,width:100,height:100}, {x:0,y:0,width:200,height:200}, 'contain', 0.2)
+  const r = fitRect(
+    { x: 0, y: 0, width: 100, height: 100 },
+    { x: 0, y: 0, width: 200, height: 200 },
+    'contain',
+    0.2
+  )
   assert.equal(r.scale, 1.6)
 })
 
@@ -201,7 +248,8 @@ console.log('\nTransformEngine')
 test('initial state', () => {
   const e = new TransformEngine()
   const s = e.getState()
-  assert.equal(s.scale, 1); assert.equal(s.x, 0)
+  assert.equal(s.scale, 1)
+  assert.equal(s.x, 0)
   e.destroy()
 })
 test('scale clamping', () => {
@@ -257,7 +305,8 @@ test('unsubscribe works', () => {
 })
 test('multiple callbacks', () => {
   const e = new TransformEngine()
-  let c1 = 0, c2 = 0
+  let c1 = 0,
+    c2 = 0
   e.onUpdate(() => c1++)
   e.onUpdate(() => c2++)
   e.setTransform({ scale: 2 })

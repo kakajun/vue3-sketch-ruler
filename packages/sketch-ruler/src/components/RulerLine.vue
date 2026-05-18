@@ -33,7 +33,9 @@ const isVertical = computed(() => props.line.orientation === 'v')
 
 const lineStyle = computed(() => {
   const pos = props.line.position * props.scale + props.offset
-  const color = props.line.locked ? props.palette.guideLineLockedColor : props.palette.guideLineColor
+  const color = props.line.locked
+    ? props.palette.guideLineLockedColor
+    : props.palette.guideLineColor
 
   if (isVertical.value) {
     return {

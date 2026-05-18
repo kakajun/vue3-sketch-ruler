@@ -57,7 +57,7 @@ import 'vue3-sketch-ruler/lib/style.css'
 <link rel="stylesheet" href="https://unpkg.com/vue3-sketch-ruler/lib/style.css" />
 
 <script>
-const { SketchRuler, Minimap } = window.Vue3SketchRuler
+  const { SketchRuler, Minimap } = window.Vue3SketchRuler
 </script>
 ```
 
@@ -193,7 +193,7 @@ const plugins: SketchRulerPlugin[] = [
 ### Props
 
 | 属性 | 描述 | 类型 | 默认值 |
-|------|------|------|--------|
+| --- | --- | --- | --- |
 | width | 容器宽度 | `number` | `1400` |
 | height | 容器高度 | `number` | `800` |
 | canvasWidth | 画布宽度 | `number` | `700` |
@@ -220,19 +220,19 @@ const plugins: SketchRulerPlugin[] = [
 
 ### Events
 
-| 事件 | 描述 | 回调参数 |
-|------|------|----------|
-| update:scale | 缩放值双向绑定 | `number` |
-| update:offset | 偏移值双向绑定 | `{ x: number; y: number }` |
-| zoomchange | 缩放/平移变化 | `{ scale, x, y }` |
-| update:lines | 参考线变化 | `{ h: number[]; v: number[] }` |
-| update:lockLine | 参考线锁定状态变化 | `boolean` |
-| onCornerClick | 左上角按钮点击 | `boolean`（参考线显示状态） |
+| 事件            | 描述               | 回调参数                       |
+| --------------- | ------------------ | ------------------------------ |
+| update:scale    | 缩放值双向绑定     | `number`                       |
+| update:offset   | 偏移值双向绑定     | `{ x: number; y: number }`     |
+| zoomchange      | 缩放/平移变化      | `{ scale, x, y }`              |
+| update:lines    | 参考线变化         | `{ h: number[]; v: number[] }` |
+| update:lockLine | 参考线锁定状态变化 | `boolean`                      |
+| onCornerClick   | 左上角按钮点击     | `boolean`（参考线显示状态）    |
 
 ### Slots
 
 | 插槽名 | 描述 | 作用域参数 |
-|--------|------|------------|
+| --- | --- | --- |
 | default | 画布内容（**必须用 `<template #default>` 包裹**） | — |
 | toolbar | 右下角工具栏 | `{ tools: { reset, zoomIn, zoomOut, zoomToPreset, setZoomMode, toggleReferLine }, state: { scale, offset, zoomMode, showReferLine } }` |
 
@@ -240,52 +240,52 @@ const plugins: SketchRulerPlugin[] = [
 
 通过 `ref` 可以调用以下方法：
 
-| 方法 | 描述 |
-|------|------|
-| `setTransform({ x?, y?, scale? })` | 设置变换状态 |
-| `zoomIn()` | 放大 |
-| `zoomOut()` | 缩小 |
-| `reset()` | 重置到初始状态 |
-| `zoomToPreset(scale)` | 缩放到预设比例 |
-| `setZoomMode(mode)` | 设置缩放模式 |
-| `engine` | TransformEngine 实例 |
-| `stateManager` | 参考线状态管理器 |
+| 方法                               | 描述                 |
+| ---------------------------------- | -------------------- |
+| `setTransform({ x?, y?, scale? })` | 设置变换状态         |
+| `zoomIn()`                         | 放大                 |
+| `zoomOut()`                        | 缩小                 |
+| `reset()`                          | 重置到初始状态       |
+| `zoomToPreset(scale)`              | 缩放到预设比例       |
+| `setZoomMode(mode)`                | 设置缩放模式         |
+| `engine`                           | TransformEngine 实例 |
+| `stateManager`                     | 参考线状态管理器     |
 
 ### Palette
 
-| 属性 | 描述 | 默认值 |
-|------|------|--------|
-| bgColor | 画布背景 | `#f6f7f9` |
-| tickColor | 刻度颜色 | `#BABBBC` |
-| labelColor | 刻度标签颜色 | `#7D8694` |
-| guideLineColor | 参考线颜色 | `#51d6a9` |
-| guideLineLockedColor | 锁定参考线颜色 | `#d4d7dc` |
-| hoverBg | 标签背景色 | `#000` |
-| hoverColor | 标签文字色 | `#fff` |
-| borderColor | 尺子边框颜色 | `#eeeeef` |
-| guideLineStyle | 参考线样式 | `'dashed'` |
-| guideLineWidth | 参考线宽度 | `1` |
-| labelEnabled | 是否显示标签 | `true` |
+| 属性                 | 描述           | 默认值     |
+| -------------------- | -------------- | ---------- |
+| bgColor              | 画布背景       | `#f6f7f9`  |
+| tickColor            | 刻度颜色       | `#BABBBC`  |
+| labelColor           | 刻度标签颜色   | `#7D8694`  |
+| guideLineColor       | 参考线颜色     | `#51d6a9`  |
+| guideLineLockedColor | 锁定参考线颜色 | `#d4d7dc`  |
+| hoverBg              | 标签背景色     | `#000`     |
+| hoverColor           | 标签文字色     | `#fff`     |
+| borderColor          | 尺子边框颜色   | `#eeeeef`  |
+| guideLineStyle       | 参考线样式     | `'dashed'` |
+| guideLineWidth       | 参考线宽度     | `1`        |
+| labelEnabled         | 是否显示标签   | `true`     |
 
 ## Minimap API
 
-| 属性 | 描述 | 类型 | 默认值 |
-|------|------|------|--------|
-| contentWidth | 内容宽度 | `number` | — |
-| contentHeight | 内容高度 | `number` | — |
-| viewportX | 视口 X 偏移 | `number` | — |
-| viewportY | 视口 Y 偏移 | `number` | — |
-| viewportWidth | 视口宽度 | `number` | — |
-| viewportHeight | 视口高度 | `number` | — |
-| scale | 缩放比例 | `number` | — |
-| width | 缩略图宽度 | `number` | `200` |
-| height | 缩略图高度 | `number` | `150` |
+| 属性           | 描述        | 类型     | 默认值 |
+| -------------- | ----------- | -------- | ------ |
+| contentWidth   | 内容宽度    | `number` | —      |
+| contentHeight  | 内容高度    | `number` | —      |
+| viewportX      | 视口 X 偏移 | `number` | —      |
+| viewportY      | 视口 Y 偏移 | `number` | —      |
+| viewportWidth  | 视口宽度    | `number` | —      |
+| viewportHeight | 视口高度    | `number` | —      |
+| scale          | 缩放比例    | `number` | —      |
+| width          | 缩略图宽度  | `number` | `200`  |
+| height         | 缩略图高度  | `number` | `150`  |
 
-| 事件 | 描述 | 回调参数 |
-|------|------|----------|
-| navigate | 导航到指定位置 | `(x: number, y: number)` |
-| dragstart | 开始拖拽 | — |
-| dragend | 结束拖拽 | — |
+| 事件      | 描述           | 回调参数                 |
+| --------- | -------------- | ------------------------ |
+| navigate  | 导航到指定位置 | `(x: number, y: number)` |
+| dragstart | 开始拖拽       | —                        |
+| dragend   | 结束拖拽       | —                        |
 
 ## 变更记录
 

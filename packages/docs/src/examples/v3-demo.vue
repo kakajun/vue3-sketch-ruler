@@ -31,7 +31,13 @@
           <button @click.stop="tools.zoomOut">缩小</button>
           <button @click.stop="tools.zoomToPreset(1)">100%</button>
           <button @click.stop="toggleZoomMode">
-            {{ state.zoomMode === 'pointer' ? '鼠标' : state.zoomMode === 'viewport-center' ? '视口' : '内容' }}
+            {{
+              state.zoomMode === 'pointer'
+                ? '鼠标'
+                : state.zoomMode === 'viewport-center'
+                  ? '视口'
+                  : '内容'
+            }}
           </button>
           <button @click.stop="post.showRuler = !post.showRuler">
             {{ post.showRuler ? '隐藏尺子' : '显示尺子' }}
@@ -121,7 +127,11 @@ const canvasStyle = computed(() => {
 })
 
 const toggleZoomMode = () => {
-  const modes: Array<'pointer' | 'viewport-center' | 'content-center'> = ['pointer', 'viewport-center', 'content-center']
+  const modes: Array<'pointer' | 'viewport-center' | 'content-center'> = [
+    'pointer',
+    'viewport-center',
+    'content-center'
+  ]
   const idx = modes.indexOf(post.zoomMode)
   post.zoomMode = modes[(idx + 1) % modes.length]
 }
@@ -160,7 +170,9 @@ const handleNavigate = (x: number, y: number) => {
 .wrapper {
   position: relative;
   margin: 0 auto;
-  background-size: 21px 21px, 21px 21px;
+  background-size:
+    21px 21px,
+    21px 21px;
   border: 1px solid #dadadc;
 }
 

@@ -5,7 +5,11 @@
  */
 
 import { ref, shallowRef, readonly, watch, type Ref, type DeepReadonly } from 'vue'
-import { TransformEngine, type TransformState, type TransformEngineOptions } from '../engine/transform-engine'
+import {
+  TransformEngine,
+  type TransformState,
+  type TransformEngineOptions
+} from '../engine/transform-engine'
 import { fitRect } from '../engine/coordinate'
 import { markRaw } from 'vue'
 
@@ -106,10 +110,7 @@ export function useCanvasTransform(options: CanvasTransformOptions = {}): UseCan
     () => offset.value,
     (newOffset) => {
       const current = engine.getState()
-      if (
-        Math.abs(current.x - newOffset.x) > 1e-10 ||
-        Math.abs(current.y - newOffset.y) > 1e-10
-      ) {
+      if (Math.abs(current.x - newOffset.x) > 1e-10 || Math.abs(current.y - newOffset.y) > 1e-10) {
         engine.setTransform({ x: newOffset.x, y: newOffset.y })
       }
     },

@@ -7,7 +7,12 @@ import { computed, ref, watch, markRaw } from 'vue'
 import type { ComputedRef, Ref, CSSProperties } from 'vue'
 import { useCanvasTransform } from './useCanvasTransform'
 import { StateManager } from '../state/state-manager'
-import { produceState, createDefaultState, type RulerState, type RulerAction } from '../state/ruler-state'
+import {
+  produceState,
+  createDefaultState,
+  type RulerState,
+  type RulerAction
+} from '../state/ruler-state'
 import type { GuideLine, RulerPalette, RulerContext, SnapConfig } from '../state/ruler-context'
 import { RulerContextKey } from '../state/ruler-context'
 import type { TransformEngine } from '../engine/transform-engine'
@@ -193,13 +198,10 @@ export function useSketchRuler(options: SketchRulerOptions): UseSketchRulerRetur
   const viewportSize = ref({ width: rectWidth.value, height: rectHeight.value })
   const contentSize = ref({ width: canvasWidth, height: canvasHeight })
 
-  watch(
-    [() => width, () => height, () => canvasWidth, () => canvasHeight],
-    () => {
-      viewportSize.value = { width, height }
-      contentSize.value = { width: canvasWidth, height: canvasHeight }
-    }
-  )
+  watch([() => width, () => height, () => canvasWidth, () => canvasHeight], () => {
+    viewportSize.value = { width, height }
+    contentSize.value = { width: canvasWidth, height: canvasHeight }
+  })
 
   const context: RulerContext = {
     scale,

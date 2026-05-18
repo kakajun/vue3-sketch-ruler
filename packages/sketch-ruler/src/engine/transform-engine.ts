@@ -52,7 +52,10 @@ export class TransformEngine {
   // damped 模式需要维护速度状态
   private velocity = { x: 0, y: 0, scale: 0 }
 
-  constructor(initial: TransformState = { x: 0, y: 0, scale: 1 }, options: TransformEngineOptions = {}) {
+  constructor(
+    initial: TransformState = { x: 0, y: 0, scale: 1 },
+    options: TransformEngineOptions = {}
+  ) {
     this.minZoom = options.minZoom ?? 0.1
     this.maxZoom = options.maxZoom ?? 10
     this.enableAnimation = options.enableAnimation ?? false
@@ -243,17 +246,21 @@ export class TransformEngine {
         const omega2 = omega * omega
 
         // x 轴
-        const ax = omega2 * (this.targetState.x - this.currentState.x) - 2 * zeta * omega * this.velocity.x
+        const ax =
+          omega2 * (this.targetState.x - this.currentState.x) - 2 * zeta * omega * this.velocity.x
         this.velocity.x += ax * dt
         this.currentState.x += this.velocity.x * dt
 
         // y 轴
-        const ay = omega2 * (this.targetState.y - this.currentState.y) - 2 * zeta * omega * this.velocity.y
+        const ay =
+          omega2 * (this.targetState.y - this.currentState.y) - 2 * zeta * omega * this.velocity.y
         this.velocity.y += ay * dt
         this.currentState.y += this.velocity.y * dt
 
         // scale
-        const as = omega2 * (this.targetState.scale - this.currentState.scale) - 2 * zeta * omega * this.velocity.scale
+        const as =
+          omega2 * (this.targetState.scale - this.currentState.scale) -
+          2 * zeta * omega * this.velocity.scale
         this.velocity.scale += as * dt
         this.currentState.scale += this.velocity.scale * dt
         break

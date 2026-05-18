@@ -45,7 +45,13 @@ export interface RulerScaleOptions {
 
 /** 刻度配置表，按 maxScale 升序排列 */
 const TICK_CONFIGS: Array<TickConfig & { maxScale: number }> = [
-  { maxScale: 0.2, interval: 500, subdivisions: 5, showLabel: true, formatLabel: (v) => `${Math.round(v / 1000)}k` },
+  {
+    maxScale: 0.2,
+    interval: 500,
+    subdivisions: 5,
+    showLabel: true,
+    formatLabel: (v) => `${Math.round(v / 1000)}k`
+  },
   { maxScale: 0.5, interval: 200, subdivisions: 4, showLabel: true },
   { maxScale: 1.0, interval: 100, subdivisions: 5, showLabel: true },
   { maxScale: 2.0, interval: 50, subdivisions: 5, showLabel: true },
@@ -54,7 +60,7 @@ const TICK_CONFIGS: Array<TickConfig & { maxScale: number }> = [
   { maxScale: Infinity, interval: 5, subdivisions: 5, showLabel: true }
 ]
 
-const HYSTERESIS_UP = 1.1   // 升级滞后：阈值 * 1.1
+const HYSTERESIS_UP = 1.1 // 升级滞后：阈值 * 1.1
 const HYSTERESIS_DOWN = 0.9 // 降级滞后：阈值 * 0.9
 
 /** 根据缩放级别获取刻度配置 */
@@ -114,7 +120,7 @@ export function useRulerScale(options: RulerScaleOptions) {
     const subInterval = interval / subdivisions
 
     // 计算视口在世界坐标中的范围
-    const worldStart = (-o) / s
+    const worldStart = -o / s
     const worldEnd = (vp - o) / s
 
     // 扩展缓冲区（左右各 0.5 倍视口宽度）
