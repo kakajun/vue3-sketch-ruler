@@ -227,7 +227,7 @@ function updatePreview(e: MouseEvent): void {
   const canvasOffset = props.vertical ? props.offset.x : props.offset.y
 
   // 基础世界坐标：screenPos 是相对于标尺的坐标，需减去 thick 转换到画布坐标系
-  let worldPos = (screenPos - props.thick - canvasOffset) / props.scale
+  let worldPos = (screenPos - canvasOffset) / props.scale
 
   // 吸附检测：查找最近的刻度
   const snapThreshold = 10 / props.scale // 10 像素转换为世界坐标
@@ -251,13 +251,13 @@ function updatePreview(e: MouseEvent): void {
   }
 
   // 转回标尺容器坐标系，让预览线跟随鼠标/吸附位置
-  previewScreenPos.value = worldPos * props.scale + canvasOffset + props.thick
+  previewScreenPos.value = worldPos * props.scale + canvasOffset
   previewWorldPos.value = worldPos
 }
 
 const lineStyle = (line: GuideLine) => {
   const canvasOffset = props.vertical ? props.offset.x : props.offset.y
-  const pos = line.position * props.scale + canvasOffset + props.thick
+  const pos = line.position * props.scale + canvasOffset
   const cursor = line.locked ? 'default' : props.vertical ? 'ew-resize' : 'ns-resize'
   if (props.vertical) {
     return {

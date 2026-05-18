@@ -37,6 +37,7 @@
   "types": "lib/index.d.ts",
   "exports": {
     ".": {
+      "development": "./src/index.ts",
       "types": "./lib/index.d.ts",
       "import": "./lib/index.js",
       "require": "./lib/index.cjs",
@@ -45,21 +46,25 @@
     "./style.css": "./lib/style.css",
     "./lib/style.css": "./lib/style.css",
     "./engine": {
+      "development": "./src/index.ts",
       "types": "./lib/index.d.ts",
       "import": "./lib/index.js",
       "require": "./lib/index.cjs"
     },
     "./composables": {
+      "development": "./src/index.ts",
       "types": "./lib/index.d.ts",
       "import": "./lib/index.js",
       "require": "./lib/index.cjs"
     },
     "./renderers": {
+      "development": "./src/index.ts",
       "types": "./lib/index.d.ts",
       "import": "./lib/index.js",
       "require": "./lib/index.cjs"
     },
     "./plugins": {
+      "development": "./src/index.ts",
       "types": "./lib/index.d.ts",
       "import": "./lib/index.js",
       "require": "./lib/index.cjs"
@@ -78,7 +83,6 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/test-utils": "^2.4.6",
-    "simple-panzoom": "workspace:*",
     "vitest": "^4.0.1"
   }
 }

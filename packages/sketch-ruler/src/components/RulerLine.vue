@@ -32,7 +32,7 @@ const emit = defineEmits<{
 const isVertical = computed(() => props.line.orientation === 'v')
 
 const lineStyle = computed(() => {
-  const pos = props.line.position * props.scale + props.offset + props.thick
+  const pos = props.line.position * props.scale + props.offset
   const color = props.line.locked ? props.palette.guideLineLockedColor : props.palette.guideLineColor
 
   if (isVertical.value) {
@@ -65,7 +65,7 @@ function handleMouseDown(e: MouseEvent): void {
     const newPosition = startPos + delta
 
     // 越界检测：拖出画布外则删除
-    const screenPos = newPosition * props.scale + props.offset + props.thick
+    const screenPos = newPosition * props.scale + props.offset
     const limit = isVertical.value ? props.containerWidth : props.containerHeight
     if (screenPos < -10 || screenPos > limit + 10) {
       emit('delete', props.line.id)

@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper whitewrapper" :style="rectStyle">
-    <SketchRulerV3
+    <SketchRuler
       ref="sketchRef"
       v-model:scale="post.scale"
       :width="post.width"
@@ -14,8 +14,7 @@
       :enable-animation="true"
       animation-mode="ease-out"
       :zoom-mode="post.zoomMode"
-      :show-line-panel="post.showLinePanel"
-      :debug="post.debug"
+      :show-ruler="post.showRuler"
       :plugins="plugins"
       @zoomchange="handleZoomChange"
       @update:lines="handleLinesChange"
@@ -34,23 +33,37 @@
           <button @click.stop="toggleZoomMode">
             {{ state.zoomMode === 'pointer' ? '鼠标' : state.zoomMode === 'viewport-center' ? '视口' : '内容' }}
           </button>
-          <button @click.stop="post.showLinePanel = !post.showLinePanel">
-            {{ state.showLinePanel ? '隐藏面板' : '参考线面板' }}
-          </button>
-          <button @click.stop="post.debug = !post.debug">
-            {{ state.debug ? '关闭调试' : '调试' }}
+          <button @click.stop="post.showRuler = !post.showRuler">
+            {{ post.showRuler ? '隐藏尺子' : '显示尺子' }}
           </button>
           <span class="scale-label">{{ (state.scale * 100).toFixed(0) }}%</span>
         </div>
       </template>
-    </SketchRulerV3>
+    </SketchRuler>
+
+    <div class="demo-minimap">
+      <Minimap
+        :content-width="post.canvasWidth"
+        :content-height="post.canvasHeight"
+        :viewport-x="viewportOffset.x"
+        :viewport-y="viewportOffset.y"
+        :viewport-width="post.width"
+        :viewport-height="post.height"
+        :scale="post.scale"
+        :width="200"
+        :height="150"
+        @navigate="handleNavigate"
+        @dragstart="handleDragStart"
+        @dragend="handleDragEnd"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import bgImg from '../assets/bg.png'
-import { computed, ref, reactive } from 'vue'
-import { SketchRulerV3 } from 'vue3-sketch-ruler'
+import { computed, ref, reactive, onMounted } from 'vue'
+import { SketchRuler, Minimap } from 'vue3-sketch-ruler'
 import type { SketchRulerPlugin } from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
 
@@ -66,11 +79,22 @@ const post = reactive({
   palette: { bgColor: 'transparent', guideLineStyle: 'dashed' as const, labelEnabled: true },
   isShowReferLine: true,
   zoomMode: 'pointer' as 'pointer' | 'viewport-center' | 'content-center',
-  showLinePanel: false,
-  debug: false,
   lines: {
     h: [0, 250],
     v: [0, 500]
+  }
+})
+
+const viewportOffset = reactive({ x: 0, y: 0 })
+
+let prevAnimation = false
+
+// 同步 SketchRuler 初始 autoCenter 状态到 minimap
+onMounted(() => {
+  const state = sketchRef.value?.engine?.getState?.()
+  if (state) {
+    viewportOffset.x = state.x
+    viewportOffset.y = state.y
   }
 })
 
@@ -104,18 +128,47 @@ const toggleZoomMode = () => {
 
 const handleZoomChange = (detail: any) => {
   console.log('zoomchange', detail)
+  viewportOffset.x = detail.x
+  viewportOffset.y = detail.y
 }
 
 const handleLinesChange = (lines: { h: number[]; v: number[] }) => {
   console.log('lines changed', lines)
 }
+
+const handleDragStart = () => {
+  const engine = sketchRef.value?.engine
+  if (engine) {
+    prevAnimation = (engine as any).enableAnimation
+    ;(engine as any).enableAnimation = false
+  }
+}
+
+const handleDragEnd = () => {
+  const engine = sketchRef.value?.engine
+  if (engine) {
+    ;(engine as any).enableAnimation = prevAnimation
+  }
+}
+
+const handleNavigate = (x: number, y: number) => {
+  sketchRef.value?.setTransform({ x, y })
+}
 </script>
 
 <style lang="scss">
 .wrapper {
+  position: relative;
   margin: 0 auto;
   background-size: 21px 21px, 21px 21px;
   border: 1px solid #dadadc;
+}
+
+.demo-minimap {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 10;
 }
 .whitewrapper {
   background-color: #fafafc;
@@ -133,7 +186,7 @@ const handleLinesChange = (lines: { h: number[]; v: number[] }) => {
   align-items: center;
   gap: 8px;
   bottom: 20px;
-  right: 40px;
+  right: 220px;
   z-index: 999;
 
   button {

@@ -31,9 +31,9 @@
     <!-- 水平标尺 -->
     <RulerWrapperV3
       v-show="showRuler"
-      :style="{ marginLeft: thick + 'px', width: rectWidth + 'px' }"
+      :style="{ width: rectWidth + 'px' }"
       :vertical="false"
-      :width="width - thick"
+      :width="width"
       :height="thick"
       :thick="thick"
       :scale="ownScale"
@@ -51,10 +51,10 @@
     <!-- 垂直标尺 -->
     <RulerWrapperV3
       v-show="showRuler"
-      :style="{ marginTop: thick + 'px', top: 0, height: rectHeight + 'px' }"
+      :style="{ height: rectHeight + 'px' }"
       :vertical="true"
       :width="thick"
-      :height="height - thick"
+      :height="height"
       :thick="thick"
       :scale="ownScale"
       :offset="offset"
@@ -161,8 +161,8 @@ const emit = defineEmits([
 ])
 
 // === 变换引擎 ===
-const rectWidth = computed(() => props.width - props.thick)
-const rectHeight = computed(() => props.height - props.thick)
+const rectWidth = computed(() => props.width)
+const rectHeight = computed(() => props.height)
 
 const { scale, offset, engine, setTransform, zoomBy, zoomTo, panBy, reset } = useCanvasTransform({
   initialScale: props.scale,
@@ -307,8 +307,8 @@ watch(
   [() => props.canvasWidth, () => props.canvasHeight, () => props.width, () => props.height],
   () => {
     if (!props.autoCenter) return
-    const w = props.width - props.thick
-    const h = props.height - props.thick
+    const w = props.width
+    const h = props.height
     const cw = props.canvasWidth
     const ch = props.canvasHeight
     if (w > 0 && h > 0 && cw > 0 && ch > 0) {
@@ -324,6 +324,8 @@ watch(
 
 const showReferLine = ref(props.isShowReferLine)
 watch(() => props.isShowReferLine, (v) => { showReferLine.value = v })
+
+watch(() => props.showRuler, (v) => { context.showRuler.value = v })
 
 function exportLines(): { h: number[]; v: number[] } {
   const h: number[] = []
@@ -349,7 +351,7 @@ const handleUpdateLine = (id: string, position: number): void => {
 }
 
 // === provide/inject 上下文 ===
-const viewportSize = ref({ width: props.width - props.thick, height: props.height - props.thick })
+const viewportSize = ref({ width: props.width, height: props.height })
 const contentSize = ref({ width: props.canvasWidth, height: props.canvasHeight })
 
 const paletteCpu = computed<RulerPalette>(() => ({
@@ -392,8 +394,8 @@ const rectStyle = computed(() => ({
   background: paletteCpu.value.bgColor,
   width: rectWidth.value + 'px',
   height: rectHeight.value + 'px',
-  left: props.thick + 'px',
-  top: props.thick + 'px'
+  left: 0,
+  top: 0
 }))
 
 const canvasStyle = computed(() => ({

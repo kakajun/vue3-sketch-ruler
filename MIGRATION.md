@@ -20,14 +20,14 @@ npx vue3-sketch-ruler-migrate ./src
 
 | 2.x | 3.x |
 |-----|-----|
-| `<SketchRule>` / `<sketch-rule>` | `<SketchRulerV3>` |
+| `<SketchRule>` / `<sketch-rule>` | `<SketchRuler>` |
 
 ```vue
 <!-- Before -->
 <SketchRule ... />
 
 <!-- After -->
-<SketchRulerV3 ... />
+<SketchRuler ... />
 ```
 
 ### 2. 插槽变更
@@ -131,7 +131,7 @@ interface RulerPalette {
 ### 插件系统
 
 ```ts
-import { SketchRulerV3 } from 'vue3-sketch-ruler'
+import { SketchRuler } from 'vue3-sketch-ruler'
 import type { SketchRulerPlugin } from 'vue3-sketch-ruler'
 
 const myPlugin: SketchRulerPlugin = {
@@ -183,5 +183,5 @@ manager.applyTemplate('A4 Portrait')
 
 ```ts
 // Tree-shaking 友好
-import { SketchRulerV3, TransformEngine, useCanvasTransform } from 'vue3-sketch-ruler'
+import { SketchRuler, TransformEngine, useCanvasTransform } from 'vue3-sketch-ruler'
 ```

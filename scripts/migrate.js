@@ -26,16 +26,22 @@ const REPLACEMENTS = [
     replacement: "from 'vue3-sketch-ruler'",
     desc: '更新导入路径'
   },
-  // 组件名
+  // 组件名（2.x → 3.x）
   {
     pattern: /<(SketchRule|sketch-rule)\b/g,
-    replacement: '<SketchRulerV3',
-    desc: '组件名 SketchRule → SketchRulerV3'
+    replacement: '<SketchRuler',
+    desc: '组件名 SketchRule → SketchRuler'
   },
   {
     pattern: /<\/(SketchRule|sketch-rule)>/g,
-    replacement: '</SketchRulerV3>',
-    desc: '组件结束标签'
+    replacement: '</SketchRuler>',
+    desc: '组件结束标签 SketchRule → SketchRuler'
+  },
+  // 组件名（旧 3.x 预览版 SketchRulerV3 → SketchRuler）
+  {
+    pattern: /SketchRulerV3/g,
+    replacement: 'SketchRuler',
+    desc: '组件名 SketchRulerV3 → SketchRuler'
   },
   // palette 嵌套配置 → 扁平化
   {

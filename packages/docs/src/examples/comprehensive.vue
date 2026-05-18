@@ -72,6 +72,9 @@
             <button @click.stop="reset">还原</button>
             <button @click.stop="zoomIn">放大</button>
             <button @click.stop="zoomOut">缩小</button>
+            <button @click.stop="post.showRuler = !post.showRuler">
+              {{ (post.showRuler ? '隐藏' : '显示') + '标尺' }}
+            </button>
           </div>
         </template>
       </SketchRule>

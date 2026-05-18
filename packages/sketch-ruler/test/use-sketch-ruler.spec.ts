@@ -33,8 +33,8 @@ describe('useSketchRuler', () => {
     const { result } = wrapper.vm as any
     expect(result.engine).toBeDefined()
     expect(result.scale.value).toBe(1)
-    expect(result.rectWidth.value).toBe(780)
-    expect(result.rectHeight.value).toBe(580)
+    expect(result.rectWidth.value).toBe(800)
+    expect(result.rectHeight.value).toBe(600)
   })
 
   it('addLine and moveLine update state', async () => {

@@ -27,6 +27,7 @@ export interface SketchRulerOptions {
   maxZoom?: number
   zoomStep?: number
   autoCenter?: boolean
+  showRuler?: boolean
 }
 
 export interface UseSketchRulerReturn {
@@ -61,8 +62,8 @@ export function useSketchRuler(options: SketchRulerOptions): UseSketchRulerRetur
   const canvasWidth = options.canvasWidth
   const canvasHeight = options.canvasHeight
 
-  const rectWidth = computed(() => width - thick)
-  const rectHeight = computed(() => height - thick)
+  const rectWidth = computed(() => width)
+  const rectHeight = computed(() => height)
 
   const { scale, offset, engine, setTransform, zoomBy, zoomTo, panBy, reset } = useCanvasTransform({
     initialScale: options.scale ?? 1,
@@ -130,8 +131,8 @@ export function useSketchRuler(options: SketchRulerOptions): UseSketchRulerRetur
     background: paletteCpu.value.bgColor,
     width: rectWidth.value + 'px',
     height: rectHeight.value + 'px',
-    left: thick + 'px',
-    top: thick + 'px'
+    left: 0,
+    top: 0
   }))
 
   const canvasStyle = computed<CSSProperties>(() => ({
@@ -195,7 +196,7 @@ export function useSketchRuler(options: SketchRulerOptions): UseSketchRulerRetur
   watch(
     [() => width, () => height, () => canvasWidth, () => canvasHeight],
     () => {
-      viewportSize.value = { width: width - thick, height: height - thick }
+      viewportSize.value = { width, height }
       contentSize.value = { width: canvasWidth, height: canvasHeight }
     }
   )
@@ -209,7 +210,7 @@ export function useSketchRuler(options: SketchRulerOptions): UseSketchRulerRetur
     snapConfig: state.value.snapConfig,
     palette: paletteCpu.value,
     engine: markRaw(engine),
-    showRuler: ref(true),
+    showRuler: ref(options.showRuler ?? true),
     showReferLine: computed(() => state.value.showReferLine) as Ref<boolean>
   }
 
