@@ -9,25 +9,34 @@ describe('CanvasManager', () => {
   })
 
   it('should initialize empty', () => {
-    expect(manager.canvasesList.value).toEqual([])
+    expect(manager.getState().canvases).toEqual([])
     expect(manager.activeCanvas).toBeNull()
   })
 
   it('should add canvas and auto-activate first', () => {
     const id = manager.addCanvas({ name: 'test', width: 800, height: 600 })
     expect(id).toBeTypeOf('string')
-    expect(manager.canvasesList.value).toHaveLength(1)
-    expect(manager.activeCanvasId.value).toBe(id)
+    expect(manager.getState().canvases).toHaveLength(1)
+    expect(manager.getState().activeId).toBe(id)
     expect(manager.activeCanvas?.name).toBe('test')
+  })
+
+  it('should notify on update', () => {
+    let notified = false
+    manager.onUpdate(() => {
+      notified = true
+    })
+    manager.addCanvas({ name: 'test', width: 800, height: 600 })
+    expect(notified).toBe(true)
   })
 
   it('should switch canvas', () => {
     const id1 = manager.addCanvas({ name: 'c1', width: 800, height: 600 })
     const id2 = manager.addCanvas({ name: 'c2', width: 1024, height: 768 })
-    expect(manager.activeCanvasId.value).toBe(id1)
+    expect(manager.getState().activeId).toBe(id1)
 
     manager.switchCanvas(id2)
-    expect(manager.activeCanvasId.value).toBe(id2)
+    expect(manager.getState().activeId).toBe(id2)
     expect(manager.activeCanvas?.name).toBe('c2')
   })
 
@@ -37,8 +46,8 @@ describe('CanvasManager', () => {
     manager.switchCanvas(id2)
 
     manager.removeCanvas(id2)
-    expect(manager.canvasesList.value).toHaveLength(1)
-    expect(manager.activeCanvasId.value).toBe(id1)
+    expect(manager.getState().canvases).toHaveLength(1)
+    expect(manager.getState().activeId).toBe(id1)
   })
 
   it('should update canvas state', () => {

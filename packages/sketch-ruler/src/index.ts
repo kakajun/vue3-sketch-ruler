@@ -8,7 +8,7 @@ export type { CanvasTransformOptions, UseCanvasTransformReturn } from './composa
 export type { RulerScaleOptions } from './composables/useRulerScale'
 export type { SnapTarget, SnapResult, SnapOptions } from './composables/useSnapDetection'
 export type { RulerContext } from './state/ruler-context'
-export type { CanvasConfig, CanvasState, CanvasTemplate } from './managers/canvas-manager'
+export type { CanvasConfig, CanvasState, CanvasTemplate } from '@sketch-ruler/core'
 
 // 从 @sketch-ruler/core 重新导出核心类型（保持向后兼容）
 export type {
@@ -37,10 +37,9 @@ export {
 export { useCanvasTransform } from './composables/useCanvasTransform'
 export { useRulerScale, getTickConfig } from './composables/useRulerScale'
 export { useSnapDetection } from './composables/useSnapDetection'
-export { StateManager } from './state/state-manager'
 export { RulerContextKey } from './state/ruler-context'
 export { InputManager } from '@sketch-ruler/canvas'
-export { CanvasManager, BUILTIN_TEMPLATES } from './managers/canvas-manager'
+export { CanvasManager, BUILTIN_TEMPLATES } from '@sketch-ruler/core'
 
 // 组件导出
 export { SketchRuler, Minimap }

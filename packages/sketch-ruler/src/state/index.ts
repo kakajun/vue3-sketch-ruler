@@ -1,8 +1,6 @@
 export type { RulerContext } from './ruler-context'
 export { RulerContextKey } from './ruler-context'
 
-export { StateManager } from './state-manager'
-
 // 从 @sketch-ruler/core 重新导出（保持向后兼容）
 export {
   createDefaultState,

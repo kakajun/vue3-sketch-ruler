@@ -76,8 +76,8 @@ import { computed, ref, watch, provide, onMounted, onUnmounted } from 'vue'
 import { markRaw } from 'vue'
 import { useCanvasTransform } from '../composables/useCanvasTransform'
 import { InputManager } from '@sketch-ruler/canvas'
-import { StateManager } from '../state/state-manager'
 import { RulerContextKey } from '../state/ruler-context'
+import { importLines, exportLines, generateLineId } from '@sketch-ruler/core'
 import type { GuideLine, RulerContext, RulerPalette } from '../state/ruler-context'
 
 import RulerWrapperV3 from './RulerWrapperV3.vue'
@@ -200,6 +200,13 @@ watch(
   }
 )
 
+watch(
+  () => props.zoomMode,
+  (mode) => {
+    inputManager?.setZoomMode(mode)
+  }
+)
+
 // 监听引擎变化，向上 emit（带防抖避免循环）
 let emittingScale = false
 watch(scale, (newScale) => {
@@ -272,45 +279,19 @@ const cursorClass = computed(() => {
 })
 
 // === 参考线状态管理 ===
-const stateManager = new StateManager()
-
-function importLines(lines: { h: number[]; v: number[] }): void {
-  const newLines: GuideLine[] = []
-  let id = 0
-  for (const h of lines.h) {
-    newLines.push({
-      id: `h-${id++}-${Date.now()}`,
-      orientation: 'h',
-      position: h,
-      visible: true,
-      locked: false
-    })
-  }
-  for (const v of lines.v) {
-    newLines.push({
-      id: `v-${id++}-${Date.now()}`,
-      orientation: 'v',
-      position: v,
-      visible: true,
-      locked: false
-    })
-  }
-  stateManager.setLines(newLines)
-}
-
-importLines(props.lines)
+const guideLines = ref<GuideLine[]>(importLines(props.lines))
 
 const horizontalLines = computed(() =>
-  stateManager.getLines().value.filter((l) => l.orientation === 'h' && l.visible !== false)
+  guideLines.value.filter((l) => l.orientation === 'h' && l.visible !== false)
 )
 const verticalLines = computed(() =>
-  stateManager.getLines().value.filter((l) => l.orientation === 'v' && l.visible !== false)
+  guideLines.value.filter((l) => l.orientation === 'v' && l.visible !== false)
 )
 
 watch(
   () => props.lines,
   (newLines) => {
-    if (newLines) importLines(newLines)
+    if (newLines) guideLines.value = importLines(newLines)
   },
   { deep: true }
 )
@@ -350,10 +331,10 @@ watch(
   }
 )
 
-function exportLines(): { h: number[]; v: number[] } {
+function getExportedLines(): { h: number[]; v: number[] } {
   const h: number[] = []
   const v: number[] = []
-  for (const line of stateManager.getLines().value) {
+  for (const line of guideLines.value) {
     if (line.visible !== false) {
       if (line.orientation === 'h') h.push(line.position)
       else v.push(line.position)
@@ -363,14 +344,15 @@ function exportLines(): { h: number[]; v: number[] } {
 }
 
 const handleAddLine = (line: Omit<GuideLine, 'id'>): void => {
-  const newLine = stateManager.addLine(line)
+  const newLine: GuideLine = { ...line, id: generateLineId() }
+  guideLines.value = [...guideLines.value, newLine]
   pluginManager.onLineCreate({ line: newLine })
-  emit('update:lines', exportLines())
+  emit('update:lines', getExportedLines())
 }
 
 const handleUpdateLine = (id: string, position: number): void => {
-  stateManager.moveLine(id, position)
-  emit('update:lines', exportLines())
+  guideLines.value = guideLines.value.map((l) => (l.id === id ? { ...l, position } : l))
+  emit('update:lines', getExportedLines())
 }
 
 // === provide/inject 上下文 ===
@@ -401,7 +383,7 @@ const context: RulerContext = {
   offset,
   viewportSize,
   contentSize,
-  lines: stateManager.getLines(),
+  lines: guideLines,
   snapConfig,
   palette: paletteCpu.value,
   engine: markRaw(engine),
@@ -447,10 +429,14 @@ const cornerStyle = computed(() => ({
 }))
 
 // === 方法 ===
+const getZoomOrigin = (): { x: number; y: number } => {
+  const parent = canvasRef.value?.parentElement
+  const rect = parent ? parent.getBoundingClientRect() : new DOMRect(0, 0, 0, 0)
+  return { x: rect.width / 2, y: rect.height / 2 }
+}
+
 const zoomIn = async (): Promise<void> => {
-  const rect = canvasRef.value?.getBoundingClientRect()
-  const cx = rect ? rect.width / 2 : 0
-  const cy = rect ? rect.height / 2 : 0
+  const { x: cx, y: cy } = getZoomOrigin()
   const allowed = await pluginManager.beforeZoom({
     from: scale.value,
     to: scale.value + props.zoomStep,
@@ -461,9 +447,7 @@ const zoomIn = async (): Promise<void> => {
 }
 
 const zoomOut = async (): Promise<void> => {
-  const rect = canvasRef.value?.getBoundingClientRect()
-  const cx = rect ? rect.width / 2 : 0
-  const cy = rect ? rect.height / 2 : 0
+  const { x: cx, y: cy } = getZoomOrigin()
   const allowed = await pluginManager.beforeZoom({
     from: scale.value,
     to: scale.value - props.zoomStep,
@@ -495,9 +479,7 @@ const ZOOM_PRESETS = [0.1, 0.25, 0.33, 0.5, 0.66, 1, 1.5, 2, 3, 4, 6, 8, 16]
 
 const zoomToPreset = (preset: number): void => {
   const target = ZOOM_PRESETS.find((p) => p >= preset) ?? ZOOM_PRESETS[ZOOM_PRESETS.length - 1]
-  const rect = canvasRef.value?.getBoundingClientRect()
-  const cx = rect ? rect.width / 2 : 0
-  const cy = rect ? rect.height / 2 : 0
+  const { x: cx, y: cy } = getZoomOrigin()
   zoomTo(target, cx, cy)
 }
 
@@ -509,7 +491,7 @@ defineExpose({
   zoomOut,
   cursorClass,
   setTransform,
-  stateManager,
+  guideLines,
   setZoomMode,
   zoomToPreset
 })

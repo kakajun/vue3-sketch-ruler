@@ -6,7 +6,6 @@
 import { computed, ref, watch, markRaw } from 'vue'
 import type { ComputedRef, Ref, CSSProperties } from 'vue'
 import { useCanvasTransform } from './useCanvasTransform'
-import { StateManager } from '../state/state-manager'
 import {
   produceState,
   createDefaultState,
