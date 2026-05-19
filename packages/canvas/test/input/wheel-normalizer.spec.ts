@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { normalizeWheel, getZoomDelta } from '../src/input/wheel-normalizer'
+import { normalizeWheel, getZoomDelta } from '../../src/input/wheel-normalizer'
 
 describe('normalizeWheel', () => {
   it('normalizes pixel mode (deltaMode = 0)', () => {

@@ -1,0 +1,58 @@
+{
+  "name": "@sketch-ruler/canvas",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Canvas rendering and DOM input management for sketch-ruler. Framework-agnostic, depends on Canvas 2D API and DOM Events.",
+  "keywords": [
+    "sketch-ruler",
+    "ruler",
+    "canvas",
+    "renderer",
+    "input",
+    "framework-agnostic"
+  ],
+  "license": "MIT",
+  "author": "kakajun <253495832@qq.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kakajun/vue3-sketch-ruler.git"
+  },
+  "files": [
+    "lib"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs"
+    },
+    "./renderers": {
+      "types": "./lib/renderers/index.d.ts",
+      "import": "./lib/renderers/index.js",
+      "require": "./lib/renderers/index.cjs"
+    },
+    "./input": {
+      "types": "./lib/input/index.d.ts",
+      "import": "./lib/input/index.js",
+      "require": "./lib/input/index.cjs"
+    }
+  },
+  "dependencies": {
+    "@sketch-ruler/core": "workspace:*"
+  },
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "vite": "^7.2.2",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^4.0.10"
+  }
+}

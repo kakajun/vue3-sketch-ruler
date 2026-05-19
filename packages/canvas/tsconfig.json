@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.common.json",
+  "compilerOptions": {
+    "outDir": "lib",
+    "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "allowJs": false,
+    "types": ["vitest", "node"]
+  },
+  "include": ["**/*.ts", "**/*.json"],
+  "exclude": ["test", "**/*.spec.ts", "vite.config.ts", "vitest.config.ts"]
+}

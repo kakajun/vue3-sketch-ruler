@@ -81,7 +81,8 @@
     "release": "release-it"
   },
   "dependencies": {
-    "@sketch-ruler/core": "workspace:*"
+    "@sketch-ruler/core": "workspace:*",
+    "@sketch-ruler/canvas": "workspace:*"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.1",

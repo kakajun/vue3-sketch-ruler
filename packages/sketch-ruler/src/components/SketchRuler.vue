@@ -75,7 +75,7 @@
 import { computed, ref, watch, provide, onMounted, onUnmounted } from 'vue'
 import { markRaw } from 'vue'
 import { useCanvasTransform } from '../composables/useCanvasTransform'
-import { InputManager } from '../input/input-manager'
+import { InputManager } from '@sketch-ruler/canvas'
 import { StateManager } from '../state/state-manager'
 import { RulerContextKey } from '../state/ruler-context'
 import type { GuideLine, RulerContext, RulerPalette } from '../state/ruler-context'

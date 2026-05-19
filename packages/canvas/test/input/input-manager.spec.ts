@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
-import { InputManager } from '../src/input/input-manager'
+import { InputManager } from '../../src/input/input-manager'
 import { TransformEngine } from '@sketch-ruler/core'
-import { MouseAdapter } from '../src/input/mouse-adapter'
-import { getZoomDelta } from '../src/input/wheel-normalizer'
+import { MouseAdapter } from '../../src/input/mouse-adapter'
+import { getZoomDelta } from '../../src/input/wheel-normalizer'
 
 describe('InputManager', () => {
   it('constructs with default options', () => {

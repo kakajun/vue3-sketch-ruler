@@ -39,7 +39,7 @@ export { useRulerScale, getTickConfig } from './composables/useRulerScale'
 export { useSnapDetection } from './composables/useSnapDetection'
 export { StateManager } from './state/state-manager'
 export { RulerContextKey } from './state/ruler-context'
-export { InputManager } from './input/input-manager'
+export { InputManager } from '@sketch-ruler/canvas'
 export { CanvasManager, BUILTIN_TEMPLATES } from './managers/canvas-manager'
 
 // 组件导出

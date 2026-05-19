@@ -6,7 +6,7 @@
 import { computed, ref, watch, onMounted } from 'vue'
 import type { ScaleMark } from '../composables/useRulerScale'
 import type { RulerPalette } from '../state/ruler-context'
-import { Canvas2DRenderer } from '../renderers/canvas-2d-renderer'
+import { Canvas2DRenderer } from '@sketch-ruler/canvas'
 
 interface Props {
   marks: ScaleMark[]

@@ -34,7 +34,7 @@ import { computed, ref, watch, onMounted } from 'vue'
 import type { RulerPalette } from '../state/ruler-context'
 import type { GuideLine } from '../state/ruler-context'
 import { useRulerScale } from '../composables/useRulerScale'
-import { Canvas2DRenderer } from '../renderers/canvas-2d-renderer'
+import { Canvas2DRenderer } from '@sketch-ruler/canvas'
 
 interface Props {
   vertical: boolean
