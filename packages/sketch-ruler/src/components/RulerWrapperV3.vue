@@ -62,13 +62,16 @@ interface Props {
   canvasHeight?: number
   /** 参考线拖出画布时显示的删除提示文案 */
   deleteLabel?: string
+  /** 是否全局锁定参考线 */
+  lockLine?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   renderLinesInCanvas: false,
   canvasWidth: 1000,
   canvasHeight: 1000,
-  deleteLabel: '放开删除'
+  deleteLabel: '放开删除',
+  lockLine: false
 })
 const emit = defineEmits(['addLine', 'updateLine', 'deleteLine'])
 
@@ -111,7 +114,7 @@ watch(
 )
 
 function handleLineEnter(line: GuideLine): void {
-  if (line.locked) return
+  if (line.locked || props.lockLine) return
   activeLineId.value = line.id
   if (labelTimer) clearTimeout(labelTimer)
   labelTimer = setTimeout(() => {
@@ -139,7 +142,7 @@ function lineLabelText(line: GuideLine): string {
 }
 
 function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
-  if (line.locked) return
+  if (line.locked || props.lockLine) return
   e.preventDefault()
   activeLineId.value = line.id
   showLineLabel.value = true
@@ -227,6 +230,7 @@ const previewStyle = computed(() => {
 })
 
 function handlePointerDown(e: MouseEvent): void {
+  if (props.lockLine) return
   // 仅在标尺区域（非刻度标签区域）触发
   isCreatingLine.value = true
   isSnapping.value = false

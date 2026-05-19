@@ -16,16 +16,12 @@
       <button class="mr10 font16" @click="post.showMinorTicks = !post.showMinorTicks">
         {{ (post.showMinorTicks ? '隐藏' : '显示') + '次刻度' }}
       </button>
-      <button class="mr10 font16" @click="lockLine = true">锁定参考线</button>
+      <button class="mr10 font16" @click="lockLine = !lockLine">
+        {{ lockLine ? '解锁' : '锁定' }}参考线
+      </button>
       <button class="mr10 font16" @click="changeShadow">模拟阴影切换</button>
       <button class="mr10 font16" @click.stop="resetMethod">还原</button>
       <button class="mr10 font16" @click.stop="zoomOutMethod">缩小</button>
-      <span>禁止缩放</span>
-      <input type="checkbox" class="switch" @change="changeScale" />
-      <span>禁止移动</span>
-      <input type="checkbox" class="switch mr10" @change="changeMove" />
-      <span>框内移动</span>
-      <input type="checkbox" class="switch mr10" @change="changeInsideMove" />
       <input
         class="mr10 font16"
         :value="state.scale"
@@ -33,21 +29,8 @@
         min="0.3"
         max="3"
         step="0.1"
-        defaultValue="1"
         @input="scaleChange"
       />
-      <div class="mr10">吸附横线:</div>
-      <input class="mr10" style="width: 90px" :value="post.snapsObj.h" @blur="snapsChange" />
-      <div class="mr10">吸附纵线:</div>
-      <input class="mr10" style="width: 90px" :value="post.snapsObj.v" @blur="snapsChangeV" />
-
-      <a
-        href="https://github.com/kakajun/vue3-sketch-ruler"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <i class="fas fa-external-link-alt"></i> git源码
-      </a>
     </div>
 
     <div
@@ -55,98 +38,110 @@
       :class="[!store.isLight ? 'blackwrapper' : 'whitewrapper']"
       :style="rectStyle"
     >
-      <SketchRule
-        ref="sketchruleRef"
-        :key="rendIndex"
+      <SketchRuler
+        ref="sketchRef"
         v-model:scale="state.scale"
-        v-model:lock-line="lockLine"
-        v-bind="post"
+        :lock-line="lockLine"
+        :width="post.width"
+        :height="post.height"
+        :canvas-width="post.canvasWidth"
+        :canvas-height="post.canvasHeight"
+        :thick="post.thick"
         :palette="cpuPalette"
+        :show-ruler="post.showRuler"
+        :show-minor-ticks="post.showMinorTicks"
+        :is-show-refer-line="post.isShowReferLine"
+        :lines="post.lines"
+        :shadow="post.shadow"
+        :enable-animation="true"
+        animation-mode="ease-out"
+        :zoom-mode="zoomMode"
+        @zoomchange="handleZoomChange"
+        @update:lines="handleLinesChange"
         @on-corner-click="handleCornerClick"
-        @zoomchange="zoomchange"
       >
         <template #default>
           <div data-type="page" :style="canvasStyle" @mousedown="handleMouseDown">
             <img class="img-style" :src="bgImg" alt="" />
           </div>
         </template>
-        <template #btn="{ reset, zoomIn, zoomOut }">
+        <template #toolbar="{ tools }">
           <div class="btns">
-            <button @click.stop="reset">还原</button>
-            <button @click.stop="zoomIn">放大</button>
-            <button @click.stop="zoomOut">缩小</button>
+            <button @click.stop="tools.reset">还原</button>
+            <button @click.stop="tools.zoomIn">放大</button>
+            <button @click.stop="tools.zoomOut">缩小</button>
             <button @click.stop="post.showRuler = !post.showRuler">
               {{ (post.showRuler ? '隐藏' : '显示') + '标尺' }}
             </button>
           </div>
         </template>
-      </SketchRule>
+      </SketchRuler>
+
+      <div class="demo-minimap">
+        <Minimap
+          :content-width="post.canvasWidth"
+          :content-height="post.canvasHeight"
+          :viewport-x="viewportOffset.x"
+          :viewport-y="viewportOffset.y"
+          :viewport-width="post.width"
+          :viewport-height="post.height"
+          :scale="state.scale"
+          :width="200"
+          :height="150"
+          @navigate="handleNavigate"
+          @dragstart="handleDragStart"
+          @dragend="handleDragEnd"
+        />
+      </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import SketchRule from 'vue3-sketch-ruler'
+import { SketchRuler, Minimap } from 'vue3-sketch-ruler'
 import type { PaletteType } from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
 import bgImg from '../assets/bg.png'
-import { computed, ref, reactive } from 'vue'
-import type { PanzoomEventDetail, PanzoomEvent } from 'simple-panzoom'
+import { computed, ref, reactive, onMounted } from 'vue'
 import { useAppStore } from '@/store/app'
+
 const store = useAppStore()
-const rendIndex = ref(0)
-const sketchruleRef = ref()
-
-// 更多配置,参见 https://github.com/timmywil/panzoom
-const panzoomOption = reactive({
-  canvas: true,
-  maxScale: 3,
-  minScale: 0.3,
-  // startX: 0,   // 画布距离左边框距离, 如果想自动,那么不要传
-  // startY: 0,   // 画布距离顶边框距离, 如果想自动,那么不要传
-  disablePan: false,
-  disableZoom: false,
-  contain: 'none', // 'inside' | 'outside' | 'none'
-  handleStartEvent: (event: PanzoomEvent['panzoomstart']) => {
-    event.preventDefault()
-    console.log('handleStartEvent', event)
-  }
-})
+const sketchRef = ref()
 const lockLine = ref(false)
-
-// 另外一个方法调用内部方法
-const zoomOutMethod = (): void => {
-  if (sketchruleRef.value) {
-    sketchruleRef.value.zoomOut()
-  }
-}
-
-const resetMethod = (): void => {
-  if (sketchruleRef.value) {
-    sketchruleRef.value.reset()
-  }
-}
+const zoomMode = ref<'pointer' | 'viewport-center' | 'content-center'>('pointer')
 
 const state = reactive({
   scale: 1
+})
+
+const viewportOffset = reactive({ x: 0, y: 0 })
+let prevAnimation = false
+
+// 同步 SketchRuler 初始 autoCenter 状态到 minimap
+onMounted(() => {
+  const s = sketchRef.value?.engine?.getState?.()
+  if (s) {
+    viewportOffset.x = s.x
+    viewportOffset.y = s.y
+    state.scale = s.scale
+  }
 })
 
 const cpuPalette = computed<PaletteType>(() => {
   return !store.isLight
     ? {
         bgColor: 'transparent',
+        tickColor: '#BABBBC',
+        labelColor: '#DEDEDE',
+        guideLineColor: '#51d6a9',
+        guideLineLockedColor: '#d4d7dc',
         hoverBg: '#fff',
-        bb: '#fff',
         hoverColor: '#000',
-        longfgColor: '#BABBBC', // ruler longer mark color
-        fontColor: '#DEDEDE', // ruler font color
-        shadowColor: '#525252', // ruler shadow color
-        lineColor: '#51d6a9',
-        borderColor: '#B5B5B5'
+        borderColor: '#B5B5B5',
+        shadowColor: '#525252'
       }
     : {
         bgColor: 'transparent',
-        lineColor: '#51d6a9',
-        lineType: 'dashed'
+        lineColor: '#51d6a9'
       }
 })
 
@@ -154,28 +149,20 @@ const post = reactive({
   thick: 20,
   width: 1470,
   height: 750,
-  showShadowText: false,
-  // gridRatio: '0.5',
-  // width: 770,
-  // height: 472,
   canvasWidth: 1920,
   canvasHeight: 1080,
-  // canvasWidth: 1000,
-  // canvasHeight: 500,
   showRuler: true,
   showMinorTicks: false,
-  snapsObj: { h: [0, 100, 200], v: [130] },
+  isShowReferLine: true,
+  lines: {
+    h: [0, 250],
+    v: [0, 500]
+  },
   shadow: {
     x: 0,
     y: 0,
     width: 300,
     height: 300
-  },
-  panzoomOption: panzoomOption,
-  isShowReferLine: true,
-  lines: {
-    h: [0, 250],
-    v: [0, 500]
   }
 })
 
@@ -202,49 +189,21 @@ const scaleChange = (e: Event): void => {
   const target = e.target as HTMLInputElement
   if (target) {
     state.scale = Number(target.value)
-    // 注意插件内部并没有监听scale的变化,所以需要手动调用zoom来改变scale
-    if (sketchruleRef.value) {
-      const panzoomInstance = sketchruleRef.value.panzoomInstance
-      panzoomInstance.zoom(state.scale)
-    }
+    sketchRef.value?.setTransform?.({ scale: state.scale })
   }
 }
 
-const handleCornerClick = (e: MouseEvent): void => {
+const handleCornerClick = (e: boolean): void => {
   console.log('handleCornerClick', e)
 }
 
-const zoomchange = (detail: PanzoomEventDetail): void => {
-  // console.log('zoomchange', detail)
+const handleZoomChange = (detail: { scale: number; x: number; y: number }): void => {
+  viewportOffset.x = detail.x
+  viewportOffset.y = detail.y
 }
 
-const snapsChange = (e: { target: { value: string } }): void => {
-  const arr = e.target.value.split(',')
-  post.snapsObj.h = arr.map((item) => Number(item))
-}
-const snapsChangeV = (e: { target: { value: string } }): void => {
-  const arr = e.target.value.split(',')
-  post.snapsObj.v = arr.map((item) => Number(item))
-}
-
-const changeScale = (e: Event): void => {
-  const target = e.target as HTMLInputElement
-  if (target) {
-    panzoomOption.disableZoom = target.checked
-  }
-}
-const changeMove = (e: Event): void => {
-  const target = e.target as HTMLInputElement
-  if (target) {
-    panzoomOption.disablePan = target.checked
-  }
-}
-
-const changeInsideMove = (e: Event): void => {
-  const target = e.target as HTMLInputElement
-  if (target) {
-    panzoomOption.contain = target.checked ? 'inside' : 'none'
-  }
+const handleLinesChange = (lines: { h: number[]; v: number[] }): void => {
+  console.log('lines changed', lines)
 }
 
 const changeShadow = (): void => {
@@ -255,15 +214,41 @@ const changeShadow = (): void => {
 const handleMouseDown = (e: MouseEvent): void => {
   console.log('handleMouseDown', e)
 }
+
+const zoomOutMethod = (): void => {
+  sketchRef.value?.zoomOut?.()
+}
+
+const resetMethod = (): void => {
+  sketchRef.value?.reset?.()
+}
+
+const handleDragStart = () => {
+  const engine = sketchRef.value?.engine
+  if (engine) {
+    prevAnimation = (engine as any).enableAnimation
+    ;(engine as any).enableAnimation = false
+  }
+}
+
+const handleDragEnd = () => {
+  const engine = sketchRef.value?.engine
+  if (engine) {
+    ;(engine as any).enableAnimation = prevAnimation
+  }
+}
+
+const handleNavigate = (x: number, y: number) => {
+  sketchRef.value?.setTransform?.({ x, y })
+}
 </script>
 
 <style lang="scss">
 .demo {
   width: 100%;
-  // padding-top: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 水平居中 */
+  align-items: center;
 }
 .top {
   display: flex;
@@ -280,6 +265,7 @@ const handleMouseDown = (e: MouseEvent): void => {
 }
 
 .wrapper {
+  position: relative;
   margin: 0 auto;
   background-size:
     21px 21px,
@@ -299,10 +285,6 @@ const handleMouseDown = (e: MouseEvent): void => {
     linear-gradient(90deg, transparent 20px, #86909c 0);
 }
 
-.button {
-  bottom: 100%;
-}
-
 .img-style {
   width: 100%;
   height: 100%;
@@ -311,49 +293,14 @@ const handleMouseDown = (e: MouseEvent): void => {
   position: absolute;
   display: flex;
   bottom: 20px;
-  right: 40px;
+  right: 220px;
   z-index: 999;
 }
 
-/* Switch开关样式 */
-/* 必须是input为 checkbox class 添加 switch 才能实现以下效果 */
-input[type='checkbox'].switch {
-  outline: none;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  position: relative;
-  width: 40px;
-  height: 20px;
-  background: #ccc;
-  border-radius: 10px;
-  transition:
-    border-color 0.3s,
-    background-color 0.3s;
-}
-
-input[type='checkbox'].switch::after {
-  content: '';
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0, 0, 2px, #999;
-  transition: 0.4s;
-  top: 2px;
+.demo-minimap {
   position: absolute;
-  left: 2px;
-}
-
-input[type='checkbox'].switch:checked {
-  background: rgb(19, 206, 102);
-}
-/* 当input[type=checkbox]被选中时：伪元素显示下面样式 位置发生变化 */
-input[type='checkbox'].switch:checked::after {
-  content: '';
-  position: absolute;
-  left: 55%;
-  top: 2px;
+  right: 10px;
+  bottom: 10px;
+  z-index: 10;
 }
 </style>
