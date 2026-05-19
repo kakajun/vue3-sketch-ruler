@@ -4,7 +4,7 @@
  * M2 性能优化：避免每帧重复绘制不变的刻度几何
  */
 
-import type { ScaleMark } from '../composables/useRulerScale'
+import type { ScaleMark } from '@sketch-ruler/core'
 import type { RulerRenderPayload } from './types'
 
 export class OffscreenRulerCache {

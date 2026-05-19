@@ -81,8 +81,8 @@ import { RulerContextKey } from '../state/ruler-context'
 import type { GuideLine, RulerContext, RulerPalette } from '../state/ruler-context'
 
 import RulerWrapperV3 from './RulerWrapperV3.vue'
-import { PluginManager } from '../plugins/plugin-manager'
-import type { SketchRulerPlugin } from '../plugins/types'
+import { PluginManager } from '@sketch-ruler/core'
+import type { SketchRulerPlugin } from '@sketch-ruler/core'
 import { eye64, closeEye64 } from './cornerImg64'
 
 export interface SketchRulerProps {

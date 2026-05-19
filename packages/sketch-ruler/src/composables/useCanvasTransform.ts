@@ -8,9 +8,9 @@ import { ref, shallowRef, readonly, watch, type Ref, type DeepReadonly } from 'v
 import {
   TransformEngine,
   type TransformState,
-  type TransformEngineOptions
-} from '../engine/transform-engine'
-import { fitRect } from '../engine/coordinate'
+  type TransformEngineOptions,
+  fitRect
+} from '@sketch-ruler/core'
 import { markRaw } from 'vue'
 
 export interface CanvasTransformOptions {

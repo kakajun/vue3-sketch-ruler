@@ -1,48 +1,16 @@
 /**
  * RulerContext - 标尺-画布-参考线跨层级状态共享体系
  * 基于 Vue 3 provide/inject 机制
+ * 纯类型已从 @sketch-ruler/core 导入
  */
 
 import type { Ref, InjectionKey } from 'vue'
-import type { TransformEngine } from '../engine/transform-engine'
-import type { ScaleMark } from '../composables/useRulerScale'
+import type { TransformEngine } from '@sketch-ruler/core'
+import type { ScaleMark } from '@sketch-ruler/core'
+import type { GuideLine, RulerPalette, SnapConfig } from '@sketch-ruler/core'
 
-export interface GuideLine {
-  id: string
-  orientation: 'h' | 'v'
-  position: number
-  locked?: boolean
-  visible?: boolean
-  label?: string
-}
-
-export interface SnapConfig {
-  enabled: boolean
-  threshold: number
-  strength: number
-}
-
-export interface RulerPalette {
-  bgColor: string
-  tickColor: string
-  labelColor: string
-  guideLineColor: string
-  guideLineLockedColor: string
-  hoverBg: string
-  hoverColor: string
-  borderColor: string
-  shadowColor?: string
-  /** 参考线样式：solid | dashed | dotted */
-  guideLineStyle?: 'solid' | 'dashed' | 'dotted'
-  /** 参考线宽度 */
-  guideLineWidth?: number
-  /** 是否显示参考线标签 */
-  labelEnabled?: boolean
-  /** 标签位置 */
-  labelPosition?: 'start' | 'center' | 'end'
-  /** 标签格式化函数 */
-  labelFormat?: (value: number) => string
-}
+// 重新导出纯类型，保持现有文件的引用兼容性
+export type { GuideLine, RulerPalette, SnapConfig } from '@sketch-ruler/core'
 
 export interface RulerContext {
   scale: Ref<number>

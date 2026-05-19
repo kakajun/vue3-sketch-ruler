@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { produceState, createDefaultState, type RulerAction } from '../src/state/ruler-state'
-import type { GuideLine } from '../src/state/ruler-context'
+import type { GuideLine } from '../src/types'
 
 describe('produceState', () => {
   const base = createDefaultState()

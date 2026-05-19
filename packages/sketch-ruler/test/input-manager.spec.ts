@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { InputManager } from '../src/input/input-manager'
-import { TransformEngine } from '../src/engine/transform-engine'
+import { TransformEngine } from '@sketch-ruler/core'
 import { MouseAdapter } from '../src/input/mouse-adapter'
 import { getZoomDelta } from '../src/input/wheel-normalizer'
 

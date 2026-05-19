@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { PluginManager } from '../src/plugins/plugin-manager'
-import type { SketchRulerPlugin, BeforeZoomContext } from '../src/plugins/types'
+import type { SketchRulerPlugin, BeforeZoomContext } from '../src/types'
 
 describe('PluginManager', () => {
   let manager: PluginManager

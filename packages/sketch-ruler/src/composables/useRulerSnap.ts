@@ -4,7 +4,7 @@
  */
 
 import { type Ref, computed } from 'vue'
-import type { GuideLine } from '../state/ruler-context'
+import type { GuideLine } from '@sketch-ruler/core'
 
 export interface SnapTarget {
   type: 'tick' | 'guide-line' | 'custom' | 'grid' | 'equidistant'

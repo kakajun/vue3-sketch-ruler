@@ -11,11 +11,13 @@ import {
   produceState,
   createDefaultState,
   type RulerState,
-  type RulerAction
-} from '../state/ruler-state'
-import type { GuideLine, RulerPalette, RulerContext, SnapConfig } from '../state/ruler-context'
+  type RulerAction,
+  type GuideLine,
+  type RulerPalette,
+  type TransformEngine
+} from '@sketch-ruler/core'
+import type { RulerContext } from '../state/ruler-context'
 import { RulerContextKey } from '../state/ruler-context'
-import type { TransformEngine } from '../engine/transform-engine'
 
 export interface SketchRulerOptions {
   width: number

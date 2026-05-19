@@ -1,4 +1,4 @@
-import type { GuideLine, RulerPalette, SnapConfig } from './ruler-context'
+import type { GuideLine, RulerPalette, SnapConfig } from '../types'
 
 /**
  * RulerState - 标尺全局状态快照

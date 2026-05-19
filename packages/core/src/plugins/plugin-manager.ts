@@ -6,7 +6,7 @@ import type {
   OnSnapContext,
   OnLineContext,
   OnLineMoveContext
-} from './types'
+} from '../types'
 
 /**
  * PluginManager - 插件生命周期管理与钩子分发

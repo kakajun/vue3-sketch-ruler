@@ -1,4 +1,5 @@
-export { PluginManager } from './plugin-manager'
+// 从 @sketch-ruler/core 重新导出（保持向后兼容）
+export { PluginManager } from '@sketch-ruler/core'
 export type {
   SketchRulerPlugin,
   RulerRenderer,
@@ -12,4 +13,4 @@ export type {
   RenderConfig,
   Point,
   SnapTarget
-} from './types'
+} from '@sketch-ruler/core'

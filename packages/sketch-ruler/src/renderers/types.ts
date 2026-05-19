@@ -1,5 +1,4 @@
-import type { ScaleMark } from '../composables/useRulerScale'
-import type { RulerPalette } from '../state/ruler-context'
+import type { ScaleMark, RulerPalette } from '@sketch-ruler/core'
 
 /** 视口矩形 */
 export interface Rect {

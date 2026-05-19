@@ -80,6 +80,9 @@
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "release": "release-it"
   },
+  "dependencies": {
+    "@sketch-ruler/core": "workspace:*"
+  },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/test-utils": "^2.4.6",

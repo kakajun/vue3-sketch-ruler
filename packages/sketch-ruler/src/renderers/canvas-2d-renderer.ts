@@ -1,4 +1,5 @@
 import type { Renderer, Rect, RulerRenderPayload } from './types'
+import type { RulerPalette } from '@sketch-ruler/core'
 import { OffscreenRulerCache } from './offscreen-ruler-cache'
 import { LabelCache } from './label-cache'
 

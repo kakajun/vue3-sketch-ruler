@@ -4,7 +4,7 @@
  * 底层事件由 MouseAdapter 封装，滚轮标准化由 WheelNormalizer 处理
  */
 
-import type { TransformEngine } from '../engine/transform-engine'
+import type { TransformEngine } from '@sketch-ruler/core'
 import { MouseAdapter, type MouseAdapterCallbacks } from './mouse-adapter'
 import { KeyboardAdapter } from './keyboard-adapter'
 import type { KeyCombo } from './keyboard-adapter'
