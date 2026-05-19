@@ -13,7 +13,7 @@ export default defineConfig({
     vue(),
     dts({
       rollupTypes: true,
-      tsconfigPath: resolve(__dirname, 'tsconfig.json'), // 指定 tsconfig 文件
+      tsconfigPath: resolve(__dirname, 'tsconfig.build.json'), // 指定 tsconfig 文件
       exclude: ['test', '**/*.spec.ts', 'vite.config.ts', 'vitest.config.ts']
     })
   ],

@@ -39,7 +39,6 @@
     ".": {
       "types": "./lib/index.d.ts",
       "development": "./src/index.ts",
-      "browser": "./lib/index.iife.js",
       "import": "./lib/index.js",
       "require": "./lib/index.cjs"
     },
@@ -81,12 +80,12 @@
     "release": "release-it"
   },
   "dependencies": {
-    "@sketch-ruler/core": "workspace:*",
-    "@sketch-ruler/canvas": "workspace:*"
+    "@sketch-ruler/canvas": "workspace:*",
+    "@sketch-ruler/core": "workspace:*"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.1",
-    "@vue/test-utils": "^2.4.6",
-    "vitest": "^4.0.1"
+    "@vitejs/plugin-vue": "^6.0.7",
+    "@vue/test-utils": "^2.4.10",
+    "vitest": "^4.1.6"
   }
 }

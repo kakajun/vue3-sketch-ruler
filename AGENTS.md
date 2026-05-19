@@ -1,295 +1,292 @@
-# vue3-sketch-ruler 项目说明
+# vue3-sketch-ruler 项目指南
 
-> 本文件面向 AI 编程助手。如果你要修改、扩展或调试本项目，请先阅读本文。
+> 本文件面向 AI Coding Agent，用于快速理解项目结构、构建流程与开发约定。
+
+---
 
 ## 项目概述
 
-`vue3-sketch-ruler` 是一个基于 Vue 3 + TypeScript 的标尺组件库，适用于低代码平台、大屏可视化、做图工具等场景，提供类似 Photoshop 的缩放与标尺辅助线体验。
+`vue3-sketch-ruler` 是一个基于 **Vue 3 + TypeScript** 的标尺组件库，适用于低代码平台、大屏可视化、做图工具等场景，提供类似 Photoshop 的缩放与标尺辅助线体验。
 
-本项目采用 pnpm monorepo 架构，主要包含：
+主要特性：
 
-- **核心库** (`packages/sketch-ruler`)：可发布的 npm 包 `vue3-sketch-ruler`
-- **文档站点** (`packages/docs`)：基于 Vite 的示例与演示站点，部署在 GitHub Pages
-- **公共模块** (`packages/common`)：共享的 i18n 等工具
-- **simple-panzoom** (`packages/simple-panzoom`)：2.x 版本使用的外部缩放库，3.x 架构正在内置 TransformEngine 以替代它（当前目录为空，迁移中）
-
-当前版本：`2.4.1`，同时正在进行 **v3.0.0 架构重构**（详见 `DEVELOPMENT_PLAN.md`）。
+- Vue 3 Composition API / `<script setup>`
+- 完整的 TypeScript 类型定义
+- 内置 TransformEngine 变换引擎（零外部 panzoom 依赖）
+- 多种缩放模式：鼠标中心、视口中心、内容中心
+- 可配置参考线（拖拽创建、吸附、锁定）
+- 内置 Minimap 缩略图导航（支持拖拽视口、点击跳转）
+- 插件系统（生命周期钩子 + 自定义渲染器）
+- 动画支持：ease-out / damped / exponential / direct
+- 平台与业务代码通过插槽分离
 
 ---
 
 ## 技术栈
 
-| 层级               | 技术                                           |
-| ------------------ | ---------------------------------------------- |
-| 框架               | Vue 3.5+（Composition API / `<script setup>`） |
-| 语言               | TypeScript 5.9+                                |
-| 构建工具           | Vite 7+                                        |
-| 包管理器           | pnpm 9+（workspace 模式）                      |
-| 测试               | Vitest 4+ + jsdom + `@vue/test-utils`          |
-| 代码检查           | oxlint + oxfmt（不使用 ESLint/Prettier）       |
-| 样式               | SCSS                                           |
-| UI 组件（文档站）  | Element Plus                                   |
-| 状态管理（文档站） | Pinia 3+                                       |
-| 路由（文档站）     | Vue Router 4+                                  |
+| 层级 | 技术 |
+|------|------|
+| 框架 | Vue 3.5+ (Composition API) |
+| 语言 | TypeScript 5.9+ (strict 模式) |
+| 构建工具 | Vite 7.x |
+| 包管理器 | pnpm 9.x（workspace 模式） |
+| 测试框架 | Vitest 4.x + jsdom |
+| Vue 测试 | `@vue/test-utils` |
+| 代码检查 | oxlint 1.64+ |
+| 代码格式化 | oxfmt 0.49+ |
+| Git Hooks | husky + lint-staged（当前 hook 文件为弃用占位，未实际启用） |
+| 文档站点 | Vite + Vue 3 SPA（位于 `packages/docs`） |
 
 ---
 
-## 仓库结构
+## Monorepo 结构
+
+项目使用 **pnpm workspace** 管理，根目录 `package.json` 声明 `workspaces: ["packages/*"]`。
 
 ```
-├── packages/
-│   ├── sketch-ruler/        # 核心 npm 包
-│   │   ├── src/
-│   │   │   ├── components/  # Vue 组件（SketchRuler.vue、CanvasRuler.vue、RulerWrapperV3.vue 等）
-│   │   │   ├── engine/      # 纯数学变换引擎（零 DOM 依赖）
-│   │   │   ├── composables/ # Vue 组合式函数
-│   │   │   ├── renderers/   # Canvas 渲染抽象与实现
-│   │   │   ├── input/       # 输入管理（鼠标、键盘、滚轮）
-│   │   │   ├── state/       # 状态管理（参考线、配色、吸附配置）
-│   │   │   ├── managers/    # 多画布管理器（CanvasManager）
-│   │   │   ├── plugins/     # 插件系统类型与管理器
-│   │   │   └── index.ts     # 库入口
-│   │   ├── test/            # Vitest 单元测试
-│   │   ├── lib/             # 构建产物（Vite library mode 输出）
-│   │   ├── vite.config.ts   # 库模式构建配置（ESM/CJS/UMD/IIFE）
-│   │   └── vitest.config.ts # 测试配置
-│   ├── docs/                # 文档与演示站点
-│   │   ├── src/             # 示例页面、Vue 组件、HTML demo
-│   │   ├── dist/            # 构建输出（部署到 gh-pages）
-│   │   └── vite.config.ts
-│   └── common/              # 共享模块（i18n）
-├── scripts/
-│   ├── release.js           # 手动发布脚本（交互式版本选择 + npm publish）
-│   └── migrate.js           # 2.x → 3.x 自动迁移脚本
-├── .github/workflows/
-│   └── gh-pages.yml         # CI：build → test → deploy
-├── package.json             # 根 package.json（workspace root）
-├── pnpm-workspace.yaml      # pnpm workspace 配置
-├── tsconfig.common.json     # 共享 tsconfig 基础配置
-├── .oxlintrc.json           # oxlint 配置
-├── .oxfmtrc.json            # oxfmt 格式化配置
-├── DEVELOPMENT_PLAN.md      # v3.0.0 重构详细计划
-└── MIGRATION.md             # 2.x → 3.x 迁移指南
+packages/
+├── sketch-ruler/      # 主发布包：vue3-sketch-ruler
+├── core/              # 框架无关核心：@sketch-ruler/core
+├── canvas/            # Canvas 渲染与 DOM 输入：@sketch-ruler/canvas
+├── docs/              # 文档与示例站点：root-doc
+└── common/            # 私有共享包：root-common（目前仅含 i18n）
 ```
+
+### 各包职责
+
+| 包名 | 发布名 | 说明 |
+|------|--------|------|
+| `packages/sketch-ruler` | `vue3-sketch-ruler` | 对外发布的 Vue 3 组件包。导出 `SketchRuler`、`Minimap` 组件，以及 Vue 相关的 composables、plugins。依赖 `@sketch-ruler/core` 与 `@sketch-ruler/canvas`。 |
+| `packages/core` | `@sketch-ruler/core` | 框架无关核心层：坐标变换引擎（TransformEngine）、矩阵运算、刻度计算、状态管理（RulerState / LineManager）、插件管理（PluginManager）、吸附引擎（SnapEngine）、多画布管理器（CanvasManager）、Minimap 引擎。零外部依赖。 |
+| `packages/canvas` | `@sketch-ruler/canvas` | 框架无关的 Canvas 2D 渲染器与 DOM 输入管理器。负责鼠标/键盘/滚轮事件适配、离屏缓存、标签缓存。依赖 `@sketch-ruler/core`。 |
+| `packages/docs` | `root-doc` | 文档演示站点，使用 Vite 构建，包含大量示例（basic、bigscreen、edit、multi-instance 等）。依赖 `vue3-sketch-ruler` workspace 包。 |
+| `packages/common` | `root-common` | 私有内部包，目前主要提供 `i18n` 实例供 docs 使用。 |
+
+所有发布包均声明 `type: "module"` 与 `sideEffects: false`。
 
 ---
 
-## 常用命令
+## 构建与开发命令
 
-所有命令均在**项目根目录**执行：
+以下命令均在**项目根目录**执行：
 
 ```bash
 # 安装依赖
 pnpm i
 
-# 开发文档站点（先构建库，再启动文档站）
+# 开发模式（先构建 sketch-ruler，再启动 docs）
 pnpm dev
-# 或仅启动文档站（不重新构建库）
+
+# 仅启动 docs（假设 sketch-ruler 已构建）
 pnpm d
 
-# 构建核心库
+# 构建主库（仅构建 sketch-ruler 包）
 pnpm build
 
-# 构建文档站点（用于部署）
+# 构建文档站点（先 build 再 build docs）
 pnpm build:demo
 
-# 运行测试（simple-panzoom + sketch-ruler）
+# 运行测试（仅 sketch-ruler 包的测试）
 pnpm test
 
 # 代码检查
-pnpm lint:check      # 检查
-pnpm lint            # 自动修复
+pnpm lint:check        # oxlint 检查
+pnpm lint              # oxlint --fix 自动修复
 
-# 格式化
-pnpm fmt             # 格式化
-pnpm fmt:check       # 检查格式
+# 代码格式化
+pnpm fmt               # oxfmt 格式化
+pnpm fmt:check         # oxfmt --check 检查格式
 
-# 发布（交互式）
+# 生成 changelog
+pnpm changelog
+
+# 发布（交互式选择版本）
 pnpm release
 
 # 清理 node_modules
 pnpm clean
 ```
 
-### 包级命令
-
-```bash
-# 仅构建 sketch-ruler
-pnpm --filter ./packages/sketch-ruler build
-
-# 仅运行 sketch-ruler 测试
-pnpm --filter ./packages/sketch-ruler test
-
-# 仅运行 sketch-ruler 测试（watch 模式）
-pnpm --filter ./packages/sketch-ruler test:watch
-```
+各子包内部也有独立的 `build` / `test` / `test:watch` 脚本，可直接进入子目录执行。
 
 ---
 
-## 核心包架构（`packages/sketch-ruler`）
+## 构建输出
 
-v3.0.0 重构目标是将代码组织为**引擎 / 渲染 / 交互 / 数据 / 组件**五层分离架构：
-
-### 1. 引擎层 (`src/engine/`) — 零 DOM 依赖
-
-- `transform-engine.ts`：`TransformEngine` 类，维护 2D 仿射变换矩阵，支持动画（ease-out / damped / exponential / direct）
-- `matrix.ts`：`Float64Array(6)` 紧凑矩阵运算
-- `coordinate.ts`：屏幕坐标 ↔ 世界坐标转换
-
-### 2. 渲染层 (`src/renderers/`)
-
-- `canvas-2d-renderer.ts`：Canvas 2D 标尺绘制实现
-- `label-cache.ts` / `offscreen-ruler-cache.ts`：离屏缓存与标签缓存
-- `types.ts`：`Renderer` 抽象接口
-
-### 3. 交互层 (`src/input/`)
-
-- `input-manager.ts`：`InputManager` 类，统一处理鼠标滚轮缩放、空格拖拽平移、键盘快捷键
-- `mouse-adapter.ts`：鼠标事件封装
-- `keyboard-adapter.ts`：键盘快捷键映射
-- `wheel-normalizer.ts`：滚轮事件标准化
-
-### 4. 数据层 (`src/state/`)
-
-- `ruler-state.ts`：不可变状态快照 + `produceState()` 纯函数更新
-- `state-manager.ts`：`StateManager` 类，管理参考线集合
-- `ruler-context.ts`：`RulerContext` provide/inject 上下文类型
-
-### 5. 组件层 (`src/components/`)
-
-- `SketchRuler.vue`：根组件，整合引擎、输入管理、状态管理、插件系统
-- `RulerWrapperV3.vue`：标尺包裹层（水平/垂直）
-- `CanvasRuler.vue`：Canvas 标尺绘制组件
-- `RulerLine.vue`：参考线 DOM 组件
-- `Minimap.vue`：缩略图导航组件
-
-### 6. 其他模块
-
-- `composables/`：`useCanvasTransform`、`useSketchRuler`、`useRulerScale`、`useSnapDetection` 等
-- `managers/`：`CanvasManager` 多画布标签页管理
-- `plugins/`：插件系统（生命周期钩子 + 自定义渲染器）
-
----
-
-## 构建产物
-
-`packages/sketch-ruler/lib/` 输出四种格式：
-
-| 格式 | 文件            | 用途                                    |
-| ---- | --------------- | --------------------------------------- |
-| ESM  | `index.js`      | Vite / Webpack 5+ / Rollup              |
-| CJS  | `index.cjs`     | Node.js / 旧版构建工具                  |
-| UMD  | `index.umd.cjs` | 浏览器 `<script src>`                   |
-| IIFE | `index.iife.js` | 书签脚本、微前端                        |
-| 样式 | `style.css`     | 组件样式                                |
-| 类型 | `index.d.ts`    | TypeScript 声明（vite-plugin-dts 生成） |
-
-`vue` 被标记为 external，不会打包进产物。
-
----
-
-## 代码风格规范
-
-本项目使用 **oxlint** 做代码检查、**oxfmt** 做格式化，不使用 ESLint/Prettier。
-
-关键配置（见 `.oxfmtrc.json`）：
-
-- 缩进：2 空格，不使用 Tab
-- 分号：不使用
-- 引号：单引号
-- 尾随逗号：不保留
-- 箭头函数参数：始终加括号
-- Vue 文件中的 script/style 不额外缩进
-
-提交前会自动运行 `lint-staged`（通过 husky），对修改的文件执行 `oxlint --fix` + `oxfmt`。
+- `packages/sketch-ruler` 构建产物输出到 `lib/`，包含以下格式：
+  - `index.js` (ESM)
+  - `index.cjs` (CJS)
+  - `index.umd.cjs` (UMD)
+  - `index.iife.js` (IIFE)
+  - `index.d.ts`（类型声明，由 `vite-plugin-dts` 生成）
+  - `style.css`（组件样式）
+- `packages/core` 与 `packages/canvas` 同样输出到各自 `lib/`，支持 ESM / CJS / UMD / IIFE。
 
 ---
 
 ## 测试策略
 
-- **单元测试**：使用 Vitest + jsdom 环境 + `@vue/test-utils`
-- **测试文件位置**：`packages/sketch-ruler/test/*.spec.ts`
-- ** globals 模式**：测试中可以不用导入 `describe` / `test` / `expect`
-- **现有测试覆盖**：
-  - `canvas-manager.spec.ts`
-  - `input-manager.spec.ts`
-  - `plugin-manager.spec.ts`
-  - `ruler-state.spec.ts`
-  - `sketch-ruler.spec.ts`（组件集成测试）
-  - `state-manager.spec.ts`
-  - `use-sketch-ruler.spec.ts`
-  - `wheel-normalizer.spec.ts`
+- 测试框架：**Vitest**，环境为 **jsdom**，开启 `globals: true`。
+- 测试文件放在各包的 `test/` 目录下，命名约定为 `*.spec.ts`。
+- Vue 组件测试使用 `@vue/test-utils` 的 `mount`，需设置 `attachTo: document.body`。
+- 核心引擎测试使用 `vi.useFakeTimers` 验证动画插值。
 
 ### 运行测试
 
 ```bash
-# 全部测试
+# 根目录运行 sketch-ruler 的测试
 pnpm test
 
-# 仅 sketch-ruler 测试
-pnpm --filter ./packages/sketch-ruler test
-
-# watch 模式
-pnpm --filter ./packages/sketch-ruler test:watch
+# 进入子包运行该包测试
+cd packages/core && pnpm test
+cd packages/canvas && pnpm test
 ```
+
+### 现有测试覆盖
+
+- `packages/core/test/`：矩阵、坐标变换、TransformEngine、CanvasManager、LineManager、PluginManager、RulerState
+- `packages/canvas/test/`：InputManager、WheelNormalizer
+- `packages/sketch-ruler/test/`：SketchRuler 组件集成测试、composables（useCanvasTransform、useRulerScale、useSnapDetection）
 
 ---
 
-## CI/CD 与部署
+## 代码风格与 lint 规则
 
-GitHub Actions 工作流 `.github/workflows/gh-pages.yml`：
+项目使用 **oxlint** 做静态检查，**oxfmt** 做格式化。
 
-1. 触发条件：`push` 或 `pull_request` 到 `main` / `master` 分支
-2. 使用 Node.js 24.x + pnpm 9
-3. 执行步骤：
-   - `pnpm i --no-frozen-lockfile`
-   - 构建 `simple-panzoom`
-   - 构建 `sketch-ruler`
-   - 运行测试 `pnpm test`
-   - 构建文档 `pnpm build:demo`
-   - **仅 push 时**：部署 `packages/docs/dist` 到 `gh-pages`
+### 关键配置
 
-文档站点地址：`https://kakajun.github.io/vue3-sketch-ruler`
+- `.oxlintrc.json`：启用 `typescript` 与 `unicorn` 插件，`correctness` 类别默认关闭。对 `.ts`/`.js` 强制 `no-var`、`prefer-const`、`prefer-rest-params`、`prefer-spread`。忽略 `node_modules` 与 `lib`。
+- `.oxfmtrc.json`：
+  - 缩进：2 空格，不使用 Tab
+  - 无分号 (`semi: false`)
+  - 单引号 (`singleQuote: true`)
+  - 无尾随逗号 (`trailingComma: none`)
+  - 箭头函数始终加括号 (`arrowParens: always`)
+
+### 提交前自动格式化
+
+根目录 `package.json` 中配置了 `lint-staged`：
+
+```json
+"lint-staged": {
+  "*.{js,ts,mjs,cjs,vue}": ["oxlint --fix", "oxfmt"]
+}
+```
+
+> 注意：当前仓库中没有 `stylelint` 配置文件，且 `.husky` 目录下的 hook 脚本为 husky v9 弃用占位，实际预提交钩子**未生效**。
+
+---
+
+## TypeScript 配置
+
+- 基线配置：`tsconfig.common.json`
+  - `target: "ES2022"`，`module: "ESNext"`
+  - `strict: true`，`noImplicitReturns: true`
+  - `composite: true`，`declaration: true`，`declarationMap: true`
+- 各包 `tsconfig.json` 继承基线，额外设置：
+  - `moduleResolution: "bundler"`
+  - `allowImportingTsExtensions: true`
+  - `emitDeclarationOnly: true`
+  - `lib: ["ES2022", "DOM", "DOM.Iterable"]`
+  - `types: ["vitest", "node"]`
+  - `include` 包含 `**/*.ts`、`**/*.vue`（sketch-ruler 包）、`**/*.json`
+  - `exclude` 排除 `test`、`**/*.spec.ts`、`vite.config.ts`、`vitest.config.ts`
+
+---
+
+## 开发约定
+
+### 目录与模块组织
+
+- **核心层** (`packages/core/src/`)：
+  - `engine/` — 变换引擎、矩阵、坐标转换、Minimap 引擎
+  - `state/` — 状态管理（RulerState、LineManager）
+  - `plugins/` — 插件系统（PluginManager）
+  - `scale/` — 刻度计算与配置
+  - `snap/` — 吸附引擎
+  - `managers/` — 多画布管理器（CanvasManager）
+  - `types/` — 框架无关的纯类型定义
+  - `utils/` — ID 生成、线段工具函数
+- **Canvas 层** (`packages/canvas/src/`)：
+  - `renderers/` — Canvas2DRenderer、离屏缓存、标签缓存
+  - `input/` — InputManager、MouseAdapter、KeyboardAdapter、WheelNormalizer
+- **Vue 层** (`packages/sketch-ruler/src/`)：
+  - `components/` — Vue SFC（SketchRuler.vue、Minimap.vue、RulerWrapperV3.vue 等）
+  - `composables/` — Vue 组合式函数（useCanvasTransform、useRulerScale、useSnapDetection 等）
+  - `plugins/` — Vue 侧插件入口
+  - `state/` — Vue 注入上下文（RulerContextKey）
+
+### 编码风格
+
+- Vue 单文件组件统一使用 `<script setup lang="ts">`。
+- 优先使用 `ref` / `computed` / `watch` / `provide` / `inject` 等 Vue 3 组合式 API。
+- Composables 命名以 `use` 开头，返回对象包含响应式状态与方法。
+- 类型定义与实现分离：框架无关的类型集中在 `packages/core/src/types/index.ts`。
+- 各包 `index.ts` 统一负责按模块分类的导出（类型、`export` / `export type` 分离）。
+- 跨包引用使用 workspace 协议：`workspace:*`。
 
 ---
 
 ## 发布流程
 
-使用根目录的 `scripts/release.js` 进行**交互式手动发布**：
+发布由根目录 `scripts/release.js` 驱动：
 
-1. 运行 `pnpm release`
-2. 选择版本类型（patch / minor / major）或输入自定义版本
-3. 脚本自动更新根目录和 `packages/sketch-ruler/package.json` 的版本号
-4. 复制根目录 `README.md` 到包目录
-5. 在 `packages/sketch-ruler/` 下执行 `npm publish`
-6. 发布完成后删除临时复制的 `README.md`
+1. 交互式提示选择版本（patch / minor / major / custom）。
+2. 更新根目录及 `packages/sketch-ruler` 的 `package.json` 版本号。
+3. 将根目录 `README.md` 复制到 `packages/sketch-ruler/README.md`。
+4. 在 `packages/sketch-ruler` 目录执行 `npm publish`，发布到 `https://registry.npmjs.org/`。
+5. 发布结束后删除临时复制的 `README.md`。
 
-注意：脚本中 git commit / tag 相关的命令被注释掉了，目前只做版本号更新和 npm 发布。
-
----
-
-## 关键开发约定
-
-1. **TypeScript 严格模式**：`strict: true`，所有包继承 `tsconfig.common.json`
-2. **Vue 组件**：统一使用 `<script setup lang="ts">`
-3. **引擎层纯净性**：`src/engine/` 中禁止引入任何 DOM API（`document`、`window`、`HTMLElement`），确保可在纯 Node.js 环境测试
-4. **响应式优化**：
-   - `TransformEngine` 实例使用 `markRaw()` 排除 Vue 代理
-   - 刻度数据使用 `shallowRef` 管理
-   - 参考线拖拽使用 `customRef` 节流
-5. **状态更新**：数据层状态通过纯函数 `produceState(current, action)` 完成，保持不可变性
-6. **插槽规范**：
-   - `default` 插槽：画布内容（必须用 `<template #default>` 包裹）
-   - `toolbar` 插槽：右下角控制按钮（v3 中由 `btn` 改名而来）
-7. **多实例支持**：每个 `SketchRuler` 组件拥有独立的 `TransformEngine` 和 `StateManager`
+> 注意：脚本中 git add / commit / tag 的代码被注释掉了，发布**不会**自动打 tag 或提交。
 
 ---
 
-## 给 AI 助手的特别提示
+## CI / CD
 
-- **修改核心组件前**：先查看 `DEVELOPMENT_PLAN.md` 了解 v3.0.0 的长期架构方向，避免与重构计划冲突。
-- **simple-panzoom**：该包目录目前为空，3.x 正在用内置 `TransformEngine` 替代它。如果看到代码中引用 `simple-panzoom`，说明是旧逻辑，迁移中应优先使用 `TransformEngine`。
-- **测试**：新增逻辑后请在 `packages/sketch-ruler/test/` 补充测试。组件测试使用 `@vue/test-utils` 的 `mount()`，注意设置 `attachTo: document.body`。
-- **构建产物**：修改 `sketch-ruler` 源码后，需要重新执行 `pnpm build` 才能在文档站中看到效果（文档站通过 `workspace:*` 引用本地构建产物）。
-- **文档语言**：项目 README、注释、文档主要以**中文**为主，提交信息可使用中文或英文。
-- **兼容性**：仅支持 Vue 3。如需 Vue 2 兼容版本，请使用项目的 `1x` 分支。
+GitHub Actions 工作流：`.github/workflows/gh-pages.yml`
+
+触发条件：`push` 或 `pull_request` 到 `main` / `master` 分支。
+
+执行步骤：
+
+1. 检出代码
+2. 安装 pnpm 9 与 Node.js 24.x
+3. `pnpm i --no-frozen-lockfile`
+4. 构建 `simple-panzoom`（历史遗留步骤，当前仓库中该包已不存在，但 workflow 仍保留此步骤）
+5. 构建 `sketch-ruler`
+6. 运行测试 `pnpm test`
+7. 构建文档 `pnpm build:demo`
+8. 仅在 `push` 事件时，将 `packages/docs/dist` 部署到 GitHub Pages
+
+---
+
+## 安全与依赖注意事项
+
+- 项目为前端组件库，不涉及服务端运行或用户敏感数据存储。
+- `vue3-sketch-ruler` 作为发布包，在 `vite.config.ts` 中将 `vue` 设为 `external`，避免将 Vue 打包进产物。
+- `@sketch-ruler/canvas` 将 `@sketch-ruler/core` 设为 `external`。
+- 根目录 `pnpm.overrides` 固定了 `parse5` 版本为 `^7.1.2`，用于解决下游依赖冲突。
+- 构建产物输出到各包 `lib/` 目录，该目录已在 `.gitignore` 中忽略，也受 oxlint 忽略。
+
+---
+
+## 快速参考
+
+| 目的 | 命令 |
+|------|------|
+| 安装所有依赖 | `pnpm i` |
+| 启动开发服务器 | `pnpm dev` |
+| 构建组件库 | `pnpm build` |
+| 构建文档 | `pnpm build:demo` |
+| 运行所有测试 | `pnpm test` |
+| 自动修复代码 | `pnpm lint && pnpm fmt` |
+| 发布新版本 | `pnpm release` |
+
+---
+
+## 相关链接
+
+- 源码仓库：https://github.com/kakajun/vue3-sketch-ruler
+- 在线演示：https://kakajun.github.io/vue3-sketch-ruler
+- NPM 包名：`vue3-sketch-ruler`
