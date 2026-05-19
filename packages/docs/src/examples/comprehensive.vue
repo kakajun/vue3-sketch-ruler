@@ -13,6 +13,9 @@
       <button class="mr10 font16" @click="post.isShowReferLine = !post.isShowReferLine">
         {{ (post.isShowReferLine ? '隐藏' : '显示') + '参考线' }}
       </button>
+      <button class="mr10 font16" @click="post.showMinorTicks = !post.showMinorTicks">
+        {{ (post.showMinorTicks ? '隐藏' : '显示') + '次刻度' }}
+      </button>
       <button class="mr10 font16" @click="lockLine = true">锁定参考线</button>
       <button class="mr10 font16" @click="changeShadow">模拟阴影切换</button>
       <button class="mr10 font16" @click.stop="resetMethod">还原</button>
@@ -160,6 +163,7 @@ const post = reactive({
   // canvasWidth: 1000,
   // canvasHeight: 500,
   showRuler: true,
+  showMinorTicks: false,
   snapsObj: { h: [0, 100, 200], v: [130] },
   shadow: {
     x: 0,

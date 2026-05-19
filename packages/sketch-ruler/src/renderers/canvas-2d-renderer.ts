@@ -3,7 +3,7 @@ import { OffscreenRulerCache } from './offscreen-ruler-cache'
 import { LabelCache } from './label-cache'
 
 /** 默认阴影颜色 */
-const DEFAULT_SHADOW_COLOR = 'rgba(0, 0, 0, 0.08)'
+const DEFAULT_SHADOW_COLOR = '#e9f7fe'
 
 export class Canvas2DRenderer implements Renderer {
   private offscreenCache = new OffscreenRulerCache()
@@ -59,7 +59,7 @@ export class Canvas2DRenderer implements Renderer {
       const screenLength = shadowLength * scale
 
       if (screenLength > 0) {
-        ctx.fillStyle = DEFAULT_SHADOW_COLOR
+        ctx.fillStyle = palette.shadowColor ?? DEFAULT_SHADOW_COLOR
         if (vertical) {
           ctx.fillRect(0, screenStart, width, screenLength)
         } else {
@@ -87,21 +87,25 @@ export class Canvas2DRenderer implements Renderer {
 
         ctx.save()
         ctx.fillStyle = palette.labelColor
-        ctx.font = `${Math.max(9, Math.floor(thick * 0.5))}px -apple-system, "Helvetica Neue", ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif`
+        ctx.font = `${Math.max(11, Math.floor(thick * 0.5) + 2)}px -apple-system, "Helvetica Neue", ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif`
 
         if (vertical) {
-          const metrics = ctx.measureText(mark.label)
-          const textWidth = metrics.width
-          // rotate(-90°) 后文字沿新 x 轴向上排列，反转字符串保持从上到下读
-          const labelY = mark.position + textWidth + 4
-          ctx.translate(width * 0.3, labelY)
+          if (mark.value === 0) {
+            ctx.translate(width * 0.4, mark.position - 3)
+          } else if (mark.value === payload.canvasSize) {
+            ctx.translate(width * 0.2, mark.position + 32)
+          } else {
+            ctx.translate(width * 0.15, mark.position + 14)
+          }
           ctx.rotate((-90 * Math.PI) / 180)
-          ctx.fillText(mark.label.split('').reverse().join(''), 4, 9)
+          ctx.fillText(mark.label, 4, 9)
         } else {
           if (mark.value === 0) {
-            ctx.translate(mark.position - 15, height * 0.01)
+            ctx.translate(mark.position - 15, height * 0.13)
+          } else if (mark.value === payload.canvasSize) {
+            ctx.translate(mark.position + 5, height * 0.3)
           } else {
-            ctx.translate(mark.position - 12, height * 0.05)
+            ctx.translate(mark.position - 12, height * 0.18)
           }
           ctx.fillText(mark.label, 4, 9)
         }
@@ -124,10 +128,10 @@ export class Canvas2DRenderer implements Renderer {
     ctx.fillStyle = palette.labelColor
     ctx.font = 'bold 12px sans-serif'
     if (vertical) {
-      ctx.translate(thick * 0.4, screenPos + (isEnd ? -8 : 8))
+      ctx.translate(thick * 0.6, screenPos + (isEnd ? -8 : 8))
       ctx.rotate(-Math.PI / 2)
     } else {
-      ctx.translate(screenPos + (isEnd ? -8 : 8), thick * 0.4)
+      ctx.translate(screenPos + (isEnd ? -8 : 8), thick * 0.6)
     }
     ctx.fillText(Math.round(value).toString(), 0, 0)
     ctx.restore()

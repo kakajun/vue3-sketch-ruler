@@ -37,11 +37,11 @@
   "types": "lib/index.d.ts",
   "exports": {
     ".": {
-      "development": "./src/index.ts",
       "types": "./lib/index.d.ts",
+      "development": "./src/index.ts",
+      "browser": "./lib/index.iife.js",
       "import": "./lib/index.js",
-      "require": "./lib/index.cjs",
-      "browser": "./lib/index.iife.js"
+      "require": "./lib/index.cjs"
     },
     "./style.css": "./lib/style.css",
     "./lib/style.css": "./lib/style.css",

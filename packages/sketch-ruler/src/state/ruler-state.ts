@@ -37,6 +37,7 @@ export function createDefaultState(): RulerState {
       hoverBg: '#000',
       hoverColor: '#fff',
       borderColor: '#eeeeef',
+      shadowColor: '#e9f7fe',
       guideLineStyle: 'dashed',
       guideLineWidth: 1,
       labelEnabled: true,

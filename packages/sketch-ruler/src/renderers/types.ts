@@ -25,7 +25,7 @@ export interface RulerRenderPayload {
   shadowLength?: number
   /** 是否显示阴影文字 */
   showShadowText?: boolean
-  /** 画布尺寸（用于阴影文字） */
+  /** 画布尺寸（用于阴影文字和边界标注过滤） */
   canvasSize?: number
 }
 

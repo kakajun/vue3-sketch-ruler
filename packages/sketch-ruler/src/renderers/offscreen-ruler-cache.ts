@@ -56,30 +56,42 @@ export class OffscreenRulerCache {
     ctx.fillStyle = palette.bgColor
     ctx.fillRect(0, 0, width, height)
 
-    // 刻度线
+    // 刻度线（简约风格：只画主刻度，与 master 分支保持一致）
     ctx.strokeStyle = palette.tickColor
     ctx.lineWidth = 1
     ctx.beginPath()
 
     for (const mark of marks) {
       const pos = mark.position
-      const len = mark.length
 
       if (mark.isMajor) {
-        if (vertical) {
-          ctx.moveTo(width * 0.7, pos)
-          ctx.lineTo(0, pos)
+        if (mark.value === 0 || mark.value === payload.canvasSize) {
+          // 0 和 canvas 最大宽度/高度刻度画满整个标尺（同 master 分支）
+          if (vertical) {
+            ctx.moveTo(0, pos)
+            ctx.lineTo(width, pos)
+          } else {
+            ctx.moveTo(pos, 0)
+            ctx.lineTo(pos, height)
+          }
         } else {
-          ctx.moveTo(pos, height * 0.7)
-          ctx.lineTo(pos, 0)
+          // 主刻度从底部画到中间偏下，整体下移给标签留空间
+          if (vertical) {
+            ctx.moveTo(width, pos)
+            ctx.lineTo(width * 0.65, pos)
+          } else {
+            ctx.moveTo(pos, height)
+            ctx.lineTo(pos, height * 0.65)
+          }
         }
       } else {
+        // 次刻度线（较短），与主刻度底部对齐
         if (vertical) {
-          ctx.moveTo(width * 0.85, pos)
-          ctx.lineTo(width * 0.55, pos)
+          ctx.moveTo(width, pos)
+          ctx.lineTo(width * 0.8, pos)
         } else {
-          ctx.moveTo(pos, height * 0.85)
-          ctx.lineTo(pos, height * 0.55)
+          ctx.moveTo(pos, height)
+          ctx.lineTo(pos, height * 0.8)
         }
       }
     }

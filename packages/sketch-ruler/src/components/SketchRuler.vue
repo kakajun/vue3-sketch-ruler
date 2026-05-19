@@ -39,6 +39,8 @@
       :shadow-start="shadow.x"
       :shadow-length="shadow.width"
       :render-lines-in-canvas="false"
+      :canvas-size="canvasWidth"
+      :show-minor-ticks="showMinorTicks"
       @add-line="handleAddLine"
       @update-line="handleUpdateLine"
     />
@@ -59,6 +61,8 @@
       :shadow-start="shadow.y"
       :shadow-length="shadow.height"
       :render-lines-in-canvas="false"
+      :canvas-size="canvasHeight"
+      :show-minor-ticks="showMinorTicks"
       @add-line="handleAddLine"
       @update-line="handleUpdateLine"
     />
@@ -79,6 +83,7 @@ import type { GuideLine, RulerContext, RulerPalette } from '../state/ruler-conte
 import RulerWrapperV3 from './RulerWrapperV3.vue'
 import { PluginManager } from '../plugins/plugin-manager'
 import type { SketchRulerPlugin } from '../plugins/types'
+import { eye64, closeEye64 } from './cornerImg64'
 
 export interface SketchRulerProps {
   showRuler?: boolean
@@ -111,6 +116,10 @@ export interface SketchRulerProps {
   shadow?: { x: number; y: number; width: number; height: number }
   /** 初始偏移（autoCenter=false 时生效） */
   initialOffset?: { x: number; y: number }
+  /** 是否显示次刻度线，默认 false */
+  showMinorTicks?: boolean
+  eyeIcon?: string
+  closeEyeIcon?: string
 }
 
 const props = withDefaults(defineProps<SketchRulerProps>(), {
@@ -136,7 +145,8 @@ const props = withDefaults(defineProps<SketchRulerProps>(), {
   plugins: () => [],
   autoCenter: true,
   shadow: () => ({ x: 0, y: 0, width: 0, height: 0 }),
-  initialOffset: () => ({ x: 0, y: 0 })
+  initialOffset: () => ({ x: 0, y: 0 }),
+  showMinorTicks: false
 })
 
 const emit = defineEmits([
@@ -376,6 +386,7 @@ const paletteCpu = computed<RulerPalette>(() => ({
   hoverBg: '#000',
   hoverColor: '#fff',
   borderColor: '#eeeeef',
+  shadowColor: '#e9f7fe',
   ...props.palette
 }))
 
@@ -416,11 +427,23 @@ const canvasStyle = computed(() => ({
   height: props.canvasHeight + 'px'
 }))
 
+const isTransparent = (color: string | undefined): boolean => {
+  if (!color) return true
+  const c = color.trim().toLowerCase()
+  return c === 'transparent' || c === 'rgba(0,0,0,0)' || c === 'rgba(0, 0, 0, 0)'
+}
+
 const cornerStyle = computed(() => ({
   width: props.thick + 'px',
   height: props.thick + 'px',
   borderRight: `1px solid ${paletteCpu.value.borderColor}`,
-  borderBottom: `1px solid ${paletteCpu.value.borderColor}`
+  borderBottom: `1px solid ${paletteCpu.value.borderColor}`,
+  backgroundColor: isTransparent(paletteCpu.value.bgColor)
+    ? '#f6f7f9'
+    : paletteCpu.value.bgColor,
+  backgroundImage: showReferLine.value
+    ? `url(${props.eyeIcon ?? eye64})`
+    : `url(${props.closeEyeIcon ?? closeEye64})`
 }))
 
 // === 方法 ===
@@ -514,11 +537,14 @@ defineExpose({
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 2;
     pointer-events: auto;
     cursor: pointer;
     box-sizing: content-box;
     transition: all 0.2s ease-in-out;
-    background: v-bind('paletteCpu.bgColor');
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
   }
 
   .default {

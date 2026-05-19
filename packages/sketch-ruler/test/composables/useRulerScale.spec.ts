@@ -46,11 +46,27 @@ describe('useRulerScale', () => {
     const result = ticks.value
     expect(result.length).toBeGreaterThan(0)
     const majors = result.filter((t) => t.isMajor)
+    expect(majors.length).toBeGreaterThan(0)
+    majors.forEach((t) => {
+      expect(t.label).toBeDefined()
+    })
+  })
+
+  test('generates minor ticks when showMinorTicks is true', () => {
+    const { ticks } = useRulerScale({
+      thick: 20,
+      viewportSize: ref({ width: 400, height: 300 }),
+      scale: ref(1),
+      offset: ref({ x: 0, y: 0 }),
+      vertical: false,
+      showMinorTicks: ref(true)
+    })
+    const result = ticks.value
+    const majors = result.filter((t) => t.isMajor)
     const minors = result.filter((t) => !t.isMajor)
     expect(majors.length).toBeGreaterThan(0)
     expect(minors.length).toBeGreaterThan(0)
     majors.forEach((t) => {
-      expect(t.label).toBeDefined()
       expect(t.length).toBeGreaterThan(minors[0].length)
     })
   })
@@ -96,7 +112,8 @@ describe('useRulerScale', () => {
       thick: 20,
       viewportSize: ref({ width: 200, height: 200 }),
       scale: ref(1),
-      offset: ref({ x: 0, y: 0 })
+      offset: ref({ x: 0, y: 0 }),
+      showMinorTicks: ref(true)
     })
     const result = ticks.value
     const minPos = Math.min(...result.map((t) => t.position))

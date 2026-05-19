@@ -31,6 +31,7 @@ export interface RulerPalette {
   hoverBg: string
   hoverColor: string
   borderColor: string
+  shadowColor?: string
   /** 参考线样式：solid | dashed | dotted */
   guideLineStyle?: 'solid' | 'dashed' | 'dotted'
   /** 参考线宽度 */

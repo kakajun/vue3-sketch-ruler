@@ -41,6 +41,10 @@ export interface RulerScaleOptions {
   offset: Ref<{ x: number; y: number }>
   /** 是否垂直方向 */
   vertical?: boolean
+  /** 画布尺寸（世界坐标），用于过滤超出范围的标注 */
+  canvasSize?: Ref<number>
+  /** 是否显示次刻度线，默认 false */
+  showMinorTicks?: Ref<boolean>
 }
 
 /** 刻度配置表，按 maxScale 升序排列 */
@@ -92,7 +96,7 @@ export function applyHysteresis(currentIdx: number, scale: number): number {
 }
 
 export function useRulerScale(options: RulerScaleOptions) {
-  const { thick, viewportSize, scale, offset, vertical = false } = options
+  const { thick, viewportSize, scale, offset, vertical = false, canvasSize, showMinorTicks } = options
 
   // 滞后带状态：维护当前刻度配置索引，避免临界振荡
   const currentIdx = ref(0)
@@ -132,30 +136,58 @@ export function useRulerScale(options: RulerScaleOptions) {
     const firstMajor = Math.floor(renderStart / interval) * interval
     const marks: ScaleMark[] = []
 
+    const endNum = canvasSize?.value ?? Infinity
+
     for (let major = firstMajor; major <= renderEnd; major += interval) {
       // 主刻度
       const screenPos = major * s + o
       if (screenPos >= -thick && screenPos <= vp + thick) {
+        // 仅在世界坐标 [0, endNum] 范围内显示标签
+        // 当离 endNum 太近时隐藏标签，避免与 endNum 刻度标签重叠
+        const showLabel = major >= 0 && major <= endNum && (endNum === Infinity || major === endNum || endNum - major >= interval)
         marks.push({
           position: screenPos,
           length: thick * 0.6,
           isMajor: true,
-          label: config.formatLabel ? config.formatLabel(major) : `${Math.round(major)}`,
+          label: showLabel
+            ? (config.formatLabel ? config.formatLabel(major) : `${Math.round(major)}`)
+            : undefined,
           value: major
         })
       }
 
-      // 次刻度
-      for (let i = 1; i < subdivisions; i++) {
-        const subValue = major + i * subInterval
-        const subScreenPos = subValue * s + o
-        if (subScreenPos >= -thick && subScreenPos <= vp + thick) {
+      // 次刻度（默认不显示，可通过 showMinorTicks 开启）
+      if (showMinorTicks?.value) {
+        for (let i = 1; i < subdivisions; i++) {
+          const subValue = major + i * subInterval
+          const subScreenPos = subValue * s + o
+          if (subScreenPos >= -thick && subScreenPos <= vp + thick) {
+            marks.push({
+              position: subScreenPos,
+              length: thick * 0.3,
+              isMajor: false,
+              value: subValue
+            })
+          }
+        }
+      }
+    }
+
+    // 特殊处理 canvas 最大宽度/高度刻度（同 master 分支的 setLast）
+    if (endNum !== Infinity && endNum > 0) {
+      const hasEndNum = marks.some((m) => m.isMajor && m.value === endNum)
+      if (!hasEndNum) {
+        const endScreenPos = endNum * s + o
+        if (endScreenPos >= -thick && endScreenPos <= vp + thick * 2) {
           marks.push({
-            position: subScreenPos,
-            length: thick * 0.3,
-            isMajor: false,
-            value: subValue
+            position: endScreenPos,
+            length: thick * 0.6,
+            isMajor: true,
+            label: `${Math.round(endNum)}`,
+            value: endNum
           })
+          // 保持有序
+          marks.sort((a, b) => a.position - b.position)
         }
       }
     }

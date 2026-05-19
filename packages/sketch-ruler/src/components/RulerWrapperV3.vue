@@ -52,6 +52,10 @@ interface Props {
   shadowStart?: number
   /** 阴影长度（世界坐标） */
   shadowLength?: number
+  /** 画布尺寸（世界坐标），用于过滤超出范围的标注 */
+  canvasSize?: number
+  /** 是否显示次刻度线，默认 false */
+  showMinorTicks?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -279,12 +283,17 @@ const offsetRef = computed(() => ({
   y: props.vertical ? props.offset.y : 0
 }))
 
+const canvasSizeRef = computed(() => props.canvasSize ?? Infinity)
+const showMinorTicksRef = computed(() => props.showMinorTicks ?? false)
+
 const { ticks } = useRulerScale({
   thick: props.thick,
   viewportSize,
   scale: scaleRef,
   offset: offsetRef,
-  vertical: props.vertical
+  vertical: props.vertical,
+  canvasSize: canvasSizeRef,
+  showMinorTicks: showMinorTicksRef
 })
 
 const renderer = new Canvas2DRenderer()
@@ -314,7 +323,8 @@ function drawRuler(): void {
         palette: props.palette,
         shadowStart: props.shadowStart,
         shadowLength: props.shadowLength,
-        showShadowText: true
+        showShadowText: true,
+        canvasSize: props.canvasSize
       }
     ],
     {
@@ -338,7 +348,8 @@ watch(
     props.height,
     props.palette,
     props.shadowStart,
-    props.shadowLength
+    props.shadowLength,
+    props.showMinorTicks
   ],
   () => {
     drawRuler()
