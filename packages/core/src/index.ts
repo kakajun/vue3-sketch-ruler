@@ -30,7 +30,13 @@ export {
 } from './engine/matrix'
 export type { Matrix6 } from './engine/matrix'
 
-export { toWorldPoint, toScreenPoint, batchToWorld, batchToScreen, fitRect } from './engine/coordinate'
+export {
+  toWorldPoint,
+  toScreenPoint,
+  batchToWorld,
+  batchToScreen,
+  fitRect
+} from './engine/coordinate'
 export type { Point as CoordinatePoint, Rect } from './engine/coordinate'
 
 export { TransformEngine } from './engine/transform-engine'
@@ -70,11 +76,22 @@ export { LineManager } from './state/line-manager'
 
 // 多画布管理
 export { CanvasManager, BUILTIN_TEMPLATES } from './managers/canvas-manager'
-export type { CanvasConfig, CanvasState, CanvasTemplate, CanvasManagerState } from './managers/canvas-manager'
+export type {
+  CanvasConfig,
+  CanvasState,
+  CanvasTemplate,
+  CanvasManagerState
+} from './managers/canvas-manager'
 
 // 吸附引擎
 export { SnapEngine, computeEquidistantTargets } from './snap/snap-engine'
-export type { SnapTarget, SnapResult, SnapRule, SnapContext, SnapEngineOptions } from './snap/snap-engine'
+export type {
+  SnapTarget,
+  SnapResult,
+  SnapRule,
+  SnapContext,
+  SnapEngineOptions
+} from './snap/snap-engine'
 
 // Minimap 引擎
 export { MinimapEngine, MinimapDragSession } from './engine/minimap-engine'

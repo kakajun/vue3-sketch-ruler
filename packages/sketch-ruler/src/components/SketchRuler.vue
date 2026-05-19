@@ -263,9 +263,13 @@ onMounted(() => {
       selfHandle: false,
       zoomMode: props.zoomMode,
       viewportSize: { width: rectWidth.value, height: rectHeight.value },
-      contentSize: { width: props.canvasWidth, height: props.canvasHeight }
+      contentSize: { width: props.canvasWidth, height: props.canvasHeight },
+      onCursorChange: (cls) => {
+        cursorClass.value = cls
+      }
     })
     inputManager.bind(canvasRef.value)
+    cursorClass.value = inputManager.getCursorClass()
   }
 })
 
@@ -274,9 +278,7 @@ onUnmounted(() => {
   inputManager = null
 })
 
-const cursorClass = computed(() => {
-  return inputManager?.getCursorClass() ?? 'default'
-})
+const cursorClass = ref('default')
 
 // === 参考线状态管理 ===
 const guideLines = ref<GuideLine[]>(importLines(props.lines))
@@ -409,20 +411,11 @@ const canvasStyle = computed(() => ({
   height: props.canvasHeight + 'px'
 }))
 
-const isTransparent = (color: string | undefined): boolean => {
-  if (!color) return true
-  const c = color.trim().toLowerCase()
-  return c === 'transparent' || c === 'rgba(0,0,0,0)' || c === 'rgba(0, 0, 0, 0)'
-}
-
 const cornerStyle = computed(() => ({
   width: props.thick + 'px',
   height: props.thick + 'px',
   borderRight: `1px solid ${paletteCpu.value.borderColor}`,
   borderBottom: `1px solid ${paletteCpu.value.borderColor}`,
-  backgroundColor: isTransparent(paletteCpu.value.bgColor)
-    ? '#f6f7f9'
-    : paletteCpu.value.bgColor,
   backgroundImage: showReferLine.value
     ? `url(${props.eyeIcon ?? eye64})`
     : `url(${props.closeEyeIcon ?? closeEye64})`

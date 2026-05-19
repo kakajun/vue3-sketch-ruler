@@ -4,7 +4,10 @@ import Minimap from './components/Minimap.vue'
 
 // 类型导出
 export type { SketchRulerProps } from './components/SketchRuler.vue'
-export type { CanvasTransformOptions, UseCanvasTransformReturn } from './composables/useCanvasTransform'
+export type {
+  CanvasTransformOptions,
+  UseCanvasTransformReturn
+} from './composables/useCanvasTransform'
 export type { RulerScaleOptions } from './composables/useRulerScale'
 export type { SnapTarget, SnapResult, SnapOptions } from './composables/useSnapDetection'
 export type { RulerContext } from './state/ruler-context'
@@ -27,11 +30,7 @@ export type {
 
 // 核心 API 导出（从 @sketch-ruler/core 透传）
 export { TransformEngine } from '@sketch-ruler/core'
-export {
-  produceState,
-  createDefaultState,
-  PluginManager
-} from '@sketch-ruler/core'
+export { produceState, createDefaultState, PluginManager } from '@sketch-ruler/core'
 
 // Vue 层 API 导出
 export { useCanvasTransform } from './composables/useCanvasTransform'

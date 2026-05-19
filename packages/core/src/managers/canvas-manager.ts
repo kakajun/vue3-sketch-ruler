@@ -129,16 +129,12 @@ export class CanvasManager {
     canvasId: string,
     updates: Partial<Pick<CanvasState, 'scale' | 'offsetX' | 'offsetY' | 'name'>>
   ): void {
-    this.canvases = this.canvases.map((c) =>
-      c.id === canvasId ? { ...c, ...updates } : c
-    )
+    this.canvases = this.canvases.map((c) => (c.id === canvasId ? { ...c, ...updates } : c))
     this.notify()
   }
 
   updateCanvasLines(canvasId: string, lines: GuideLine[]): void {
-    this.canvases = this.canvases.map((c) =>
-      c.id === canvasId ? { ...c, lines: [...lines] } : c
-    )
+    this.canvases = this.canvases.map((c) => (c.id === canvasId ? { ...c, lines: [...lines] } : c))
     this.notify()
   }
 
@@ -178,9 +174,7 @@ export class CanvasManager {
   importCanvas(snapshot: CanvasState): void {
     const exists = this.canvases.some((c) => c.id === snapshot.id)
     if (exists) {
-      this.canvases = this.canvases.map((c) =>
-        c.id === snapshot.id ? { ...snapshot } : c
-      )
+      this.canvases = this.canvases.map((c) => (c.id === snapshot.id ? { ...snapshot } : c))
     } else {
       this.canvases = [...this.canvases, { ...snapshot }]
     }

@@ -86,9 +86,7 @@ describe('LineManager', () => {
   it('sets lines', () => {
     const manager = new LineManager()
     manager.addLine({ orientation: 'h', position: 50, visible: true, locked: false })
-    manager.setLines([
-      { id: 'a', orientation: 'v', position: 200, visible: true, locked: false }
-    ])
+    manager.setLines([{ id: 'a', orientation: 'v', position: 200, visible: true, locked: false }])
     expect(manager.getLines()).toHaveLength(1)
     expect(manager.getLines()[0].id).toBe('a')
   })

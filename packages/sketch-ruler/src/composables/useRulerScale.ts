@@ -33,7 +33,15 @@ export interface RulerScaleOptions {
 }
 
 export function useRulerScale(options: RulerScaleOptions) {
-  const { thick, viewportSize, scale, offset, vertical = false, canvasSize, showMinorTicks } = options
+  const {
+    thick,
+    viewportSize,
+    scale,
+    offset,
+    vertical = false,
+    canvasSize,
+    showMinorTicks
+  } = options
 
   // 滞后带状态：维护当前刻度配置索引，避免临界振荡
   const currentIdx = ref(0)

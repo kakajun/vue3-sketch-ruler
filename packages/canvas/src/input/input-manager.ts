@@ -22,6 +22,8 @@ export interface InputManagerOptions {
   viewportSize?: { width: number; height: number }
   /** 内容尺寸（content-center 模式需要） */
   contentSize?: { width: number; height: number }
+  /** 光标状态变化回调 */
+  onCursorChange?: (cursorClass: string) => void
 }
 
 export class InputManager {
@@ -45,6 +47,7 @@ export class InputManager {
   private keyboardAdapter: KeyboardAdapter | null = null
   private pendingWheelDelta = 0
   private wheelRafId: number | null = null
+  private onCursorChange: ((cursorClass: string) => void) | null = null
 
   constructor(engine: TransformEngine, options: InputManagerOptions = {}) {
     this.engine = engine
@@ -53,6 +56,7 @@ export class InputManager {
     this.zoomMode = options.zoomMode ?? 'pointer'
     this.viewportSize = options.viewportSize ?? { width: 0, height: 0 }
     this.contentSize = options.contentSize ?? { width: 0, height: 0 }
+    this.onCursorChange = options.onCursorChange ?? null
 
     this.boundKeyUp = this.handleKeyUp.bind(this)
   }
@@ -213,6 +217,7 @@ export class InputManager {
         if (!this.isSpacePressed) {
           this.isSpacePressed = true
           e.preventDefault()
+          this.notifyCursorChange()
         }
         break
       }
@@ -225,6 +230,7 @@ export class InputManager {
     if (e.key === ' ') {
       this.isSpacePressed = false
       this.isDragging = false
+      this.notifyCursorChange()
     }
   }
 
@@ -234,6 +240,7 @@ export class InputManager {
       this.dragStart = { x: e.clientX, y: e.clientY }
       this.lastMouse = { x: e.clientX, y: e.clientY }
       e.preventDefault()
+      this.notifyCursorChange()
     }
   }
 
@@ -248,6 +255,7 @@ export class InputManager {
 
   private handleMouseUp(): void {
     this.isDragging = false
+    this.notifyCursorChange()
   }
 
   getCursorClass(): string {
@@ -255,5 +263,9 @@ export class InputManager {
       return this.isDragging ? 'grabbing' : 'grab'
     }
     return 'default'
+  }
+
+  private notifyCursorChange(): void {
+    this.onCursorChange?.(this.getCursorClass())
   }
 }

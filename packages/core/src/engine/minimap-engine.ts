@@ -76,7 +76,12 @@ export class MinimapEngine {
     )
   }
 
-  clickAt(clientX: number, clientY: number, rectLeft: number, rectTop: number): { x: number; y: number } {
+  clickAt(
+    clientX: number,
+    clientY: number,
+    rectLeft: number,
+    rectTop: number
+  ): { x: number; y: number } {
     const state = this.getState()
     const worldX = (clientX - rectLeft - state.contentOffset.x) / state.miniScale
     const worldY = (clientY - rectTop - state.contentOffset.y) / state.miniScale
@@ -91,7 +96,13 @@ export class MinimapEngine {
     startMinimapLeft: number,
     startMinimapTop: number
   ): MinimapDragSession {
-    return new MinimapDragSession(this, startViewportX, startViewportY, startMinimapLeft, startMinimapTop)
+    return new MinimapDragSession(
+      this,
+      startViewportX,
+      startViewportY,
+      startMinimapLeft,
+      startMinimapTop
+    )
   }
 }
 

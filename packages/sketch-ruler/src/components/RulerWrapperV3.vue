@@ -82,6 +82,24 @@ const activeLineId = ref<string | null>(null)
 const showLineLabel = ref(false)
 let labelTimer: ReturnType<typeof setTimeout> | null = null
 
+// 缩放期间临时禁用参考线交互，防止滚轮事件被参考线拦截导致页面缩放
+const isInScale = ref(false)
+let scaleTimer: ReturnType<typeof setTimeout> | null = null
+const deactivateAfterDelay = (): void => {
+  if (scaleTimer) clearTimeout(scaleTimer)
+  scaleTimer = setTimeout(() => {
+    isInScale.value = false
+  }, 1000)
+}
+
+watch(
+  () => props.scale,
+  () => {
+    isInScale.value = true
+    deactivateAfterDelay()
+  }
+)
+
 function handleLineEnter(line: GuideLine): void {
   if (line.locked) return
   activeLineId.value = line.id
@@ -251,6 +269,7 @@ const lineStyle = (line: GuideLine) => {
   const canvasOffset = props.vertical ? props.offset.x : props.offset.y
   const pos = line.position * props.scale + canvasOffset
   const cursor = line.locked ? 'default' : props.vertical ? 'ew-resize' : 'ns-resize'
+  const pointerEvents: 'auto' | 'none' = line.locked || isInScale.value ? 'none' : 'auto'
   if (props.vertical) {
     return {
       left: `${pos}px`,
@@ -258,7 +277,8 @@ const lineStyle = (line: GuideLine) => {
       height: '100vh',
       width: '1px',
       borderLeft: `1px dashed ${props.palette.guideLineColor}`,
-      cursor
+      cursor,
+      pointerEvents
     }
   }
   return {
@@ -267,7 +287,8 @@ const lineStyle = (line: GuideLine) => {
     width: '100vw',
     height: '1px',
     borderBottom: `1px dashed ${props.palette.guideLineColor}`,
-    cursor
+    cursor,
+    pointerEvents
   }
 }
 

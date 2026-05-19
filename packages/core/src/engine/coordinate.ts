@@ -77,8 +77,8 @@ export function fitRect(
   }
 
   const paddedTarget = {
-    x: target.x + target.width * paddingRatio / 2,
-    y: target.y + target.height * paddingRatio / 2,
+    x: target.x + (target.width * paddingRatio) / 2,
+    y: target.y + (target.height * paddingRatio) / 2,
     width: target.width * (1 - paddingRatio),
     height: target.height * (1 - paddingRatio)
   }
