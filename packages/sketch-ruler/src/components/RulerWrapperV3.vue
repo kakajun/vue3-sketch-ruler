@@ -56,12 +56,21 @@ interface Props {
   canvasSize?: number
   /** 是否显示次刻度线，默认 false */
   showMinorTicks?: boolean
+  /** 画布宽度（世界坐标），用于参考线越界检测 */
+  canvasWidth?: number
+  /** 画布高度（世界坐标），用于参考线越界检测 */
+  canvasHeight?: number
+  /** 参考线拖出画布时显示的删除提示文案 */
+  deleteLabel?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  renderLinesInCanvas: false
+  renderLinesInCanvas: false,
+  canvasWidth: 1000,
+  canvasHeight: 1000,
+  deleteLabel: '放开删除'
 })
-const emit = defineEmits(['addLine', 'updateLine'])
+const emit = defineEmits(['addLine', 'updateLine', 'deleteLine'])
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const ratio = ref(typeof window !== 'undefined' ? window.devicePixelRatio : 1)
@@ -80,6 +89,7 @@ const displayLines = computed(() => props.lines)
 // === 已存在参考线交互 ===
 const activeLineId = ref<string | null>(null)
 const showLineLabel = ref(false)
+const draggingLinePos = ref<number | null>(null)
 let labelTimer: ReturnType<typeof setTimeout> | null = null
 
 // 缩放期间临时禁用参考线交互，防止滚轮事件被参考线拦截导致页面缩放
@@ -118,6 +128,13 @@ function handleLineLeave(): void {
 }
 
 function lineLabelText(line: GuideLine): string {
+  if (activeLineId.value === line.id && draggingLinePos.value !== null) {
+    const limit = props.vertical ? props.canvasWidth : props.canvasHeight
+    if (draggingLinePos.value < 0 || draggingLinePos.value > limit) {
+      return props.deleteLabel
+    }
+    return `${props.vertical ? 'X' : 'Y'}: ${Math.round(draggingLinePos.value)}`
+  }
   return `${props.vertical ? 'X' : 'Y'}: ${Math.round(line.position)}`
 }
 
@@ -126,6 +143,7 @@ function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
   e.preventDefault()
   activeLineId.value = line.id
   showLineLabel.value = true
+  draggingLinePos.value = line.position
 
   const rect = canvasRef.value?.getBoundingClientRect()
   if (!rect) return
@@ -154,6 +172,16 @@ function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
     }
     if (bestTick !== null) newPos = bestTick
 
+    draggingLinePos.value = newPos
+
+    // 越界检测：拖出画布外则删除
+    const limit = props.vertical ? props.canvasWidth : props.canvasHeight
+    if (newPos < 0 || newPos > limit) {
+      emit('deleteLine', line.id)
+      cleanup()
+      return
+    }
+
     emit('updateLine', line.id, Math.round(newPos))
   }
 
@@ -162,6 +190,12 @@ function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
     document.removeEventListener('mouseup', onUp)
     showLineLabel.value = false
     activeLineId.value = null
+    draggingLinePos.value = null
+  }
+
+  const cleanup = (): void => {
+    document.removeEventListener('mousemove', onMove)
+    document.removeEventListener('mouseup', onUp)
   }
 
   document.addEventListener('mousemove', onMove)
@@ -209,7 +243,8 @@ function handlePointerDown(e: MouseEvent): void {
     if (isCreatingLine.value) {
       // 如果拖拽距离很小（< 3px），视为点击直接创建；否则按最终位置创建
       const worldPos = previewWorldPos.value
-      if (worldPos >= 0) {
+      const limit = props.vertical ? props.canvasWidth : props.canvasHeight
+      if (worldPos >= 0 && worldPos <= limit) {
         emit('addLine', {
           orientation: props.vertical ? 'v' : 'h',
           position: Math.round(worldPos),

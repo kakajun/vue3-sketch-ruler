@@ -41,8 +41,12 @@
       :render-lines-in-canvas="false"
       :canvas-size="canvasWidth"
       :show-minor-ticks="showMinorTicks"
+      :canvas-width="canvasWidth"
+      :canvas-height="canvasHeight"
+      :delete-label="deleteLabel"
       @add-line="handleAddLine"
       @update-line="handleUpdateLine"
+      @delete-line="handleDeleteLine"
     />
 
     <!-- 垂直标尺 -->
@@ -63,8 +67,12 @@
       :render-lines-in-canvas="false"
       :canvas-size="canvasHeight"
       :show-minor-ticks="showMinorTicks"
+      :canvas-width="canvasWidth"
+      :canvas-height="canvasHeight"
+      :delete-label="deleteLabel"
       @add-line="handleAddLine"
       @update-line="handleUpdateLine"
+      @delete-line="handleDeleteLine"
     />
 
     <a v-show="showRuler" class="corner" :style="cornerStyle" @click="onCornerClick" />
@@ -120,6 +128,8 @@ export interface SketchRulerProps {
   showMinorTicks?: boolean
   eyeIcon?: string
   closeEyeIcon?: string
+  /** 参考线拖出画布时显示的删除提示文案 */
+  deleteLabel?: string
 }
 
 const props = withDefaults(defineProps<SketchRulerProps>(), {
@@ -146,7 +156,8 @@ const props = withDefaults(defineProps<SketchRulerProps>(), {
   autoCenter: true,
   shadow: () => ({ x: 0, y: 0, width: 0, height: 0 }),
   initialOffset: () => ({ x: 0, y: 0 }),
-  showMinorTicks: false
+  showMinorTicks: false,
+  deleteLabel: '放开删除'
 })
 
 const emit = defineEmits([
@@ -354,6 +365,11 @@ const handleAddLine = (line: Omit<GuideLine, 'id'>): void => {
 
 const handleUpdateLine = (id: string, position: number): void => {
   guideLines.value = guideLines.value.map((l) => (l.id === id ? { ...l, position } : l))
+  emit('update:lines', getExportedLines())
+}
+
+const handleDeleteLine = (id: string): void => {
+  guideLines.value = guideLines.value.filter((l) => l.id !== id)
   emit('update:lines', getExportedLines())
 }
 
