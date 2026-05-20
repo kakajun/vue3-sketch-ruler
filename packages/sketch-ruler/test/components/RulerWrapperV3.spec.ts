@@ -72,7 +72,9 @@ describe('RulerWrapperV3 line boundary deletion', () => {
     })
 
     const lineEl = wrapper.find('.line').element
-    lineEl.dispatchEvent(new MouseEvent('mousedown', { clientY: 120, bubbles: true, cancelable: true }))
+    lineEl.dispatchEvent(
+      new MouseEvent('mousedown', { clientY: 120, bubbles: true, cancelable: true })
+    )
 
     // drag up: newPos = 100 + (-50 - 120) = -70 < 0
     document.dispatchEvent(new MouseEvent('mousemove', { clientY: -50 }))
@@ -91,7 +93,9 @@ describe('RulerWrapperV3 line boundary deletion', () => {
     })
 
     const lineEl = wrapper.find('.line').element
-    lineEl.dispatchEvent(new MouseEvent('mousedown', { clientY: 120, bubbles: true, cancelable: true }))
+    lineEl.dispatchEvent(
+      new MouseEvent('mousedown', { clientY: 120, bubbles: true, cancelable: true })
+    )
 
     // drag down: newPos = 100 + (350 - 120) = 330 > canvasHeight(200)
     document.dispatchEvent(new MouseEvent('mousemove', { clientY: 350 }))
@@ -110,7 +114,9 @@ describe('RulerWrapperV3 line boundary deletion', () => {
     })
 
     const lineEl = wrapper.find('.line').element
-    lineEl.dispatchEvent(new MouseEvent('mousedown', { clientX: 120, bubbles: true, cancelable: true }))
+    lineEl.dispatchEvent(
+      new MouseEvent('mousedown', { clientX: 120, bubbles: true, cancelable: true })
+    )
 
     // drag right: newPos = 100 + (450 - 120) = 430 > canvasWidth(300)
     document.dispatchEvent(new MouseEvent('mousemove', { clientX: 450 }))
@@ -128,7 +134,9 @@ describe('RulerWrapperV3 line boundary deletion', () => {
     })
 
     const lineEl = wrapper.find('.line').element
-    lineEl.dispatchEvent(new MouseEvent('mousedown', { clientY: 120, bubbles: true, cancelable: true }))
+    lineEl.dispatchEvent(
+      new MouseEvent('mousedown', { clientY: 120, bubbles: true, cancelable: true })
+    )
 
     // drag to clientY=150, newPos = 100 + (150 - 120) = 130 (within 0~200)
     document.dispatchEvent(new MouseEvent('mousemove', { clientY: 150 }))
@@ -147,7 +155,9 @@ describe('RulerWrapperV3 line boundary deletion', () => {
     })
 
     const lineEl = wrapper.find('.line').element
-    lineEl.dispatchEvent(new MouseEvent('mousedown', { clientY: 120, bubbles: true, cancelable: true }))
+    lineEl.dispatchEvent(
+      new MouseEvent('mousedown', { clientY: 120, bubbles: true, cancelable: true })
+    )
 
     // drag out of boundary
     document.dispatchEvent(new MouseEvent('mousemove', { clientY: -50 }))
@@ -168,7 +178,9 @@ describe('RulerWrapperV3 line boundary deletion', () => {
     })
 
     const lineEl = wrapper.find('.line').element
-    lineEl.dispatchEvent(new MouseEvent('mousedown', { clientY: 120, bubbles: true, cancelable: true }))
+    lineEl.dispatchEvent(
+      new MouseEvent('mousedown', { clientY: 120, bubbles: true, cancelable: true })
+    )
 
     // drag out of boundary
     document.dispatchEvent(new MouseEvent('mousemove', { clientY: -50 }))
@@ -187,7 +199,9 @@ describe('RulerWrapperV3 line boundary deletion', () => {
     const canvas = wrapper.find('canvas').element
 
     // mousedown on ruler: clientY=30 -> worldPos = (30 - 20) / 1 = 10
-    canvas.dispatchEvent(new MouseEvent('mousedown', { clientY: 30, bubbles: true, cancelable: true }))
+    canvas.dispatchEvent(
+      new MouseEvent('mousedown', { clientY: 30, bubbles: true, cancelable: true })
+    )
     document.dispatchEvent(new MouseEvent('mousemove', { clientY: 30 }))
     document.dispatchEvent(new MouseEvent('mouseup', { clientY: 30 }))
 
@@ -204,7 +218,9 @@ describe('RulerWrapperV3 line boundary deletion', () => {
     const canvas = wrapper.find('canvas').element
 
     // clientY=10 -> worldPos = (10 - 20) / 1 = -10 < 0
-    canvas.dispatchEvent(new MouseEvent('mousedown', { clientY: 10, bubbles: true, cancelable: true }))
+    canvas.dispatchEvent(
+      new MouseEvent('mousedown', { clientY: 10, bubbles: true, cancelable: true })
+    )
     document.dispatchEvent(new MouseEvent('mousemove', { clientY: 10 }))
     document.dispatchEvent(new MouseEvent('mouseup', { clientY: 10 }))
 
@@ -218,7 +234,9 @@ describe('RulerWrapperV3 line boundary deletion', () => {
     const canvas = wrapper.find('canvas').element
 
     // clientY=250 -> worldPos = (250 - 20) / 1 = 230 > canvasHeight(200)
-    canvas.dispatchEvent(new MouseEvent('mousedown', { clientY: 30, bubbles: true, cancelable: true }))
+    canvas.dispatchEvent(
+      new MouseEvent('mousedown', { clientY: 30, bubbles: true, cancelable: true })
+    )
     document.dispatchEvent(new MouseEvent('mousemove', { clientY: 250 }))
     document.dispatchEvent(new MouseEvent('mouseup', { clientY: 250 }))
 
@@ -232,7 +250,9 @@ describe('RulerWrapperV3 line boundary deletion', () => {
     const canvas = wrapper.find('canvas').element
 
     // clientX=350 -> worldPos = (350 - 20) / 1 = 330 > canvasWidth(300)
-    canvas.dispatchEvent(new MouseEvent('mousedown', { clientX: 30, bubbles: true, cancelable: true }))
+    canvas.dispatchEvent(
+      new MouseEvent('mousedown', { clientX: 30, bubbles: true, cancelable: true })
+    )
     document.dispatchEvent(new MouseEvent('mousemove', { clientX: 350 }))
     document.dispatchEvent(new MouseEvent('mouseup', { clientX: 350 }))
 
@@ -247,7 +267,9 @@ describe('RulerWrapperV3 line boundary deletion', () => {
     })
 
     const lineEl = wrapper.find('.line').element
-    lineEl.dispatchEvent(new MouseEvent('mousedown', { clientY: 120, bubbles: true, cancelable: true }))
+    lineEl.dispatchEvent(
+      new MouseEvent('mousedown', { clientY: 120, bubbles: true, cancelable: true })
+    )
 
     document.dispatchEvent(new MouseEvent('mousemove', { clientY: -50 }))
     document.dispatchEvent(new MouseEvent('mouseup', { clientY: -50 }))

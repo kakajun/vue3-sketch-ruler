@@ -24,18 +24,18 @@
 
 ## 技术栈
 
-| 层级 | 技术 |
-|------|------|
-| 框架 | Vue 3.5+ (Composition API) |
-| 语言 | TypeScript 5.9+ (strict 模式) |
-| 构建工具 | Vite 7.x |
-| 包管理器 | pnpm 9.x（workspace 模式） |
-| 测试框架 | Vitest 4.x + jsdom |
-| Vue 测试 | `@vue/test-utils` |
-| 代码检查 | oxlint 1.64+ |
-| 代码格式化 | oxfmt 0.49+ |
-| Git Hooks | husky + lint-staged（当前 hook 文件为弃用占位，未实际启用） |
-| 文档站点 | Vite + Vue 3 SPA（位于 `packages/docs`） |
+| 层级       | 技术                                                        |
+| ---------- | ----------------------------------------------------------- |
+| 框架       | Vue 3.5+ (Composition API)                                  |
+| 语言       | TypeScript 5.9+ (strict 模式)                               |
+| 构建工具   | Vite 7.x                                                    |
+| 包管理器   | pnpm 9.x（workspace 模式）                                  |
+| 测试框架   | Vitest 4.x + jsdom                                          |
+| Vue 测试   | `@vue/test-utils`                                           |
+| 代码检查   | oxlint 1.64+                                                |
+| 代码格式化 | oxfmt 0.49+                                                 |
+| Git Hooks  | husky + lint-staged（当前 hook 文件为弃用占位，未实际启用） |
+| 文档站点   | Vite + Vue 3 SPA（位于 `packages/docs`）                    |
 
 ---
 
@@ -55,7 +55,7 @@ packages/
 ### 各包职责
 
 | 包名 | 发布名 | 说明 |
-|------|--------|------|
+| --- | --- | --- |
 | `packages/sketch-ruler` | `vue3-sketch-ruler` | 对外发布的 Vue 3 组件包。导出 `SketchRuler`、`Minimap` 组件，以及 Vue 相关的 composables、plugins。依赖 `@sketch-ruler/core` 与 `@sketch-ruler/canvas`。 |
 | `packages/core` | `@sketch-ruler/core` | 框架无关核心层：坐标变换引擎（TransformEngine）、矩阵运算、刻度计算、状态管理（RulerState / LineManager）、插件管理（PluginManager）、吸附引擎（SnapEngine）、多画布管理器（CanvasManager）、Minimap 引擎。零外部依赖。 |
 | `packages/canvas` | `@sketch-ruler/canvas` | 框架无关的 Canvas 2D 渲染器与 DOM 输入管理器。负责鼠标/键盘/滚轮事件适配、离屏缓存、标签缓存。依赖 `@sketch-ruler/core`。 |
@@ -273,15 +273,15 @@ GitHub Actions 工作流：`.github/workflows/gh-pages.yml`
 
 ## 快速参考
 
-| 目的 | 命令 |
-|------|------|
-| 安装所有依赖 | `pnpm i` |
-| 启动开发服务器 | `pnpm dev` |
-| 构建组件库 | `pnpm build` |
-| 构建文档 | `pnpm build:demo` |
-| 运行所有测试 | `pnpm test` |
-| 自动修复代码 | `pnpm lint && pnpm fmt` |
-| 发布新版本 | `pnpm release` |
+| 目的           | 命令                    |
+| -------------- | ----------------------- |
+| 安装所有依赖   | `pnpm i`                |
+| 启动开发服务器 | `pnpm dev`              |
+| 构建组件库     | `pnpm build`            |
+| 构建文档       | `pnpm build:demo`       |
+| 运行所有测试   | `pnpm test`             |
+| 自动修复代码   | `pnpm lint && pnpm fmt` |
+| 发布新版本     | `pnpm release`          |
 
 ---
 

@@ -3,36 +3,20 @@
     <div class="top font16">
       <div class="mr10">设置autoCenter=false, 自己给初始值---</div>
       <div class="mr10">X方向:</div>
-      <el-input
-        class="mr10"
-        style="width: 90px"
-        v-model="panzoomOption.startX"
-        @change="rendIndex++"
-      />
+      <el-input class="mr10" style="width: 90px" v-model="offsetX" @change="rendIndex++" />
       <div class="mr10">Y方向:</div>
-      <el-input
-        class="mr10"
-        style="width: 90px"
-        v-model="panzoomOption.startY"
-        @change="rendIndex++"
-      />
+      <el-input class="mr10" style="width: 90px" v-model="offsetY" @change="rendIndex++" />
     </div>
     <div class="top font16">
       <div class="scale mr10">缩放比:{{ cpuScale }}</div>
-      <button v-if="showRuler" class="mr10 font16" @click="showRuler = false">隐藏规尺</button>
-      <button v-else class="mr10 font16" @click="handleShow">显示规尺</button>
+      <button v-if="showRuler" class="mr10 font16" @click="showRuler = false">隐藏标尺</button>
+      <button v-else class="mr10 font16" @click="handleShow">显示标尺</button>
       <button class="mr10 font16" @click="showLineClick">辅助线开关</button>
       <button class="mr10 font16" @click="lockLine = true">锁定参考线</button>
       <button class="mr10 font16" @click="changeShadow">模拟阴影切换</button>
       <button class="mr10 font16" @click="changeTheme">主题切换</button>
       <button class="mr10 font16" @click.stop="resetMethod">还原</button>
       <button class="mr10 font16" @click.stop="zoomOutMethod">缩小</button>
-      <span>禁止缩放</span>
-      <input type="checkbox" class="switch" @change="changeScale" />
-      <span>禁止移动</span>
-      <input type="checkbox" class="switch mr10" @change="changeMove" />
-      <span>框内移动</span>
-      <input type="checkbox" class="switch mr10" @change="changeInsideMove" />
       <input
         class="mr10 font16"
         :value="state.scale"
@@ -62,8 +46,7 @@
       :class="[state.isBlack ? 'balckwrapper' : 'whitewrapper']"
       :style="rectStyle"
     >
-      <!--  这个可以传入图标  :gridRatio="0.5" -->
-      <SketchRule
+      <SketchRuler
         :key="rendIndex"
         ref="sketchruleRef"
         v-model:scale="state.scale"
@@ -74,13 +57,13 @@
         :height="rectHeight"
         :palette="cpuPalette"
         :snaps-obj="snapsObj"
-        :autoCenter="false"
+        :auto-center="false"
         :shadow="state.shadow"
         :canvas-width="canvasWidth"
         :canvas-height="canvasHeight"
-        :panzoom-option="panzoomOption"
         :is-show-refer-line="state.isShowReferLine"
         :lines="state.lines"
+        :initial-offset="{ x: Number(offsetX), y: Number(offsetY) }"
         @on-corner-click="handleCornerClick"
         @zoomchange="zoomchange"
       >
@@ -89,58 +72,36 @@
             <img class="img-style" :src="bgImg" alt="" />
           </div>
         </template>
-        <template #btn="{ reset, zoomIn, zoomOut }">
+        <template #toolbar="{ tools, state }">
           <div class="btns">
-            <button @click.stop="reset">还原</button>
-            <button @click.stop="zoomIn">放大</button>
-            <button @click.stop="zoomOut">缩小</button>
+            <button @click.stop="tools.reset">还原</button>
+            <button @click.stop="tools.zoomIn">放大</button>
+            <button @click.stop="tools.zoomOut">缩小</button>
           </div>
         </template>
-      </SketchRule>
+      </SketchRuler>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import bgImg from '../assets/bg.png'
-import { computed, ref, reactive, onMounted } from 'vue'
-import SketchRule from 'vue3-sketch-ruler'
+import { computed, ref, reactive } from 'vue'
+import { SketchRuler } from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
-import type { PanzoomEventDetail, PanzoomEvent } from 'simple-panzoom'
+
 const rectWidth = ref(1470)
 const rectHeight = ref(800)
-// const canvasWidth = ref(2800)
-// const canvasHeight = ref(1800)
-// const canvasWidth = ref(1920)
-// const canvasHeight = ref(1080)
 const canvasWidth = ref(1000)
 const canvasHeight = ref(500)
-// const rectWidth =ref( 800)
-// const rectHeight =ref( 400)
-// const canvasWidth =ref( 530)
-// const canvasHeight =ref( 250)
 const rendIndex = ref(0)
-const windowScale = ref(1)
 const sketchruleRef = ref()
 const showRuler = ref(true)
-// 更多配置,参见 https://github.com/timmywil/panzoom
-const panzoomOption = reactive({
-  maxScale: 3,
-  minScale: 0.3,
-  startX: 0, // 画布距离左边框距离, 如果想自动,那么不要传
-  startY: 0, // 画布距离顶边框距离, 如果想自动,那么不要传
-  disablePan: false,
-  disableZoom: false,
-  origin: '0 0', // 默认是'50% 50%'
-  contain: 'none', // 'inside' | 'outside' | 'none'
-  handleStartEvent: (event: PanzoomEvent['panzoomstart']) => {
-    event.preventDefault()
-    console.log('handleStartEvent', event)
-  }
-})
+const offsetX = ref('0')
+const offsetY = ref('0')
 
 const lockLine = ref(false)
 const snapsObj = ref({ h: [0, 100, 200], v: [130] })
-// 另外一个方法调用内部方法
+
 const zoomOutMethod = (): void => {
   if (sketchruleRef.value) {
     sketchruleRef.value.zoomOut()
@@ -176,8 +137,8 @@ const state = reactive({
     width: 300,
     height: 300
   },
-  isShowRuler: true, // 显示标尺
-  isShowReferLine: true // 显示参考线
+  isShowRuler: true,
+  isShowReferLine: true
 })
 
 const rectStyle = computed(() => {
@@ -192,16 +153,16 @@ const cpuPalette = computed(() => {
         bgColor: 'transparent',
         hoverBg: '#fff',
         hoverColor: '#000',
-        longfgColor: '#BABBBC', // ruler longer mark color
-        fontColor: '#DEDEDE', // ruler font color
-        shadowColor: '#525252', // ruler shadow color
-        lineColor: '#51d6a9',
+        tickColor: '#BABBBC',
+        labelColor: '#DEDEDE',
+        shadowColor: '#525252',
+        guideLineColor: '#51d6a9',
         borderColor: '#B5B5B5'
       }
     : {
         bgColor: 'transparent',
-        lineColor: '#51d6a9',
-        lineType: 'dashed'
+        guideLineColor: '#51d6a9',
+        guideLineStyle: 'dashed'
       }
 })
 
@@ -219,17 +180,14 @@ const canvasStyle = computed(() => {
 
 const scaleChange = (e: { target: { value: number } }): void => {
   state.scale = e.target.value * 1
-  if (sketchruleRef.value) {
-    const panzoomInstance = sketchruleRef.value.panzoomInstance
-    panzoomInstance.zoom(state.scale)
-  }
+  sketchruleRef.value?.setTransform?.({ scale: state.scale })
 }
 
 const handleCornerClick = (e: MouseEvent): void => {
   console.log('handleCornerClick', e)
 }
 
-const zoomchange = (detail: PanzoomEventDetail): void => {
+const zoomchange = (detail: { scale: number; x: number; y: number }): void => {
   console.log('zoomchange', detail)
 }
 
@@ -246,19 +204,7 @@ const snapsChangeV = (e: { target: { value: string } }): void => {
   snapsObj.value.v = arr.map((item) => Number(item))
 }
 
-const changeScale = (e: { target: { checked: boolean } }): void => {
-  panzoomOption.disableZoom = e.target.checked
-}
-const changeMove = (e: { target: { checked: boolean } }): void => {
-  panzoomOption.disablePan = e.target.checked
-}
-
-const changeInsideMove = (e: { target: { checked: boolean } }): void => {
-  panzoomOption.contain = e.target.checked ? 'inside' : 'none'
-}
-
 const changeShadow = (): void => {
-  // 模拟 x canvasWidth.value   y canvasHeight.value  范围内随机数据
   state.shadow.x = Math.random() * canvasWidth.value
   state.shadow.y = Math.random() * canvasHeight.value
 }
@@ -322,7 +268,6 @@ const changeShadow = (): void => {
 }
 
 /* Switch开关样式 */
-/* 必须是input为 checkbox class 添加 switch 才能实现以下效果 */
 input[type='checkbox'].switch {
   outline: none;
   appearance: none;
@@ -355,7 +300,6 @@ input[type='checkbox'].switch::after {
 input[type='checkbox'].switch:checked {
   background: rgb(19, 206, 102);
 }
-/* 当input[type=checkbox]被选中时：伪元素显示下面样式 位置发生变化 */
 input[type='checkbox'].switch:checked::after {
   content: '';
   position: absolute;

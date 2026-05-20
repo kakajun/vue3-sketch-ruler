@@ -4,7 +4,7 @@
       说明: 该案例展示了大分辨率8K大屏(8800*5097)上使用vue3-sketch-ruler插件,
       依然能做到上下左右居中正确
     </div>
-    <SketchRule
+    <SketchRuler
       v-if="rectWidth && rectHeight"
       :thick="20"
       v-model:scale="scale"
@@ -12,7 +12,6 @@
       :height="rectHeight"
       :canvas-width="canvasWidth"
       :canvas-height="canvasHeight"
-      :panzoom-option="panzoomOption"
       :lines="lines"
       :auto-center="true"
       :show-ruler="true"
@@ -20,20 +19,20 @@
       <template #default>
         <img style="width: 100%; height: 100%" :src="leftImg" alt="Left Screen" />
       </template>
-      <template #btn="{ reset, zoomIn, zoomOut }">
+      <template #toolbar="{ tools, state }">
         <div class="btns">
           <button @click.stop="reset">还原</button>
           <button @click.stop="zoomIn">放大</button>
           <button @click.stop="zoomOut">缩小</button>
         </div>
       </template>
-    </SketchRule>
+    </SketchRuler>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, onUnmounted, computed } from 'vue'
-import SketchRule from 'vue3-sketch-ruler'
+import { SketchRuler } from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
 import leftImg from '../../assets/8k.jpg'
 
@@ -47,13 +46,6 @@ const scale = ref(1)
 const lines = ref({
   h: [0, 2400],
   v: [0, 800]
-})
-
-const panzoomOption = reactive({
-  maxScale: 3,
-  minScale: 0.01,
-  disablePan: false,
-  disableZoom: false
 })
 
 const updateDimensions = (): void => {

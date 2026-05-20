@@ -1,38 +1,37 @@
 <template>
   <div>
     <div class="wrapper whitewrapper" :style="rectStyle">
-      <sketch-rule ref="sketchruleRef" v-bind="post">
+      <SketchRuler ref="sketchruleRef" v-bind="post">
         <template #default>
           <div data-type="page" :style="canvasStyle">
             <el-input v-model="inputValue" type="text" />
           </div>
         </template>
-        <template #btn="{ reset, zoomIn, zoomOut }">
+        <template #toolbar="{ tools, state }">
           <div class="btns">
             <button @click.stop="reset">还原</button>
             <button @click.stop="zoomIn">放大</button>
             <button @click.stop="zoomOut">缩小</button>
           </div>
         </template>
-      </sketch-rule>
+      </SketchRuler>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import bgImg from '../assets/bg.png'
 import { computed, ref, reactive } from 'vue'
-import SketchRule from 'vue3-sketch-ruler'
+import { SketchRuler } from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
 const sketchruleRef = ref()
 const post = reactive({
   thick: 20,
   width: 1470,
   height: 700,
-  showShadowText: false,
   canvasWidth: 1000,
   canvasHeight: 500,
   showRuler: true,
-  palette: { bgColor: 'transparent', lineType: 'dashed' },
+  palette: { bgColor: 'transparent', guideLineStyle: 'dashed' },
   isShowReferLine: true,
   shadow: {
     x: 0,

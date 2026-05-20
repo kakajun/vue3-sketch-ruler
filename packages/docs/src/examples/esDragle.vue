@@ -5,7 +5,7 @@
       :class="[!store.isLight ? 'blackwrapper' : 'whitewrapper']"
       :style="rectStyle"
     >
-      <sketch-rule ref="sketchruleRef" v-model:scale="post.scale" v-bind="post">
+      <SketchRuler ref="sketchruleRef" v-model:scale="post.scale" v-bind="post">
         <template #default>
           <div ref="dragParentRef" data-type="page" :style="canvasStyle">
             <Drager
@@ -24,20 +24,20 @@
             </Drager>
           </div>
         </template>
-        <template #btn="{ reset, zoomIn, zoomOut }">
+        <template #toolbar="{ tools, state }">
           <div class="btns">
             <button @click.stop="reset">还原</button>
             <button @click.stop="zoomIn">放大</button>
             <button @click.stop="zoomOut">缩小</button>
           </div>
         </template>
-      </sketch-rule>
+      </SketchRuler>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { computed, ref, reactive, CSSProperties, nextTick } from 'vue'
-import SketchRule from 'vue3-sketch-ruler'
+import { SketchRuler } from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
 import Drager, { DragData } from 'es-drager'
 import { useAppStore } from '@/store/app'
@@ -49,11 +49,10 @@ const post = reactive<any>({
   thick: 20,
   width: 1470,
   height: 700,
-  showShadowText: true,
   canvasWidth: 1000,
   canvasHeight: 500,
   showRuler: true,
-  palette: { bgColor: 'transparent', lineType: 'dashed' },
+  palette: { bgColor: 'transparent', guideLineStyle: 'dashed' },
   isShowReferLine: true,
   shadow: {
     x: 0,

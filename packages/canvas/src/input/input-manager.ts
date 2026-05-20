@@ -139,9 +139,9 @@ export class InputManager {
           break
         }
         case 'content-center': {
-          originX = this.viewportSize.width / 2
-          originY = this.viewportSize.height / 2
-          // 内容中心模式下，原点固定为视口中心，引擎内部会处理内容居中
+          const s = this.engine.getState()
+          originX = s.x + (this.contentSize.width * s.scale) / 2
+          originY = s.y + (this.contentSize.height * s.scale) / 2
           break
         }
         case 'pointer':

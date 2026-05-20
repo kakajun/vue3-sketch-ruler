@@ -11,6 +11,8 @@
   "devDependencies": {
     "es-drager": "^1.3.4",
     "framework-utils": "^1.1.0",
-    "vue3-sketch-ruler": "workspace:*"
+    "vue3-sketch-ruler": "workspace:*",
+    "@sketch-ruler/canvas": "workspace:*",
+    "@sketch-ruler/core": "workspace:*"
   }
 }

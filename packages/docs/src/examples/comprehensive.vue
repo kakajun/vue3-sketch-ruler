@@ -19,6 +19,15 @@
       <button class="mr10 font16" @click="lockLine = !lockLine">
         {{ lockLine ? '解锁' : '锁定' }}参考线
       </button>
+      <button class="mr10 font16" @click="toggleZoomMode">
+        {{
+          zoomMode === 'pointer'
+            ? '鼠标'
+            : zoomMode === 'viewport-center'
+              ? '视口'
+              : '内容'
+        }}
+      </button>
       <button class="mr10 font16" @click="changeShadow">模拟阴影切换</button>
       <button class="mr10 font16" @click.stop="resetMethod">还原</button>
       <button class="mr10 font16" @click.stop="zoomOutMethod">缩小</button>
@@ -70,9 +79,6 @@
             <button @click.stop="tools.reset">还原</button>
             <button @click.stop="tools.zoomIn">放大</button>
             <button @click.stop="tools.zoomOut">缩小</button>
-            <button @click.stop="post.showRuler = !post.showRuler">
-              {{ (post.showRuler ? '隐藏' : '显示') + '标尺' }}
-            </button>
           </div>
         </template>
       </SketchRuler>
@@ -109,6 +115,16 @@ const sketchRef = ref()
 const lockLine = ref(false)
 const zoomMode = ref<'pointer' | 'viewport-center' | 'content-center'>('pointer')
 
+const toggleZoomMode = () => {
+  const modes: Array<'pointer' | 'viewport-center' | 'content-center'> = [
+    'pointer',
+    'viewport-center',
+    'content-center'
+  ]
+  const idx = modes.indexOf(zoomMode.value)
+  zoomMode.value = modes[(idx + 1) % modes.length]
+}
+
 const state = reactive({
   scale: 1
 })
@@ -141,7 +157,7 @@ const cpuPalette = computed<PaletteType>(() => {
       }
     : {
         bgColor: 'transparent',
-        lineColor: '#51d6a9'
+        guideLineColor: '#51d6a9'
       }
 })
 

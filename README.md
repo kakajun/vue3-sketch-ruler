@@ -287,9 +287,119 @@ const plugins: SketchRulerPlugin[] = [
 | dragstart | 开始拖拽       | —                        |
 | dragend   | 结束拖拽       | —                        |
 
+## 2.x → 3.x 迁移指南
+
+v3.x 是架构重构版本，内置 TransformEngine 替代了外部 `simple-panzoom` 依赖，并引入了 Minimap、插件系统、动画系统等全新能力。以下是核心差异与迁移要点：
+
+### 主要 Breaking Changes
+
+| 变更项 | 2.x 写法 | 3.x 写法 | 说明 |
+| --- | --- | --- | --- |
+| **组件名** | `<SketchRule>` / `<sketch-rule>` | `<SketchRuler>` | 统一为 PascalCase 完整拼写 |
+| **导入方式** | `import SketchRule from 'vue3-sketch-ruler'` | `import { SketchRuler } from 'vue3-sketch-ruler'` | 改为命名导出，同时仍保留默认导出兼容 |
+| **工具栏插槽** | `#btn="{ reset, zoomIn, zoomOut }"` | `#toolbar="{ tools, state }"` | `tools` 包含 `reset`、`zoomIn`、`zoomOut`、`zoomToPreset`、`setZoomMode`、`toggleReferLine`；`state` 包含 `scale`、`offset`、`zoomMode`、`showReferLine` |
+| **缩放事件** | `@zoomStart` | `v-model:scale` / `@update:scale` | 支持双向绑定，无需手动监听缩放开始 |
+| **参考线事件** | `@handleLine` | `@update:lines` | 统一为 `update:` 风格事件 |
+| **偏移事件** | 无 | `@update:offset` / `@zoomchange` | 3.x 新增，返回 `{ scale, x, y }` |
+| **锁定事件** | 无 | `v-model:lockLine` / `@update:lockLine` | 3.x 新增双向绑定 |
+| **缩放控制** | `panzoomOption` | `zoomMode`、`zoomStep`、`minZoom`、`maxZoom` | 移除 `panzoomOption`，改为内置引擎直接配置 |
+| **动画系统** | 无 | `enableAnimation`、`animationMode` | 3.x 新增，支持 `ease-out`、`damped`、`exponential`、`direct` |
+| **自动居中** | 依赖 panzoom 的 `startX/startY` | `autoCenter`、`initialOffset` | `autoCenter` 为 `true` 时自动计算初始偏移 |
+| **阴影文字** | `showShadowText` | 移除 | 3.x 已移除该属性 |
+| **palette 属性** | `lineType`、`lineColor`、`longfgColor`、`fontColor` | `guideLineStyle`、`guideLineColor`、`tickColor`、`labelColor` | 命名规范化 |
+| **Expose** | `panzoomInstance` | `engine`（TransformEngine） | 直接暴露内置引擎实例 |
+| **Expose 方法** | `zoomIn()`、`zoomOut()`、`reset()` | 同上，并新增 `setTransform()`、`zoomToPreset()`、`setZoomMode()` | 方法更丰富 |
+| **外部依赖** | `simple-panzoom` | 零外部 panzoom 依赖 | 需从项目中移除 `simple-panzoom` |
+
+### 快速迁移示例
+
+**2.x 代码：**
+
+```vue
+<template>
+  <sketch-rule
+    ref="sketchruleRef"
+    v-model:scale="state.scale"
+    :panzoomOption="panzoomOption"
+    :palette="{ lineType: 'dashed', lineColor: '#51d6a9' }"
+    @handleLine="handleLinesChange"
+  >
+    <template #default>...</template>
+    <template #btn="{ reset, zoomIn, zoomOut }">
+      <button @click="reset">还原</button>
+      <button @click="zoomIn">放大</button>
+      <button @click="zoomOut">缩小</button>
+    </template>
+  </sketch-rule>
+</template>
+
+<script setup>
+import SketchRule from 'vue3-sketch-ruler'
+import { simplePanzoom } from 'simple-panzoom' // 需移除
+</script>
+```
+
+**3.x 代码：**
+
+```vue
+<template>
+  <SketchRuler
+    ref="sketchRef"
+    v-model:scale="state.scale"
+    v-model:offset="state.offset"
+    :zoom-mode="'pointer'"
+    :enable-animation="true"
+    animation-mode="ease-out"
+    :palette="{ guideLineStyle: 'dashed', guideLineColor: '#51d6a9' }"
+    @update:lines="handleLinesChange"
+    @zoomchange="handleZoomChange"
+  >
+    <template #default>...</template>
+    <template #toolbar="{ tools }">
+      <button @click="tools.reset">还原</button>
+      <button @click="tools.zoomIn">放大</button>
+      <button @click="tools.zoomOut">缩小</button>
+      <button @click="tools.zoomToPreset(1)">100%</button>
+      <span>{{ (tools.state.scale * 100).toFixed(0) }}%</span>
+    </template>
+  </SketchRuler>
+</template>
+
+<script setup>
+import { SketchRuler } from 'vue3-sketch-ruler'
+</script>
+```
+
+### 自动化迁移脚本
+
+项目提供了官方迁移脚本，可自动处理大部分替换：
+
+```bash
+npx vue3-sketch-ruler-migrate <path>
+```
+
+脚本会自动处理：
+
+- 组件名 `SketchRule` → `SketchRuler`
+- 插槽 `#btn` → `#toolbar`
+- 事件 `zoomStart` → `update:scale`、`handleLine` → `update:lines`
+- 检测 `simple-panzoom`、`useLine` 等需手动移除的依赖并发出警告
+
+> ⚠️ 脚本仅为辅助工具，执行后请务必 review 变更并运行测试。
+
+### 新增能力速览
+
+- **Minimap 缩略图**：独立组件，支持拖拽视口与点击跳转
+- **插件系统**：通过 `plugins` 属性注入生命周期钩子
+- **多画布管理器**：`CanvasManager` + `BUILTIN_TEMPLATES`
+- **吸附引擎**：`snapThreshold` 配置参考线吸附阈值
+- **动画引擎**：`enableAnimation` + `animationMode` 实现平滑缩放/平移
+
+---
+
 ## 变更记录
 
-- **v3.x** 内置 TransformEngine 替代外部 panzoom，新增 Minimap、插件系统、多画布管理器
+- **v3.x** 内置 TransformEngine 替代外部 panzoom，新增 Minimap、插件系统、多画布管理器、吸附引擎、动画系统
 - **v2.4.x** 多实例支持
 - **v2.3.x** 引用简化版 simple-panzoom，提升性能，更新全部依赖
 

@@ -10,7 +10,7 @@
       :class="[state.isBlack ? 'balckwrapper' : 'whitewrapper']"
       :style="rectStyle"
     >
-      <SketchRule
+      <SketchRuler
         ref="sketchruleRef"
         v-model:scale="state.scale"
         v-model:lock-line="lockLine"
@@ -26,72 +26,25 @@
             />
           </div>
         </template>
-        <template #btn="{ reset, zoomIn, zoomOut }">
+        <template #toolbar="{ tools, state }">
           <div class="btns">
-            <button @click.stop="reset">还原</button>
-            <button @click.stop="zoomIn">放大</button>
-            <button @click.stop="zoomOut">缩小</button>
+            <button @click.stop="tools.reset">还原</button>
+            <button @click.stop="tools.zoomIn">放大</button>
+            <button @click.stop="tools.zoomOut">缩小</button>
           </div>
         </template>
-      </SketchRule>
+      </SketchRuler>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { computed, ref, reactive, onMounted } from 'vue'
-import SketchRule from 'vue3-sketch-ruler'
+import { computed, ref, reactive } from 'vue'
+import { SketchRuler } from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
-import type { PanzoomEvent } from 'simple-panzoom'
 import movebleCom from './edit/moveble.vue'
 
 const sketchruleRef = ref()
-
-// 更多配置,参见 https://github.com/timmywil/panzoom
-const panzoomOption = reactive({
-  maxScale: 3,
-  minScale: 0.3,
-  disablePan: false,
-  disableZoom: false,
-  contain: 'none', // 'inside' | 'outside' | 'none'
-  handleStartEvent: (event: PanzoomEvent['panzoomstart']) => {
-    event.preventDefault()
-    console.log('handleStartEvent', event)
-  }
-})
 const lockLine = ref(false)
-
-onMounted(() => {
-  const panzoomInstance = sketchruleRef.value.panzoomInstance
-  const parentDom = document.getElementsByClassName('canvasedit-parent')
-  if (parentDom[0]) {
-    const parent = parentDom[0]
-    if (parent) {
-      parent.addEventListener('wheel', function (e: WheelEvent) {
-        if (e.ctrlKey || e.metaKey) {
-          panzoomInstance.zoomWithWheel(e)
-        }
-      })
-    }
-
-    // 让按下鼠标中键才能移动画布,千万不能用mousedown, 否则会出现缩放bug, 因为panzoom内部对pointerId有判断,而mousedown里面并没有pointerId
-    document.addEventListener('pointerdown', function (e) {
-      if (e.button === 1) {
-        sketchruleRef.value.cursorClass = 'grabCursor'
-        panzoomInstance.bind()
-        panzoomInstance.handleDown(e)
-        e.preventDefault()
-      }
-    })
-
-    document.addEventListener('pointerup', function (e) {
-      if (e.button === 1) {
-        panzoomInstance.destroy()
-        console.log('放开了')
-        sketchruleRef.value.cursorClass = 'defaultCursor'
-      }
-    })
-  }
-})
 
 const state = reactive({
   scale: 1,
@@ -104,16 +57,16 @@ const cpuPalette = computed(() => {
         bgColor: 'transparent',
         hoverBg: '#fff',
         hoverColor: '#000',
-        longfgColor: '#BABBBC', // ruler longer mark color
-        fontColor: '#DEDEDE', // ruler font color
-        shadowColor: '#525252', // ruler shadow color
-        lineColor: '#51d6a9',
+        tickColor: '#BABBBC',
+        labelColor: '#DEDEDE',
+        shadowColor: '#525252',
+        guideLineColor: '#51d6a9',
         borderColor: '#B5B5B5'
       }
     : {
         bgColor: 'transparent',
-        lineColor: '#51d6a9',
-        lineType: 'dashed'
+        guideLineColor: '#51d6a9',
+        guideLineStyle: 'dashed'
       }
 })
 
@@ -123,11 +76,6 @@ const post = reactive({
   height: 800,
   canvasWidth: 1242,
   canvasHeight: 1660,
-  // width: 770,
-  // height: 400,
-  // canvasWidth: 600,
-  // canvasHeight: 400,
-
   showRuler: true,
   palette: cpuPalette.value,
   snapsObj: { h: [], v: [] },
@@ -137,7 +85,6 @@ const post = reactive({
     width: 0,
     height: 0
   },
-  panzoomOption: panzoomOption,
   isShowReferLine: true,
   lines: {
     h: [0, 250],
@@ -168,7 +115,6 @@ const canvasStyle = computed(() => {
 <style lang="scss">
 .demo {
   width: 100%;
-  // padding-top: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center; /* 水平居中 */
