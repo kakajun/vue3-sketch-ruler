@@ -31,6 +31,27 @@
       <button class="mr10 font16" @click="changeShadow">模拟阴影切换</button>
       <button class="mr10 font16" @click.stop="resetMethod">还原</button>
       <button class="mr10 font16" @click.stop="zoomOutMethod">缩小</button>
+      <span class="mr10 font16">步长:{{ post.zoomStep }}</span>
+      <input
+        class="mr10 font16"
+        v-model.number="post.zoomStep"
+        type="range"
+        min="0.1"
+        max="1"
+        step="0.05"
+        style="width: 80px"
+      />
+      <span class="mr10 font16">范围:{{ post.minZoom }}~{{ post.maxZoom }}</span>
+      <span class="mr10 font16">吸附:{{ post.snapThreshold }}px</span>
+      <input
+        class="mr10 font16"
+        v-model.number="post.snapThreshold"
+        type="range"
+        min="0"
+        max="20"
+        step="1"
+        style="width: 80px"
+      />
       <input
         class="mr10 font16"
         :value="state.scale"
@@ -65,6 +86,10 @@
         :enable-animation="true"
         animation-mode="ease-out"
         :zoom-mode="zoomMode"
+        :zoom-step="post.zoomStep"
+        :min-zoom="post.minZoom"
+        :max-zoom="post.maxZoom"
+        :snap-threshold="post.snapThreshold"
         @zoomchange="handleZoomChange"
         @update:lines="handleLinesChange"
         @on-corner-click="handleCornerClick"
@@ -170,6 +195,10 @@ const post = reactive({
   showRuler: true,
   showMinorTicks: false,
   isShowReferLine: true,
+  zoomStep: 0.25,
+  minZoom: 0.1,
+  maxZoom: 3,
+  snapThreshold: 5,
   lines: {
     h: [0, 250],
     v: [0, 500]
@@ -219,7 +248,7 @@ const handleZoomChange = (detail: { scale: number; x: number; y: number }): void
 }
 
 const handleLinesChange = (lines: { h: number[]; v: number[] }): void => {
-  console.log('lines changed', lines)
+  post.lines = lines
 }
 
 const changeShadow = (): void => {

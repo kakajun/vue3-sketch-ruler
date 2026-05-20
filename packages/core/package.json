@@ -18,7 +18,8 @@
     "url": "git+https://github.com/kakajun/vue3-sketch-ruler.git"
   },
   "files": [
-    "lib"
+    "lib",
+    "AGENTS.md"
   ],
   "type": "module",
   "sideEffects": false,

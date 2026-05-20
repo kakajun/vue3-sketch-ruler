@@ -8,9 +8,9 @@
       </template>
       <template #toolbar="{ tools, state }">
         <div class="btns">
-          <button @click.stop="reset">还原</button>
-          <button @click.stop="zoomIn">放大</button>
-          <button @click.stop="zoomOut">缩小</button>
+          <button @click.stop="tools.reset">还原</button>
+          <button @click.stop="tools.zoomIn">放大</button>
+          <button @click.stop="tools.zoomOut">缩小</button>
         </div>
       </template>
     </SketchRuler>
@@ -31,6 +31,8 @@ const post = reactive({
   showRuler: true,
   palette: { bgColor: 'transparent', guideLineStyle: 'dashed' },
   isShowReferLine: true,
+  autoCenter: false,
+  initialOffset: { x: 100, y: 50 },
   shadow: {
     x: 0,
     y: 0,
