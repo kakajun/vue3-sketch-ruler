@@ -7,6 +7,8 @@ export type {
   TickConfig,
   Point,
   BeforeZoomContext,
+  AfterZoomContext,
+  BeforePanContext,
   AfterPanContext,
   OnSnapContext,
   OnLineContext,
@@ -15,7 +17,9 @@ export type {
   LabelInfo,
   RenderConfig,
   RulerRenderer,
-  SketchRulerPlugin
+  SketchRulerPlugin,
+  PluginApi,
+  PluginContext
 } from './types'
 
 // 引擎层

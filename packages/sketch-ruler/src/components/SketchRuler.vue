@@ -92,7 +92,7 @@ import type { GuideLine, RulerContext, RulerPalette } from '../state/ruler-conte
 
 import RulerWrapperV3 from './RulerWrapperV3.vue'
 import { PluginManager } from '@sketch-ruler/core'
-import type { SketchRulerPlugin } from '@sketch-ruler/core'
+import type { SketchRulerPlugin, PluginApi } from '@sketch-ruler/core'
 import { eye64, closeEye64 } from './cornerImg64'
 
 export interface SketchRulerProps {
@@ -190,19 +190,6 @@ const { scale, offset, engine, setTransform, zoomBy, zoomTo, panBy, reset } = us
 
 const ownScale = computed(() => scale.value)
 
-// === 插件系统 ===
-const pluginManager = new PluginManager()
-watch(
-  () => props.plugins,
-  (newPlugins) => {
-    pluginManager.clear()
-    for (const plugin of newPlugins ?? []) {
-      pluginManager.register(plugin)
-    }
-  },
-  { immediate: true, deep: true }
-)
-
 // 外部 prop 变化 → 同步到引擎
 watch(
   () => props.scale,
@@ -279,6 +266,38 @@ onMounted(() => {
       contentSize: { width: props.canvasWidth, height: props.canvasHeight },
       onCursorChange: (cls) => {
         cursorClass.value = cls
+      },
+      zoomInterceptor: {
+        beforeZoom: async (from, to, originX, originY) => {
+          return await pluginManager.beforeZoom({
+            from,
+            to,
+            center: { x: originX, y: originY },
+            cancel: () => {}
+          })
+        },
+        afterZoom: (from, to, originX, originY) => {
+          pluginManager.afterZoom({
+            from,
+            to,
+            center: { x: originX, y: originY }
+          })
+        }
+      },
+      panInterceptor: {
+        beforePan: async (dx, dy) => {
+          return await pluginManager.beforePan({
+            offset: { ...offset.value },
+            delta: { x: dx, y: dy },
+            cancel: () => {}
+          })
+        },
+        afterPan: (dx, dy) => {
+          pluginManager.afterPan({
+            offset: { ...offset.value },
+            delta: { x: dx, y: dy }
+          })
+        }
       }
     })
     inputManager.bind(canvasRef.value)
@@ -303,10 +322,63 @@ const verticalLines = computed(() =>
   guideLines.value.filter((l) => l.orientation === 'v' && l.visible !== false)
 )
 
+// === 插件系统 ===
+const pluginManager = new PluginManager()
+
+const pluginApi: PluginApi = {
+  getState: () => ({
+    scale: scale.value,
+    offset: { ...offset.value },
+    lines: guideLines.value
+  }),
+  zoomBy,
+  zoomTo,
+  panBy,
+  setTransform
+}
+pluginManager.setApi(pluginApi)
+
+watch(
+  () => props.plugins,
+  (newPlugins, oldPlugins) => {
+    if (newPlugins === oldPlugins) return
+    pluginManager.clear()
+    for (const plugin of newPlugins ?? []) {
+      pluginManager.register(plugin)
+    }
+  },
+  { immediate: true }
+)
+
+function syncGuideLines(newLines: { h: number[]; v: number[] }): void {
+  const existing = guideLines.value
+  const updated: GuideLine[] = []
+
+  const existingH = existing.filter((l) => l.orientation === 'h')
+  newLines.h.forEach((pos, idx) => {
+    if (idx < existingH.length) {
+      updated.push({ ...existingH[idx], position: pos })
+    } else {
+      updated.push({ id: generateLineId(), orientation: 'h', position: pos, visible: true, locked: false })
+    }
+  })
+
+  const existingV = existing.filter((l) => l.orientation === 'v')
+  newLines.v.forEach((pos, idx) => {
+    if (idx < existingV.length) {
+      updated.push({ ...existingV[idx], position: pos })
+    } else {
+      updated.push({ id: generateLineId(), orientation: 'v', position: pos, visible: true, locked: false })
+    }
+  })
+
+  guideLines.value = updated
+}
+
 watch(
   () => props.lines,
   (newLines) => {
-    if (newLines) guideLines.value = importLines(newLines)
+    if (newLines) syncGuideLines(newLines)
   },
   { deep: true }
 )
@@ -366,12 +438,20 @@ const handleAddLine = (line: Omit<GuideLine, 'id'>): void => {
 }
 
 const handleUpdateLine = (id: string, position: number): void => {
+  const line = guideLines.value.find((l) => l.id === id)
+  if (!line) return
+  const from = line.position
   guideLines.value = guideLines.value.map((l) => (l.id === id ? { ...l, position } : l))
+  pluginManager.onLineMove({ line: { ...line, position }, from, to: position })
   emit('update:lines', getExportedLines())
 }
 
 const handleDeleteLine = (id: string): void => {
+  const line = guideLines.value.find((l) => l.id === id)
   guideLines.value = guideLines.value.filter((l) => l.id !== id)
+  if (line) {
+    pluginManager.onLineDelete({ line })
+  }
   emit('update:lines', getExportedLines())
 }
 
@@ -448,24 +528,34 @@ const getZoomOrigin = (): { x: number; y: number } => {
 
 const zoomIn = async (): Promise<void> => {
   const { x: cx, y: cy } = getZoomOrigin()
+  const from = scale.value
+  const to = from + props.zoomStep
   const allowed = await pluginManager.beforeZoom({
-    from: scale.value,
-    to: scale.value + props.zoomStep,
+    from,
+    to,
     center: { x: cx, y: cy },
     cancel: () => {}
   })
-  if (allowed) zoomBy(props.zoomStep, cx, cy)
+  if (allowed) {
+    zoomBy(props.zoomStep, cx, cy)
+    pluginManager.afterZoom({ from, to, center: { x: cx, y: cy } })
+  }
 }
 
 const zoomOut = async (): Promise<void> => {
   const { x: cx, y: cy } = getZoomOrigin()
+  const from = scale.value
+  const to = from - props.zoomStep
   const allowed = await pluginManager.beforeZoom({
-    from: scale.value,
-    to: scale.value - props.zoomStep,
+    from,
+    to,
     center: { x: cx, y: cy },
     cancel: () => {}
   })
-  if (allowed) zoomBy(-props.zoomStep, cx, cy)
+  if (allowed) {
+    zoomBy(-props.zoomStep, cx, cy)
+    pluginManager.afterZoom({ from, to, center: { x: cx, y: cy } })
+  }
 }
 
 const onCornerClick = (): void => {
@@ -488,10 +578,20 @@ const setZoomMode = (mode: 'pointer' | 'viewport-center' | 'content-center'): vo
 
 const ZOOM_PRESETS = [0.1, 0.25, 0.33, 0.5, 0.66, 1, 1.5, 2, 3, 4, 6, 8, 16]
 
-const zoomToPreset = (preset: number): void => {
+const zoomToPreset = async (preset: number): Promise<void> => {
   const target = ZOOM_PRESETS.find((p) => p >= preset) ?? ZOOM_PRESETS[ZOOM_PRESETS.length - 1]
   const { x: cx, y: cy } = getZoomOrigin()
-  zoomTo(target, cx, cy)
+  const from = scale.value
+  const allowed = await pluginManager.beforeZoom({
+    from,
+    to: target,
+    center: { x: cx, y: cy },
+    cancel: () => {}
+  })
+  if (allowed) {
+    zoomTo(target, cx, cy)
+    pluginManager.afterZoom({ from, to: target, center: { x: cx, y: cy } })
+  }
 }
 
 // === 暴露 ===

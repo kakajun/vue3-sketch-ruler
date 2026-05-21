@@ -60,25 +60,25 @@ function handleMouseDown(e: MouseEvent): void {
 
   const startPos = props.line.position
   const startClient = isVertical.value ? e.clientX : e.clientY
+  let shouldDelete = false
 
   const onMouseMove = (moveEvent: MouseEvent): void => {
     const currentClient = isVertical.value ? moveEvent.clientX : moveEvent.clientY
     const delta = (currentClient - startClient) / props.scale
     const newPosition = startPos + delta
 
-    // 越界检测：拖出画布外则删除
+    // 越界检测：记录是否拖出画布外，等鼠标放开时再删除
     const screenPos = newPosition * props.scale + props.offset
     const limit = isVertical.value ? props.containerWidth : props.containerHeight
-    if (screenPos < -10 || screenPos > limit + 10) {
-      emit('delete', props.line.id)
-      cleanup()
-      return
-    }
+    shouldDelete = screenPos < -10 || screenPos > limit + 10
 
     emit('update', props.line.id, Math.round(newPosition))
   }
 
   const onMouseUp = (): void => {
+    if (shouldDelete) {
+      emit('delete', props.line.id)
+    }
     cleanup()
   }
 

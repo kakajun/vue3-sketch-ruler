@@ -19,11 +19,11 @@
       <template #default>
         <img style="width: 100%; height: 100%" :src="leftImg" alt="Left Screen" />
       </template>
-      <template #toolbar="{ tools, state }">
+      <template #toolbar="{ tools }">
         <div class="btns">
-          <button @click.stop="reset">还原</button>
-          <button @click.stop="zoomIn">放大</button>
-          <button @click.stop="zoomOut">缩小</button>
+          <button @click.stop="tools.reset">还原</button>
+          <button @click.stop="tools.zoomIn">放大</button>
+          <button @click.stop="tools.zoomOut">缩小</button>
         </div>
       </template>
     </SketchRuler>

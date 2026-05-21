@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.common.json",
   "compilerOptions": {
     "outDir": "lib",
+    "rootDir": "src",
     "allowImportingTsExtensions": true,
     "emitDeclarationOnly": true,
     "moduleResolution": "bundler",
@@ -11,6 +12,6 @@
     "allowJs": false,
     "types": ["vitest", "node"]
   },
-  "include": ["**/*.ts", "**/*.json"],
+  "include": ["src/**/*.ts", "**/*.json"],
   "exclude": ["test", "**/*.spec.ts", "vite.config.ts", "vitest.config.ts"]
 }

@@ -39,6 +39,7 @@ export { useSnapDetection } from './composables/useSnapDetection'
 export { RulerContextKey } from './state/ruler-context'
 export { InputManager } from '@sketch-ruler/canvas'
 export { CanvasManager, BUILTIN_TEMPLATES } from '@sketch-ruler/core'
+export { definePlugin } from './plugins'
 
 // 组件导出
 export { SketchRuler, Minimap }

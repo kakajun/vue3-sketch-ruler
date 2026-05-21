@@ -153,6 +153,7 @@ function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
 
   const startMouse = props.vertical ? e.clientX - rect.left : e.clientY - rect.top
   const startPos = line.position
+  let shouldDelete = false
 
   const onMove = (moveEvent: MouseEvent) => {
     const currentMouse = props.vertical
@@ -177,28 +178,22 @@ function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
 
     draggingLinePos.value = newPos
 
-    // 越界检测：拖出画布外则删除
+    // 越界检测：记录是否拖出画布外，等鼠标放开时再删除
     const limit = props.vertical ? props.canvasWidth : props.canvasHeight
-    if (newPos < 0 || newPos > limit) {
-      emit('deleteLine', line.id)
-      cleanup()
-      return
-    }
+    shouldDelete = newPos < 0 || newPos > limit
 
     emit('updateLine', line.id, Math.round(newPos))
   }
 
   const onUp = () => {
+    if (shouldDelete) {
+      emit('deleteLine', line.id)
+    }
     document.removeEventListener('mousemove', onMove)
     document.removeEventListener('mouseup', onUp)
     showLineLabel.value = false
     activeLineId.value = null
     draggingLinePos.value = null
-  }
-
-  const cleanup = (): void => {
-    document.removeEventListener('mousemove', onMove)
-    document.removeEventListener('mouseup', onUp)
   }
 
   document.addEventListener('mousemove', onMove)

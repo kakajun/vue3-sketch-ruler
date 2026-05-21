@@ -90,6 +90,7 @@
         :min-zoom="post.minZoom"
         :max-zoom="post.maxZoom"
         :snap-threshold="post.snapThreshold"
+        :plugins="plugins"
         @zoomchange="handleZoomChange"
         @update:lines="handleLinesChange"
         @on-corner-click="handleCornerClick"
@@ -128,7 +129,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { SketchRuler, Minimap } from 'vue3-sketch-ruler'
+import { SketchRuler, Minimap, definePlugin } from 'vue3-sketch-ruler'
 import type { PaletteType } from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
 import bgImg from '../assets/bg.png'
@@ -139,6 +140,69 @@ const store = useAppStore()
 const sketchRef = ref()
 const lockLine = ref(false)
 const zoomMode = ref<'pointer' | 'viewport-center' | 'content-center'>('pointer')
+
+// ===================== 插件系统示例 =====================
+
+/** 1. 日志插件 —— 展示 beforeZoom / afterZoom / beforePan / afterPan */
+const logPlugin = definePlugin(() => ({
+  name: 'log-plugin',
+  priority: 5,
+  beforeZoom(ctx) {
+    console.log('[beforeZoom] 即将缩放', ctx.from, '->', ctx.to)
+  },
+  afterZoom(ctx) {
+    console.log('[afterZoom] 缩放完成', ctx.from, '->', ctx.to)
+  },
+  beforePan(ctx) {
+    console.log('[beforePan] 即将平移', 'delta:', ctx.delta)
+  },
+  afterPan(ctx) {
+    console.log('[afterPan] 平移完成', 'offset:', ctx.offset)
+  }
+}))
+
+/** 2. 参考线事件插件 —— 展示 onLineCreate / onLineMove / onLineDelete */
+const lineEventPlugin = definePlugin(() => ({
+  name: 'line-event-plugin',
+  priority: 3,
+  onLineCreate(ctx) {
+    console.log('[onLineCreate] 创建参考线', ctx.line.orientation, ctx.line.position)
+  },
+  onLineMove(ctx) {
+    console.log('[onLineMove] 移动参考线', ctx.line.id, ctx.from, '->', ctx.to)
+  },
+  onLineDelete(ctx) {
+    console.log('[onLineDelete] 删除参考线', ctx.line.id)
+  }
+}))
+
+/** 3. 限制缩放插件 —— 展示高优先级 + cancel 拦截 */
+const zoomLimitPlugin = definePlugin(() => ({
+  name: 'zoom-limit-plugin',
+  priority: 10, // 最高优先级，最先执行
+  beforeZoom(ctx) {
+    if (ctx.to > 2.5) {
+      console.warn('[zoomLimit] 超过 2.5 上限，取消缩放')
+      ctx.cancel()
+    }
+  }
+}))
+
+/** 4. 状态监听插件 —— 展示 api.getState() 读取状态 */
+const stateWatcherPlugin = definePlugin(() => ({
+  name: 'state-watcher-plugin',
+  priority: 1,
+  afterZoom(ctx) {
+    const { scale, offset, lines } = ctx.api.getState()
+    console.log('[stateWatcher] afterZoom 状态快照:', { scale, offset, linesCount: lines.length })
+  },
+  afterPan(ctx) {
+    const { scale, offset } = ctx.api.getState()
+    console.log('[stateWatcher] afterPan 状态快照:', { scale, offset })
+  }
+}))
+
+const plugins = [logPlugin(), lineEventPlugin(), zoomLimitPlugin(), stateWatcherPlugin()]
 
 const toggleZoomMode = () => {
   const modes: Array<'pointer' | 'viewport-center' | 'content-center'> = [

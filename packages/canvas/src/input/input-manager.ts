@@ -11,6 +11,16 @@ import type { KeyCombo } from './keyboard-adapter'
 
 export type ZoomMode = 'pointer' | 'viewport-center' | 'content-center'
 
+export interface ZoomInterceptor {
+  beforeZoom?: (from: number, to: number, originX: number, originY: number) => boolean | Promise<boolean>
+  afterZoom?: (from: number, to: number, originX: number, originY: number) => void
+}
+
+export interface PanInterceptor {
+  beforePan?: (dx: number, dy: number) => boolean | Promise<boolean>
+  afterPan?: (dx: number, dy: number) => void
+}
+
 export interface InputManagerOptions {
   /** 缩放步长 */
   zoomStep?: number
@@ -24,6 +34,10 @@ export interface InputManagerOptions {
   contentSize?: { width: number; height: number }
   /** 光标状态变化回调 */
   onCursorChange?: (cursorClass: string) => void
+  /** 缩放拦截器（用于插件 beforeZoom / afterZoom） */
+  zoomInterceptor?: ZoomInterceptor
+  /** 平移拦截器（用于插件 beforePan / afterPan） */
+  panInterceptor?: PanInterceptor
 }
 
 export class InputManager {
@@ -48,6 +62,8 @@ export class InputManager {
   private pendingWheelDelta = 0
   private wheelRafId: number | null = null
   private onCursorChange: ((cursorClass: string) => void) | null = null
+  private zoomInterceptor: ZoomInterceptor | null = null
+  private panInterceptor: PanInterceptor | null = null
 
   constructor(engine: TransformEngine, options: InputManagerOptions = {}) {
     this.engine = engine
@@ -57,6 +73,8 @@ export class InputManager {
     this.viewportSize = options.viewportSize ?? { width: 0, height: 0 }
     this.contentSize = options.contentSize ?? { width: 0, height: 0 }
     this.onCursorChange = options.onCursorChange ?? null
+    this.zoomInterceptor = options.zoomInterceptor ?? null
+    this.panInterceptor = options.panInterceptor ?? null
 
     this.boundKeyUp = this.handleKeyUp.bind(this)
   }
@@ -166,7 +184,7 @@ export class InputManager {
           const toScale = currentScale * Math.exp((this.pendingWheelDelta * this.zoomStep) / 3)
           this.pendingWheelDelta = 0
 
-          this.engine.zoomTo(toScale, originX, originY)
+          this.executeZoom(() => this.engine.zoomTo(toScale, originX, originY), currentScale, toScale, originX, originY)
         })
       }
     }
@@ -178,21 +196,53 @@ export class InputManager {
     const centerX = this.viewportSize.width / 2
     const centerY = this.viewportSize.height / 2
 
+    const execute = (fn: () => void | Promise<void>): void => {
+      void fn()
+    }
+
     switch (combo) {
       case 'ctrl+0': {
         e.preventDefault()
-        this.engine.zoomTo(1, centerX, centerY)
+        execute(() =>
+          this.executeZoom(
+            () => this.engine.zoomTo(1, centerX, centerY),
+            this.engine.getState().scale,
+            1,
+            centerX,
+            centerY
+          )
+        )
         break
       }
       case 'ctrl+minus': {
         e.preventDefault()
-        this.engine.zoomBy(-this.zoomStep, centerX, centerY)
+        const from = this.engine.getState().scale
+        const to = from - this.zoomStep
+        execute(() =>
+          this.executeZoom(
+            () => this.engine.zoomBy(-this.zoomStep, centerX, centerY),
+            from,
+            to,
+            centerX,
+            centerY
+          )
+        )
         break
       }
       case 'ctrl+equal':
       case 'ctrl+plus': {
         e.preventDefault()
-        this.engine.zoomBy(this.zoomStep, centerX, centerY)
+        const from = this.engine.getState().scale
+        const to = from + this.zoomStep
+        execute(() =>
+          this.executeZoom(
+            () => this.engine.zoomBy(this.zoomStep, centerX, centerY),
+            from,
+            to,
+            centerX,
+            centerY
+          )
+        )
         break
       }
       case 'ctrl+1': {
@@ -209,7 +259,16 @@ export class InputManager {
           const newScale = Math.min(scaleX, scaleY)
           const newX = (vw - cw * newScale) / 2
           const newY = (vh - ch * newScale) / 2
-          this.engine.setTransform({ scale: newScale, x: newX, y: newY })
+          const from = this.engine.getState().scale
+          execute(() =>
+            this.executeZoom(
+              () => this.engine.setTransform({ scale: newScale, x: newX, y: newY }),
+              from,
+              newScale,
+              centerX,
+              centerY
+            )
+          )
         }
         break
       }
@@ -244,11 +303,20 @@ export class InputManager {
     }
   }
 
-  private handleMouseMove(e: MouseEvent): void {
+  private async handleMouseMove(e: MouseEvent): Promise<void> {
     if (this.isDragging && this.isSpacePressed) {
       const dx = e.clientX - this.lastMouse.x
       const dy = e.clientY - this.lastMouse.y
-      this.engine.panBy(dx, dy)
+
+      const allowed = this.panInterceptor?.beforePan
+        ? await this.panInterceptor.beforePan(dx, dy)
+        : true
+
+      if (allowed) {
+        this.engine.panBy(dx, dy)
+        this.panInterceptor?.afterPan?.(dx, dy)
+      }
+
       this.lastMouse = { x: e.clientX, y: e.clientY }
     }
   }
@@ -256,6 +324,23 @@ export class InputManager {
   private handleMouseUp(): void {
     this.isDragging = false
     this.notifyCursorChange()
+  }
+
+  private async executeZoom(
+    action: () => void,
+    from: number,
+    to: number,
+    originX: number,
+    originY: number
+  ): Promise<void> {
+    const allowed = this.zoomInterceptor?.beforeZoom
+      ? await this.zoomInterceptor.beforeZoom(from, to, originX, originY)
+      : true
+
+    if (allowed) {
+      action()
+      this.zoomInterceptor?.afterZoom?.(from, this.engine.getState().scale, originX, originY)
+    }
   }
 
   getCursorClass(): string {
