@@ -48,7 +48,9 @@ export default defineConfig({
           return chunkInfo.name ? chunkInfo.name : '[name][extname]'
         },
         globals: {
-          vue: 'Vue'
+          vue: 'Vue',
+          '@sketch-ruler/core': 'SketchRulerCore',
+          '@sketch-ruler/canvas': 'SketchRulerCanvas'
         },
         exports: 'named'
       }

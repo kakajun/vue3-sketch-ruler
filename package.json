@@ -23,7 +23,7 @@
   "scripts": {
     "dev": "pnpm build && pnpm --filter ./packages/docs dev",
     "d": "pnpm --filter ./packages/docs dev",
-    "build": "pnpm --filter ./packages/sketch-ruler build",
+    "build": "pnpm --filter ./packages/core build && pnpm --filter ./packages/canvas build && pnpm --filter ./packages/sketch-ruler build",
     "build:demo": "pnpm build && pnpm --filter ./packages/docs build",
     "precommit": "lint-staged",
     "clean": "rimraf node_modules && rimraf ./packages/**/node_modules",

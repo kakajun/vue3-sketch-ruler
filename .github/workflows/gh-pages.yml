@@ -28,8 +28,11 @@ jobs:
       - name: Install dependencies
         run: pnpm i --no-frozen-lockfile
 
-      - name: Build simple-panzoom
-        run: pnpm --filter ./packages/simple-panzoom build
+      - name: Build core
+        run: pnpm --filter ./packages/core build
+
+      - name: Build canvas
+        run: pnpm --filter ./packages/canvas build
 
       - name: Build sketch-ruler
         run: pnpm --filter ./packages/sketch-ruler build
