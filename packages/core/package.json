@@ -1,6 +1,6 @@
 {
   "name": "@sketch-ruler/core",
-  "version": "3.0.0-beta.0",
+  "version": "3.0.0",
   "private": false,
   "description": "Framework-agnostic core for sketch-ruler: transform engine, state management, plugins, and scale computation.",
   "keywords": [

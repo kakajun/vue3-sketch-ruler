@@ -1,6 +1,6 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "3.0.0-beta.0",
+  "version": "3.0.0",
   "private": false,
   "keywords": [
     "panzoom",
@@ -80,7 +80,7 @@
     "release": "release-it"
   },
   "dependencies": {
-    "@sketch-ruler/canvas": "workspace:*",
+    "@sketch-ruler/canvas": "3.0.0",
     "@sketch-ruler/core": "workspace:*"
   },
   "devDependencies": {
