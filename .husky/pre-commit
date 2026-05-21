@@ -1,2 +1,3 @@
 . "$HOME/.bashrc" 2>/dev/null || true
 pnpm exec lint-staged
+pnpm test

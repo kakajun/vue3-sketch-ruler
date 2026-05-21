@@ -182,7 +182,9 @@ function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
     const limit = props.vertical ? props.canvasWidth : props.canvasHeight
     shouldDelete = newPos < 0 || newPos > limit
 
-    emit('updateLine', line.id, Math.round(newPos))
+    if (!shouldDelete) {
+      emit('updateLine', line.id, Math.round(newPos))
+    }
   }
 
   const onUp = () => {
