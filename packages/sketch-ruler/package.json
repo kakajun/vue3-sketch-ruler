@@ -80,7 +80,7 @@
     "release": "release-it"
   },
   "dependencies": {
-    "@sketch-ruler/canvas": "3.0.0",
+    "@sketch-ruler/canvas": "workspace:*",
     "@sketch-ruler/core": "workspace:*"
   },
   "devDependencies": {

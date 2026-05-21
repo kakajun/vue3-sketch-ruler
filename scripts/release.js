@@ -147,9 +147,11 @@ async function publishPackage(pkgName, version) {
   console.log(pkgRoot, 'pkgRootpkgRoot')
 
   try {
-    // copy README.md
-    step(`copy README.md...`)
-    fs.cpSync(path.resolve(__dirname, '../README.md'), path.resolve(pkgRoot, 'README.md'))
+    // 只有 sketch-ruler 包需要 copy README.md
+    if (pkgName === 'sketch-ruler') {
+      step(`copy README.md...`)
+      fs.cpSync(path.resolve(__dirname, '../README.md'), path.resolve(pkgRoot, 'README.md'))
+    }
 
     execSync('npm publish', { cwd: pkgRoot, stdio: 'inherit' })
 
