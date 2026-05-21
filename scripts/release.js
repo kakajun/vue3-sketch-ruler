@@ -102,50 +102,33 @@ function updatePackage(pkgRoot, version, depVersion, originalDepsMap) {
 
   // 同步 sketch-ruler 和 canvas 的 @sketch-ruler/* 依赖版本
   if (pkg.dependencies) {
-    if (pkg.dependencies['@sketch-ruler/core'] === 'workspace:*') {
-      if (originalDepsMap) {
-        originalDepsMap.set(pkgPath, { key: '@sketch-ruler/core', value: 'workspace:*' })
-      }
-      pkg.dependencies['@sketch-ruler/core'] = depVersion
-    }
-    if (pkg.dependencies['@sketch-ruler/canvas'] === 'workspace:*') {
-      if (originalDepsMap) {
-        if (!originalDepsMap.has(pkgPath)) {
-          originalDepsMap.set(pkgPath, {})
+    ;['@sketch-ruler/core', '@sketch-ruler/canvas'].forEach((depKey) => {
+      if (pkg.dependencies[depKey] === 'workspace:*') {
+        if (originalDepsMap) {
+          if (!originalDepsMap.has(pkgPath)) {
+            originalDepsMap.set(pkgPath, {})
+          }
+          originalDepsMap.get(pkgPath)[depKey] = 'workspace:*'
         }
-        const entry = originalDepsMap.get(pkgPath)
-        if (typeof entry === 'object' && entry !== null) {
-          entry['@sketch-ruler/canvas'] = 'workspace:*'
-        } else {
-          originalDepsMap.set(pkgPath, { key: '@sketch-ruler/canvas', value: 'workspace:*' })
-        }
+        pkg.dependencies[depKey] = depVersion
       }
-      pkg.dependencies['@sketch-ruler/canvas'] = depVersion
-    }
+    })
   }
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n')
 }
 
 function restoreWorkspaceDeps(originalDepsMap) {
-  for (const [pkgPath, entry] of originalDepsMap) {
+  for (const [pkgPath, deps] of originalDepsMap) {
     const raw = fs.readFileSync(pkgPath, 'utf-8')
     const pkg = JSON.parse(raw)
     if (!pkg.dependencies) continue
 
-    if (entry && typeof entry === 'object' && !entry.key) {
-      // 多个依赖被替换的情况
-      Object.keys(entry).forEach((key) => {
-        if (pkg.dependencies[key] !== undefined) {
-          pkg.dependencies[key] = entry[key]
-        }
-      })
-    } else if (entry && entry.key) {
-      // 单个依赖被替换的情况
-      if (pkg.dependencies[entry.key] !== undefined) {
-        pkg.dependencies[entry.key] = entry.value
+    Object.keys(deps).forEach((key) => {
+      if (pkg.dependencies[key] !== undefined) {
+        pkg.dependencies[key] = deps[key]
       }
-    }
+    })
 
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n')
   }

@@ -1,7 +1,9 @@
 <template>
   <div class="demo">
     <div class="top font16">
-      <div class="mr10">多画布管理器演示：通过 CanvasManager 管理多个画布，各自独立保存缩放、偏移与参考线</div>
+      <div class="mr10"
+        >多画布管理器演示：通过 CanvasManager 管理多个画布，各自独立保存缩放、偏移与参考线</div
+      >
     </div>
 
     <div class="main-layout">
@@ -48,8 +50,8 @@
         <div class="editor-header">
           <span class="editor-title">{{ activeCanvas?.name || '未选择' }}</span>
           <span class="editor-meta">
-            {{ activeCanvas?.width }} × {{ activeCanvas?.height }} |
-            参考线: {{ activeLines.h.length }}h / {{ activeLines.v.length }}v
+            {{ activeCanvas?.width }} × {{ activeCanvas?.height }} | 参考线:
+            {{ activeLines.h.length }}h / {{ activeLines.v.length }}v
           </span>
         </div>
 

@@ -20,13 +20,7 @@
         {{ lockLine ? '解锁' : '锁定' }}参考线
       </button>
       <button class="mr10 font16" @click="toggleZoomMode">
-        {{
-          zoomMode === 'pointer'
-            ? '鼠标'
-            : zoomMode === 'viewport-center'
-              ? '视口'
-              : '内容'
-        }}
+        {{ zoomMode === 'pointer' ? '鼠标' : zoomMode === 'viewport-center' ? '视口' : '内容' }}
       </button>
       <button class="mr10 font16" @click="changeShadow">模拟阴影切换</button>
       <button class="mr10 font16" @click.stop="resetMethod">还原</button>

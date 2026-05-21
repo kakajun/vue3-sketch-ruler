@@ -76,18 +76,19 @@ cd packages/canvas && pnpm test:watch
 ```ts
 const input = new InputManager(engine, {
   zoomStep: 0.25,
-  zoomMode: 'pointer',          // 'pointer' | 'viewport-center' | 'content-center'
+  zoomMode: 'pointer', // 'pointer' | 'viewport-center' | 'content-center'
   viewportSize: { width, height },
   contentSize: { width, height },
-  onCursorChange: (cls) => { }  // 'default' | 'grab' | 'grabbing'
+  onCursorChange: (cls) => {} // 'default' | 'grab' | 'grabbing'
 })
-input.bind(containerElement)    // 事件绑定到 container.parentElement
+input.bind(containerElement) // 事件绑定到 container.parentElement
 input.setZoomMode(mode)
 input.getCursorClass()
-input.destroy()                 // 清理所有事件监听
+input.destroy() // 清理所有事件监听
 ```
 
 **内置交互**：
+
 - `Ctrl/Cmd + 滚轮`：缩放
 - `Space + 鼠标左键拖拽`：平移
 - `Ctrl+0`：100% 缩放
@@ -99,9 +100,15 @@ input.destroy()                 // 清理所有事件监听
 ```ts
 const renderer = new Canvas2DRenderer(canvasElement)
 renderer.render({
-  width, height, scale, offset,
-  vertical: false,   // false=水平, true=垂直
-  thick, marks, config, palette
+  width,
+  height,
+  scale,
+  offset,
+  vertical: false, // false=水平, true=垂直
+  thick,
+  marks,
+  config,
+  palette
 })
 ```
 
@@ -112,7 +119,7 @@ const mouse = new MouseAdapter(parent, callbacks)
 mouse.bind()
 mouse.unbind()
 
-const kb = new KeyboardAdapter({ onShortcut: (combo, e) => { } })
+const kb = new KeyboardAdapter({ onShortcut: (combo, e) => {} })
 kb.bind()
 kb.unbind()
 ```
@@ -121,11 +128,11 @@ kb.unbind()
 
 ## 子路径导出
 
-| 路径 | 用途 |
-|------|------|
-| `@sketch-ruler/canvas` | 完整导出 |
+| 路径                             | 用途           |
+| -------------------------------- | -------------- |
+| `@sketch-ruler/canvas`           | 完整导出       |
 | `@sketch-ruler/canvas/renderers` | 仅渲染器与缓存 |
-| `@sketch-ruler/canvas/input` | 仅输入管理层 |
+| `@sketch-ruler/canvas/input`     | 仅输入管理层   |
 
 ---
 

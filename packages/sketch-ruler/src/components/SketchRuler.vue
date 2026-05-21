@@ -359,7 +359,13 @@ function syncGuideLines(newLines: { h: number[]; v: number[] }): void {
     if (idx < existingH.length) {
       updated.push({ ...existingH[idx], position: pos })
     } else {
-      updated.push({ id: generateLineId(), orientation: 'h', position: pos, visible: true, locked: false })
+      updated.push({
+        id: generateLineId(),
+        orientation: 'h',
+        position: pos,
+        visible: true,
+        locked: false
+      })
     }
   })
 
@@ -368,7 +374,13 @@ function syncGuideLines(newLines: { h: number[]; v: number[] }): void {
     if (idx < existingV.length) {
       updated.push({ ...existingV[idx], position: pos })
     } else {
-      updated.push({ id: generateLineId(), orientation: 'v', position: pos, visible: true, locked: false })
+      updated.push({
+        id: generateLineId(),
+        orientation: 'v',
+        position: pos,
+        visible: true,
+        locked: false
+      })
     }
   })
 

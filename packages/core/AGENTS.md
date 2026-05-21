@@ -128,13 +128,13 @@ manager.updateCanvasLines(id, importLines({ h, v }))
 
 ## 子路径导出
 
-| 路径 | 用途 |
-|------|------|
-| `@sketch-ruler/core` | 完整导出 |
-| `@sketch-ruler/core/engine` | 仅引擎层（TransformEngine、矩阵、坐标） |
-| `@sketch-ruler/core/state` | 仅状态管理 |
-| `@sketch-ruler/core/plugins` | 仅插件系统 |
-| `@sketch-ruler/core/scale` | 仅刻度计算 |
+| 路径                         | 用途                                    |
+| ---------------------------- | --------------------------------------- |
+| `@sketch-ruler/core`         | 完整导出                                |
+| `@sketch-ruler/core/engine`  | 仅引擎层（TransformEngine、矩阵、坐标） |
+| `@sketch-ruler/core/state`   | 仅状态管理                              |
+| `@sketch-ruler/core/plugins` | 仅插件系统                              |
+| `@sketch-ruler/core/scale`   | 仅刻度计算                              |
 
 ---
 

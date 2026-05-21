@@ -151,7 +151,10 @@ describe('PluginManager', () => {
   })
 
   it('should not re-call registerRenderer on unregister', () => {
-    const registerRenderer = vi.fn(() => ({ name: 'custom', renderer: { renderTicks: vi.fn(), renderLabels: vi.fn() } }))
+    const registerRenderer = vi.fn(() => ({
+      name: 'custom',
+      renderer: { renderTicks: vi.fn(), renderLabels: vi.fn() }
+    }))
     const plugin: SketchRulerPlugin = {
       name: 'p1',
       registerRenderer
@@ -167,9 +170,27 @@ describe('PluginManager', () => {
 
   it('should sort plugins by priority descending', async () => {
     const order: string[] = []
-    const p1: SketchRulerPlugin = { name: 'low', priority: 0, beforeZoom: async () => { order.push('low') } }
-    const p2: SketchRulerPlugin = { name: 'high', priority: 10, beforeZoom: async () => { order.push('high') } }
-    const p3: SketchRulerPlugin = { name: 'mid', priority: 5, beforeZoom: async () => { order.push('mid') } }
+    const p1: SketchRulerPlugin = {
+      name: 'low',
+      priority: 0,
+      beforeZoom: async () => {
+        order.push('low')
+      }
+    }
+    const p2: SketchRulerPlugin = {
+      name: 'high',
+      priority: 10,
+      beforeZoom: async () => {
+        order.push('high')
+      }
+    }
+    const p3: SketchRulerPlugin = {
+      name: 'mid',
+      priority: 5,
+      beforeZoom: async () => {
+        order.push('mid')
+      }
+    }
 
     manager.register(p1)
     manager.register(p2)
@@ -182,7 +203,9 @@ describe('PluginManager', () => {
   it('should isolate errors in sync hooks', () => {
     const p1: SketchRulerPlugin = {
       name: 'thrower',
-      afterPan: () => { throw new Error('oops') }
+      afterPan: () => {
+        throw new Error('oops')
+      }
     }
     const p2: SketchRulerPlugin = {
       name: 'safe',
@@ -200,7 +223,9 @@ describe('PluginManager', () => {
   it('should isolate errors in async hooks', async () => {
     const p1: SketchRulerPlugin = {
       name: 'thrower',
-      beforeZoom: async () => { throw new Error('async oops') }
+      beforeZoom: async () => {
+        throw new Error('async oops')
+      }
     }
     const p2: SketchRulerPlugin = {
       name: 'safe',
@@ -210,7 +235,12 @@ describe('PluginManager', () => {
     manager.register(p1)
     manager.register(p2)
 
-    const allowed = await manager.beforeZoom({ from: 1, to: 2, center: { x: 0, y: 0 }, cancel: () => {} })
+    const allowed = await manager.beforeZoom({
+      from: 1,
+      to: 2,
+      center: { x: 0, y: 0 },
+      cancel: () => {}
+    })
     expect(allowed).toBe(true)
     expect(p2.beforeZoom).toHaveBeenCalledOnce()
   })
@@ -218,7 +248,10 @@ describe('PluginManager', () => {
   it('should clear all plugins and renderers', () => {
     const plugin: SketchRulerPlugin = {
       name: 'p1',
-      registerRenderer: () => ({ name: 'custom', renderer: { renderTicks: vi.fn(), renderLabels: vi.fn() } })
+      registerRenderer: () => ({
+        name: 'custom',
+        renderer: { renderTicks: vi.fn(), renderLabels: vi.fn() }
+      })
     }
     manager.register(plugin)
     manager.clear()
@@ -228,6 +261,8 @@ describe('PluginManager', () => {
 
   it('should throw if api not set when dispatching hooks', () => {
     const m = new PluginManager()
-    expect(() => m.afterPan({ offset: { x: 0, y: 0 }, delta: { x: 1, y: 1 } })).toThrow('[PluginManager] api not set')
+    expect(() => m.afterPan({ offset: { x: 0, y: 0 }, delta: { x: 1, y: 1 } })).toThrow(
+      '[PluginManager] api not set'
+    )
   })
 })

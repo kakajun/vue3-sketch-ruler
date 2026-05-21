@@ -23,8 +23,8 @@ import { TransformEngine } from '@sketch-ruler/core'
 const engine = new TransformEngine({ x: 0, y: 0, scale: 1 })
 
 const inputManager = new InputManager(engine, {
-  zoomStep: 0.25,           // 滚轮缩放步长
-  zoomMode: 'pointer',      // 'pointer' | 'viewport-center' | 'content-center'
+  zoomStep: 0.25, // 滚轮缩放步长
+  zoomMode: 'pointer', // 'pointer' | 'viewport-center' | 'content-center'
   viewportSize: { width: 1470, height: 700 },
   contentSize: { width: 1920, height: 1080 },
   onCursorChange: (cls) => {
@@ -69,9 +69,9 @@ renderer.render({
   height: 20,
   scale: 1,
   offset: 0,
-  vertical: false,          // false=水平标尺, true=垂直标尺
+  vertical: false, // false=水平标尺, true=垂直标尺
   thick: 20,
-  marks: scaleMarks,        // 由 core 的 computeScaleMarks 生成
+  marks: scaleMarks, // 由 core 的 computeScaleMarks 生成
   config: tickConfig,
   palette: {
     bgColor: '#f6f7f9',
@@ -178,16 +178,16 @@ kb.bind()
 
 ## API 概览
 
-| 导出 | 类型 | 说明 |
-|------|------|------|
-| `InputManager` | 类 | 统一输入管理（滚轮/拖拽/键盘） |
-| `MouseAdapter` | 类 | 鼠标事件封装（wheel/mousedown/mousemove/mouseup） |
-| `KeyboardAdapter` | 类 | 键盘快捷键封装 |
-| `normalizeWheel` | 函数 | 滚轮事件标准化 |
-| `getZoomDelta` | 函数 | 从标准化滚轮计算缩放增量 |
-| `Canvas2DRenderer` | 类 | Canvas 2D 标尺渲染器 |
-| `OffscreenRulerCache` | 类 | 离屏标尺缓存 |
-| `LabelCache` | 类 | 刻度标签缓存 |
+| 导出                  | 类型 | 说明                                              |
+| --------------------- | ---- | ------------------------------------------------- |
+| `InputManager`        | 类   | 统一输入管理（滚轮/拖拽/键盘）                    |
+| `MouseAdapter`        | 类   | 鼠标事件封装（wheel/mousedown/mousemove/mouseup） |
+| `KeyboardAdapter`     | 类   | 键盘快捷键封装                                    |
+| `normalizeWheel`      | 函数 | 滚轮事件标准化                                    |
+| `getZoomDelta`        | 函数 | 从标准化滚轮计算缩放增量                          |
+| `Canvas2DRenderer`    | 类   | Canvas 2D 标尺渲染器                              |
+| `OffscreenRulerCache` | 类   | 离屏标尺缓存                                      |
+| `LabelCache`          | 类   | 刻度标签缓存                                      |
 
 ## 与 @sketch-ruler/core 的配合
 

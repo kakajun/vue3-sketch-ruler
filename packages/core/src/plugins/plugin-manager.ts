@@ -104,11 +104,7 @@ export class PluginManager {
 
     for (const plugin of this.plugins) {
       if (plugin.beforeZoom) {
-        await this.safeCallAsync(
-          () => plugin.beforeZoom!(context),
-          plugin.name,
-          'beforeZoom'
-        )
+        await this.safeCallAsync(() => plugin.beforeZoom!(context), plugin.name, 'beforeZoom')
         if (cancelled) return false
       }
     }
@@ -133,11 +129,7 @@ export class PluginManager {
 
     for (const plugin of this.plugins) {
       if (plugin.beforePan) {
-        await this.safeCallAsync(
-          () => plugin.beforePan!(context),
-          plugin.name,
-          'beforePan'
-        )
+        await this.safeCallAsync(() => plugin.beforePan!(context), plugin.name, 'beforePan')
         if (cancelled) return false
       }
     }

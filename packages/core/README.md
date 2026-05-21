@@ -20,7 +20,7 @@ pnpm add @sketch-ruler/core
 import { TransformEngine } from '@sketch-ruler/core'
 
 const engine = new TransformEngine(
-  { x: 0, y: 0, scale: 1 },           // 初始状态
+  { x: 0, y: 0, scale: 1 }, // 初始状态
   { minZoom: 0.1, maxZoom: 10, enableAnimation: true, animationMode: 'ease-out' }
 )
 
@@ -42,8 +42,8 @@ engine.panBy(100, -50)
 engine.setTransform({ scale: 1, x: 0, y: 0 })
 
 // 坐标转换
-const world = engine.toWorldPoint(100, 100)   // 屏幕 → 世界
-const screen = engine.toScreenPoint(50, 50)   // 世界 → 屏幕
+const world = engine.toWorldPoint(100, 100) // 屏幕 → 世界
+const screen = engine.toScreenPoint(50, 50) // 世界 → 屏幕
 
 // 清理
 unsubscribe()
@@ -175,8 +175,14 @@ const style = computeLineStyle(guideLines[0], 1, 0, false, '#51d6a9')
 
 ```ts
 import {
-  createMatrix, fromTransform, multiply, invert, toCSSString,
-  toWorldPoint, toScreenPoint, fitRect
+  createMatrix,
+  fromTransform,
+  multiply,
+  invert,
+  toCSSString,
+  toWorldPoint,
+  toScreenPoint,
+  fitRect
 } from '@sketch-ruler/core'
 
 // 从变换状态生成矩阵
@@ -212,7 +218,7 @@ const stableConfig = applyHysteresis(0.85, getTickConfig(0.8), getTickConfig(1))
 ## API 概览
 
 | 模块 | 导出 | 说明 |
-|------|------|------|
+| --- | --- | --- |
 | `TransformEngine` | 类 | 2D 仿射变换引擎，支持动画 |
 | `CanvasManager` | 类 | 多画布生命周期管理 |
 | `BUILTIN_TEMPLATES` | 常量 | 内置画布模板（A4、Web 1920、Mobile 等） |

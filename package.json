@@ -31,8 +31,9 @@
     "lint": "oxlint --fix",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
-    "test": "pnpm --filter ./packages/sketch-ruler test",
+    "test": "pnpm --filter ./packages/core test && pnpm --filter ./packages/canvas test && pnpm --filter ./packages/sketch-ruler test",
     "changelog": "pnpm --filter ./packages/sketch-ruler changelog",
+    "prepare": "husky",
     "release": "pnpm build && node ./scripts/release.js"
   },
   "devDependencies": {

@@ -12,7 +12,12 @@ import type { KeyCombo } from './keyboard-adapter'
 export type ZoomMode = 'pointer' | 'viewport-center' | 'content-center'
 
 export interface ZoomInterceptor {
-  beforeZoom?: (from: number, to: number, originX: number, originY: number) => boolean | Promise<boolean>
+  beforeZoom?: (
+    from: number,
+    to: number,
+    originX: number,
+    originY: number
+  ) => boolean | Promise<boolean>
   afterZoom?: (from: number, to: number, originX: number, originY: number) => void
 }
 
@@ -184,7 +189,13 @@ export class InputManager {
           const toScale = currentScale * Math.exp((this.pendingWheelDelta * this.zoomStep) / 3)
           this.pendingWheelDelta = 0
 
-          this.executeZoom(() => this.engine.zoomTo(toScale, originX, originY), currentScale, toScale, originX, originY)
+          this.executeZoom(
+            () => this.engine.zoomTo(toScale, originX, originY),
+            currentScale,
+            toScale,
+            originX,
+            originY
+          )
         })
       }
     }
