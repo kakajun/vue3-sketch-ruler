@@ -2,7 +2,6 @@
   "route": {
     "basic": "基础示例",
     "comprehensive": "综合",
-    "comprehensive2": "综合(另外写法)",
     "customizeButtons": "自定义按键",
     "moveble": "moveble插件结合",
     "selecto": "Selecto测试",

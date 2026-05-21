@@ -1,6 +1,6 @@
 {
   "name": "root-doc",
-  "version": "2.2.2",
+  "version": "3.0.0-beta.0",
   "private": false,
   "license": "MIT",
   "author": "kakajun <253495832@qq.com>",
@@ -9,8 +9,10 @@
     "build": "vite build"
   },
   "devDependencies": {
-    "es-drager": "^1.3.2",
+    "es-drager": "^1.3.4",
     "framework-utils": "^1.1.0",
-    "vue3-sketch-ruler": "workspace:*"
+    "vue3-sketch-ruler": "workspace:*",
+    "@sketch-ruler/canvas": "workspace:*",
+    "@sketch-ruler/core": "workspace:*"
   }
 }

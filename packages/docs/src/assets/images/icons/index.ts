@@ -1,4 +1,4 @@
-export const svgs = import.meta.glob('./*.svg', { eager: true, as: 'raw' })
+export const svgs = import.meta.glob('./*.svg', { eager: true, query: '?raw', import: 'default' })
 export const IconProps = {
   name: String,
   color: String,

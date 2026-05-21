@@ -1,12 +1,9 @@
 <script>
 import Moveable from 'vue3-moveable'
 import Selecto from './edit/Selecto.vue'
-import { ref, reactive, computed, onMounted } from 'vue'
-import Panzoom from 'simple-panzoom'
-import SketchRule from 'vue3-sketch-ruler'
-import 'vue3-sketch-ruler/lib/style.css'
+import { ref, reactive, computed } from 'vue'
 export default {
-  components: { Moveable, Selecto, SketchRule },
+  components: { Moveable, Selecto },
   setup() {
     const hitRate = 0
     const selectByClick = true
@@ -24,31 +21,6 @@ export default {
       scale: 1,
       isBlack: false
     })
-    // 更多配置,参见 https://github.com/timmywil/panzoom
-    const panzoomOption = {
-      noBind: true,
-      maxScale: 3,
-      minScale: 0.3,
-      disablePan: true,
-      disableZoom: false,
-      contain: 'none', // 'inside' | 'outside' | 'none'
-      handleStartEvent: (event) => {
-        event.preventDefault()
-        console.log('handleStartEvent', event)
-      }
-    }
-    let panzoom
-    onMounted(() => {
-      // 放开就会有问题
-      // const dom = document.querySelector('.moveable')
-      // panzoom = Panzoom(dom, panzoomOption)
-    })
-
-    const zoom = () => {
-      console.log('444')
-
-      panzoom.zoomIn()
-    }
 
     const cpuPalette = computed(() => {
       return state.isBlack
@@ -56,16 +28,16 @@ export default {
             bgColor: 'transparent',
             hoverBg: '#fff',
             hoverColor: '#000',
-            longfgColor: '#BABBBC', // ruler longer mark color
-            fontColor: '#DEDEDE', // ruler font color
-            shadowColor: '#525252', // ruler shadow color
-            lineColor: '#51d6a9',
+            tickColor: '#BABBBC',
+            labelColor: '#DEDEDE',
+            shadowColor: '#525252',
+            guideLineColor: '#51d6a9',
             borderColor: '#B5B5B5'
           }
         : {
             bgColor: 'transparent',
-            lineColor: '#51d6a9',
-            lineType: 'dashed'
+            guideLineColor: '#51d6a9',
+            guideLineStyle: 'dashed'
           }
     })
 
@@ -114,7 +86,6 @@ export default {
         width: 0,
         height: 0
       },
-      panzoomOption: panzoomOption,
       isShowReferLine: true,
       lines: {
         h: [0, 250],
@@ -122,7 +93,6 @@ export default {
       }
     })
     return {
-      zoom,
       moveableRef,
       post,
       state,
@@ -145,7 +115,6 @@ export default {
 }
 </script>
 <template>
-  <button @click="zoom">缩小</button>
   <div class="moveable app">
     <div class="container" style="transform: scale(1)">
       <div id="logo" class="logo logos">
@@ -157,12 +126,7 @@ export default {
         </a>
       </div>
       <h1>Change the Moveable targets by selecting it.</h1>
-      <p class="description">
-        此例子存在意义是,Selecto不能和pzoom共存, 这到不是pazoom的问题,问题出在,
-        Select的定位是fixed,如果父级标签有transform, 那么fixed就会相对于它, 目前看上去是正常的,
-        但只要把我注释的style="transform: scale(1)",加入到下面
-        container中,那么马上Slectro选择框定位就不准了
-      </p>
+      <p class="description"> 此例子展示 Selecto 与 Moveable 的协同使用 </p>
       <Moveable
         ref="moveableRef"
         :target="targets"

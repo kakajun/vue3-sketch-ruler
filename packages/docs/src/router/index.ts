@@ -9,24 +9,10 @@ export const menuRoutes: RouteRecordRaw[] = [
     }
   },
   {
-    path: 'basic2',
-    component: () => import('../examples/basic2.vue'),
-    meta: {
-      title: 'basic'
-    }
-  },
-  {
     path: 'comprehensive',
     component: () => import('../examples/comprehensive.vue'),
     meta: {
       title: 'comprehensive'
-    }
-  },
-  {
-    path: 'comprehensive2',
-    component: () => import('../examples/comprehensive2.vue'),
-    meta: {
-      title: 'comprehensive2'
     }
   },
   {

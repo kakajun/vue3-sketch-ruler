@@ -1,6 +1,6 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "2.4.1",
+  "version": "3.0.0",
   "private": false,
   "keywords": [
     "panzoom",
@@ -22,22 +22,52 @@
     "url": "git+https://github.com/kakajun/vue3-sketch-ruler.git"
   },
   "style": "lib/style.css",
+  "bin": {
+    "vue3-sketch-ruler-migrate": "./bin/migrate.js"
+  },
   "files": [
     "lib",
-    "src",
+    "bin",
     "AGENTS.md"
   ],
   "type": "module",
   "sideEffects": false,
   "main": "lib/index.js",
+  "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
+      "development": "./src/index.ts",
       "import": "./lib/index.js",
-      "require": "./lib/index.umd.cjs"
+      "require": "./lib/index.cjs"
     },
-    "./lib/style.css": "./lib/style.css"
+    "./style.css": "./lib/style.css",
+    "./lib/style.css": "./lib/style.css",
+    "./engine": {
+      "development": "./src/index.ts",
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs"
+    },
+    "./composables": {
+      "development": "./src/index.ts",
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs"
+    },
+    "./renderers": {
+      "development": "./src/index.ts",
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs"
+    },
+    "./plugins": {
+      "development": "./src/index.ts",
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs"
+    }
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
@@ -49,15 +79,13 @@
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "release": "release-it"
   },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.1",
-    "@vue/test-utils": "^2.4.6",
-    "simple-panzoom": "workspace:*",
-    "vitest": "^4.0.1"
+  "dependencies": {
+    "@sketch-ruler/canvas": "workspace:*",
+    "@sketch-ruler/core": "workspace:*"
   },
-  "main1": "src/index.ts",
-  "repository2": {
-    "type": "gitee",
-    "url": "https://gitee.com/majun2232/vue3-sketch-Ruler"
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.7",
+    "@vue/test-utils": "^2.4.10",
+    "vitest": "^4.1.6"
   }
 }

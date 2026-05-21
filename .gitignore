@@ -1,14 +1,9 @@
 node_modules
 .DS_Store
 dist
-dist-ssr
 *.local
 /dist*
-*-lock.*
 pnpm-debug
 types
-auto-*.d.ts
-codeAndPrompt.md
 lib
-.idea
-.history
+pnpm-lock.yaml
