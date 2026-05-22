@@ -1,6 +1,7 @@
 {
   "route": {
     "basic": "基础示例",
+    "basic2": "基础示例2",
     "comprehensive": "综合",
     "customizeButtons": "自定义按键",
     "moveble": "moveble插件结合",

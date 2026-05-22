@@ -173,6 +173,13 @@ export class TransformEngine {
     return new Float64Array(this.matrix)
   }
 
+  /** 设置动画模式 */
+  setAnimationMode(mode: AnimationMode): void {
+    this.animationMode = mode
+    this.lastFrameTime = 0
+    this.velocity = { x: 0, y: 0, scale: 0 }
+  }
+
   /** 销毁引擎，清理资源 */
   destroy(): void {
     if (this.rafId !== null) {

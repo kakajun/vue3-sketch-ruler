@@ -87,7 +87,7 @@ import { markRaw } from 'vue'
 import { useCanvasTransform } from '../composables/useCanvasTransform'
 import { InputManager } from '@sketch-ruler/canvas'
 import { RulerContextKey } from '../state/ruler-context'
-import { importLines, exportLines, generateLineId } from '@sketch-ruler/core'
+import { importLines, generateLineId } from '@sketch-ruler/core'
 import type { GuideLine, RulerContext, RulerPalette } from '../state/ruler-context'
 
 import RulerWrapperV3 from './RulerWrapperV3.vue'
@@ -204,6 +204,15 @@ watch(
   () => props.zoomMode,
   (mode) => {
     inputManager?.setZoomMode(mode)
+  }
+)
+
+watch(
+  () => props.animationMode,
+  (mode) => {
+    if (mode) {
+      engine.setAnimationMode(mode)
+    }
   }
 )
 

@@ -4,7 +4,7 @@
  * 支持 v-model:scale / v-model:offset 双向绑定
  */
 
-import { ref, shallowRef, readonly, watch, type Ref, type DeepReadonly } from 'vue'
+import { ref, shallowRef, watch, type Ref } from 'vue'
 import {
   TransformEngine,
   type TransformState,
@@ -31,7 +31,7 @@ export interface CanvasTransformOptions {
 
 export interface UseCanvasTransformReturn {
   scale: Ref<number>
-  offset: DeepReadonly<Ref<{ x: number; y: number }>>
+  offset: Ref<{ x: number; y: number }>
   engine: TransformEngine
   setTransform: (t: Partial<TransformState>) => void
   panBy: (dx: number, dy: number) => void
@@ -147,7 +147,7 @@ export function useCanvasTransform(options: CanvasTransformOptions = {}): UseCan
 
   return {
     scale,
-    offset: readonly(offset) as DeepReadonly<Ref<{ x: number; y: number }>>,
+    offset,
     engine,
     setTransform,
     panBy,

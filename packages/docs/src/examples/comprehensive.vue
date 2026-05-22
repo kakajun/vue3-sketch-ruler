@@ -23,6 +23,12 @@
         {{ zoomMode === 'pointer' ? '鼠标' : zoomMode === 'viewport-center' ? '视口' : '内容' }}
       </button>
       <button class="mr10 font16" @click="changeShadow">模拟阴影切换</button>
+      <select v-model="animationMode" class="mr10 font16">
+        <option value="ease-out">ease-out</option>
+        <option value="damped">damped</option>
+        <option value="exponential">exponential</option>
+        <option value="direct">direct</option>
+      </select>
       <button class="mr10 font16" @click.stop="resetMethod">还原</button>
       <button class="mr10 font16" @click.stop="zoomOutMethod">缩小</button>
       <span class="mr10 font16">步长:{{ post.zoomStep }}</span>
@@ -78,7 +84,7 @@
         :lines="post.lines"
         :shadow="post.shadow"
         :enable-animation="true"
-        animation-mode="ease-out"
+        :animation-mode="animationMode"
         :zoom-mode="zoomMode"
         :zoom-step="post.zoomStep"
         :min-zoom="post.minZoom"
@@ -134,6 +140,7 @@ const store = useAppStore()
 const sketchRef = ref()
 const lockLine = ref(false)
 const zoomMode = ref<'pointer' | 'viewport-center' | 'content-center'>('pointer')
+const animationMode = ref<'ease-out' | 'damped' | 'exponential' | 'direct'>('ease-out')
 
 // ===================== 插件系统示例 =====================
 
