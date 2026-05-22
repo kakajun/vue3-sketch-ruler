@@ -5,7 +5,7 @@
       :class="[!store.isLight ? 'blackwrapper' : 'whitewrapper']"
       :style="rectStyle"
     >
-      <SketchRuler ref="sketchruleRef" v-model:scale="post.scale" v-bind="post">
+      <SketchRuler ref="sketchruleRef" v-model:scale="scale" v-bind="post">
         <template #default>
           <div ref="dragParentRef" data-type="page" :style="canvasStyle">
             <Drager
@@ -13,22 +13,25 @@
               v-bind="item"
               :key="item.id"
               snap
-              :scale-ratio="post.scale"
+              :scale-ratio="scale"
               class="dragerItem"
               :snap-threshold="10"
               markline
               :extra-lines="extraLines"
               @change="onChange($event, item)"
+              @drag-start="onDragStart(item)"
             >
-              <component :is="item.component">{{ item.text }}</component>
+              <div @mousedown="onSelect(item)">
+                <component :is="item.component">{{ item.text }}</component>
+              </div>
             </Drager>
           </div>
         </template>
-        <template #toolbar="{ tools, state }">
+        <template #toolbar="{ tools }">
           <div class="btns">
-            <button @click.stop="reset">还原</button>
-            <button @click.stop="zoomIn">放大</button>
-            <button @click.stop="zoomOut">缩小</button>
+            <button @click.stop="tools.reset">还原</button>
+            <button @click.stop="tools.zoomIn">放大</button>
+            <button @click.stop="tools.zoomOut">缩小</button>
           </div>
         </template>
       </SketchRuler>
@@ -36,7 +39,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, ref, reactive, CSSProperties, nextTick } from 'vue'
+import { computed, ref, reactive, CSSProperties } from 'vue'
 import { SketchRuler } from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
 import Drager, { DragData } from 'es-drager'
@@ -44,8 +47,8 @@ import { useAppStore } from '@/store/app'
 const store = useAppStore()
 const sketchruleRef = ref()
 const dragParentRef = ref<HTMLElement>()
+const scale = ref(1)
 const post = reactive<any>({
-  scale: 1,
   thick: 20,
   width: 1470,
   height: 700,
@@ -119,44 +122,53 @@ const canvasStyle = computed<CSSProperties>(() => {
   }
 })
 
+const activeId = ref<string>('')
+
+// 拖拽开始时的快照（仿 moveble.vue）
+const copyList = ref<ComponentType[]>([])
+
+const setShadow = (item: ComponentType) => {
+  post.shadow = {
+    x: item.left ?? 0,
+    y: item.top ?? 0,
+    width: item.width ?? 0,
+    height: item.height ?? 0
+  }
+}
+
+const onSelect = (item: ComponentType) => {
+  activeId.value = item.id!
+  setShadow(item)
+}
+
+const onDragStart = (item: ComponentType) => {
+  copyList.value = JSON.parse(JSON.stringify(data.value.componentList))
+}
+
 const onChange = (dragData: DragData, item: any): void => {
-  nextTick(() => {
-    post.shadow = {
-      x: item.left,
-      y: item.top,
-      width: item.width,
-      height: item.height
-    }
-  })
-  Object.keys(dragData).forEach((key) => {
-    ;(item as any)[key] = dragData[key as keyof DragData]
-  })
+  const original = copyList.value.find((o) => o.id === item.id)
+
+  // 只更新有效值，避免 es-drager 在纵轴返回异常值导致覆盖错误
+  if (typeof dragData.left === 'number') item.left = dragData.left
+  if (typeof dragData.top === 'number') item.top = dragData.top
+  if (typeof dragData.width === 'number') item.width = dragData.width
+  if (typeof dragData.height === 'number') item.height = dragData.height
+  if (typeof dragData.angle === 'number') item.angle = dragData.angle
+
+  // 如果 es-drager 传出的值异常（如 top 变成 0 或 undefined），用快照兜底
+  if (original) {
+    if (item.left == null || Number.isNaN(item.left)) item.left = original.left
+    if (item.top == null || Number.isNaN(item.top)) item.top = original.top
+    if (item.width == null || Number.isNaN(item.width)) item.width = original.width
+    if (item.height == null || Number.isNaN(item.height)) item.height = original.height
+  }
+
+  setShadow(item)
 }
 
 const extraLines = (targetRect: DOMRect): Element[] => {
   // 可以返回dom元素列表
   return Array.from(document.querySelectorAll('.sketch-ruler .lines .line'))
-  // 也可以根据 targetRect 显示位置
-  // const pRect = dragParentRef.value!.getBoundingClientRect()
-  // const hLines = post.lines.h.reduce((arr: any[], item: number) => {
-  //   const hTop = pRect.top / post.scale + item
-  //   // 顶部对齐
-  //   arr.push({ showTop: hTop, top: hTop })
-  //   // 底部对齐
-  //   arr.push({ showTop: hTop, top: hTop - targetRect.height })
-  //   return arr
-  // }, [])
-
-  // const vLines = post.lines.v.reduce((arr: any[], item: number) => {
-  //   const vLeft = pRect.left / post.scale + item
-  //   // 顶部对齐
-  //   arr.push({ showLeft: vLeft, left: vLeft })
-  //   // 底部对齐
-  //   arr.push({ showLeft: vLeft, left: vLeft - targetRect.width })
-  //   return arr
-  // }, [])
-
-  // return hLines.concat(vLines)
 }
 </script>
 
