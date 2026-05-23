@@ -76,7 +76,16 @@ async function main() {
 
   try {
     for (const pkg of packages) {
-      await publishPackage(pkg, targetVersion)
+      const { publish } = await prompt({
+        type: 'confirm',
+        name: 'publish',
+        message: `Publish ${pkg}?`
+      })
+      if (publish) {
+        await publishPackage(pkg, targetVersion)
+      } else {
+        console.log(chalk.yellow(`Skipping ${pkg}`))
+      }
     }
   } finally {
     // 无论发布成功还是失败，都把依赖恢复为 workspace:*
