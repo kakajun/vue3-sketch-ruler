@@ -52,13 +52,6 @@ export const menuRoutes: RouteRecordRaw[] = [
     }
   },
   {
-    path: 'esDragle',
-    component: () => import('@/examples/esDragle.vue'),
-    meta: {
-      title: 'esDragle'
-    }
-  },
-  {
     path: 'bigscreen',
     component: () => import('@/examples/bigscreen/bigscreen.vue'),
     meta: {

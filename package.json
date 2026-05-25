@@ -25,7 +25,6 @@
     "d": "pnpm --filter ./packages/docs dev",
     "build": "pnpm --filter ./packages/core build && pnpm --filter ./packages/canvas build && pnpm --filter ./packages/sketch-ruler build",
     "build:demo": "pnpm build && pnpm --filter ./packages/docs build",
-    "precommit": "lint-staged",
     "clean": "rimraf node_modules && rimraf ./packages/**/node_modules",
     "lint:check": "oxlint",
     "lint": "oxlint --fix",
@@ -33,7 +32,6 @@
     "fmt:check": "oxfmt --check",
     "test": "pnpm --filter ./packages/core test && pnpm --filter ./packages/canvas test && pnpm --filter ./packages/sketch-ruler test",
     "changelog": "pnpm --filter ./packages/sketch-ruler changelog",
-    "prepare": "husky",
     "release": "pnpm build && node ./scripts/release.js"
   },
   "devDependencies": {
@@ -54,9 +52,7 @@
     "gh-pages": "^6.3.0",
     "globals": "^17.6.0",
     "highlight.js": "^11.11.1",
-    "husky": "^9.1.7",
     "jsdom": "^29.1.1",
-    "lint-staged": "^17.0.5",
     "lodash": "^4.18.1",
     "minimist": "^1.2.8",
     "oxfmt": "^0.50.0",
@@ -80,12 +76,6 @@
     "vue-tsc": "^3.2.9",
     "vue3-moveable": "^0.28.0",
     "vue3-sketch-ruler": "workspace:*"
-  },
-  "lint-staged": {
-    "*.{js,ts,mjs,cjs,vue}": [
-      "oxlint --fix",
-      "oxfmt"
-    ]
   },
   "pnpm": {
     "overrides": {

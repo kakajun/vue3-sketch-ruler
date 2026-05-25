@@ -34,7 +34,6 @@
 | Vue 测试   | `@vue/test-utils`                                           |
 | 代码检查   | oxlint 1.64+                                                |
 | 代码格式化 | oxfmt 0.49+                                                 |
-| Git Hooks  | husky + lint-staged（当前 hook 文件为弃用占位，未实际启用） |
 | 文档站点   | Vite + Vue 3 SPA（位于 `packages/docs`）                    |
 
 ---
@@ -163,18 +162,6 @@ cd packages/canvas && pnpm test
   - 单引号 (`singleQuote: true`)
   - 无尾随逗号 (`trailingComma: none`)
   - 箭头函数始终加括号 (`arrowParens: always`)
-
-### 提交前自动格式化
-
-根目录 `package.json` 中配置了 `lint-staged`：
-
-```json
-"lint-staged": {
-  "*.{js,ts,mjs,cjs,vue}": ["oxlint --fix", "oxfmt"]
-}
-```
-
-> 注意：当前仓库中没有 `stylelint` 配置文件，且 `.husky` 目录下的 hook 脚本为 husky v9 弃用占位，实际预提交钩子**未生效**。
 
 ---
 
