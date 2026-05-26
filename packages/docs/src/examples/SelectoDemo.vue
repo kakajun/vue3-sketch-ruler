@@ -1,9 +1,11 @@
 <script>
 import Moveable from 'vue3-moveable'
 import Selecto from './edit/Selecto.vue'
+import { SketchRuler } from 'vue3-sketch-ruler'
+import 'vue3-sketch-ruler/lib/style.css'
 import { ref, reactive, computed } from 'vue'
 export default {
-  components: { Moveable, Selecto },
+  components: { Moveable, Selecto, SketchRuler },
   setup() {
     const hitRate = 0
     const selectByClick = true
@@ -17,6 +19,7 @@ export default {
     const targets = ref([])
     const moveableRef = ref(null)
     const selectoRef = ref(null)
+    const sketchruleRef = ref(null)
     const state = reactive({
       scale: 1,
       isBlack: false
@@ -74,9 +77,9 @@ export default {
     const post = reactive({
       thick: 20,
       width: 770,
-      height: 400,
+      height: 600,
       canvasWidth: 600,
-      canvasHeight: 400,
+      canvasHeight: 600,
       showRuler: true,
       palette: cpuPalette.value,
       snapsObj: { h: [], v: [] },
@@ -92,6 +95,21 @@ export default {
         v: [0, 500]
       }
     })
+
+    const rectStyle = computed(() => {
+      return {
+        width: `${post.width}px`,
+        height: `${post.height}px`
+      }
+    })
+
+    const canvasStyle = computed(() => {
+      return {
+        width: `${post.canvasWidth}px`,
+        height: `${post.canvasHeight}px`
+      }
+    })
+
     return {
       moveableRef,
       post,
@@ -109,48 +127,61 @@ export default {
       window,
       onDragStart,
       onSelectEnd,
-      cubes
+      cubes,
+      sketchruleRef,
+      rectStyle,
+      canvasStyle
     }
   }
 }
 </script>
 <template>
   <div class="moveable app">
-    <div class="container" style="transform: scale(1)">
-      <div id="logo" class="logo logos">
-        <a>
-          <img src="https://daybrush.com/selecto/images/256x256.png" class="selecto" />
-        </a>
-        <a>
-          <img src="https://daybrush.com/moveable/images/256x256.png" />
-        </a>
-      </div>
-      <h1>Change the Moveable targets by selecting it.</h1>
-      <p class="description"> 此例子展示 Selecto 与 Moveable 的协同使用 </p>
-      <Moveable
-        ref="moveableRef"
-        :target="targets"
-        :draggable="true"
-        @click-group="onClickGroup"
-        @render="onRender"
-        @render-group="onRenderGroup"
-      />
-      <Selecto
-        ref="selectoRef"
-        :drag-container="'.elements'"
-        :selectable-targets="['.target']"
-        :hit-rate="hitRate"
-        :select-by-click="selectByClick"
-        :select-from-inside="selectFromInside"
-        :toggle-continue-select="toggleContinueSelect"
-        :ratio="ratio"
-        :key-container="window"
-        @drag-start="onDragStart"
-        @select-end="onSelectEnd"
-      />
-      <div ref="elem" class="elements selecto-area">
-        <div v-for="i in cubes" :key="i" class="cube target"></div>
-      </div>
+    <h1>Change the Moveable targets by selecting it.</h1>
+    <p class="description">
+      这是一个失败的例子, 此例子展示 Selecto 与 vue3-sketch-ruler 共存会有问题,
+      因为vue3-sketch-ruler 依赖transform 跟 Selecto 天然不能共存
+    </p>
+    <div class="wrapper whitewrapper" :style="rectStyle">
+      <SketchRuler ref="sketchruleRef" v-bind="post">
+        <template #default>
+          <div data-type="page" :style="canvasStyle">
+            <div class="container">
+              <Moveable
+                ref="moveableRef"
+                :target="targets"
+                :draggable="true"
+                @click-group="onClickGroup"
+                @render="onRender"
+                @render-group="onRenderGroup"
+              />
+              <Selecto
+                ref="selectoRef"
+                :drag-container="'.elements'"
+                :selectable-targets="['.target']"
+                :hit-rate="hitRate"
+                :select-by-click="selectByClick"
+                :select-from-inside="selectFromInside"
+                :toggle-continue-select="toggleContinueSelect"
+                :ratio="ratio"
+                :key-container="window"
+                @drag-start="onDragStart"
+                @select-end="onSelectEnd"
+              />
+              <div ref="elem" class="elements selecto-area">
+                <div v-for="i in cubes" :key="i" class="cube target"></div>
+              </div>
+            </div>
+          </div>
+        </template>
+        <template #toolbar="{ tools, state }">
+          <div class="btns">
+            <button @click.stop="tools.reset">还原</button>
+            <button @click.stop="tools.zoomIn">放大</button>
+            <button @click.stop="tools.zoomOut">缩小</button>
+          </div>
+        </template>
+      </SketchRuler>
     </div>
   </div>
 </template>
@@ -249,7 +280,10 @@ h1,
 #selecto1 .cube {
   transition: all ease 0.2s;
 }
-
+.moveable {
+  display: flex;
+  flex-direction: column;
+}
 .moveable #selecto1 .cube {
   transition: none;
 }
@@ -314,5 +348,26 @@ h1,
   stroke: #333;
   stroke-width: 2;
   fill: transparent;
+}
+
+.wrapper {
+  margin: 0 auto;
+  background-size:
+    21px 21px,
+    21px 21px;
+  border: 1px solid #dadadc;
+}
+.whitewrapper {
+  background-color: #fafafc;
+  background-image:
+    linear-gradient(#fafafc 20px, transparent 0),
+    linear-gradient(90deg, transparent 20px, #373739 0);
+}
+.btns {
+  position: absolute;
+  display: flex;
+  bottom: 20px;
+  right: 40px;
+  z-index: 999;
 }
 </style>
