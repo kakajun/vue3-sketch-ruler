@@ -87,8 +87,8 @@ import { markRaw } from 'vue'
 import { useCanvasTransform } from '../composables/useCanvasTransform'
 import { InputManager } from '@sketch-ruler/canvas'
 import { RulerContextKey } from '../state/ruler-context'
-import { importLines, generateLineId } from '@sketch-ruler/core'
-import type { GuideLine, RulerContext, RulerPalette } from '../state/ruler-context'
+import { importLines, generateLineId, getZoomOrigin } from '@sketch-ruler/core'
+import type { GuideLine, RulerContext, RulerPalette, ZoomMode } from '../state/ruler-context'
 
 import RulerWrapperV3 from './RulerWrapperV3.vue'
 import { PluginManager } from '@sketch-ruler/core'
@@ -115,7 +115,7 @@ export interface SketchRulerProps {
   /** 动画模式：direct | ease-out | damped | exponential */
   animationMode?: 'direct' | 'ease-out' | 'damped' | 'exponential'
   /** 缩放原点模式：pointer | viewport-center | content-center */
-  zoomMode?: 'pointer' | 'viewport-center' | 'content-center'
+  zoomMode?: ZoomMode
   /** 是否启用平滑动画 */
   enableAnimation?: boolean
   /** 插件列表 */
@@ -195,31 +195,15 @@ watch(
   () => props.scale,
   (newScale) => {
     if (newScale !== undefined && Math.abs(newScale - scale.value) > 1e-10) {
-      let originX = rectWidth.value / 2
-      let originY = rectHeight.value / 2
-      const currentScale = scale.value
+      const origin = getZoomOrigin({
+        mode: props.zoomMode,
+        viewportSize: { width: rectWidth.value, height: rectHeight.value },
+        contentSize: { width: props.canvasWidth, height: props.canvasHeight },
+        offset: { x: offset.value.x, y: offset.value.y },
+        scale: scale.value
+      })
 
-      switch (props.zoomMode) {
-        case 'viewport-center': {
-          originX = rectWidth.value / 2
-          originY = rectHeight.value / 2
-          break
-        }
-        case 'content-center': {
-          originX = offset.value.x + (props.canvasWidth * currentScale) / 2
-          originY = offset.value.y + (props.canvasHeight * currentScale) / 2
-          break
-        }
-        case 'pointer':
-        default: {
-          // 外部直接修改 scale 无鼠标事件，回退到视口中心
-          originX = rectWidth.value / 2
-          originY = rectHeight.value / 2
-          break
-        }
-      }
-
-      engine.zoomTo(newScale, originX, originY)
+      engine.zoomTo(newScale, origin.x, origin.y)
     }
   }
 )
@@ -565,14 +549,14 @@ const cornerStyle = computed(() => ({
 }))
 
 // === 方法 ===
-const getZoomOrigin = (): { x: number; y: number } => {
+const getPointerOrigin = (): { x: number; y: number } => {
   const parent = canvasRef.value?.parentElement
   const rect = parent ? parent.getBoundingClientRect() : new DOMRect(0, 0, 0, 0)
   return { x: rect.width / 2, y: rect.height / 2 }
 }
 
 const zoomIn = async (): Promise<void> => {
-  const { x: cx, y: cy } = getZoomOrigin()
+  const { x: cx, y: cy } = getPointerOrigin()
   const from = scale.value
   const to = from + props.zoomStep
   const allowed = await pluginManager.beforeZoom({
@@ -588,7 +572,7 @@ const zoomIn = async (): Promise<void> => {
 }
 
 const zoomOut = async (): Promise<void> => {
-  const { x: cx, y: cy } = getZoomOrigin()
+  const { x: cx, y: cy } = getPointerOrigin()
   const from = scale.value
   const to = from - props.zoomStep
   const allowed = await pluginManager.beforeZoom({
@@ -615,7 +599,7 @@ const toolbarState = computed(() => ({
   showReferLine: showReferLine.value
 }))
 
-const setZoomMode = (mode: 'pointer' | 'viewport-center' | 'content-center'): void => {
+const setZoomMode = (mode: ZoomMode): void => {
   if (inputManager) {
     inputManager.setZoomMode(mode)
   }
@@ -625,7 +609,7 @@ const ZOOM_PRESETS = [0.1, 0.25, 0.33, 0.5, 0.66, 1, 1.5, 2, 3, 4, 6, 8, 16]
 
 const zoomToPreset = async (preset: number): Promise<void> => {
   const target = ZOOM_PRESETS.find((p) => p >= preset) ?? ZOOM_PRESETS[ZOOM_PRESETS.length - 1]
-  const { x: cx, y: cy } = getZoomOrigin()
+  const { x: cx, y: cy } = getPointerOrigin()
   const from = scale.value
   const allowed = await pluginManager.beforeZoom({
     from,

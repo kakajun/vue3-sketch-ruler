@@ -5,6 +5,7 @@
  */
 
 import type { Matrix6 } from './matrix'
+import type { ZoomMode } from '../types'
 
 export interface Point {
   x: number
@@ -59,6 +60,45 @@ export function batchToWorld(matrix: Matrix6, points: Point[]): Point[] {
  */
 export function batchToScreen(matrix: Matrix6, points: Point[]): Point[] {
   return points.map((p) => toScreenPoint(matrix, p.x, p.y))
+}
+
+/**
+ * 根据 zoomMode 计算缩放原点
+ * @param options.mode 缩放模式
+ * @param options.viewportSize 视口尺寸
+ * @param options.contentSize 内容尺寸
+ * @param options.offset 当前画布偏移
+ * @param options.scale 当前缩放值
+ * @param options.pointerPosition 指针位置（pointer 模式使用）
+ */
+export function getZoomOrigin(options: {
+  mode: ZoomMode
+  viewportSize: { width: number; height: number }
+  contentSize: { width: number; height: number }
+  offset: { x: number; y: number }
+  scale: number
+  pointerPosition?: { x: number; y: number }
+}): Point {
+  const { mode, viewportSize, contentSize, offset, scale, pointerPosition } = options
+
+  switch (mode) {
+    case 'viewport-center': {
+      return { x: viewportSize.width / 2, y: viewportSize.height / 2 }
+    }
+    case 'content-center': {
+      return {
+        x: offset.x + (contentSize.width * scale) / 2,
+        y: offset.y + (contentSize.height * scale) / 2
+      }
+    }
+    case 'pointer':
+    default: {
+      if (pointerPosition) {
+        return { x: pointerPosition.x, y: pointerPosition.y }
+      }
+      return { x: viewportSize.width / 2, y: viewportSize.height / 2 }
+    }
+  }
 }
 
 /**

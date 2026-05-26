@@ -4,12 +4,11 @@
  * 底层事件由 MouseAdapter 封装，滚轮标准化由 WheelNormalizer 处理
  */
 
-import type { TransformEngine } from '@sketch-ruler/core'
+import { getZoomOrigin, type TransformEngine, type ZoomMode } from '@sketch-ruler/core'
 import { MouseAdapter, type MouseAdapterCallbacks } from './mouse-adapter'
 import { KeyboardAdapter } from './keyboard-adapter'
 import type { KeyCombo } from './keyboard-adapter'
 
-export type ZoomMode = 'pointer' | 'viewport-center' | 'content-center'
 
 export interface ZoomInterceptor {
   beforeZoom?: (
@@ -152,28 +151,17 @@ export class InputManager {
       const parent = this.container?.parentElement
       const rect = parent ? parent.getBoundingClientRect() : new DOMRect(0, 0, 0, 0)
 
-      let originX: number
-      let originY: number
-
-      switch (this.zoomMode) {
-        case 'viewport-center': {
-          originX = this.viewportSize.width / 2
-          originY = this.viewportSize.height / 2
-          break
-        }
-        case 'content-center': {
-          const s = this.engine.getState()
-          originX = s.x + (this.contentSize.width * s.scale) / 2
-          originY = s.y + (this.contentSize.height * s.scale) / 2
-          break
-        }
-        case 'pointer':
-        default: {
-          originX = e.clientX - rect.left
-          originY = e.clientY - rect.top
-          break
-        }
-      }
+      const s = this.engine.getState()
+      const origin = getZoomOrigin({
+        mode: this.zoomMode,
+        viewportSize: this.viewportSize,
+        contentSize: this.contentSize,
+        offset: { x: s.x, y: s.y },
+        scale: s.scale,
+        pointerPosition: { x: e.clientX - rect.left, y: e.clientY - rect.top }
+      })
+      const originX = origin.x
+      const originY = origin.y
 
       // 滚轮缩放采用 rAF 累积器模式：一帧内所有滚轮事件只处理一次
       // 这样既不会丢弃事件，又能避免高频事件导致缩放过快，同时保证丝滑

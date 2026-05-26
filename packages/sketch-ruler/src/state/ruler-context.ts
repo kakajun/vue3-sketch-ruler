@@ -10,7 +10,7 @@ import type { ScaleMark } from '@sketch-ruler/core'
 import type { GuideLine, RulerPalette, SnapConfig } from '@sketch-ruler/core'
 
 // 重新导出纯类型，保持现有文件的引用兼容性
-export type { GuideLine, RulerPalette, SnapConfig } from '@sketch-ruler/core'
+export type { GuideLine, RulerPalette, SnapConfig, ZoomMode } from '@sketch-ruler/core'
 
 export interface RulerContext {
   scale: Ref<number>

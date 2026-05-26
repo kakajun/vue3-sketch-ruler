@@ -19,7 +19,8 @@ export type {
   RulerRenderer,
   SketchRulerPlugin,
   PluginApi,
-  PluginContext
+  PluginContext,
+  ZoomMode
 } from './types'
 
 // 引擎层
@@ -39,7 +40,8 @@ export {
   toScreenPoint,
   batchToWorld,
   batchToScreen,
-  fitRect
+  fitRect,
+  getZoomOrigin
 } from './engine/coordinate'
 export type { Point as CoordinatePoint, Rect } from './engine/coordinate'
 

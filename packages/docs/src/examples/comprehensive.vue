@@ -130,6 +130,7 @@
 </template>
 <script setup lang="ts">
 import { SketchRuler, Minimap, definePlugin } from 'vue3-sketch-ruler'
+import type { ZoomMode } from 'vue3-sketch-ruler'
 import type { PaletteType } from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
 import bgImg from '../assets/bg.png'
@@ -139,7 +140,7 @@ import { useAppStore } from '@/store/app'
 const store = useAppStore()
 const sketchRef = ref()
 const lockLine = ref(false)
-const zoomMode = ref<'pointer' | 'viewport-center' | 'content-center'>('pointer')
+const zoomMode = ref<ZoomMode>('pointer')
 const animationMode = ref<'ease-out' | 'damped' | 'exponential' | 'direct'>('ease-out')
 
 // ===================== 插件系统示例 =====================
@@ -206,7 +207,7 @@ const stateWatcherPlugin = definePlugin(() => ({
 const plugins = [logPlugin(), lineEventPlugin(), zoomLimitPlugin(), stateWatcherPlugin()]
 
 const toggleZoomMode = () => {
-  const modes: Array<'pointer' | 'viewport-center' | 'content-center'> = [
+  const modes: Array<ZoomMode> = [
     'pointer',
     'viewport-center',
     'content-center'

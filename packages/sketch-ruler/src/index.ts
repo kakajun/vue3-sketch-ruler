@@ -25,7 +25,8 @@ export type {
   SketchRulerPlugin,
   RulerRenderer,
   RulerState,
-  RulerAction
+  RulerAction,
+  ZoomMode
 } from '@sketch-ruler/core'
 
 // 核心 API 导出（从 @sketch-ruler/core 透传）
