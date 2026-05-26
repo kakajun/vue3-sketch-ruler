@@ -72,6 +72,7 @@ function handleMouseDown(e: MouseEvent): void {
     const limit = isVertical.value ? props.containerWidth : props.containerHeight
     shouldDelete = screenPos < -10 || screenPos > limit + 10
 
+    // 始终更新位置，让线可以跟随鼠标移出画布
     emit('update', props.line.id, Math.round(newPosition))
   }
 

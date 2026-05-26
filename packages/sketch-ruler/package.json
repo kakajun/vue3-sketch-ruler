@@ -1,6 +1,6 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "private": false,
   "keywords": [
     "panzoom",
@@ -28,6 +28,7 @@
   "files": [
     "lib",
     "bin",
+    "src",
     "AGENTS.md"
   ],
   "type": "module",

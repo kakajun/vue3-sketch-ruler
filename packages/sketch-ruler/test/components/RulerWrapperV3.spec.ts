@@ -68,7 +68,7 @@ describe('RulerWrapperV3 line boundary deletion', () => {
   })
 
   it('should emit deleteLine when dragging an existing horizontal line out of top boundary', async () => {
-    // 水平参考线拖出上边界应触发 deleteLine
+    // 水平参考线拖出上边界应触发 deleteLine，但拖拽过程中仍应更新位置
     const wrapper = mountRulerWrapper({
       lines: [{ id: 'h-1', orientation: 'h', position: 100, visible: true, locked: false }]
     })
@@ -80,17 +80,22 @@ describe('RulerWrapperV3 line boundary deletion', () => {
 
     // drag up: newPos = 100 + (-50 - 120) = -70 < 0
     document.dispatchEvent(new MouseEvent('mousemove', { clientY: -50 }))
-    document.dispatchEvent(new MouseEvent('mouseup', { clientY: -50 }))
-
     await nextTick()
 
+    // 拖拽过程中位置应更新（即使超出画布）
+    expect(wrapper.emitted('updateLine')).toBeTruthy()
+    expect(wrapper.emitted('updateLine')![0]).toEqual(['h-1', -70])
+
+    document.dispatchEvent(new MouseEvent('mouseup', { clientY: -50 }))
+    await nextTick()
+
+    // 松手后才删除
     expect(wrapper.emitted('deleteLine')).toBeTruthy()
     expect(wrapper.emitted('deleteLine')![0]).toEqual(['h-1'])
-    expect(wrapper.emitted('updateLine')).toBeFalsy()
   })
 
   it('should emit deleteLine when dragging an existing horizontal line out of bottom boundary', async () => {
-    // 水平参考线拖出下边界应触发 deleteLine
+    // 水平参考线拖出下边界应触发 deleteLine，但拖拽过程中仍应更新位置
     const wrapper = mountRulerWrapper({
       lines: [{ id: 'h-2', orientation: 'h', position: 100, visible: true, locked: false }]
     })
@@ -102,16 +107,22 @@ describe('RulerWrapperV3 line boundary deletion', () => {
 
     // drag down: newPos = 100 + (350 - 120) = 330 > canvasHeight(200)
     document.dispatchEvent(new MouseEvent('mousemove', { clientY: 350 }))
-    document.dispatchEvent(new MouseEvent('mouseup', { clientY: 350 }))
-
     await nextTick()
 
+    // 拖拽过程中位置应更新（即使超出画布）
+    expect(wrapper.emitted('updateLine')).toBeTruthy()
+    expect(wrapper.emitted('updateLine')![0]).toEqual(['h-2', 330])
+
+    document.dispatchEvent(new MouseEvent('mouseup', { clientY: 350 }))
+    await nextTick()
+
+    // 松手后才删除
     expect(wrapper.emitted('deleteLine')).toBeTruthy()
     expect(wrapper.emitted('deleteLine')![0]).toEqual(['h-2'])
   })
 
   it('should emit deleteLine when dragging an existing vertical line out of right boundary', async () => {
-    // 垂直参考线拖出右边界应触发 deleteLine
+    // 垂直参考线拖出右边界应触发 deleteLine，但拖拽过程中仍应更新位置
     const wrapper = mountRulerWrapper({
       vertical: true,
       lines: [{ id: 'v-1', orientation: 'v', position: 100, visible: true, locked: false }]
@@ -124,10 +135,16 @@ describe('RulerWrapperV3 line boundary deletion', () => {
 
     // drag right: newPos = 100 + (450 - 120) = 430 > canvasWidth(300)
     document.dispatchEvent(new MouseEvent('mousemove', { clientX: 450 }))
-    document.dispatchEvent(new MouseEvent('mouseup', { clientX: 450 }))
-
     await nextTick()
 
+    // 拖拽过程中位置应更新（即使超出画布）
+    expect(wrapper.emitted('updateLine')).toBeTruthy()
+    expect(wrapper.emitted('updateLine')![0]).toEqual(['v-1', 430])
+
+    document.dispatchEvent(new MouseEvent('mouseup', { clientX: 450 }))
+    await nextTick()
+
+    // 松手后才删除
     expect(wrapper.emitted('deleteLine')).toBeTruthy()
     expect(wrapper.emitted('deleteLine')![0]).toEqual(['v-1'])
   })
@@ -290,5 +307,63 @@ describe('RulerWrapperV3 line boundary deletion', () => {
 
     expect(wrapper.emitted('deleteLine')).toBeFalsy()
     expect(wrapper.emitted('updateLine')).toBeFalsy()
+  })
+
+  it('should update line position beyond boundary during drag and delete only on mouseup', async () => {
+    // 拖拽过程中线应跟随鼠标移出画布，仅松手时才删除
+    const wrapper = mountRulerWrapper({
+      lines: [{ id: 'h-1', orientation: 'h', position: 100, visible: true, locked: false }]
+    })
+
+    const lineEl = wrapper.find('.line').element
+    lineEl.dispatchEvent(
+      new MouseEvent('mousedown', { clientY: 120, bubbles: true, cancelable: true })
+    )
+
+    // 第一步：拖到画布内的新位置
+    document.dispatchEvent(new MouseEvent('mousemove', { clientY: 150 }))
+    await nextTick()
+    expect(wrapper.emitted('updateLine')![0]).toEqual(['h-1', 130])
+
+    // 第二步：继续拖出上边界
+    document.dispatchEvent(new MouseEvent('mousemove', { clientY: -30 }))
+    await nextTick()
+    expect(wrapper.emitted('updateLine')![1]).toEqual(['h-1', -50])
+
+    // 此时不应触发 deleteLine
+    expect(wrapper.emitted('deleteLine')).toBeFalsy()
+
+    // 第三步：松手，才触发 deleteLine
+    document.dispatchEvent(new MouseEvent('mouseup', { clientY: -30 }))
+    await nextTick()
+    expect(wrapper.emitted('deleteLine')).toBeTruthy()
+    expect(wrapper.emitted('deleteLine')![0]).toEqual(['h-1'])
+  })
+
+  it('should allow dragging back from beyond boundary without deleting', async () => {
+    // 从画布外拖回画布内不应删除
+    const wrapper = mountRulerWrapper({
+      lines: [{ id: 'h-1', orientation: 'h', position: 100, visible: true, locked: false }]
+    })
+
+    const lineEl = wrapper.find('.line').element
+    lineEl.dispatchEvent(
+      new MouseEvent('mousedown', { clientY: 120, bubbles: true, cancelable: true })
+    )
+
+    // 拖出上边界
+    document.dispatchEvent(new MouseEvent('mousemove', { clientY: -50 }))
+    await nextTick()
+    expect(wrapper.emitted('updateLine')![0]).toEqual(['h-1', -70])
+
+    // 拖回画布内
+    document.dispatchEvent(new MouseEvent('mousemove', { clientY: 150 }))
+    await nextTick()
+    expect(wrapper.emitted('updateLine')![1]).toEqual(['h-1', 130])
+
+    // 松手，不应删除
+    document.dispatchEvent(new MouseEvent('mouseup', { clientY: 150 }))
+    await nextTick()
+    expect(wrapper.emitted('deleteLine')).toBeFalsy()
   })
 })

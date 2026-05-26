@@ -1,6 +1,6 @@
 {
   "name": "@sketch-ruler/canvas",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "private": false,
   "description": "Canvas rendering and DOM input management for sketch-ruler. Framework-agnostic, depends on Canvas 2D API and DOM Events.",
   "keywords": [
@@ -19,6 +19,7 @@
   },
   "files": [
     "lib",
+    "src",
     "AGENTS.md"
   ],
   "type": "module",

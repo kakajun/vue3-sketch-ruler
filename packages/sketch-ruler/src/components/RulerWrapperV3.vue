@@ -182,9 +182,8 @@ function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
     const limit = props.vertical ? props.canvasWidth : props.canvasHeight
     shouldDelete = newPos < 0 || newPos > limit
 
-    if (!shouldDelete) {
-      emit('updateLine', line.id, Math.round(newPos))
-    }
+    // 始终更新位置，让线可以跟随鼠标移出画布
+    emit('updateLine', line.id, Math.round(newPos))
   }
 
   const onUp = () => {

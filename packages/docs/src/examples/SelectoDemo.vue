@@ -245,6 +245,7 @@ body {
 h1,
 .description {
   text-align: center;
+  margin-bottom: 10px;
 }
 
 .button {
