@@ -10,7 +10,8 @@ const mockApi: PluginApi = {
   setTransform: vi.fn()
 }
 
-describe('PluginManager', () => { // 插件管理器测试
+describe('PluginManager', () => {
+  // 插件管理器测试
   let manager: PluginManager
 
   beforeEach(() => {
@@ -18,14 +19,16 @@ describe('PluginManager', () => { // 插件管理器测试
     manager.setApi(mockApi)
   })
 
-  it('should register and unregister plugin', () => { // 注册和注销插件
+  it('should register and unregister plugin', () => {
+    // 注册和注销插件
     const plugin: SketchRulerPlugin = { name: 'test' }
     const unregister = manager.register(plugin)
     expect(unregister).toBeTypeOf('function')
     unregister()
   })
 
-  it('should trigger beforeZoom hooks and allow cancellation', async () => { // 触发 beforeZoom 钩子并允许取消
+  it('should trigger beforeZoom hooks and allow cancellation', async () => {
+    // 触发 beforeZoom 钩子并允许取消
     const plugin1: SketchRulerPlugin = {
       name: 'p1',
       beforeZoom: vi.fn(async (ctx: BeforeZoomContext & { api: PluginApi }) => {
@@ -53,7 +56,8 @@ describe('PluginManager', () => { // 插件管理器测试
     expect(plugin2.beforeZoom).not.toHaveBeenCalled()
   })
 
-  it('should allow zoom when no plugin cancels', async () => { // 无插件取消时允许缩放
+  it('should allow zoom when no plugin cancels', async () => {
+    // 无插件取消时允许缩放
     const plugin: SketchRulerPlugin = {
       name: 'p1',
       beforeZoom: vi.fn()
@@ -70,7 +74,8 @@ describe('PluginManager', () => { // 插件管理器测试
     expect(allowed).toBe(true)
   })
 
-  it('should trigger afterPan hooks', () => { // 触发 afterPan 钩子
+  it('should trigger afterPan hooks', () => {
+    // 触发 afterPan 钩子
     const plugin: SketchRulerPlugin = {
       name: 'p1',
       afterPan: vi.fn()
@@ -81,7 +86,8 @@ describe('PluginManager', () => { // 插件管理器测试
     expect(plugin.afterPan).toHaveBeenCalledOnce()
   })
 
-  it('should trigger afterZoom hooks', () => { // 触发 afterZoom 钩子
+  it('should trigger afterZoom hooks', () => {
+    // 触发 afterZoom 钩子
     const plugin: SketchRulerPlugin = {
       name: 'p1',
       afterZoom: vi.fn()
@@ -92,7 +98,8 @@ describe('PluginManager', () => { // 插件管理器测试
     expect(plugin.afterZoom).toHaveBeenCalledOnce()
   })
 
-  it('should trigger beforePan hooks and allow cancellation', async () => { // 触发 beforePan 钩子并允许取消
+  it('should trigger beforePan hooks and allow cancellation', async () => {
+    // 触发 beforePan 钩子并允许取消
     const plugin: SketchRulerPlugin = {
       name: 'p1',
       beforePan: vi.fn(async (ctx) => {
@@ -111,7 +118,8 @@ describe('PluginManager', () => { // 插件管理器测试
     expect(plugin.beforePan).toHaveBeenCalledOnce()
   })
 
-  it('should trigger line event hooks', () => { // 触发参考线事件钩子
+  it('should trigger line event hooks', () => {
+    // 触发参考线事件钩子
     const plugin: SketchRulerPlugin = {
       name: 'p1',
       onLineCreate: vi.fn(),
@@ -132,7 +140,8 @@ describe('PluginManager', () => { // 插件管理器测试
     expect(plugin.onLineMove).toHaveBeenCalledWith({ line, from: 50, to: 100, api: mockApi })
   })
 
-  it('should manage custom renderers', () => { // 管理自定义渲染器
+  it('should manage custom renderers', () => {
+    // 管理自定义渲染器
     const renderer = {
       renderTicks: vi.fn(),
       renderLabels: vi.fn()
@@ -150,7 +159,8 @@ describe('PluginManager', () => { // 插件管理器测试
     expect(manager.getActiveRenderer()).toBe(renderer)
   })
 
-  it('should not re-call registerRenderer on unregister', () => { // 注销时不重复调用 registerRenderer
+  it('should not re-call registerRenderer on unregister', () => {
+    // 注销时不重复调用 registerRenderer
     const registerRenderer = vi.fn(() => ({
       name: 'custom',
       renderer: { renderTicks: vi.fn(), renderLabels: vi.fn() }
@@ -168,7 +178,8 @@ describe('PluginManager', () => { // 插件管理器测试
     expect(manager.getRendererNames()).not.toContain('custom')
   })
 
-  it('should sort plugins by priority descending', async () => { // 按优先级降序排列插件
+  it('should sort plugins by priority descending', async () => {
+    // 按优先级降序排列插件
     const order: string[] = []
     const p1: SketchRulerPlugin = {
       name: 'low',
@@ -200,7 +211,8 @@ describe('PluginManager', () => { // 插件管理器测试
     expect(order).toEqual(['high', 'mid', 'low'])
   })
 
-  it('should isolate errors in sync hooks', () => { // 同步钩子中隔离错误
+  it('should isolate errors in sync hooks', () => {
+    // 同步钩子中隔离错误
     const p1: SketchRulerPlugin = {
       name: 'thrower',
       afterPan: () => {
@@ -220,7 +232,8 @@ describe('PluginManager', () => { // 插件管理器测试
     expect(p2.afterPan).toHaveBeenCalledOnce()
   })
 
-  it('should isolate errors in async hooks', async () => { // 异步钩子中隔离错误
+  it('should isolate errors in async hooks', async () => {
+    // 异步钩子中隔离错误
     const p1: SketchRulerPlugin = {
       name: 'thrower',
       beforeZoom: async () => {
@@ -245,7 +258,8 @@ describe('PluginManager', () => { // 插件管理器测试
     expect(p2.beforeZoom).toHaveBeenCalledOnce()
   })
 
-  it('should clear all plugins and renderers', () => { // 清除所有插件和渲染器
+  it('should clear all plugins and renderers', () => {
+    // 清除所有插件和渲染器
     const plugin: SketchRulerPlugin = {
       name: 'p1',
       registerRenderer: () => ({
@@ -259,7 +273,8 @@ describe('PluginManager', () => { // 插件管理器测试
     expect(manager.getActiveRenderer()).toBeNull()
   })
 
-  it('should throw if api not set when dispatching hooks', () => { // 未设置 api 时派发钩子抛出错误
+  it('should throw if api not set when dispatching hooks', () => {
+    // 未设置 api 时派发钩子抛出错误
     const m = new PluginManager()
     expect(() => m.afterPan({ offset: { x: 0, y: 0 }, delta: { x: 1, y: 1 } })).toThrow(
       '[PluginManager] api not set'

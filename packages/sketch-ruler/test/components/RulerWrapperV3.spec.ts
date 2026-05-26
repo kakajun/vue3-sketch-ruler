@@ -60,13 +60,15 @@ function mountRulerWrapper(props: Record<string, any> = {}) {
   return wrapper
 }
 
-describe('RulerWrapperV3 line boundary deletion', () => { // RulerWrapperV3 参考线边界删除测试
+describe('RulerWrapperV3 line boundary deletion', () => {
+  // RulerWrapperV3 参考线边界删除测试
   afterEach(() => {
     // 清理可能残留的 document 事件监听器
     document.dispatchEvent(new MouseEvent('mouseup'))
   })
 
-  it('should emit deleteLine when dragging an existing horizontal line out of top boundary', async () => { // 水平参考线拖出上边界应触发 deleteLine
+  it('should emit deleteLine when dragging an existing horizontal line out of top boundary', async () => {
+    // 水平参考线拖出上边界应触发 deleteLine
     const wrapper = mountRulerWrapper({
       lines: [{ id: 'h-1', orientation: 'h', position: 100, visible: true, locked: false }]
     })
@@ -87,7 +89,8 @@ describe('RulerWrapperV3 line boundary deletion', () => { // RulerWrapperV3 参�
     expect(wrapper.emitted('updateLine')).toBeFalsy()
   })
 
-  it('should emit deleteLine when dragging an existing horizontal line out of bottom boundary', async () => { // 水平参考线拖出下边界应触发 deleteLine
+  it('should emit deleteLine when dragging an existing horizontal line out of bottom boundary', async () => {
+    // 水平参考线拖出下边界应触发 deleteLine
     const wrapper = mountRulerWrapper({
       lines: [{ id: 'h-2', orientation: 'h', position: 100, visible: true, locked: false }]
     })
@@ -107,7 +110,8 @@ describe('RulerWrapperV3 line boundary deletion', () => { // RulerWrapperV3 参�
     expect(wrapper.emitted('deleteLine')![0]).toEqual(['h-2'])
   })
 
-  it('should emit deleteLine when dragging an existing vertical line out of right boundary', async () => { // 垂直参考线拖出右边界应触发 deleteLine
+  it('should emit deleteLine when dragging an existing vertical line out of right boundary', async () => {
+    // 垂直参考线拖出右边界应触发 deleteLine
     const wrapper = mountRulerWrapper({
       vertical: true,
       lines: [{ id: 'v-1', orientation: 'v', position: 100, visible: true, locked: false }]
@@ -128,7 +132,8 @@ describe('RulerWrapperV3 line boundary deletion', () => { // RulerWrapperV3 参�
     expect(wrapper.emitted('deleteLine')![0]).toEqual(['v-1'])
   })
 
-  it('should emit updateLine when dragging line within boundary', async () => { // 在边界内拖拽参考线应触发 updateLine
+  it('should emit updateLine when dragging line within boundary', async () => {
+    // 在边界内拖拽参考线应触发 updateLine
     const wrapper = mountRulerWrapper({
       lines: [{ id: 'h-1', orientation: 'h', position: 100, visible: true, locked: false }]
     })
@@ -149,7 +154,8 @@ describe('RulerWrapperV3 line boundary deletion', () => { // RulerWrapperV3 参�
     expect(wrapper.emitted('deleteLine')).toBeFalsy()
   })
 
-  it('should show default delete label when dragging line out of boundary', async () => { // 拖出边界时应显示默认删除标签
+  it('should show default delete label when dragging line out of boundary', async () => {
+    // 拖出边界时应显示默认删除标签
     const wrapper = mountRulerWrapper({
       lines: [{ id: 'h-1', orientation: 'h', position: 100, visible: true, locked: false }]
     })
@@ -171,7 +177,8 @@ describe('RulerWrapperV3 line boundary deletion', () => { // RulerWrapperV3 参�
     document.dispatchEvent(new MouseEvent('mouseup', { clientY: -50 }))
   })
 
-  it('should show custom delete label when dragging line out of boundary', async () => { // 拖出边界时应显示自定义删除标签
+  it('should show custom delete label when dragging line out of boundary', async () => {
+    // 拖出边界时应显示自定义删除标签
     const wrapper = mountRulerWrapper({
       deleteLabel: 'Release to delete',
       lines: [{ id: 'h-1', orientation: 'h', position: 100, visible: true, locked: false }]
@@ -194,7 +201,8 @@ describe('RulerWrapperV3 line boundary deletion', () => { // RulerWrapperV3 参�
     document.dispatchEvent(new MouseEvent('mouseup', { clientY: -50 }))
   })
 
-  it('should emit addLine when creating a new horizontal line within boundary', async () => { // 在边界内新建水平参考线应触发 addLine
+  it('should emit addLine when creating a new horizontal line within boundary', async () => {
+    // 在边界内新建水平参考线应触发 addLine
     const wrapper = mountRulerWrapper()
     const canvas = wrapper.find('canvas').element
 
@@ -213,7 +221,8 @@ describe('RulerWrapperV3 line boundary deletion', () => { // RulerWrapperV3 参�
     expect(payload.position).toBe(10)
   })
 
-  it('should not emit addLine when creating a new line beyond top boundary', async () => { // 超出上边界时不应触发 addLine
+  it('should not emit addLine when creating a new line beyond top boundary', async () => {
+    // 超出上边界时不应触发 addLine
     const wrapper = mountRulerWrapper()
     const canvas = wrapper.find('canvas').element
 
@@ -229,7 +238,8 @@ describe('RulerWrapperV3 line boundary deletion', () => { // RulerWrapperV3 参�
     expect(wrapper.emitted('addLine')).toBeFalsy()
   })
 
-  it('should not emit addLine when creating a new line beyond bottom boundary', async () => { // 超出下边界时不应触发 addLine
+  it('should not emit addLine when creating a new line beyond bottom boundary', async () => {
+    // 超出下边界时不应触发 addLine
     const wrapper = mountRulerWrapper()
     const canvas = wrapper.find('canvas').element
 
@@ -245,7 +255,8 @@ describe('RulerWrapperV3 line boundary deletion', () => { // RulerWrapperV3 参�
     expect(wrapper.emitted('addLine')).toBeFalsy()
   })
 
-  it('should not emit addLine when creating a new vertical line beyond right boundary', async () => { // 超出右边界时不应触发 addLine
+  it('should not emit addLine when creating a new vertical line beyond right boundary', async () => {
+    // 超出右边界时不应触发 addLine
     const wrapper = mountRulerWrapper({ vertical: true })
     const canvas = wrapper.find('canvas').element
 
@@ -261,7 +272,8 @@ describe('RulerWrapperV3 line boundary deletion', () => { // RulerWrapperV3 参�
     expect(wrapper.emitted('addLine')).toBeFalsy()
   })
 
-  it('should not emit deleteLine for locked lines', async () => { // 锁定参考线不应触发 deleteLine
+  it('should not emit deleteLine for locked lines', async () => {
+    // 锁定参考线不应触发 deleteLine
     const wrapper = mountRulerWrapper({
       lines: [{ id: 'h-1', orientation: 'h', position: 100, visible: true, locked: true }]
     })

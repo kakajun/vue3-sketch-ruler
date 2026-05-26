@@ -9,8 +9,10 @@ import {
   equals
 } from '../../src/engine/matrix'
 
-describe('matrix', () => { // 矩阵运算测试
-  test('createMatrix returns identity matrix', () => { // createMatrix 返回单位矩阵
+describe('matrix', () => {
+  // 矩阵运算测试
+  test('createMatrix returns identity matrix', () => {
+    // createMatrix 返回单位矩阵
     const m = createMatrix()
     expect(m[0]).toBe(1)
     expect(m[1]).toBe(0)
@@ -20,7 +22,8 @@ describe('matrix', () => { // 矩阵运算测试
     expect(m[5]).toBe(0)
   })
 
-  test('fromTransform creates correct matrix', () => { // fromTransform 创建正确矩阵
+  test('fromTransform creates correct matrix', () => {
+    // fromTransform 创建正确矩阵
     const m = fromTransform(2, 100, 50)
     expect(m[0]).toBe(2)
     expect(m[3]).toBe(2)
@@ -28,7 +31,8 @@ describe('matrix', () => { // 矩阵运算测试
     expect(m[5]).toBe(50)
   })
 
-  test('multiply combines transforms', () => { // multiply 组合变换
+  test('multiply combines transforms', () => {
+    // multiply 组合变换
     const m1 = fromTransform(2, 100, 50)
     const m2 = fromTransform(0.5, 20, 10)
     const result = multiply(m1, m2)
@@ -38,7 +42,8 @@ describe('matrix', () => { // 矩阵运算测试
     expect(result[5]).toBeCloseTo(70, 6)
   })
 
-  test('invert reverses transform', () => { // invert 反转变换
+  test('invert reverses transform', () => {
+    // invert 反转变换
     const m = fromTransform(2, 100, 50)
     const inv = invert(m)
     expect(inv).not.toBeNull()
@@ -49,12 +54,14 @@ describe('matrix', () => { // 矩阵运算测试
     expect(restored[5]).toBeCloseTo(0, 6)
   })
 
-  test('invert returns null for singular matrix', () => { // invert 对奇异矩阵返回 null
+  test('invert returns null for singular matrix', () => {
+    // invert 对奇异矩阵返回 null
     const m = new Float64Array([0, 0, 0, 0, 0, 0])
     expect(invert(m)).toBeNull()
   })
 
-  test('decompose extracts scale and translate', () => { // decompose 提取缩放和平移
+  test('decompose extracts scale and translate', () => {
+    // decompose 提取缩放和平移
     const m = fromTransform(2.5, 100, -50)
     const d = decompose(m)
     expect(d.scale).toBe(2.5)
@@ -62,12 +69,14 @@ describe('matrix', () => { // 矩阵运算测试
     expect(d.translateY).toBe(-50)
   })
 
-  test('toCSSString formats correctly', () => { // toCSSString 正确格式化
+  test('toCSSString formats correctly', () => {
+    // toCSSString 正确格式化
     const m = fromTransform(2, 100, 50)
     expect(toCSSString(m)).toBe('matrix(2, 0, 0, 2, 100, 50)')
   })
 
-  test('equals with epsilon', () => { // equals 在精度范围内比较
+  test('equals with epsilon', () => {
+    // equals 在精度范围内比较
     const m1 = fromTransform(2, 100, 50)
     const m2 = fromTransform(2.0000001, 100.0000001, 50.0000001)
     expect(equals(m1, m2)).toBe(true)

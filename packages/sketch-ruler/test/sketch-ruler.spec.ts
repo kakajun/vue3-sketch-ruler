@@ -1,8 +1,10 @@
 import { mount } from '@vue/test-utils'
 import SketchRuler from '../src/components/SketchRuler.vue'
 
-describe('SketchRuler integration', () => { // SketchRuler 组件集成测试
-  test('emits update:scale on zoomIn', async () => { // 放大时触发 update:scale 事件
+describe('SketchRuler integration', () => {
+  // SketchRuler 组件集成测试
+  test('emits update:scale on zoomIn', async () => {
+    // 放大时触发 update:scale 事件
     const wrapper = mount(SketchRuler as any, {
       props: {
         width: 800,
@@ -27,7 +29,8 @@ describe('SketchRuler integration', () => { // SketchRuler 组件集成测试
     expect(emitted.length).toBeGreaterThan(0)
   })
 
-  test('corner click emits onCornerClick and toggles', async () => { // 点击角标触发 onCornerClick 并切换状态
+  test('corner click emits onCornerClick and toggles', async () => {
+    // 点击角标触发 onCornerClick 并切换状态
     const wrapper = mount(SketchRuler as any, {
       props: {
         width: 800,
@@ -45,7 +48,8 @@ describe('SketchRuler integration', () => { // SketchRuler 组件集成测试
     expect(typeof emitted[0][0]).toBe('boolean')
   })
 
-  test('multiple instances have independent transform engines', async () => { // 多实例拥有独立的变换引擎
+  test('multiple instances have independent transform engines', async () => {
+    // 多实例拥有独立的变换引擎
     const container = document.createElement('div')
     document.body.appendChild(container)
 

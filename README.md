@@ -216,6 +216,10 @@ const plugins: SketchRulerPlugin[] = [
 | snapThreshold | 吸附阈值 | `number` | `5` |
 | lockLine | 是否锁定参考线 | `boolean` | `false` |
 | selfHandle | 自行处理输入事件 | `boolean` | `false` |
+| showMinorTicks | 是否显示次刻度线 | `boolean` | `false` |
+| eyeIcon | 左上角眼睛图标 base64 | `string` | 内置图标 |
+| closeEyeIcon | 左上角闭眼图标 base64 | `string` | 内置图标 |
+| deleteLabel | 参考线拖出画布时的删除提示 | `string` | `'放开删除'` |
 | plugins | 插件列表 | `SketchRulerPlugin[]` | `[]` |
 
 ### Events
@@ -249,7 +253,8 @@ const plugins: SketchRulerPlugin[] = [
 | `zoomToPreset(scale)`              | 缩放到预设比例       |
 | `setZoomMode(mode)`                | 设置缩放模式         |
 | `engine`                           | TransformEngine 实例 |
-| `stateManager`                     | 参考线状态管理器     |
+| `guideLines`                       | 当前参考线数组       |
+| `cursorClass`                      | 当前光标类名         |
 
 ### Palette
 
@@ -263,6 +268,7 @@ const plugins: SketchRulerPlugin[] = [
 | hoverBg              | 标签背景色     | `#000`     |
 | hoverColor           | 标签文字色     | `#fff`     |
 | borderColor          | 尺子边框颜色   | `#eeeeef`  |
+| shadowColor          | 阴影高亮色     | `#e9f7fe`  |
 | guideLineStyle       | 参考线样式     | `'dashed'` |
 | guideLineWidth       | 参考线宽度     | `1`        |
 | labelEnabled         | 是否显示标签   | `true`     |

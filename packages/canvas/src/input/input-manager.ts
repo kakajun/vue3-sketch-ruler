@@ -9,7 +9,6 @@ import { MouseAdapter, type MouseAdapterCallbacks } from './mouse-adapter'
 import { KeyboardAdapter } from './keyboard-adapter'
 import type { KeyCombo } from './keyboard-adapter'
 
-
 export interface ZoomInterceptor {
   beforeZoom?: (
     from: number,

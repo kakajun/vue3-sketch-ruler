@@ -207,11 +207,7 @@ const stateWatcherPlugin = definePlugin(() => ({
 const plugins = [logPlugin(), lineEventPlugin(), zoomLimitPlugin(), stateWatcherPlugin()]
 
 const toggleZoomMode = () => {
-  const modes: Array<ZoomMode> = [
-    'pointer',
-    'viewport-center',
-    'content-center'
-  ]
+  const modes: Array<ZoomMode> = ['pointer', 'viewport-center', 'content-center']
   const idx = modes.indexOf(zoomMode.value)
   zoomMode.value = modes[(idx + 1) % modes.length]
 }

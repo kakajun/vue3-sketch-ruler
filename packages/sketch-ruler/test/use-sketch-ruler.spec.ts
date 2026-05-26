@@ -14,8 +14,10 @@ const TestComp = defineComponent({
   }
 })
 
-describe('useSketchRuler', () => { // useSketchRuler 组合式函数测试
-  it('returns engine and reactive state', async () => { // 返回引擎和响应式状态
+describe('useSketchRuler', () => {
+  // useSketchRuler 组合式函数测试
+  it('returns engine and reactive state', async () => {
+    // 返回引擎和响应式状态
     const wrapper = mount(TestComp as any, {
       props: {
         options: {
@@ -37,7 +39,8 @@ describe('useSketchRuler', () => { // useSketchRuler 组合式函数测试
     expect(result.rectHeight.value).toBe(600)
   })
 
-  it('addLine and moveLine update state', async () => { // addLine 和 moveLine 更新状态
+  it('addLine and moveLine update state', async () => {
+    // addLine 和 moveLine 更新状态
     const wrapper = mount(TestComp as any, {
       props: {
         options: {
@@ -66,7 +69,8 @@ describe('useSketchRuler', () => { // useSketchRuler 组合式函数测试
     expect(result.horizontalLines.value[0].position).toBe(200)
   })
 
-  it('removeLine deletes line', async () => { // removeLine 删除参考线
+  it('removeLine deletes line', async () => {
+    // removeLine 删除参考线
     const wrapper = mount(TestComp as any, {
       props: {
         options: {
@@ -91,7 +95,8 @@ describe('useSketchRuler', () => { // useSketchRuler 组合式函数测试
     expect(result.horizontalLines.value).toHaveLength(0)
   })
 
-  it('zoomIn/zoomOut/reset work', async () => { // 缩放和重置功能正常
+  it('zoomIn/zoomOut/reset work', async () => {
+    // 缩放和重置功能正常
     const wrapper = mount(TestComp as any, {
       props: {
         options: {
@@ -119,7 +124,8 @@ describe('useSketchRuler', () => { // useSketchRuler 组合式函数测试
     expect(result.scale.value).toBe(initialScale)
   })
 
-  it('paletteCpu merges custom palette', async () => { // paletteCpu 合并自定义调色板
+  it('paletteCpu merges custom palette', async () => {
+    // paletteCpu 合并自定义调色板
     const wrapper = mount(TestComp as any, {
       props: {
         options: {
@@ -139,7 +145,8 @@ describe('useSketchRuler', () => { // useSketchRuler 组合式函数测试
     expect(result.paletteCpu.value.tickColor).toBeDefined()
   })
 
-  it('lines initialization and state updates work correctly', async () => { // 参考线初始化及状态更新正确
+  it('lines initialization and state updates work correctly', async () => {
+    // 参考线初始化及状态更新正确
     const wrapper = mount(TestComp as any, {
       props: {
         options: {

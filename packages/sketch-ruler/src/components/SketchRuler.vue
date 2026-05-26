@@ -1,10 +1,5 @@
 <template>
-  <div
-    ref="rootRef"
-    class="sketch-ruler"
-    @mouseenter="isHovered = true"
-    @mouseleave="isHovered = false"
-  >
+  <div class="sketch-ruler" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
     <slot
       name="toolbar"
       :tools="{
@@ -261,7 +256,6 @@ watch(
 )
 
 // === 输入管理 ===
-const rootRef = ref<HTMLElement | null>(null)
 const canvasRef = ref<HTMLElement | null>(null)
 const isHovered = ref(false)
 

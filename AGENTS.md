@@ -24,17 +24,17 @@
 
 ## 技术栈
 
-| 层级       | 技术                                                        |
-| ---------- | ----------------------------------------------------------- |
-| 框架       | Vue 3.5+ (Composition API)                                  |
-| 语言       | TypeScript 5.9+ (strict 模式)                               |
-| 构建工具   | Vite 7.x                                                    |
-| 包管理器   | pnpm 9.x（workspace 模式）                                  |
-| 测试框架   | Vitest 4.x + jsdom                                          |
-| Vue 测试   | `@vue/test-utils`                                           |
-| 代码检查   | oxlint 1.64+                                                |
-| 代码格式化 | oxfmt 0.49+                                                 |
-| 文档站点   | Vite + Vue 3 SPA（位于 `packages/docs`）                    |
+| 层级       | 技术                                     |
+| ---------- | ---------------------------------------- |
+| 框架       | Vue 3.5+ (Composition API)               |
+| 语言       | TypeScript 5.9+ (strict 模式)            |
+| 构建工具   | Vite 7.x                                 |
+| 包管理器   | pnpm 9.x（workspace 模式）               |
+| 测试框架   | Vitest 4.x + jsdom                       |
+| Vue 测试   | `@vue/test-utils`                        |
+| 代码检查   | oxlint 1.64+                             |
+| 代码格式化 | oxfmt 0.49+                              |
+| 文档站点   | Vite + Vue 3 SPA（位于 `packages/docs`） |
 
 ---
 

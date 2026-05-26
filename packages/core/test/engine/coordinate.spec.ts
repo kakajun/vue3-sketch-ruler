@@ -8,29 +8,34 @@ import {
   fitRect
 } from '../../src/engine/coordinate'
 
-describe('coordinate', () => { // 坐标转换测试
-  test('toWorldPoint converts screen to world', () => { // toWorldPoint 将屏幕坐标转为世界坐标
+describe('coordinate', () => {
+  // 坐标转换测试
+  test('toWorldPoint converts screen to world', () => {
+    // toWorldPoint 将屏幕坐标转为世界坐标
     const m = fromTransform(2, 100, 50)
     const p = toWorldPoint(m, 300, 250)
     expect(p.x).toBe(100)
     expect(p.y).toBe(100)
   })
 
-  test('toWorldPoint handles zero scale', () => { // toWorldPoint 处理零缩放
+  test('toWorldPoint handles zero scale', () => {
+    // toWorldPoint 处理零缩放
     const m = fromTransform(0, 0, 0)
     const p = toWorldPoint(m, 100, 100)
     expect(p.x).toBe(0)
     expect(p.y).toBe(0)
   })
 
-  test('toScreenPoint converts world to screen', () => { // toScreenPoint 将世界坐标转为屏幕坐标
+  test('toScreenPoint converts world to screen', () => {
+    // toScreenPoint 将世界坐标转为屏幕坐标
     const m = fromTransform(2, 100, 50)
     const p = toScreenPoint(m, 100, 100)
     expect(p.x).toBe(300)
     expect(p.y).toBe(250)
   })
 
-  test('round-trip conversion', () => { // 往返坐标转换
+  test('round-trip conversion', () => {
+    // 往返坐标转换
     const m = fromTransform(1.5, -30, 40)
     const world = { x: 123.45, y: 678.9 }
     const screen = toScreenPoint(m, world.x, world.y)
@@ -39,7 +44,8 @@ describe('coordinate', () => { // 坐标转换测试
     expect(back.y).toBeCloseTo(world.y, 6)
   })
 
-  test('batchToWorld converts multiple points', () => { // batchToWorld 批量转换多个点
+  test('batchToWorld converts multiple points', () => {
+    // batchToWorld 批量转换多个点
     const m = fromTransform(2, 100, 50)
     const points = [
       { x: 300, y: 250 },
@@ -52,7 +58,8 @@ describe('coordinate', () => { // 坐标转换测试
     expect(result[1].y).toBe(150)
   })
 
-  test('batchToScreen converts multiple points', () => { // batchToScreen 批量转换多个点
+  test('batchToScreen converts multiple points', () => {
+    // batchToScreen 批量转换多个点
     const m = fromTransform(2, 100, 50)
     const points = [
       { x: 100, y: 100 },
@@ -65,7 +72,8 @@ describe('coordinate', () => { // 坐标转换测试
     expect(result[1].y).toBe(350)
   })
 
-  test('fitRect contain mode', () => { // fitRect contain 模式
+  test('fitRect contain mode', () => {
+    // fitRect contain 模式
     const content = { x: 0, y: 0, width: 1000, height: 800 }
     const viewport = { x: 0, y: 0, width: 500, height: 400 }
     const result = fitRect(content, viewport, 'contain')
@@ -74,14 +82,16 @@ describe('coordinate', () => { // 坐标转换测试
     expect(result.y).toBe(0)
   })
 
-  test('fitRect with padding', () => { // fitRect 带内边距
+  test('fitRect with padding', () => {
+    // fitRect 带内边距
     const content = { x: 0, y: 0, width: 100, height: 100 }
     const viewport = { x: 0, y: 0, width: 200, height: 200 }
     const result = fitRect(content, viewport, 'contain', 0.2)
     expect(result.scale).toBe(1.6)
   })
 
-  test('fitRect handles zero dimensions', () => { // fitRect 处理零尺寸
+  test('fitRect handles zero dimensions', () => {
+    // fitRect 处理零尺寸
     const content = { x: 0, y: 0, width: 0, height: 100 }
     const viewport = { x: 0, y: 0, width: 500, height: 400 }
     const result = fitRect(content, viewport)

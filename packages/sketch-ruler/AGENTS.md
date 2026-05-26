@@ -1,68 +1,61 @@
 # vue3-sketch-ruler 项目指南
 
-> 本文件面向 AI Coding Agent，用于快速理解项目结构、构建流程与开发约定。
+> 本文件面向 AI Coding Agent，用于快速理解 `vue3-sketch-ruler` 主发布包的结构、API 与开发约定。
 
 ---
 
-## 项目概述
+## 包概述
 
-`vue3-sketch-ruler` 是一个基于 **Vue 3 + TypeScript** 的标尺组件库，适用于低代码平台、大屏可视化、做图工具等场景，提供类似 Photoshop 的缩放与标尺辅助线体验。
+`vue3-sketch-ruler` 是面向 **Vue 3** 的主发布包，基于 `@sketch-ruler/core` 与 `@sketch-ruler/canvas`，提供：
 
-主要特性：
-
-- Vue 3 Composition API / `<script setup>`
-- 完整的 TypeScript 类型定义
-- 内置 TransformEngine 变换引擎（零外部 panzoom 依赖）
-- 多种缩放模式：鼠标中心、视口中心、内容中心
-- 可配置参考线（拖拽创建、吸附、锁定）
-- 内置 Minimap 缩略图导航（支持拖拽视口、点击跳转）
-- 插件系统（生命周期钩子 + 自定义渲染器）
-- 动画支持：ease-out / damped / exponential / direct
-- 平台与业务代码通过插槽分离
+- `SketchRuler` 主组件（含标尺、画布、参考线）
+- `Minimap` 缩略图组件
+- Vue 组合式函数（composables）
+- Vue 侧插件入口（`definePlugin`）
+- 基于 `provide/inject` 的跨层级状态共享（`RulerContextKey`）
 
 ---
 
 ## 技术栈
 
-| 层级       | 技术                                                        |
-| ---------- | ----------------------------------------------------------- |
-| 框架       | Vue 3.5+ (Composition API)                                  |
-| 语言       | TypeScript 5.9+ (strict 模式)                               |
-| 构建工具   | Vite 7.x                                                    |
-| 包管理器   | pnpm 9.x（workspace 模式）                                  |
-| 测试框架   | Vitest 4.x + jsdom                                          |
-| Vue 测试   | `@vue/test-utils`                                           |
-| 代码检查   | oxlint 1.64+                                                |
-| 代码格式化 | oxfmt 0.49+                                                 |
-| Git Hooks  | husky + lint-staged（当前 hook 文件为弃用占位，未实际启用） |
-| 文档站点   | Vite + Vue 3 SPA（位于 `packages/docs`）                    |
+| 层级       | 技术                                     |
+| ---------- | ---------------------------------------- |
+| 框架       | Vue 3.5+ (Composition API)               |
+| 语言       | TypeScript 5.9+ (strict 模式)            |
+| 构建工具   | Vite 8.x                                 |
+| 包管理器   | pnpm 9.x（workspace 模式）               |
+| 测试框架   | Vitest 4.x + jsdom                       |
+| Vue 测试   | `@vue/test-utils`                        |
+| 代码检查   | oxlint 1.64+                             |
+| 代码格式化 | oxfmt 0.49+                              |
+| 文档站点   | Vite + Vue 3 SPA（位于 `packages/docs`） |
 
 ---
 
-## Monorepo 结构
-
-项目使用 **pnpm workspace** 管理，根目录 `package.json` 声明 `workspaces: ["packages/*"]`。
+## 目录结构
 
 ```
-packages/
-├── sketch-ruler/      # 主发布包：vue3-sketch-ruler
-├── core/              # 框架无关核心：@sketch-ruler/core
-├── canvas/            # Canvas 渲染与 DOM 输入：@sketch-ruler/canvas
-├── docs/              # 文档与示例站点：root-doc
-└── common/            # 私有共享包：root-common（目前仅含 i18n）
+src/
+├── components/       # Vue SFC
+│   ├── SketchRuler.vue      # 主组件（整合标尺+画布+参考线）
+│   ├── Minimap.vue          # 缩略图导航组件
+│   ├── RulerWrapperV3.vue   # 标尺容器（水平+垂直标尺包装）
+│   ├── CanvasRuler.vue      # Canvas 标尺渲染组件
+│   ├── RulerLine.vue        # 参考线 DOM 组件（拖拽、锁定、标签）
+│   └── cornerImg64.ts       # 左上角角落图片 base64
+├── composables/      # Vue 组合式函数
+│   ├── useCanvasTransform.ts   # 画布变换（scale/offset）管理
+│   ├── useRulerScale.ts        # 标尺刻度计算与响应式更新
+│   ├── useRulerSnap.ts         # 智能吸附引擎（M3）
+│   ├── useSnapDetection.ts     # 基础吸附检测（M1）
+│   ├── useSketchRuler.ts       # Master Composable（整合变换+参考线+标尺样式）
+│   └── index.ts
+├── plugins/          # Vue 侧插件入口
+│   └── index.ts             # definePlugin 辅助函数 + 类型重导出
+├── state/            # Vue 注入上下文
+│   └── ruler-context.ts     # RulerContext 接口 + RulerContextKey
+└── index.ts          # 统一导出入口
 ```
-
-### 各包职责
-
-| 包名 | 发布名 | 说明 |
-| --- | --- | --- |
-| `packages/sketch-ruler` | `vue3-sketch-ruler` | 对外发布的 Vue 3 组件包。导出 `SketchRuler`、`Minimap` 组件，以及 Vue 相关的 composables、plugins。依赖 `@sketch-ruler/core` 与 `@sketch-ruler/canvas`。 |
-| `packages/core` | `@sketch-ruler/core` | 框架无关核心层：坐标变换引擎（TransformEngine）、矩阵运算、刻度计算、状态管理（RulerState / LineManager）、插件管理（PluginManager）、吸附引擎（SnapEngine）、多画布管理器（CanvasManager）、Minimap 引擎。零外部依赖。 |
-| `packages/canvas` | `@sketch-ruler/canvas` | 框架无关的 Canvas 2D 渲染器与 DOM 输入管理器。负责鼠标/键盘/滚轮事件适配、离屏缓存、标签缓存。依赖 `@sketch-ruler/core`。 |
-| `packages/docs` | `root-doc` | 文档演示站点，使用 Vite 构建，包含大量示例（basic、bigscreen、edit、multi-instance 等）。依赖 `vue3-sketch-ruler` workspace 包。 |
-| `packages/common` | `root-common` | 私有内部包，目前主要提供 `i18n` 实例供 docs 使用。 |
-
-所有发布包均声明 `type: "module"` 与 `sideEffects: false`。
 
 ---
 
@@ -97,8 +90,6 @@ pnpm lint              # oxlint --fix 自动修复
 pnpm fmt               # oxfmt 格式化
 pnpm fmt:check         # oxfmt --check 检查格式
 
-# 生成 changelog
-pnpm changelog
 
 # 发布（交互式选择版本）
 pnpm release
@@ -121,6 +112,19 @@ pnpm clean
   - `index.d.ts`（类型声明，由 `vite-plugin-dts` 生成）
   - `style.css`（组件样式）
 - `packages/core` 与 `packages/canvas` 同样输出到各自 `lib/`，支持 ESM / CJS / UMD / IIFE。
+
+### 子路径导出（package.json exports）
+
+| 路径                         | 说明                      |
+| ---------------------------- | ------------------------- |
+| `vue3-sketch-ruler`          | 完整导出                  |
+| `vue3-sketch-ruler/style.css`| 组件样式                  |
+| `vue3-sketch-ruler/engine`   | 透传 `@sketch-ruler/core` |
+| `vue3-sketch-ruler/composables` | 组合式函数            |
+| `vue3-sketch-ruler/renderers`| 透传 `@sketch-ruler/canvas` |
+| `vue3-sketch-ruler/plugins`  | 插件系统                  |
+
+> 开发环境下 `development` 条件指向 `src/index.ts`，支持源码级调试。
 
 ---
 
@@ -146,7 +150,10 @@ cd packages/canvas && pnpm test
 
 - `packages/core/test/`：矩阵、坐标变换、TransformEngine、CanvasManager、LineManager、PluginManager、RulerState
 - `packages/canvas/test/`：InputManager、WheelNormalizer
-- `packages/sketch-ruler/test/`：SketchRuler 组件集成测试、composables（useCanvasTransform、useRulerScale、useSnapDetection）
+- `packages/sketch-ruler/test/`：
+  - `sketch-ruler.spec.ts` — SketchRuler 组件集成测试
+  - `use-sketch-ruler.spec.ts` — useSketchRuler Master Composable 测试
+  - `composables/` — useCanvasTransform、useRulerScale、useSnapDetection
 
 ---
 
@@ -163,18 +170,6 @@ cd packages/canvas && pnpm test
   - 单引号 (`singleQuote: true`)
   - 无尾随逗号 (`trailingComma: none`)
   - 箭头函数始终加括号 (`arrowParens: always`)
-
-### 提交前自动格式化
-
-根目录 `package.json` 中配置了 `lint-staged`：
-
-```json
-"lint-staged": {
-  "*.{js,ts,mjs,cjs,vue}": ["oxlint --fix", "oxfmt"]
-}
-```
-
-> 注意：当前仓库中没有 `stylelint` 配置文件，且 `.husky` 目录下的 hook 脚本为 husky v9 弃用占位，实际预提交钩子**未生效**。
 
 ---
 
@@ -212,10 +207,10 @@ cd packages/canvas && pnpm test
   - `renderers/` — Canvas2DRenderer、离屏缓存、标签缓存
   - `input/` — InputManager、MouseAdapter、KeyboardAdapter、WheelNormalizer
 - **Vue 层** (`packages/sketch-ruler/src/`)：
-  - `components/` — Vue SFC（SketchRuler.vue、Minimap.vue、RulerWrapperV3.vue 等）
-  - `composables/` — Vue 组合式函数（useCanvasTransform、useRulerScale、useSnapDetection 等）
-  - `plugins/` — Vue 侧插件入口
-  - `state/` — Vue 注入上下文（RulerContextKey）
+  - `components/` — Vue SFC（SketchRuler.vue、Minimap.vue、RulerWrapperV3.vue、CanvasRuler.vue、RulerLine.vue、cornerImg64.ts）
+  - `composables/` — Vue 组合式函数（useCanvasTransform、useRulerScale、useRulerSnap、useSnapDetection、useSketchRuler）
+  - `plugins/` — Vue 侧插件入口（definePlugin）
+  - `state/` — Vue 注入上下文（ruler-context.ts，含 RulerContextKey）
 
 ### 编码风格
 

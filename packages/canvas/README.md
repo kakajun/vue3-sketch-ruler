@@ -84,36 +84,44 @@ renderer.render({
 
 ### 离屏缓存 — OffscreenRulerCache
 
-用于频繁重绘场景，将标尺渲染到 OffscreenCanvas 再 blit 到主 Canvas。
+用于频繁重绘场景，将标尺静态外观预渲染到离屏 Canvas，仅在配色/厚度/密度变更时重建。
 
 ```ts
 import { OffscreenRulerCache } from '@sketch-ruler/canvas'
 
-const cache = new OffscreenRulerCache({ width: 1400, height: 20 })
+const cache = new OffscreenRulerCache()
 
-cache.draw((ctx) => {
-  // 使用 Canvas 2D 上下文绘制标尺
-  ctx.fillStyle = '#f6f7f9'
-  ctx.fillRect(0, 0, 1400, 20)
-  // ... 绘制刻度
+// 在渲染循环中使用
+const usedCache = cache.drawStatic(targetCtx, marks, {
+  width: 1400,
+  height: 20,
+  ratio: window.devicePixelRatio,
+  palette,
+  thick: 20,
+  vertical: false,
+  canvasSize: 1000
 })
 
-// 将缓存绘制到主 Canvas
-ctx.drawImage(cache.canvas, 0, 0)
+// 清空缓存（如配色变更时）
+cache.clear()
 ```
 
 ### 标签缓存 — LabelCache
 
-缓存刻度文字标签，避免每帧重复测量文本。
+缓存刻度文字标签，避免每帧重复测量文本和 fillText。
 
 ```ts
 import { LabelCache } from '@sketch-ruler/canvas'
 
-const labelCache = new LabelCache()
+const labelCache = new LabelCache(500) // 最大缓存 500 条
 
-// 获取或创建标签
-const label = labelCache.get('100px', '12px Arial')
-// label: { text: '100px', width: number, bitmap: ImageBitmap }
+// 在 Canvas2DRenderer 渲染循环中使用
+const entry = labelCache.get(ctx, { text: '100', font: '12px Arial', color: '#7D8694' })
+// entry: { canvas: HTMLCanvasElement, width: number, height: number }
+ctx.drawImage(entry.canvas, x, y)
+
+// 清空缓存
+labelCache.clear()
 ```
 
 ### 滚轮标准化 — WheelNormalizer
@@ -124,10 +132,12 @@ const label = labelCache.get('100px', '12px Arial')
 import { normalizeWheel, getZoomDelta } from '@sketch-ruler/canvas'
 
 canvas.addEventListener('wheel', (e) => {
+  // 标准化滚轮事件
   const normalized = normalizeWheel(e)
-  // normalized: { pixelX, pixelY, spinX, spinY }
+  // normalized: { deltaX, deltaY, deltaZ, deltaMode }
 
-  const delta = getZoomDelta(normalized, { zoomSpeed: 0.25 })
+  // 计算缩放增量（默认灵敏度 0.001）
+  const delta = getZoomDelta(e, 0.001)
   engine.zoomBy(delta, e.clientX, e.clientY)
 })
 ```
@@ -184,7 +194,7 @@ kb.bind()
 | `MouseAdapter`        | 类   | 鼠标事件封装（wheel/mousedown/mousemove/mouseup） |
 | `KeyboardAdapter`     | 类   | 键盘快捷键封装                                    |
 | `normalizeWheel`      | 函数 | 滚轮事件标准化                                    |
-| `getZoomDelta`        | 函数 | 从标准化滚轮计算缩放增量                          |
+| `getZoomDelta`        | 函数 | 从原生 WheelEvent 计算缩放增量                    |
 | `Canvas2DRenderer`    | 类   | Canvas 2D 标尺渲染器                              |
 | `OffscreenRulerCache` | 类   | 离屏标尺缓存                                      |
 | `LabelCache`          | 类   | 刻度标签缓存                                      |
@@ -211,7 +221,7 @@ engine.onUpdate((state) => {
   const marks = computeScaleMarks({
     scale: state.scale,
     offset: state.x,
-    length: 1400,
+    viewportSize: 1400,
     thick: 20,
     config: getTickConfig(state.scale)
   })

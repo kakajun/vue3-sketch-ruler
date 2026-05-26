@@ -79,7 +79,10 @@ const input = new InputManager(engine, {
   zoomMode: 'pointer', // 'pointer' | 'viewport-center' | 'content-center'
   viewportSize: { width, height },
   contentSize: { width, height },
-  onCursorChange: (cls) => {} // 'default' | 'grab' | 'grabbing'
+  selfHandle: false,   // 是否由外部自行处理事件
+  onCursorChange: (cls) => {}, // 'default' | 'grab' | 'grabbing'
+  zoomInterceptor: { beforeZoom, afterZoom },
+  panInterceptor: { beforePan, afterPan }
 })
 input.bind(containerElement) // 事件绑定到 container.parentElement
 input.setZoomMode(mode)
@@ -124,6 +127,14 @@ kb.bind()
 kb.unbind()
 ```
 
+### 滚轮标准化
+
+```ts
+import { normalizeWheel, getZoomDelta } from '@sketch-ruler/canvas'
+const wheel = normalizeWheel(event) // NormalizedWheel
+const delta = getZoomDelta(wheel, zoomStep) // 计算缩放增量
+```
+
 ---
 
 ## 子路径导出
@@ -155,8 +166,16 @@ engine.onUpdate((state) => {
 
 ---
 
+## 测试覆盖
+
+- `test/input/input-manager.spec.ts` — 事件绑定/解绑、缩放/平移交互
+- `test/input/wheel-normalizer.spec.ts` — 滚轮标准化、delta 计算
+
+---
+
 ## 注意事项
 
 - `InputManager.bind(container)` 实际将滚轮/鼠标事件绑定到 `container.parentElement`，因此 `parentElement` 必须存在
 - `MouseAdapter` 的 `onWheel` 回调接收 `(WheelEvent, NormalizedWheel)`，滚轮标准化逻辑在 `WheelNormalizer` 中
 - 新增 DOM 事件相关逻辑时，请务必提供对应的解绑方法，确保 `destroy()` 能完整清理
+- `InputManagerOptions` 中的 `zoomInterceptor` 与 `panInterceptor` 用于插件系统注入 `beforeZoom` / `afterZoom` / `beforePan` / `afterPan` 钩子
