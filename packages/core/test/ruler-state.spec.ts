@@ -2,17 +2,17 @@ import { describe, it, expect } from 'vitest'
 import { produceState, createDefaultState, type RulerAction } from '../src/state/ruler-state'
 import type { GuideLine } from '../src/types'
 
-describe('produceState', () => {
+describe('produceState', () => { // 标尺状态生成测试
   const base = createDefaultState()
 
-  it('createDefaultState returns valid initial state', () => {
+  it('createDefaultState returns valid initial state', () => { // createDefaultState 返回有效初始状态
     expect(base.lines).toEqual([])
     expect(base.palette.bgColor).toBe('#f6f7f9')
     expect(base.snapConfig.enabled).toBe(true)
     expect(base.showReferLine).toBe(true)
   })
 
-  it('addLine appends a line', () => {
+  it('addLine appends a line', () => { // addLine 追加参考线
     const line: GuideLine = {
       id: 'l1',
       orientation: 'h',
@@ -26,7 +26,7 @@ describe('produceState', () => {
     expect(next.lines[0].position).toBe(100)
   })
 
-  it('removeLine filters by id', () => {
+  it('removeLine filters by id', () => { // removeLine 按 id 过滤
     const s1 = produceState(base, {
       type: 'addLine',
       line: { id: 'l1', orientation: 'h', position: 100, visible: true, locked: false }
@@ -35,12 +35,12 @@ describe('produceState', () => {
     expect(s2.lines).toHaveLength(0)
   })
 
-  it('removeLine returns same state if id not found', () => {
+  it('removeLine returns same state if id not found', () => { // id 未找到时返回相同状态
     const next = produceState(base, { type: 'removeLine', id: 'missing' })
     expect(next).toBe(base)
   })
 
-  it('moveLine updates position', () => {
+  it('moveLine updates position', () => { // moveLine 更新位置
     const s1 = produceState(base, {
       type: 'addLine',
       line: { id: 'l1', orientation: 'h', position: 100, visible: true, locked: false }
@@ -49,7 +49,7 @@ describe('produceState', () => {
     expect(s2.lines[0].position).toBe(200)
   })
 
-  it('updateLine merges updates', () => {
+  it('updateLine merges updates', () => { // updateLine 合并更新
     const s1 = produceState(base, {
       type: 'addLine',
       line: { id: 'l1', orientation: 'h', position: 100, visible: true, locked: false }
@@ -59,7 +59,7 @@ describe('produceState', () => {
     expect(s2.lines[0].position).toBe(100)
   })
 
-  it('setLines replaces entire array', () => {
+  it('setLines replaces entire array', () => { // setLines 替换整个数组
     const next = produceState(base, {
       type: 'setLines',
       lines: [{ id: 'x', orientation: 'v', position: 50, visible: true, locked: false }]
@@ -68,7 +68,7 @@ describe('produceState', () => {
     expect(next.lines[0].id).toBe('x')
   })
 
-  it('setLines replaces with converted h/v arrays', () => {
+  it('setLines replaces with converted h/v arrays', () => { // setLines 替换为转换后的 h/v 数组
     const lines: GuideLine[] = [
       { id: 'h1', orientation: 'h', position: 10, visible: true, locked: false },
       { id: 'h2', orientation: 'h', position: 20, visible: true, locked: false },
@@ -80,31 +80,31 @@ describe('produceState', () => {
     expect(next.lines.filter((l) => l.orientation === 'v')).toHaveLength(1)
   })
 
-  it('setPalette merges partial palette', () => {
+  it('setPalette merges partial palette', () => { // setPalette 合并部分调色板
     const next = produceState(base, { type: 'setPalette', palette: { bgColor: '#000' } })
     expect(next.palette.bgColor).toBe('#000')
     expect(next.palette.tickColor).toBe(base.palette.tickColor)
   })
 
-  it('setSnapConfig merges partial config', () => {
+  it('setSnapConfig merges partial config', () => { // setSnapConfig 合并部分配置
     const next = produceState(base, { type: 'setSnapConfig', config: { threshold: 10 } })
     expect(next.snapConfig.threshold).toBe(10)
     expect(next.snapConfig.enabled).toBe(true)
   })
 
-  it('toggleReferLine toggles boolean', () => {
+  it('toggleReferLine toggles boolean', () => { // toggleReferLine 切换布尔值
     const s1 = produceState(base, { type: 'toggleReferLine' })
     expect(s1.showReferLine).toBe(false)
     const s2 = produceState(s1, { type: 'toggleReferLine' })
     expect(s2.showReferLine).toBe(true)
   })
 
-  it('toggleReferLine accepts explicit value', () => {
+  it('toggleReferLine accepts explicit value', () => { // toggleReferLine 接受显式值
     const next = produceState(base, { type: 'toggleReferLine', value: false })
     expect(next.showReferLine).toBe(false)
   })
 
-  it('structural sharing: unchanged parts are same reference', () => {
+  it('structural sharing: unchanged parts are same reference', () => { // 结构共享：未更改部分保持相同引用
     const s1 = produceState(base, { type: 'setPalette', palette: { bgColor: '#fff' } })
     expect(s1.lines).toBe(base.lines)
     expect(s1.snapConfig).toBe(base.snapConfig)

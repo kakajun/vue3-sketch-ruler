@@ -190,12 +190,36 @@ const { scale, offset, engine, setTransform, zoomBy, zoomTo, panBy, reset } = us
 
 const ownScale = computed(() => scale.value)
 
-// 外部 prop 变化 → 同步到引擎
+// 外部 prop 变化 → 同步到引擎，并根据 zoomMode 选择缩放原点
 watch(
   () => props.scale,
   (newScale) => {
     if (newScale !== undefined && Math.abs(newScale - scale.value) > 1e-10) {
-      engine.setTransform({ scale: newScale })
+      let originX = rectWidth.value / 2
+      let originY = rectHeight.value / 2
+      const currentScale = scale.value
+
+      switch (props.zoomMode) {
+        case 'viewport-center': {
+          originX = rectWidth.value / 2
+          originY = rectHeight.value / 2
+          break
+        }
+        case 'content-center': {
+          originX = offset.value.x + (props.canvasWidth * currentScale) / 2
+          originY = offset.value.y + (props.canvasHeight * currentScale) / 2
+          break
+        }
+        case 'pointer':
+        default: {
+          // 外部直接修改 scale 无鼠标事件，回退到视口中心
+          originX = rectWidth.value / 2
+          originY = rectHeight.value / 2
+          break
+        }
+      }
+
+      engine.zoomTo(newScale, originX, originY)
     }
   }
 )

@@ -1,7 +1,7 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest'
 import { TransformEngine } from '../../src/engine/transform-engine'
 
-describe('TransformEngine', () => {
+describe('TransformEngine', () => { // 变换引擎测试
   let engine: TransformEngine
 
   beforeEach(() => {
@@ -12,21 +12,21 @@ describe('TransformEngine', () => {
     engine.destroy()
   })
 
-  test('initial state', () => {
+  test('initial state', () => { // 初始状态
     const state = engine.getState()
     expect(state.scale).toBe(1)
     expect(state.x).toBe(0)
     expect(state.y).toBe(0)
   })
 
-  test('onUpdate called immediately with current state', () => {
+  test('onUpdate called immediately with current state', () => { // onUpdate 立即以当前状态被调用
     const cb = vi.fn()
     engine.onUpdate(cb)
     expect(cb).toHaveBeenCalledTimes(1)
     expect(cb).toHaveBeenCalledWith(expect.objectContaining({ scale: 1, x: 0, y: 0 }))
   })
 
-  test('onUpdate returns unsubscribe function', () => {
+  test('onUpdate returns unsubscribe function', () => { // onUpdate 返回取消订阅函数
     const cb = vi.fn()
     const unsubscribe = engine.onUpdate(cb)
     unsubscribe()
@@ -34,7 +34,7 @@ describe('TransformEngine', () => {
     expect(cb).toHaveBeenCalledTimes(1)
   })
 
-  test('setTransform updates state', () => {
+  test('setTransform updates state', () => { // setTransform 更新状态
     engine.setTransform({ scale: 2, x: 100, y: 50 })
     const state = engine.getState()
     expect(state.scale).toBe(2)
@@ -42,21 +42,21 @@ describe('TransformEngine', () => {
     expect(state.y).toBe(50)
   })
 
-  test('scale is clamped by minZoom/maxZoom', () => {
+  test('scale is clamped by minZoom/maxZoom', () => { // 缩放被限制在最小/最大范围内
     engine.setTransform({ scale: 0.01 })
     expect(engine.getState().scale).toBe(0.1)
     engine.setTransform({ scale: 100 })
     expect(engine.getState().scale).toBe(10)
   })
 
-  test('panBy updates translate', () => {
+  test('panBy updates translate', () => { // panBy 更新平移量
     engine.panBy(50, 30)
     const state = engine.getState()
     expect(state.x).toBe(50)
     expect(state.y).toBe(30)
   })
 
-  test('zoomBy with origin preserves origin point', () => {
+  test('zoomBy with origin preserves origin point', () => { // zoomBy 以原点为中心时保持原点坐标
     engine.zoomBy(1, 0, 0)
     const state = engine.getState()
     expect(state.scale).toBe(2)
@@ -65,7 +65,7 @@ describe('TransformEngine', () => {
     expect(worldAtOrigin.y).toBeCloseTo(0, 6)
   })
 
-  test('zoomBy with non-zero origin preserves origin world coordinate', () => {
+  test('zoomBy with non-zero origin preserves origin world coordinate', () => { // zoomBy 以非零原点为中心时保持世界坐标
     // 缩放前：screen(100,100) 对应 world(100,100)
     const worldAtOriginBefore = engine.toWorldPoint(100, 100)
     expect(worldAtOriginBefore.x).toBe(100)
@@ -81,12 +81,12 @@ describe('TransformEngine', () => {
     expect(worldAtOriginAfter.y).toBeCloseTo(100, 6)
   })
 
-  test('zoomTo sets exact scale', () => {
+  test('zoomTo sets exact scale', () => { // zoomTo 设置精确缩放值
     engine.zoomTo(3, 0, 0)
     expect(engine.getState().scale).toBe(3)
   })
 
-  test('toWorldPoint and toScreenPoint are inverse', () => {
+  test('toWorldPoint and toScreenPoint are inverse', () => { // toWorldPoint 与 toScreenPoint 互逆
     engine.setTransform({ scale: 1.5, x: -30, y: 40 })
     const world = { x: 100, y: 200 }
     const screen = engine.toScreenPoint(world.x, world.y)
@@ -95,14 +95,14 @@ describe('TransformEngine', () => {
     expect(back.y).toBeCloseTo(world.y, 6)
   })
 
-  test('getMatrix returns copy', () => {
+  test('getMatrix returns copy', () => { // getMatrix 返回副本
     const m1 = engine.getMatrix()
     const m2 = engine.getMatrix()
     expect(m1).not.toBe(m2)
     expect(m1[0]).toBe(m2[0])
   })
 
-  test('multiple callbacks receive updates', () => {
+  test('multiple callbacks receive updates', () => { // 多个回调接收更新
     const cb1 = vi.fn()
     const cb2 = vi.fn()
     engine.onUpdate(cb1)
@@ -112,14 +112,14 @@ describe('TransformEngine', () => {
     expect(cb2).toHaveBeenLastCalledWith(expect.objectContaining({ scale: 2 }))
   })
 
-  test('zoomBy with tiny delta is no-op', () => {
+  test('zoomBy with tiny delta is no-op', () => { // zoomBy 微小增量无操作
     const before = engine.getState()
     engine.zoomBy(1e-8, 100, 100)
     const after = engine.getState()
     expect(after.scale).toBe(before.scale)
   })
 
-  test('destroy cleans up', () => {
+  test('destroy cleans up', () => { // destroy 清理资源
     const animated = new TransformEngine({ x: 0, y: 0, scale: 1 }, { enableAnimation: true })
     animated.setTransform({ scale: 2 })
     animated.destroy()
@@ -127,7 +127,7 @@ describe('TransformEngine', () => {
   })
 })
 
-describe('TransformEngine with animation', () => {
+describe('TransformEngine with animation', () => { // 带动画的变换引擎测试
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true })
   })
@@ -136,7 +136,7 @@ describe('TransformEngine with animation', () => {
     vi.useRealTimers()
   })
 
-  test('animation interpolates values', async () => {
+  test('animation interpolates values', async () => { // 动画插值
     const engine = new TransformEngine(
       { x: 0, y: 0, scale: 1 },
       { enableAnimation: true, animationDuration: 100 }

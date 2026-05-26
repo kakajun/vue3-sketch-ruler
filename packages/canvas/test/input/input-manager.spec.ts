@@ -4,15 +4,15 @@ import { TransformEngine } from '@sketch-ruler/core'
 import { MouseAdapter } from '../../src/input/mouse-adapter'
 import { getZoomDelta } from '../../src/input/wheel-normalizer'
 
-describe('InputManager', () => {
-  it('constructs with default options', () => {
+describe('InputManager', () => { // 输入管理器测试
+  it('constructs with default options', () => { // 以默认选项构造
     const engine = new TransformEngine()
     const im = new InputManager(engine)
     expect(im).toBeDefined()
     expect(im.getCursorClass()).toBe('default')
   })
 
-  it('getCursorClass returns grab when space pressed', () => {
+  it('getCursorClass returns grab when space pressed', () => { // 按下空格时 getCursorClass 返回 grab
     const engine = new TransformEngine()
     const im = new InputManager(engine)
 
@@ -40,7 +40,7 @@ describe('InputManager', () => {
     document.body.removeChild(parent)
   })
 
-  it('bind/unbind/destroy does not throw', () => {
+  it('bind/unbind/destroy does not throw', () => { // bind/unbind/destroy 不抛出异常
     const engine = new TransformEngine()
     const im = new InputManager(engine)
     const container = document.createElement('div')
@@ -52,7 +52,7 @@ describe('InputManager', () => {
     expect(() => im.destroy()).not.toThrow()
   })
 
-  it('selfHandle prevents binding', () => {
+  it('selfHandle prevents binding', () => { // selfHandle 阻止绑定
     const engine = new TransformEngine()
     const im = new InputManager(engine, { selfHandle: true })
     const container = document.createElement('div')
@@ -64,15 +64,15 @@ describe('InputManager', () => {
   })
 })
 
-describe('MouseAdapter', () => {
-  it('binds and unbinds without throw', () => {
+describe('MouseAdapter', () => { // 鼠标适配器测试
+  it('binds and unbinds without throw', () => { // 绑定和解绑不抛出异常
     const container = document.createElement('div')
     const adapter = new MouseAdapter(container, {})
     expect(() => adapter.bind()).not.toThrow()
     expect(() => adapter.unbind()).not.toThrow()
   })
 
-  it('invokes callbacks on events', () => {
+  it('invokes callbacks on events', () => { // 事件触发回调
     const container = document.createElement('div')
     const onWheel = vi.fn()
     const onMouseDown = vi.fn()
@@ -90,8 +90,8 @@ describe('MouseAdapter', () => {
   })
 })
 
-describe('getZoomDelta', () => {
-  it('scales by sensitivity', () => {
+describe('getZoomDelta', () => { // getZoomDelta 测试
+  it('scales by sensitivity', () => { // 按灵敏度缩放
     const event = new WheelEvent('wheel', { deltaY: 100 })
     const delta = getZoomDelta(event, 0.001)
     expect(delta).toBeCloseTo(-0.1, 5)

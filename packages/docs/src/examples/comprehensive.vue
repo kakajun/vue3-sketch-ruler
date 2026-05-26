@@ -299,7 +299,6 @@ const scaleChange = (e: Event): void => {
   const target = e.target as HTMLInputElement
   if (target) {
     state.scale = Number(target.value)
-    sketchRef.value?.setTransform?.({ scale: state.scale })
   }
 }
 

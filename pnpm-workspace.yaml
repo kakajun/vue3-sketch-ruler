@@ -3,3 +3,5 @@ packages:
 allowBuilds:
   '@parcel/watcher': false
   esbuild: false
+overrides:
+  parse5: ^7.1.2

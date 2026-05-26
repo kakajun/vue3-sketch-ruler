@@ -2,40 +2,40 @@ import { describe, test, expect } from 'vitest'
 import { ref } from 'vue'
 import { useRulerScale, getTickConfig } from '../../src/composables/useRulerScale'
 
-describe('getTickConfig', () => {
-  test('returns correct config for scale < 0.2', () => {
+describe('getTickConfig', () => { // 获取刻度配置测试
+  test('returns correct config for scale < 0.2', () => { // 缩放 < 0.2 时返回正确配置
     const config = getTickConfig(0.1)
     expect(config.interval).toBe(500)
     expect(config.subdivisions).toBe(5)
   })
 
-  test('returns correct config for scale 0.3', () => {
+  test('returns correct config for scale 0.3', () => { // 缩放 0.3 时返回正确配置
     const config = getTickConfig(0.3)
     expect(config.interval).toBe(200)
     expect(config.subdivisions).toBe(4)
   })
 
-  test('returns correct config for scale 1.0', () => {
+  test('returns correct config for scale 1.0', () => { // 缩放 1.0 时返回正确配置
     const config = getTickConfig(1.0)
     expect(config.interval).toBe(50)
     expect(config.subdivisions).toBe(5)
   })
 
-  test('returns correct config for scale 3.0', () => {
+  test('returns correct config for scale 3.0', () => { // 缩放 3.0 时返回正确配置
     const config = getTickConfig(3.0)
     expect(config.interval).toBe(20)
     expect(config.subdivisions).toBe(4)
   })
 
-  test('returns correct config for scale >= 10', () => {
+  test('returns correct config for scale >= 10', () => { // 缩放 >= 10 时返回正确配置
     const config = getTickConfig(15)
     expect(config.interval).toBe(5)
     expect(config.subdivisions).toBe(5)
   })
 })
 
-describe('useRulerScale', () => {
-  test('generates ticks for horizontal ruler', () => {
+describe('useRulerScale', () => { // 标尺刻度组合式函数测试
+  test('generates ticks for horizontal ruler', () => { // 为水平标尺生成刻度
     const { ticks } = useRulerScale({
       thick: 20,
       viewportSize: ref({ width: 400, height: 300 }),
@@ -52,7 +52,7 @@ describe('useRulerScale', () => {
     })
   })
 
-  test('generates minor ticks when showMinorTicks is true', () => {
+  test('generates minor ticks when showMinorTicks is true', () => { // showMinorTicks 为 true 时生成次刻度
     const { ticks } = useRulerScale({
       thick: 20,
       viewportSize: ref({ width: 400, height: 300 }),
@@ -71,7 +71,7 @@ describe('useRulerScale', () => {
     })
   })
 
-  test('generates ticks for vertical ruler', () => {
+  test('generates ticks for vertical ruler', () => { // 为垂直标尺生成刻度
     const { ticks } = useRulerScale({
       thick: 20,
       viewportSize: ref({ width: 400, height: 300 }),
@@ -82,7 +82,7 @@ describe('useRulerScale', () => {
     expect(ticks.value.length).toBeGreaterThan(0)
   })
 
-  test('tick positions respect scale and offset', () => {
+  test('tick positions respect scale and offset', () => { // 刻度位置遵循缩放和偏移
     const { ticks } = useRulerScale({
       thick: 20,
       viewportSize: ref({ width: 400, height: 300 }),
@@ -97,7 +97,7 @@ describe('useRulerScale', () => {
     }
   })
 
-  test('returns empty array for zero viewport', () => {
+  test('returns empty array for zero viewport', () => { // 视口为零时返回空数组
     const { ticks } = useRulerScale({
       thick: 20,
       viewportSize: ref({ width: 0, height: 0 }),
@@ -107,7 +107,7 @@ describe('useRulerScale', () => {
     expect(ticks.value).toEqual([])
   })
 
-  test('includes buffer region ticks', () => {
+  test('includes buffer region ticks', () => { // 包含缓冲区刻度
     const { ticks } = useRulerScale({
       thick: 20,
       viewportSize: ref({ width: 200, height: 200 }),
