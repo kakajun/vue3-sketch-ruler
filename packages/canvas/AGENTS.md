@@ -79,7 +79,7 @@ const input = new InputManager(engine, {
   zoomMode: 'pointer', // 'pointer' | 'viewport-center' | 'content-center'
   viewportSize: { width, height },
   contentSize: { width, height },
-  selfHandle: false,   // 是否由外部自行处理事件
+  selfHandle: false, // 是否由外部自行处理事件
   onCursorChange: (cls) => {}, // 'default' | 'grab' | 'grabbing'
   zoomInterceptor: { beforeZoom, afterZoom },
   panInterceptor: { beforePan, afterPan }

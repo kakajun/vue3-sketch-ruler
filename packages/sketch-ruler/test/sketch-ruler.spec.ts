@@ -48,6 +48,43 @@ describe('SketchRuler integration', () => {
     expect(typeof emitted[0][0]).toBe('boolean')
   })
 
+  test('paddingRatio affects autoCenter initial scale and offset', async () => {
+    // paddingRatio 影响 autoCenter 的初始缩放与偏移
+    const wrapper = mount(SketchRuler as any, {
+      props: {
+        width: 1000,
+        height: 800,
+        canvasWidth: 2000,
+        canvasHeight: 1600,
+        autoCenter: true,
+        paddingRatio: 0.2,
+        selfHandle: true
+      },
+      slots: {
+        default: '<div data-type="page" style="width:2000px;height:1600px;"></div>'
+      },
+      attachTo: document.body
+    })
+
+    await Promise.resolve()
+    await new Promise((r) => setTimeout(r, 50))
+
+    const engine = (wrapper.vm as any).engine
+    const state = engine.getState()
+
+    // paddingRatio=0.2 时，可用视口为 800*0.8=640, 1000*0.8=800
+    // 画布 2000x1600，scale = min(800/2000, 640/1600) = 0.4
+    expect(state.scale).toBeCloseTo(0.4, 5)
+
+    // 更新 paddingRatio 为 0，应重新 fit（无留白）
+    await wrapper.setProps({ paddingRatio: 0 })
+    await new Promise((r) => setTimeout(r, 50))
+
+    const newState = engine.getState()
+    // paddingRatio=0 时，scale = min(1000/2000, 800/1600) = 0.5
+    expect(newState.scale).toBeCloseTo(0.5, 5)
+  })
+
   test('multiple instances have independent transform engines', async () => {
     // 多实例拥有独立的变换引擎
     const container = document.createElement('div')

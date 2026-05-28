@@ -14,6 +14,16 @@
 - Vue 侧插件入口（`definePlugin`）
 - 基于 `provide/inject` 的跨层级状态共享（`RulerContextKey`）
 
+### SketchRuler 关键 Props
+
+| 属性 | 说明 | 默认值 |
+| --- | --- | --- |
+| `autoCenter` | 初始化时自动将画布居中 | `true` |
+| `paddingRatio` | 自动居中时的边距比例（`0 ~ 0.5`），控制画布四周留白 | `0.2` |
+| `initialOffset` | `autoCenter=false` 时使用的初始偏移 | `{ x:0, y:0 }` |
+
+> `paddingRatio` 变更后会实时触发重新 fit 并更新画布位置（仅 `autoCenter=true` 时生效）。
+
 ---
 
 ## 技术栈
@@ -115,14 +125,14 @@ pnpm clean
 
 ### 子路径导出（package.json exports）
 
-| 路径                         | 说明                      |
-| ---------------------------- | ------------------------- |
-| `vue3-sketch-ruler`          | 完整导出                  |
-| `vue3-sketch-ruler/style.css`| 组件样式                  |
-| `vue3-sketch-ruler/engine`   | 透传 `@sketch-ruler/core` |
-| `vue3-sketch-ruler/composables` | 组合式函数            |
-| `vue3-sketch-ruler/renderers`| 透传 `@sketch-ruler/canvas` |
-| `vue3-sketch-ruler/plugins`  | 插件系统                  |
+| 路径                            | 说明                        |
+| ------------------------------- | --------------------------- |
+| `vue3-sketch-ruler`             | 完整导出                    |
+| `vue3-sketch-ruler/style.css`   | 组件样式                    |
+| `vue3-sketch-ruler/engine`      | 透传 `@sketch-ruler/core`   |
+| `vue3-sketch-ruler/composables` | 组合式函数                  |
+| `vue3-sketch-ruler/renderers`   | 透传 `@sketch-ruler/canvas` |
+| `vue3-sketch-ruler/plugins`     | 插件系统                    |
 
 > 开发环境下 `development` 条件指向 `src/index.ts`，支持源码级调试。
 

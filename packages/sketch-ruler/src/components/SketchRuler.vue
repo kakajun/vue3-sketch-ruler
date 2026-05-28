@@ -82,7 +82,7 @@ import { markRaw } from 'vue'
 import { useCanvasTransform } from '../composables/useCanvasTransform'
 import { InputManager } from '@sketch-ruler/canvas'
 import { RulerContextKey } from '../state/ruler-context'
-import { importLines, generateLineId, getZoomOrigin } from '@sketch-ruler/core'
+import { importLines, generateLineId, getZoomOrigin, fitRect } from '@sketch-ruler/core'
 import type { GuideLine, RulerContext, RulerPalette, ZoomMode } from '../state/ruler-context'
 
 import RulerWrapperV3 from './RulerWrapperV3.vue'
@@ -123,6 +123,7 @@ export interface SketchRulerProps {
   initialOffset?: { x: number; y: number }
   /** 是否显示次刻度线，默认 false */
   showMinorTicks?: boolean
+  paddingRatio?: number
   eyeIcon?: string
   closeEyeIcon?: string
   /** 参考线拖出画布时显示的删除提示文案 */
@@ -154,6 +155,7 @@ const props = withDefaults(defineProps<SketchRulerProps>(), {
   shadow: () => ({ x: 0, y: 0, width: 0, height: 0 }),
   initialOffset: () => ({ x: 0, y: 0 }),
   showMinorTicks: false,
+  paddingRatio: 0.2,
   deleteLabel: '放开删除'
 })
 
@@ -180,7 +182,7 @@ const { scale, offset, engine, setTransform, zoomBy, zoomTo, panBy, reset } = us
   autoCenter: props.autoCenter,
   canvasSize: { width: props.canvasWidth, height: props.canvasHeight },
   viewportSize: { width: rectWidth.value, height: rectHeight.value },
-  paddingRatio: 0.2
+  paddingRatio: props.paddingRatio
 })
 
 const ownScale = computed(() => scale.value)
@@ -215,6 +217,21 @@ watch(
   (mode) => {
     if (mode) {
       engine.setAnimationMode(mode)
+    }
+  }
+)
+
+watch(
+  () => props.paddingRatio,
+  () => {
+    if (props.autoCenter) {
+      const fit = fitRect(
+        { x: 0, y: 0, width: props.canvasWidth, height: props.canvasHeight },
+        { x: 0, y: 0, width: rectWidth.value, height: rectHeight.value },
+        'contain',
+        props.paddingRatio
+      )
+      setTransform({ scale: fit.scale, x: fit.x, y: fit.y })
     }
   }
 )

@@ -52,6 +52,17 @@
         step="1"
         style="width: 80px"
       />
+      <span class="mr10 font16">边距比:{{ post.paddingRatio }}</span>
+      <input
+        class="mr10 font16"
+        v-model.number="post.paddingRatio"
+        type="range"
+        min="0"
+        max="0.5"
+        step="0.05"
+        style="width: 80px"
+      />
+      <span class="mr10 font16">缩放:</span>
       <input
         class="mr10 font16"
         :value="state.scale"
@@ -90,6 +101,7 @@
         :min-zoom="post.minZoom"
         :max-zoom="post.maxZoom"
         :snap-threshold="post.snapThreshold"
+        :padding-ratio="post.paddingRatio"
         :plugins="plugins"
         @zoomchange="handleZoomChange"
         @update:lines="handleLinesChange"
@@ -261,6 +273,7 @@ const post = reactive({
   minZoom: 0.1,
   maxZoom: 3,
   snapThreshold: 5,
+  paddingRatio: 0.1,
   lines: {
     h: [0, 250],
     v: [0, 500]

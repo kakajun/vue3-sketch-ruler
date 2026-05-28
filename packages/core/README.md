@@ -206,7 +206,10 @@ const css = toCSSString(matrix) // "matrix(1.5, 0, 0, 1.5, 100, 50)"
 const world = toWorldPoint(matrix, 200, 200)
 
 // 批量转换
-const points = batchToWorld(matrix, [{ x: 0, y: 0 }, { x: 100, y: 100 }])
+const points = batchToWorld(matrix, [
+  { x: 0, y: 0 },
+  { x: 100, y: 100 }
+])
 
 // 将内容矩形适配到视口
 const fitted = fitRect({ width: 1920, height: 1080 }, { width: 1470, height: 700 }, 0.2)
