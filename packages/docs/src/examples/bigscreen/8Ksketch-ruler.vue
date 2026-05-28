@@ -10,6 +10,7 @@
       v-model:scale="scale"
       :width="rectWidth"
       :height="rectHeight"
+      :padding-ratio="0.1"
       :canvas-width="canvasWidth"
       :canvas-height="canvasHeight"
       :lines="lines"

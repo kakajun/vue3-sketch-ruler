@@ -433,12 +433,13 @@ watch(
     const cw = props.canvasWidth
     const ch = props.canvasHeight
     if (w > 0 && h > 0 && cw > 0 && ch > 0) {
-      const scaleX = (w * 0.8) / cw
-      const scaleY = (h * 0.8) / ch
-      const newScale = Math.min(scaleX, scaleY)
-      const newX = (w - cw * newScale) / 2
-      const newY = (h - ch * newScale) / 2
-      setTransform({ scale: newScale, x: newX, y: newY })
+      const fit = fitRect(
+        { x: 0, y: 0, width: cw, height: ch },
+        { x: 0, y: 0, width: w, height: h },
+        'contain',
+        props.paddingRatio
+      )
+      setTransform({ scale: fit.scale, x: fit.x, y: fit.y })
     }
   }
 )
