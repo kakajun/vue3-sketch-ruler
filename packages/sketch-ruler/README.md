@@ -266,8 +266,8 @@ const plugins: SketchRulerPlugin[] = [
 | labelColor           | 刻度标签颜色   | `#7D8694`  |
 | guideLineColor       | 参考线颜色     | `#51d6a9`  |
 | guideLineLockedColor | 锁定参考线颜色 | `#d4d7dc`  |
-| hoverBg              | 标签背景色     | `#000`     |
-| hoverColor           | 标签文字色     | `#fff`     |
+| hoverBg              | 标签背景色     | `transparent` |
+| hoverColor           | 标签文字色     | `#000`     |
 | borderColor          | 尺子边框颜色   | `#eeeeef`  |
 | shadowColor          | 阴影高亮色     | `#e9f7fe`  |
 | guideLineStyle       | 参考线样式     | `'dashed'` |

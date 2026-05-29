@@ -5,7 +5,6 @@
     <div
       v-if="isCreatingLine"
       class="preview-line"
-      :class="{ snapping: isSnapping }"
       :style="previewStyle"
     >
       <span class="preview-label">{{ Math.round(previewWorldPos) }}</span>
@@ -21,11 +20,7 @@
         @mouseleave.stop="handleLineLeave"
         @mousedown.stop="handleLineMouseDown(line, $event)"
       >
-        <span
-          v-if="showLineLabel && activeLineId === line.id"
-          class="line-label"
-          :style="activeLineLabelStyle"
-        >
+        <span v-if="!line.locked" class="line-label">
           {{ lineLabelText(line) }}
         </span>
       </div>
@@ -88,7 +83,7 @@ const containerClass = computed(() => (props.vertical ? 'v-container' : 'h-conta
 const rulerStyle = computed(() => ({
   width: props.width + 'px',
   height: props.height + 'px',
-  cursor: props.vertical ? 'ew-resize' : 'ns-resize',
+  cursor: props.lockLine ? 'default' : props.vertical ? 'ew-resize' : 'ns-resize',
   [props.vertical ? 'borderRight' : 'borderBottom']: `1px solid ${props.palette.borderColor}`
 }))
 
@@ -96,10 +91,7 @@ const displayLines = computed(() => props.lines)
 
 // === 已存在参考线交互 ===
 const activeLineId = ref<string | null>(null)
-const showLineLabel = ref(false)
 const draggingLinePos = ref<number | null>(null)
-const labelOffset = ref({ x: 0, y: 0 })
-let labelTimer: ReturnType<typeof setTimeout> | null = null
 
 // 缩放期间临时禁用参考线交互，防止滚轮事件被参考线拦截导致页面缩放
 const isInScale = ref(false)
@@ -122,19 +114,10 @@ watch(
 function handleLineEnter(line: GuideLine): void {
   if (line.locked || props.lockLine) return
   activeLineId.value = line.id
-  if (labelTimer) clearTimeout(labelTimer)
-  labelTimer = setTimeout(() => {
-    if (activeLineId.value === line.id) showLineLabel.value = true
-  }, 50)
 }
 
 function handleLineLeave(): void {
-  if (labelTimer) clearTimeout(labelTimer)
-  labelTimer = setTimeout(() => {
-    showLineLabel.value = false
-    activeLineId.value = null
-    labelOffset.value = { x: 0, y: 0 }
-  }, 200)
+  activeLineId.value = null
 }
 
 function lineLabelText(line: GuideLine): string {
@@ -146,34 +129,15 @@ function lineLabelText(line: GuideLine): string {
     if (isOutOfCanvas || isOverRuler) {
       return props.deleteLabel
     }
-    return `${props.vertical ? 'X' : 'Y'}: ${Math.round(draggingLinePos.value)}`
   }
-  return `${props.vertical ? 'X' : 'Y'}: ${Math.round(line.position)}`
+  return String(Math.round(line.position))
 }
-
-const activeLineLabelStyle = computed(() => {
-  if (draggingLinePos.value === null) return {}
-  if (props.vertical) {
-    return {
-      top: `${labelOffset.value.y}px`,
-      left: '6px',
-      transform: 'scale(0.83)'
-    }
-  }
-  return {
-    left: `${labelOffset.value.x}px`,
-    top: '6px',
-    transform: 'scale(0.83)'
-  }
-})
 
 function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
   if (line.locked || props.lockLine) return
   e.preventDefault()
   activeLineId.value = line.id
-  showLineLabel.value = true
   draggingLinePos.value = line.position
-
   const rect = canvasRef.value?.getBoundingClientRect()
   if (!rect) return
 
@@ -197,13 +161,6 @@ function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
       newPos = gridPos
     }
 
-    draggingLinePos.value = newPos
-
-    // 标签跟随鼠标
-    const mouseX = moveEvent.clientX - rect.left
-    const mouseY = moveEvent.clientY - rect.top
-    labelOffset.value = { x: mouseX, y: mouseY }
-
     // 越界检测：记录是否拖出画布外，等鼠标放开时再删除
     const limit = props.vertical ? props.canvasWidth : props.canvasHeight
     const isOutOfCanvas = newPos < 0 || newPos > limit
@@ -213,6 +170,8 @@ function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
     const isOverRuler = screenPos <= props.thick
 
     shouldDelete = isOutOfCanvas || isOverRuler
+
+    draggingLinePos.value = newPos
 
     // 始终更新位置，让线可以跟随鼠标移出画布
     emit('updateLine', line.id, Math.round(newPos))
@@ -224,10 +183,8 @@ function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
     }
     document.removeEventListener('mousemove', onMove)
     document.removeEventListener('mouseup', onUp)
-    showLineLabel.value = false
     activeLineId.value = null
     draggingLinePos.value = null
-    labelOffset.value = { x: 0, y: 0 }
   }
 
   document.addEventListener('mousemove', onMove)
@@ -236,25 +193,27 @@ function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
 
 // === M3 W12: 拖拽创建参考线 + 吸附预览 ===
 const isCreatingLine = ref(false)
-const isSnapping = ref(false)
 const previewScreenPos = ref(0)
 const previewWorldPos = ref(0)
 
 const previewStyle = computed(() => {
   const pos = previewScreenPos.value
+  const border = `1px dashed ${props.palette.guideLineColor}`
   if (props.vertical) {
     return {
       left: `${pos}px`,
       top: 0,
       height: '100%',
-      width: '1px'
+      width: '1px',
+      borderLeft: border
     }
   }
   return {
     top: `${pos}px`,
     left: 0,
     width: '100%',
-    height: '1px'
+    height: '1px',
+    borderBottom: border
   }
 })
 
@@ -262,7 +221,6 @@ function handlePointerDown(e: MouseEvent): void {
   if (props.lockLine) return
   // 仅在标尺区域（非刻度标签区域）触发
   isCreatingLine.value = true
-  isSnapping.value = false
   updatePreview(e)
 
   const onMove = (moveEvent: MouseEvent) => {
@@ -290,7 +248,6 @@ function handlePointerDown(e: MouseEvent): void {
     }
 
     isCreatingLine.value = false
-    isSnapping.value = false
   }
 
   document.addEventListener('mousemove', onMove)
@@ -317,9 +274,6 @@ function updatePreview(e: MouseEvent): void {
 
   if (dist < snapThreshold) {
     worldPos = gridPos
-    isSnapping.value = true
-  } else {
-    isSnapping.value = false
   }
 
   // 转回标尺容器坐标系，让预览线跟随鼠标/吸附位置
@@ -330,8 +284,10 @@ function updatePreview(e: MouseEvent): void {
 const lineStyle = (line: GuideLine) => {
   const canvasOffset = props.vertical ? props.offset.x : props.offset.y
   const pos = line.position * props.scale + canvasOffset
-  const cursor = line.locked ? 'default' : props.vertical ? 'ew-resize' : 'ns-resize'
-  const pointerEvents: 'auto' | 'none' = line.locked || isInScale.value ? 'none' : 'auto'
+  const cursor =
+    line.locked || props.lockLine ? 'default' : props.vertical ? 'ew-resize' : 'ns-resize'
+  const pointerEvents: 'auto' | 'none' =
+    line.locked || props.lockLine || isInScale.value ? 'none' : 'auto'
   if (props.vertical) {
     return {
       left: `${pos}px`,
@@ -506,36 +462,28 @@ watch(
 .preview-line {
   position: absolute;
   pointer-events: none;
-  background: v-bind('palette.guideLineColor');
-  opacity: 0.5;
   z-index: 5;
-
-  &.snapping {
-    opacity: 0.9;
-    background: v-bind('palette.hoverBg');
-  }
 }
 
-.line-label {
+.line-label,
+.preview-label {
   position: absolute;
-  background: v-bind('palette.hoverBg');
   color: v-bind('palette.hoverColor');
-  font-size: 10px;
-  padding: 2px 4px;
-  border-radius: 2px;
+  font-size: 12px;
   white-space: nowrap;
   pointer-events: none;
   transform: scale(0.83);
 }
 
-.preview-label {
-  position: absolute;
-  background: v-bind('palette.hoverBg');
-  color: v-bind('palette.hoverColor');
-  font-size: 10px;
-  padding: 2px 4px;
-  border-radius: 2px;
-  white-space: nowrap;
-  pointer-events: none;
+.h-container .line-label,
+.h-container .preview-label {
+  top: 14px;
+  left: 24px;
+}
+
+.v-container .line-label,
+.v-container .preview-label {
+  top: 24px;
+  left: 10px;
 }
 </style>

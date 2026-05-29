@@ -22,6 +22,23 @@
 | `paddingRatio` | 自动居中时的边距比例（`0 ~ 0.5`），控制画布四周留白 | `0.2` |
 | `initialOffset` | `autoCenter=false` 时使用的初始偏移 | `{ x:0, y:0 }` |
 
+### Palette 默认值
+
+| 属性 | 默认值 |
+| --- | --- |
+| `bgColor` | `#f6f7f9` |
+| `tickColor` | `#BABBBC` |
+| `labelColor` | `#7D8694` |
+| `guideLineColor` | `#51d6a9` |
+| `guideLineLockedColor` | `#d4d7dc` |
+| `hoverBg` | `transparent` |
+| `hoverColor` | `#000` |
+| `borderColor` | `#eeeeef` |
+| `shadowColor` | `#e9f7fe` |
+| `guideLineStyle` | `'dashed'` |
+| `guideLineWidth` | `1` |
+| `labelEnabled` | `true` |
+
 > `paddingRatio` 变更后会实时触发重新 fit 并更新画布位置（仅 `autoCenter=true` 时生效）。
 
 ---
