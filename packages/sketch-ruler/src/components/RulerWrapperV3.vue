@@ -21,7 +21,11 @@
         @mouseleave.stop="handleLineLeave"
         @mousedown.stop="handleLineMouseDown(line, $event)"
       >
-        <span v-if="showLineLabel && activeLineId === line.id" class="line-label">
+        <span
+          v-if="showLineLabel && activeLineId === line.id"
+          class="line-label"
+          :style="activeLineLabelStyle"
+        >
           {{ lineLabelText(line) }}
         </span>
       </div>
@@ -35,6 +39,7 @@ import type { RulerPalette } from '../state/ruler-context'
 import type { GuideLine } from '../state/ruler-context'
 import { useRulerScale } from '../composables/useRulerScale'
 import { Canvas2DRenderer } from '@sketch-ruler/canvas'
+import { getTickConfig } from '@sketch-ruler/core'
 
 interface Props {
   vertical: boolean
@@ -93,6 +98,7 @@ const displayLines = computed(() => props.lines)
 const activeLineId = ref<string | null>(null)
 const showLineLabel = ref(false)
 const draggingLinePos = ref<number | null>(null)
+const labelOffset = ref({ x: 0, y: 0 })
 let labelTimer: ReturnType<typeof setTimeout> | null = null
 
 // 缩放期间临时禁用参考线交互，防止滚轮事件被参考线拦截导致页面缩放
@@ -127,19 +133,39 @@ function handleLineLeave(): void {
   labelTimer = setTimeout(() => {
     showLineLabel.value = false
     activeLineId.value = null
+    labelOffset.value = { x: 0, y: 0 }
   }, 200)
 }
 
 function lineLabelText(line: GuideLine): string {
   if (activeLineId.value === line.id && draggingLinePos.value !== null) {
     const limit = props.vertical ? props.canvasWidth : props.canvasHeight
-    if (draggingLinePos.value < 0 || draggingLinePos.value > limit) {
+    const isOutOfCanvas = draggingLinePos.value < 0 || draggingLinePos.value > limit
+    const screenPos = draggingLinePos.value * props.scale + (props.vertical ? props.offset.x : props.offset.y)
+    const isOverRuler = screenPos <= props.thick
+    if (isOutOfCanvas || isOverRuler) {
       return props.deleteLabel
     }
     return `${props.vertical ? 'X' : 'Y'}: ${Math.round(draggingLinePos.value)}`
   }
   return `${props.vertical ? 'X' : 'Y'}: ${Math.round(line.position)}`
 }
+
+const activeLineLabelStyle = computed(() => {
+  if (draggingLinePos.value === null) return {}
+  if (props.vertical) {
+    return {
+      top: `${labelOffset.value.y}px`,
+      left: '6px',
+      transform: 'scale(0.83)'
+    }
+  }
+  return {
+    left: `${labelOffset.value.x}px`,
+    top: '6px',
+    transform: 'scale(0.83)'
+  }
+})
 
 function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
   if (line.locked || props.lockLine) return
@@ -162,25 +188,31 @@ function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
     const delta = (currentMouse - startMouse) / props.scale
     let newPos = startPos + delta
 
-    // 吸附到最近刻度
+    // 吸附到最近主刻度（基于当前缩放级别的刻度间隔，不依赖可见刻度数组）
     const snapThreshold = 10 / props.scale
-    let bestTick: number | null = null
-    let bestDist = Infinity
-    for (const mark of ticks.value) {
-      if (!mark.isMajor) continue
-      const dist = Math.abs(newPos - mark.value)
-      if (dist < snapThreshold && dist < bestDist) {
-        bestDist = dist
-        bestTick = mark.value
-      }
+    const interval = getTickConfig(props.scale).interval
+    const gridPos = Math.round(newPos / interval) * interval
+    const dist = Math.abs(newPos - gridPos)
+    if (dist < snapThreshold) {
+      newPos = gridPos
     }
-    if (bestTick !== null) newPos = bestTick
 
     draggingLinePos.value = newPos
 
+    // 标签跟随鼠标
+    const mouseX = moveEvent.clientX - rect.left
+    const mouseY = moveEvent.clientY - rect.top
+    labelOffset.value = { x: mouseX, y: mouseY }
+
     // 越界检测：记录是否拖出画布外，等鼠标放开时再删除
     const limit = props.vertical ? props.canvasWidth : props.canvasHeight
-    shouldDelete = newPos < 0 || newPos > limit
+    const isOutOfCanvas = newPos < 0 || newPos > limit
+
+    // 标尺区域检测：参考线被拖回到标尺区域（屏幕位置 ≤ thick）也应删除
+    const screenPos = newPos * props.scale + (props.vertical ? props.offset.x : props.offset.y)
+    const isOverRuler = screenPos <= props.thick
+
+    shouldDelete = isOutOfCanvas || isOverRuler
 
     // 始终更新位置，让线可以跟随鼠标移出画布
     emit('updateLine', line.id, Math.round(newPos))
@@ -195,6 +227,7 @@ function handleLineMouseDown(line: GuideLine, e: MouseEvent): void {
     showLineLabel.value = false
     activeLineId.value = null
     draggingLinePos.value = null
+    labelOffset.value = { x: 0, y: 0 }
   }
 
   document.addEventListener('mousemove', onMove)
@@ -244,7 +277,9 @@ function handlePointerDown(e: MouseEvent): void {
       // 如果拖拽距离很小（< 3px），视为点击直接创建；否则按最终位置创建
       const worldPos = previewWorldPos.value
       const limit = props.vertical ? props.canvasWidth : props.canvasHeight
-      if (worldPos >= 0 && worldPos <= limit) {
+      const screenPos = previewScreenPos.value
+      const isOverRuler = screenPos <= props.thick
+      if (worldPos >= 0 && worldPos <= limit && !isOverRuler) {
         emit('addLine', {
           orientation: props.vertical ? 'v' : 'h',
           position: Math.round(worldPos),
@@ -274,22 +309,14 @@ function updatePreview(e: MouseEvent): void {
   // 基础世界坐标：screenPos 是相对于标尺的坐标，需减去 thick 转换到画布坐标系
   let worldPos = (screenPos - canvasOffset) / props.scale
 
-  // 吸附检测：查找最近的刻度
+  // 吸附检测：吸附到最近主刻度（基于当前缩放级别的刻度间隔，不依赖可见刻度数组）
   const snapThreshold = 10 / props.scale // 10 像素转换为世界坐标
-  let bestTick: number | null = null
-  let bestDist = Infinity
+  const interval = getTickConfig(props.scale).interval
+  const gridPos = Math.round(worldPos / interval) * interval
+  const dist = Math.abs(worldPos - gridPos)
 
-  for (const mark of ticks.value) {
-    if (!mark.isMajor) continue
-    const dist = Math.abs(worldPos - mark.value)
-    if (dist < snapThreshold && dist < bestDist) {
-      bestDist = dist
-      bestTick = mark.value
-    }
-  }
-
-  if (bestTick !== null) {
-    worldPos = bestTick
+  if (dist < snapThreshold) {
+    worldPos = gridPos
     isSnapping.value = true
   } else {
     isSnapping.value = false
