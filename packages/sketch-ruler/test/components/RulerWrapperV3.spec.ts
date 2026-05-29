@@ -366,4 +366,59 @@ describe('RulerWrapperV3 line boundary deletion', () => {
     await nextTick()
     expect(wrapper.emitted('deleteLine')).toBeFalsy()
   })
+
+  it('should emit deleteLine when dragging horizontal line back onto the ruler', async () => {
+    // 水平参考线被拖回标尺区域（screenPos <= thick）也应删除
+    const wrapper = mountRulerWrapper({
+      lines: [{ id: 'h-1', orientation: 'h', position: 100, visible: true, locked: false }]
+    })
+
+    const lineEl = wrapper.find('.line').element
+    lineEl.dispatchEvent(
+      new MouseEvent('mousedown', { clientY: 120, bubbles: true, cancelable: true })
+    )
+
+    // 拖到标尺底部边缘：newPos = 0, screenPos = 0 * 1 + 20 = 20 <= thick(20)
+    document.dispatchEvent(new MouseEvent('mousemove', { clientY: 20 }))
+    await nextTick()
+
+    expect(wrapper.emitted('updateLine')).toBeTruthy()
+    expect(wrapper.emitted('updateLine')![0]).toEqual(['h-1', 0])
+
+    const label = wrapper.find('.line-label')
+    expect(label.exists()).toBe(true)
+    expect(label.text()).toBe('放开删除')
+
+    document.dispatchEvent(new MouseEvent('mouseup', { clientY: 20 }))
+    await nextTick()
+
+    expect(wrapper.emitted('deleteLine')).toBeTruthy()
+    expect(wrapper.emitted('deleteLine')![0]).toEqual(['h-1'])
+  })
+
+  it('should emit deleteLine when dragging vertical line back onto the ruler', async () => {
+    // 垂直参考线被拖回标尺区域（screenPos <= thick）也应删除
+    const wrapper = mountRulerWrapper({
+      vertical: true,
+      lines: [{ id: 'v-1', orientation: 'v', position: 100, visible: true, locked: false }]
+    })
+
+    const lineEl = wrapper.find('.line').element
+    lineEl.dispatchEvent(
+      new MouseEvent('mousedown', { clientX: 120, bubbles: true, cancelable: true })
+    )
+
+    // 拖到标尺右侧边缘：newPos = 0, screenPos = 0 * 1 + 20 = 20 <= thick(20)
+    document.dispatchEvent(new MouseEvent('mousemove', { clientX: 20 }))
+    await nextTick()
+
+    expect(wrapper.emitted('updateLine')).toBeTruthy()
+    expect(wrapper.emitted('updateLine')![0]).toEqual(['v-1', 0])
+
+    document.dispatchEvent(new MouseEvent('mouseup', { clientX: 20 }))
+    await nextTick()
+
+    expect(wrapper.emitted('deleteLine')).toBeTruthy()
+    expect(wrapper.emitted('deleteLine')![0]).toEqual(['v-1'])
+  })
 })
