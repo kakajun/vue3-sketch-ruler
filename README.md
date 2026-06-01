@@ -50,14 +50,39 @@ import type { SketchRulerProps, SketchRulerPlugin } from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
 ```
 
-### CDN
+### CDN (IIFE)
+
+通过 `<script>` 标签直接引入，挂载到全局变量 `SketchRuler`：
 
 ```html
-<script src="https://unpkg.com/vue3-sketch-ruler/lib/index.umd.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://unpkg.com/vue3-sketch-ruler/lib/index.iife.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/vue3-sketch-ruler/lib/style.css" />
 
 <script>
-  const { SketchRuler, Minimap } = window.Vue3SketchRuler
+  const { SketchRuler: SketchRulerComp } = SketchRuler
+
+  Vue.createApp({
+    components: { SketchRuler: SketchRulerComp }
+  }).mount('#app')
+</script>
+```
+
+### CDN (UMD)
+
+UMD 格式兼容 CommonJS、AMD 和浏览器全局变量三种环境：
+
+```html
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://unpkg.com/vue3-sketch-ruler/lib/index.umd.cjs"></script>
+<link rel="stylesheet" href="https://unpkg.com/vue3-sketch-ruler/lib/style.css" />
+
+<script>
+  const { SketchRuler: SketchRulerComp } = SketchRuler
+
+  Vue.createApp({
+    components: { SketchRuler: SketchRulerComp }
+  }).mount('#app')
 </script>
 ```
 

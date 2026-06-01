@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vue3-sketch-ruler UMD Demo</title>
+  <!-- 1. 引入 vue3-sketch-ruler 样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/vue3-sketch-ruler/lib/style.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body, #app { width: 100%; height: 100%; }
+    .wrapper {
+      margin: 0 auto;
+      background-color: #fafafc;
+      background-image:
+        linear-gradient(#fafafc 20px, transparent 0),
+        linear-gradient(90deg, transparent 20px, #373739 0);
+      background-size: 21px 21px, 21px 21px;
+      border: 1px solid #dadadc;
+    }
+    .canvas-box {
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #666;
+    }
+    .btns {
+      position: absolute;
+      display: flex;
+      gap: 8px;
+      bottom: 20px;
+      right: 40px;
+      z-index: 999;
+    }
+    .btns button {
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="wrapper" :style="wrapperStyle">
+      <sketch-ruler ref="rulerRef" v-bind="rulerConfig">
+        <template #default>
+          <div data-type="page" class="canvas-box" :style="canvasStyle">
+            UMD Demo Content
+          </div>
+        </template>
+        <template #toolbar="{ tools }">
+          <div class="btns">
+            <button @click="tools.reset">还原</button>
+            <button @click="tools.zoomIn">放大</button>
+            <button @click="tools.zoomOut">缩小</button>
+          </div>
+        </template>
+      </sketch-ruler>
+    </div>
+  </div>
+
+  <!--
+    UMD 格式说明：
+    该格式同时兼容 CommonJS、AMD 和浏览器全局变量三种环境。
+    在浏览器中通过 <script> 标签引入时，会自动挂载到全局变量 window.SketchRuler 上。
+    你也可以通过 RequireJS 等 AMD 加载器使用，或在 Node 环境中通过 require 引入。
+  -->
+
+  <!-- 2. 引入 Vue 3 Global Build（UMD 依赖的全局变量 Vue） -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <!-- 3. 引入 vue3-sketch-ruler UMD Build -->
+  <script src="https://unpkg.com/vue3-sketch-ruler/lib/index.umd.cjs"></script>
+
+  <script>
+    // UMD 在浏览器中会暴露全局对象 SketchRuler
+    // 同时兼容：CommonJS(require)、AMD(define) 和 全局变量(window.SketchRuler)
+    const { createApp, ref, reactive, computed } = Vue
+    const { SketchRuler: SketchRulerComp } = SketchRuler
+
+    createApp({
+      components: {
+        SketchRuler: SketchRulerComp
+      },
+      setup() {
+        const rulerRef = ref()
+
+        const rulerConfig = reactive({
+          thick: 20,
+          width: 1470,
+          height: 700,
+          canvasWidth: 1000,
+          canvasHeight: 500,
+          showRuler: true,
+          palette: { bgColor: 'transparent', guideLineStyle: 'dashed' },
+          isShowReferLine: true,
+          autoCenter: true,
+          shadow: {
+            x: 0,
+            y: 0,
+            width: 300,
+            height: 300
+          },
+          lines: {
+            h: [0, 250],
+            v: [0, 500]
+          }
+        })
+
+        const wrapperStyle = computed(() => ({
+          width: rulerConfig.width + 'px',
+          height: rulerConfig.height + 'px'
+        }))
+
+        const canvasStyle = computed(() => ({
+          width: rulerConfig.canvasWidth + 'px',
+          height: rulerConfig.canvasHeight + 'px'
+        }))
+
+        return {
+          rulerRef,
+          rulerConfig,
+          wrapperStyle,
+          canvasStyle
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+</html>

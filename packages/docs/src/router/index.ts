@@ -78,6 +78,34 @@ export const menuRoutes: RouteRecordRaw[] = [
     meta: {
       title: 'multi-instance'
     }
+  },
+  {
+    path: 'flow-editor',
+    component: () => import('../examples/flow-editor.vue'),
+    meta: {
+      title: 'flow-editor'
+    }
+  },
+  {
+    path: 'whiteboard',
+    component: () => import('../examples/whiteboard.vue'),
+    meta: {
+      title: 'whiteboard'
+    }
+  },
+  {
+    path: 'topology',
+    component: () => import('../examples/topology.vue'),
+    meta: {
+      title: 'topology'
+    }
+  },
+  {
+    path: 'org-chart',
+    component: () => import('../examples/org-chart.vue'),
+    meta: {
+      title: 'org-chart'
+    }
   }
 ]
 
