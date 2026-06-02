@@ -43,6 +43,13 @@ export const menuRoutes: RouteRecordRaw[] = [
       title: 'selecto'
     }
   },
+  {
+    path: 'mySelecto',
+    component: () => import('../examples/mySelectoDemo.vue'),
+    meta: {
+      title: 'mySelecto'
+    }
+  },
 
   {
     path: 'input',

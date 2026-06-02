@@ -14,7 +14,7 @@ const { prompt } = require('enquirer')
 const args = require('minimist')(process.argv.slice(2))
 const currentVersion = require('../packages/sketch-ruler/package.json').version
 
-const packages = ['core', 'canvas', 'sketch-ruler']
+const packages = ['core', 'canvas', 'selecto', 'sketch-ruler']
 
 const versionIncrements = ['patch', 'minor', 'major']
 const step = (msg) => console.log(chalk.cyan(msg))
@@ -109,9 +109,9 @@ function updatePackage(pkgRoot, version, depVersion, originalDepsMap) {
   const pkg = JSON.parse(raw)
   pkg.version = version
 
-  // 同步 sketch-ruler 和 canvas 的 @sketch-ruler/* 依赖版本
+  // 同步 sketch-ruler、canvas、selecto 的 @sketch-ruler/* 依赖版本
   if (pkg.dependencies) {
-    ;['@sketch-ruler/core', '@sketch-ruler/canvas'].forEach((depKey) => {
+    ;['@sketch-ruler/core', '@sketch-ruler/canvas', '@sketch-ruler/selecto'].forEach((depKey) => {
       if (pkg.dependencies[depKey] === 'workspace:*') {
         if (originalDepsMap) {
           if (!originalDepsMap.has(pkgPath)) {

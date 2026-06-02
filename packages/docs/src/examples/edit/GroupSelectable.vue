@@ -1,22 +1,21 @@
 <template>
-  <Selecto
+  <SketchSelecto
     ref="selectorRef"
-    :drag-container="'.container'"
+    drag-container=".container"
     :selectable-targets="['.target']"
     :hit-rate="0"
     :select-by-click="true"
     :select-from-inside="true"
     :toggle-continue-select="['ctrl']"
-    :key-container="window"
-    :ratio="0"
     @drag-start="onDragStart"
     @select-end="onSelectEnd"
   />
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import Selecto from './Selecto.vue'
+import { ref } from 'vue'
+import { SketchSelecto } from '@sketch-ruler/selecto'
+
 const selectorRef = ref(null)
 const targets = ref([])
 const emit = defineEmits(['setTargetClass', 'dragStart'])
@@ -26,7 +25,7 @@ const props = defineProps({
 
 const onSelectEnd = (e) => {
   let { selected } = e
-  //如果为拖拽，则将当前的整个dom事件传递给movable，确保选中元素后可以立马拖拽
+  // 如果为拖拽，则将当前的整个 dom 事件传递给 movable，确保选中元素后可以立马拖拽
   if (e.isDragStart) {
     e.inputEvent.preventDefault()
     console.log('dragStart', e.inputEvent)

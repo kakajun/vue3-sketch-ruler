@@ -13,6 +13,7 @@
     "framework-utils": "^1.1.0",
     "vue3-sketch-ruler": "workspace:*",
     "@sketch-ruler/canvas": "workspace:*",
-    "@sketch-ruler/core": "workspace:*"
+    "@sketch-ruler/core": "workspace:*",
+    "@sketch-ruler/selecto": "workspace:*"
   }
 }

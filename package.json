@@ -30,7 +30,7 @@
     "lint": "oxlint --fix",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
-    "test": "pnpm --filter ./packages/core test && pnpm --filter ./packages/canvas test && pnpm --filter ./packages/sketch-ruler test",
+    "test": "pnpm -r test",
     "release": "pnpm build && node ./scripts/release.js"
   },
   "devDependencies": {

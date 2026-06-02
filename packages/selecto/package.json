@@ -1,0 +1,56 @@
+{
+  "name": "@sketch-ruler/selecto",
+  "version": "3.1.4",
+  "private": false,
+  "description": "Sketch-ruler compatible selection engine with transform awareness. Replaces selecto for zoomed canvases.",
+  "keywords": [
+    "sketch-ruler",
+    "selecto",
+    "selection",
+    "transform",
+    "vue3"
+  ],
+  "license": "MIT",
+  "author": "kakajun <253495832@qq.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kakajun/vue3-sketch-ruler.git"
+  },
+  "files": [
+    "lib",
+    "src",
+    "AGENTS.md"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@sketch-ruler/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.7",
+    "vite": "^8.0.13",
+    "vite-plugin-dts": "^5.0.0",
+    "vitest": "^4.1.6"
+  }
+}
