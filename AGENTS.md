@@ -81,7 +81,7 @@ pnpm dev
 # 仅启动 docs（假设 sketch-ruler 已构建）
 pnpm d
 
-# 构建主库（仅构建 sketch-ruler 包）
+# 构建主库（按顺序构建 core、canvas、selecto、sketch-ruler）
 pnpm build
 
 # 构建文档站点（先 build 再 build docs）

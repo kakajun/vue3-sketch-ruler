@@ -34,6 +34,9 @@ jobs:
       - name: Build canvas
         run: pnpm --filter ./packages/canvas build
 
+      - name: Build selecto
+        run: pnpm --filter ./packages/selecto build
+
       - name: Build sketch-ruler
         run: pnpm --filter ./packages/sketch-ruler build
 
@@ -41,7 +44,7 @@ jobs:
         run: pnpm test
 
       - name: Build docs
-        run: pnpm build:demo
+        run: pnpm --filter ./packages/docs build
 
       - name: Deploy gh-pages
         uses: peaceiris/actions-gh-pages@v4
