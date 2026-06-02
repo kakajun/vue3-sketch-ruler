@@ -16,6 +16,12 @@ export default defineConfig({
     port: 8888 // 设置你的端口号
   },
   build: {
-    outDir: 'dist'
+    outDir: 'dist',
+    rollupOptions: {
+      onwarn(warning, warn) {
+        if (warning.code === 'INVALID_ANNOTATION') return
+        warn(warning)
+      }
+    }
   }
 })
