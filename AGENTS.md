@@ -59,7 +59,7 @@ packages/
 | `packages/sketch-ruler` | `vue3-sketch-ruler` | 对外发布的 Vue 3 组件包。导出 `SketchRuler`、`Minimap` 组件，以及 Vue 相关的 composables、plugins。依赖 `@sketch-ruler/core` 与 `@sketch-ruler/canvas`。 |
 | `packages/core` | `@sketch-ruler/core` | 框架无关核心层：坐标变换引擎（TransformEngine）、矩阵运算、刻度计算、状态管理（RulerState / LineManager）、插件管理（PluginManager）、吸附引擎（SnapEngine）、多画布管理器（CanvasManager）、Minimap 引擎。零外部依赖。 |
 | `packages/canvas` | `@sketch-ruler/canvas` | 框架无关的 Canvas 2D 渲染器与 DOM 输入管理器。负责鼠标/键盘/滚轮事件适配、离屏缓存、标签缓存。依赖 `@sketch-ruler/core`。 |
-| `packages/selecto` | `@sketch-ruler/selecto` | 框选引擎与 Vue 组件 `SketchSelecto`。使用屏幕坐标系进行 hit test，选择框以 fixed 定位绘制，天然适配 sketch-ruler 的 CSS transform 场景。替代外部 `selecto` 库。依赖 `@sketch-ruler/core`（workspace），peer 依赖 `vue`。 |
+| `packages/selecto` | `@sketch-ruler/selecto` | 框选引擎与 Vue 组件 `SketchSelecto`。使用屏幕坐标系进行 hit test，选择框以 fixed 定位绘制，天然适配 sketch-ruler 的 CSS transform 场景。替代外部 `selecto` 库。peer 依赖 `vue`。 |
 | `packages/docs` | `root-doc` | 文档演示站点，使用 Vite 构建，包含大量示例（basic、bigscreen、edit、multi-instance 等）。依赖 `vue3-sketch-ruler` workspace 包。 |
 | `packages/common` | `root-common` | 私有内部包，目前主要提供 `i18n` 实例供 docs 使用。 |
 

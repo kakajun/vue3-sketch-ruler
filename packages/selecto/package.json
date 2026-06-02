@@ -1,6 +1,6 @@
 {
   "name": "@sketch-ruler/selecto",
-  "version": "3.1.4",
+  "version": "3.1.5",
   "private": false,
   "description": "Sketch-ruler compatible selection engine with transform awareness. Replaces selecto for zoomed canvases.",
   "keywords": [
@@ -37,9 +37,6 @@
     "build": "vite build",
     "test": "vitest run",
     "test:watch": "vitest"
-  },
-  "dependencies": {
-    "@sketch-ruler/core": "workspace:*"
   },
   "peerDependencies": {
     "vue": "^3.5.0"

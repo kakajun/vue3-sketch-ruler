@@ -109,9 +109,9 @@ function updatePackage(pkgRoot, version, depVersion, originalDepsMap) {
   const pkg = JSON.parse(raw)
   pkg.version = version
 
-  // 同步 sketch-ruler、canvas、selecto 的 @sketch-ruler/* 依赖版本
+  // 同步 sketch-ruler 和 canvas 的 @sketch-ruler/* 依赖版本
   if (pkg.dependencies) {
-    ;['@sketch-ruler/core', '@sketch-ruler/canvas', '@sketch-ruler/selecto'].forEach((depKey) => {
+    ;['@sketch-ruler/core', '@sketch-ruler/canvas'].forEach((depKey) => {
       if (pkg.dependencies[depKey] === 'workspace:*') {
         if (originalDepsMap) {
           if (!originalDepsMap.has(pkgPath)) {

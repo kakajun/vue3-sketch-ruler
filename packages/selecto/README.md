@@ -1,6 +1,6 @@
 # @sketch-ruler/selecto
 
-> 框选引擎与 Vue 组件。专为 sketch-ruler 的 CSS transform 场景设计：选择框以 fixed 定位绘制在 body 上，天然不受父级缩放/平移影响。可替代外部 `selecto` 库。依赖 `@sketch-ruler/core`，peer 依赖 `vue`。
+> 框选引擎与 Vue 组件。专为 sketch-ruler 的 CSS transform 场景设计：选择框以 fixed 定位绘制在 body 上，天然不受父级缩放/平移影响。可替代外部 `selecto` 库。peer 依赖 `vue`。
 
 ## 安装
 

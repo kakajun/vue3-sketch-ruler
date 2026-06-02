@@ -21,7 +21,6 @@ src/
 
 ## 依赖
 
-- `@sketch-ruler/core`（workspace 依赖，目前仅类型/概念层面关联，引擎内部未直接调用 TransformEngine）
 - `vue`（peerDependency）
 
 ## 构建
