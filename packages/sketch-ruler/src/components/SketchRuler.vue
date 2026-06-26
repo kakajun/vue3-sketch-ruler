@@ -617,21 +617,18 @@ const setZoomMode = (mode: ZoomMode): void => {
   }
 }
 
-const ZOOM_PRESETS = [0.1, 0.25, 0.33, 0.5, 0.66, 1, 1.5, 2, 3, 4, 6, 8, 16]
-
 const zoomToPreset = async (preset: number): Promise<void> => {
-  const target = ZOOM_PRESETS.find((p) => p >= preset) ?? ZOOM_PRESETS[ZOOM_PRESETS.length - 1]
   const { x: cx, y: cy } = getPointerOrigin()
   const from = scale.value
   const allowed = await pluginManager.beforeZoom({
     from,
-    to: target,
+    to: preset,
     center: { x: cx, y: cy },
     cancel: () => {}
   })
   if (allowed) {
-    zoomTo(target, cx, cy)
-    pluginManager.afterZoom({ from, to: target, center: { x: cx, y: cy } })
+    zoomTo(preset, cx, cy)
+    pluginManager.afterZoom({ from, to: preset, center: { x: cx, y: cy } })
   }
 }
 

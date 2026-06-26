@@ -85,6 +85,35 @@ describe('SketchRuler integration', () => {
     expect(newState.scale).toBeCloseTo(0.5, 5)
   })
 
+  test('zoomToPreset should set scale to the exact requested value', async () => {
+    // zoomToPreset(0.75) 应该精确缩放到 0.75，而不是被预设列表取整到 1
+    const wrapper = mount(SketchRuler as any, {
+      props: {
+        width: 800,
+        height: 600,
+        canvasWidth: 600,
+        canvasHeight: 400,
+        selfHandle: true,
+        autoCenter: false
+      },
+      slots: {
+        default: '<div data-type="page" style="width:600px;height:400px;"></div>'
+      },
+      attachTo: document.body
+    })
+
+    await Promise.resolve()
+    await new Promise((r) => setTimeout(r, 50))
+
+    const engine = (wrapper.vm as any).engine
+    expect(engine.getState().scale).toBeCloseTo(1, 5)
+
+    await (wrapper.vm as any).zoomToPreset(0.75)
+    await new Promise((r) => setTimeout(r, 50))
+
+    expect(engine.getState().scale).toBeCloseTo(0.75, 5)
+  })
+
   test('multiple instances have independent transform engines', async () => {
     // 多实例拥有独立的变换引擎
     const container = document.createElement('div')

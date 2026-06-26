@@ -4,6 +4,7 @@ dist
 *.local
 /dist*
 pnpm-debug
-types
+/types
 lib
 pnpm-lock.yaml
+*.tsbuildinfo
