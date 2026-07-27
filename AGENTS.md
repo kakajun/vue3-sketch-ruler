@@ -215,6 +215,12 @@ cd packages/canvas && pnpm test
 - 各包 `index.ts` 统一负责按模块分类的导出（类型、`export` / `export type` 分离）。
 - 跨包引用使用 workspace 协议：`workspace:*`。
 
+### README 维护约定
+
+- **根目录 `README.md` 是唯一权威来源**。`packages/sketch-ruler/README.md` 是它的副本（发布时由 `scripts/release.js` 复制生成），两者内容必须保持一致。
+- 修改 API 文档、用法示例等 README 内容时，**只改根目录 `README.md`**，然后执行 `cp README.md packages/sketch-ruler/README.md` 同步到包内。
+- 不要直接编辑 `packages/sketch-ruler/README.md`，否则下次发布时改动会被覆盖。
+
 ---
 
 ## 发布流程

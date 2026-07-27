@@ -123,6 +123,7 @@
 
       <div class="demo-minimap">
         <Minimap
+          bgColor="gray"
           :content-width="post.canvasWidth"
           :content-height="post.canvasHeight"
           :viewport-x="viewportOffset.x"

@@ -29,11 +29,13 @@ interface Props {
   scale: number
   width?: number
   height?: number
+  bgColor?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   width: 200,
-  height: 150
+  height: 150,
+  bgColor: '#fff'
 })
 
 const emit = defineEmits<{
@@ -49,7 +51,8 @@ const dragRect = ref({ left: 0, top: 0, width: 0, height: 0 })
 
 const containerStyle = computed(() => ({
   width: props.width + 'px',
-  height: props.height + 'px'
+  height: props.height + 'px',
+  background: props.bgColor
 }))
 
 const miniScale = computed(() => {
@@ -128,7 +131,7 @@ function drawMinimap(): void {
   const h = props.height
   ctx.clearRect(0, 0, w, h)
 
-  ctx.fillStyle = '#fff'
+  ctx.fillStyle = props.bgColor
   ctx.fillRect(0, 0, w, h)
 
   const s = miniScale.value
@@ -150,7 +153,8 @@ watch(
     props.viewportY,
     props.scale,
     props.width,
-    props.height
+    props.height,
+    props.bgColor
   ],
   () => {
     drawMinimap()
@@ -285,7 +289,6 @@ function startDrag(e: PointerEvent, source: 'canvas' | 'viewport', canMove: bool
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   overflow: hidden;
-  background: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 

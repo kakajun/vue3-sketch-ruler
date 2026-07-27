@@ -50,39 +50,14 @@ import type { SketchRulerProps, SketchRulerPlugin } from 'vue3-sketch-ruler'
 import 'vue3-sketch-ruler/lib/style.css'
 ```
 
-### CDN (IIFE)
-
-通过 `<script>` 标签直接引入，挂载到全局变量 `SketchRuler`：
+### CDN
 
 ```html
-<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-<script src="https://unpkg.com/vue3-sketch-ruler/lib/index.iife.js"></script>
+<script src="https://unpkg.com/vue3-sketch-ruler/lib/index.umd.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/vue3-sketch-ruler/lib/style.css" />
 
 <script>
-  const { SketchRuler: SketchRulerComp } = SketchRuler
-
-  Vue.createApp({
-    components: { SketchRuler: SketchRulerComp }
-  }).mount('#app')
-</script>
-```
-
-### CDN (UMD)
-
-UMD 格式兼容 CommonJS、AMD 和浏览器全局变量三种环境：
-
-```html
-<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-<script src="https://unpkg.com/vue3-sketch-ruler/lib/index.umd.cjs"></script>
-<link rel="stylesheet" href="https://unpkg.com/vue3-sketch-ruler/lib/style.css" />
-
-<script>
-  const { SketchRuler: SketchRulerComp } = SketchRuler
-
-  Vue.createApp({
-    components: { SketchRuler: SketchRulerComp }
-  }).mount('#app')
+  const { SketchRuler, Minimap } = window.Vue3SketchRuler
 </script>
 ```
 
@@ -284,20 +259,20 @@ const plugins: SketchRulerPlugin[] = [
 
 ### Palette
 
-| 属性                 | 描述           | 默认值     |
-| -------------------- | -------------- | ---------- |
-| bgColor              | 画布背景       | `#f6f7f9`  |
-| tickColor            | 刻度颜色       | `#BABBBC`  |
-| labelColor           | 刻度标签颜色   | `#7D8694`  |
-| guideLineColor       | 参考线颜色     | `#51d6a9`  |
-| guideLineLockedColor | 锁定参考线颜色 | `#d4d7dc`  |
+| 属性                 | 描述           | 默认值        |
+| -------------------- | -------------- | ------------- |
+| bgColor              | 画布背景       | `#f6f7f9`     |
+| tickColor            | 刻度颜色       | `#BABBBC`     |
+| labelColor           | 刻度标签颜色   | `#7D8694`     |
+| guideLineColor       | 参考线颜色     | `#51d6a9`     |
+| guideLineLockedColor | 锁定参考线颜色 | `#d4d7dc`     |
 | hoverBg              | 标签背景色     | `transparent` |
-| hoverColor           | 标签文字色     | `#000`     |
-| borderColor          | 尺子边框颜色   | `#eeeeef`  |
-| shadowColor          | 阴影高亮色     | `#e9f7fe`  |
-| guideLineStyle       | 参考线样式     | `'dashed'` |
-| guideLineWidth       | 参考线宽度     | `1`        |
-| labelEnabled         | 是否显示标签   | `true`     |
+| hoverColor           | 标签文字色     | `#000`        |
+| borderColor          | 尺子边框颜色   | `#eeeeef`     |
+| shadowColor          | 阴影高亮色     | `#e9f7fe`     |
+| guideLineStyle       | 参考线样式     | `'dashed'`    |
+| guideLineWidth       | 参考线宽度     | `1`           |
+| labelEnabled         | 是否显示标签   | `true`        |
 
 ## Minimap API
 
@@ -312,6 +287,7 @@ const plugins: SketchRulerPlugin[] = [
 | scale          | 缩放比例    | `number` | —      |
 | width          | 缩略图宽度  | `number` | `200`  |
 | height         | 缩略图高度  | `number` | `150`  |
+| bgColor        | 背景颜色    | `string` | `#fff` |
 
 | 事件      | 描述           | 回调参数                 |
 | --------- | -------------- | ------------------------ |
