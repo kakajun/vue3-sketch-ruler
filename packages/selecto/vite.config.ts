@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [
     vue(),
     dts({
-      rollupTypes: true,
+      bundleTypes: true,
       tsconfigPath: resolve(__dirname, 'tsconfig.json'),
       exclude: ['test', '**/*.spec.ts', 'vite.config.ts', 'vitest.config.ts']
     })

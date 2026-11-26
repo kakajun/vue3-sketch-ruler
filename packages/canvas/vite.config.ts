@@ -8,7 +8,7 @@ const banner = `/*!${pkg.name} v${pkg.version} ${new Date().getFullYear()}-${new
 export default defineConfig({
   plugins: [
     dts({
-      rollupTypes: true,
+      bundleTypes: true,
       tsconfigPath: resolve(__dirname, 'tsconfig.json'),
       exclude: ['test', '**/*.spec.ts', 'vite.config.ts', 'vitest.config.ts']
     })
