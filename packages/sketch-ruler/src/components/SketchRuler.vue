@@ -510,6 +510,10 @@ const paletteCpu = computed<RulerPalette>(() => ({
   hoverColor: '#000',
   borderColor: '#eeeeef',
   shadowColor: '#e9f7fe',
+  guideLineStyle: 'dashed',
+  guideLineWidth: 1,
+  labelEnabled: true,
+  labelPosition: 'end',
   ...props.palette
 }))
 

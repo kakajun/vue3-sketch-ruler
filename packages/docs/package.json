@@ -2,6 +2,7 @@
   "name": "root-doc",
   "version": "3.0.0-beta.0",
   "private": false,
+  "type": "module",
   "license": "MIT",
   "author": "kakajun <253495832@qq.com>",
   "scripts": {

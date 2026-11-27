@@ -11,7 +11,9 @@ const fs = require('fs')
 
 const semver = require('semver')
 const { prompt } = require('enquirer')
+const { findWorkspaceDependencies } = require('./check-publish-manifest')
 const args = require('minimist')(process.argv.slice(2))
+const autoYes = args.yes === true || args.y === true
 const currentVersion = require('../packages/sketch-ruler/package.json').version
 
 const packages = ['core', 'canvas', 'selecto', 'sketch-ruler']
@@ -54,11 +56,14 @@ async function main() {
     throw new Error(`invalid target version: ${targetVersion}`)
   }
 
-  const { yes } = await prompt({
-    type: 'confirm',
-    name: 'yes',
-    message: `Releasing v${targetVersion}. Confirm?`
-  })
+  let yes = autoYes
+  if (!autoYes) {
+    ;({ yes } = await prompt({
+      type: 'confirm',
+      name: 'yes',
+      message: `Releasing v${targetVersion}. Confirm?`
+    }))
+  }
 
   if (!yes) {
     return
@@ -69,18 +74,29 @@ async function main() {
 
   // update all package versions and inter-dependencies
   step('\nUpdating cross dependencies...')
-  updateVersions(targetVersion, originalDeps)
-
-  // publish packages
-  step('\nPublishing packages...')
 
   try {
+    updateVersions(targetVersion, originalDeps)
+
+    const workspaceOffenders = findWorkspaceDependencies()
+    if (workspaceOffenders.length > 0) {
+      throw new Error(
+        `Refusing to publish, workspace: deps remain after version rewrite:\n  - ${workspaceOffenders.join('\n  - ')}`
+      )
+    }
+
+    // publish packages
+    step('\nPublishing packages...')
+
     for (const pkg of packages) {
-      const { publish } = await prompt({
-        type: 'confirm',
-        name: 'publish',
-        message: `Publish ${pkg}?`
-      })
+      let publish = autoYes
+      if (!autoYes) {
+        ;({ publish } = await prompt({
+          type: 'confirm',
+          name: 'publish',
+          message: `Publish ${pkg}?`
+        }))
+      }
       if (publish) {
         await publishPackage(pkg, targetVersion)
       } else {
@@ -98,7 +114,7 @@ main()
 
 function updateVersions(version, originalDepsMap) {
   // 1. update root package.json
-  updatePackage(path.resolve(__dirname, '..'), version)
+  updatePackage(path.resolve(__dirname, '..'), version, version)
   // 2. update all packages
   packages.forEach((p) => updatePackage(getPkgRoot(p), version, version, originalDepsMap))
 }
@@ -112,12 +128,13 @@ function updatePackage(pkgRoot, version, depVersion, originalDepsMap) {
   // 同步 sketch-ruler 和 canvas 的 @sketch-ruler/* 依赖版本
   if (pkg.dependencies) {
     ;['@sketch-ruler/core', '@sketch-ruler/canvas'].forEach((depKey) => {
-      if (pkg.dependencies[depKey] === 'workspace:*') {
+      const range = pkg.dependencies[depKey]
+      if (typeof range === 'string' && range.startsWith('workspace:')) {
         if (originalDepsMap) {
           if (!originalDepsMap.has(pkgPath)) {
             originalDepsMap.set(pkgPath, {})
           }
-          originalDepsMap.get(pkgPath)[depKey] = 'workspace:*'
+          originalDepsMap.get(pkgPath)[depKey] = range
         }
         pkg.dependencies[depKey] = depVersion
       }

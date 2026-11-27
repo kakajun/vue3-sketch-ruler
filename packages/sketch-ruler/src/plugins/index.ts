@@ -27,7 +27,7 @@ import type { SketchRulerPlugin } from '@sketch-ruler/core'
  * const myPlugin = definePlugin((options: { color: string }) => ({
  *   name: 'my-plugin',
  *   priority: 10,
- *   beforeZoom(ctx) { console.log(options.color, ctx.to) }
+ *   beforeZoom(ctx) {}
  * }))
  */
 export function definePlugin<TOptions = void>(

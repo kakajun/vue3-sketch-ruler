@@ -78,8 +78,8 @@ export class PluginManager {
   private safeCall(fn: () => void, pluginName: string, hookName: string): void {
     try {
       fn()
-    } catch (err) {
-      console.error(`[PluginManager] Plugin "${pluginName}" ${hookName} threw:`, err)
+    } catch {
+      // 插件钩子异常按设计隔离，不输出到控制台
     }
   }
 
@@ -90,8 +90,8 @@ export class PluginManager {
   ): Promise<void> {
     try {
       await fn()
-    } catch (err) {
-      console.error(`[PluginManager] Plugin "${pluginName}" ${hookName} threw:`, err)
+    } catch {
+      // 插件钩子异常按设计隔离，不输出到控制台
     }
   }
 

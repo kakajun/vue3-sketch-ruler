@@ -14,6 +14,8 @@ const args = process.argv.slice(2)
 const dryRun = args.includes('--dry')
 const targetDir = args.find((a) => !a.startsWith('-')) || process.cwd()
 
+const log = (...parts) => process.stdout.write(parts.join(' ') + '\n')
+
 const stats = {
   filesScanned: 0,
   filesModified: 0,
@@ -111,7 +113,7 @@ function scanFile(filePath) {
       content = content.replace(pattern, replacement)
       stats.replacements += matches.length
       fileModified = true
-      console.log(`  [${desc}] ×${matches.length}`)
+      log(`  [${desc}] ×${matches.length}`)
     }
   }
 
@@ -168,7 +170,7 @@ function scanFile(filePath) {
 
   if (fileModified) {
     if (dryRun) {
-      console.log(`  (dry-run) 将修改: ${fileRel}`)
+      log(`  (dry-run) 将修改: ${fileRel}`)
     } else {
       fs.writeFileSync(filePath, content, 'utf-8')
       stats.filesModified++
@@ -199,27 +201,27 @@ function scanDir(dir) {
 
 function printReport() {
   const mode = dryRun ? '【预览模式】' : ''
-  console.log(`\n========== 迁移报告 ${mode}==========`)
-  console.log(`扫描文件: ${stats.filesScanned}`)
-  console.log(`修改文件: ${dryRun ? '(dry-run 未实际写入)' : stats.filesModified}`)
-  console.log(`自动替换: ${stats.replacements} 处`)
+  log(`\n========== 迁移报告 ${mode}==========`)
+  log(`扫描文件: ${stats.filesScanned}`)
+  log(`修改文件: ${dryRun ? '(dry-run 未实际写入)' : stats.filesModified}`)
+  log(`自动替换: ${stats.replacements} 处`)
 
   if (stats.warnings.length > 0) {
-    console.log(`\n⚠️  需要手动处理的警告 (${stats.warnings.length} 条):`)
+    log(`\n⚠️  需要手动处理的警告 (${stats.warnings.length} 条):`)
     for (const w of stats.warnings) {
-      console.log(`  - ${path.relative(targetDir, w.file)}: ${w.msg}`)
+      log(`  - ${path.relative(targetDir, w.file)}: ${w.msg}`)
     }
   }
 
   if (dryRun) {
-    console.log('\n🏃 本次为预览模式，未实际修改任何文件。去掉 --dry 参数即可执行真实替换。')
+    log('\n🏃 本次为预览模式，未实际修改任何文件。去掉 --dry 参数即可执行真实替换。')
   }
-  console.log('\n✅ 迁移扫描完成！请检查变更并运行测试。')
-  console.log(
+  log('\n✅ 迁移扫描完成！请检查变更并运行测试。')
+  log(
     '📖 详细迁移指南: https://github.com/kakajun/vue3-sketch-ruler/blob/main/README.md#2x--3x-迁移指南'
   )
 }
 
-console.log(`🔍 扫描目录: ${targetDir}${dryRun ? ' (dry-run)' : ''}\n`)
+log(`🔍 扫描目录: ${targetDir}${dryRun ? ' (dry-run)' : ''}\n`)
 scanDir(targetDir)
 printReport()

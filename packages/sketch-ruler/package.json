@@ -1,6 +1,6 @@
 {
   "name": "vue3-sketch-ruler",
-  "version": "3.1.7",
+  "version": "3.1.8",
   "private": false,
   "keywords": [
     "panzoom",
@@ -28,7 +28,6 @@
   "files": [
     "lib",
     "bin",
-    "src",
     "AGENTS.md"
   ],
   "type": "module",
@@ -39,32 +38,27 @@
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
-      "development": "./src/index.ts",
       "import": "./lib/index.js",
       "require": "./lib/index.cjs"
     },
     "./style.css": "./lib/style.css",
     "./lib/style.css": "./lib/style.css",
     "./engine": {
-      "development": "./src/index.ts",
       "types": "./lib/index.d.ts",
       "import": "./lib/index.js",
       "require": "./lib/index.cjs"
     },
     "./composables": {
-      "development": "./src/index.ts",
       "types": "./lib/index.d.ts",
       "import": "./lib/index.js",
       "require": "./lib/index.cjs"
     },
     "./renderers": {
-      "development": "./src/index.ts",
       "types": "./lib/index.d.ts",
       "import": "./lib/index.js",
       "require": "./lib/index.cjs"
     },
     "./plugins": {
-      "development": "./src/index.ts",
       "types": "./lib/index.d.ts",
       "import": "./lib/index.js",
       "require": "./lib/index.cjs"
@@ -75,6 +69,7 @@
   },
   "scripts": {
     "build": "vite build",
+    "prepublishOnly": "node ../../scripts/check-publish-manifest.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",

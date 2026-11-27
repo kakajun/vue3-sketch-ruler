@@ -2,24 +2,25 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 import dts from 'vite-plugin-dts'
-import pkg from './package.json'
+import pkg from './package.json' with { type: 'json' }
 
 const banner = `/*!${pkg.name} v${pkg.version}${new Date().getFullYear()}年${
   new Date().getMonth() + 1
 }月${new Date()}制作*/`
 
 export default defineConfig({
+  esbuild: { drop: ['console', 'debugger'] },
   plugins: [
     vue(),
     dts({
       bundleTypes: true,
-      tsconfigPath: resolve(__dirname, 'tsconfig.build.json'), // 指定 tsconfig 文件
+      tsconfigPath: resolve(import.meta.dirname, 'tsconfig.build.json'), // 指定 tsconfig 文件
       exclude: ['test', '**/*.spec.ts', 'vite.config.ts', 'vitest.config.ts']
     })
   ],
   resolve: {
     alias: {
-      '@': resolve(__dirname)
+      '@': resolve(import.meta.dirname)
     },
     extensions: ['.ts', '.jsx', '.tsx', '.json']
   },
@@ -27,7 +28,7 @@ export default defineConfig({
     outDir: 'lib',
     // minify: true, // 不压缩代码,方便开发调试
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: resolve(import.meta.dirname, 'src/index.ts'),
       name: 'SketchRuler',
       fileName: (format) => {
         if (format === 'umd') return 'index.umd.cjs'
